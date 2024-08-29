@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LiquidCommerce SDK Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding-top: 80px;
+      padding-bottom: 60px;
+      background-color: #f8f9fa;
+    }
+
+    .navbar-area, .footer-top {
+      background-color: #101B2C;
+      position: fixed;
+      left: 0;
+      right: 0;
+      z-index: 1030;
+    }
+
+    .navbar-area {
+      top: 0;
+      height: 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-top {
+      bottom: 0;
+      height: 60px;
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-brand img, .footer-logo img {
+      height: 40px;
+      width: auto;
+    }
+
+    #hero-area {
+      min-height: calc(100vh - 140px);
+      display: flex;
+      align-items: center;
+    }
+
+    #addressInput {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+
+    #autocompleteResults {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-top: none;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #autocompleteResults li {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #autocompleteResults li:hover {
+      background-color: #f0f0f0;
+    }
+
+    #results, #availabilityResults, #catalogResults {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .nav-tabs {
+      border-bottom: none;
+      margin-left: 20px;
+    }
+
+    .nav-tabs .nav-link {
+      color: #ffffff;
+      border: none;
+      padding: 10px 15px;
+      margin-right: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-tabs .nav-link.active {
+      color: #ffffff;
+      border-bottom: 2px solid #ffffff;
+      background-color: transparent;
+    }
+
+    .nav-tabs .nav-link:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .catalog-form {
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .catalog-form h3 {
+      margin-bottom: 15px;
+    }
+
+    .catalog-section {
+      margin-bottom: 30px;
+    }
+
+    .card {
+      transition: box-shadow 0.3s ease-in-out;
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      border-top-left-radius: calc(0.375rem - 1px);
+      border-top-right-radius: calc(0.375rem - 1px);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .list-group-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .card-footer {
+      background-color: #f8f9fa;
+      border-top: none;
+    }
+  </style>
+</head>
+<body>
+<header class="navbar-area">
+  <div class="container">
+    <div class="d-flex align-items-center">
+      <a href="index.html" class="navbar-brand">
+        <img src="https://assets.liquidcommerce.co/development/cloud-sdk-logo.svg" style="max-width: 250px;" alt="Logo">
+      </a>
+      <ul class="nav nav-tabs" id="sdkTabs" role="tablist">
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
+                  aria-controls="address" aria-selected="true">Address
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="catalog-tab" data-bs-toggle="tab" data-bs-target="#catalog" type="button" role="tab"
+                  aria-controls="catalog" aria-selected="false">Catalog
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="cart-tab" data-bs-toggle="tab" data-bs-target="#cart" type="button" role="tab" aria-controls="cart"
+                  aria-selected="false">Cart
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab"
+                  aria-controls="user" aria-selected="false">User
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
+                  aria-controls="payment" aria-selected="false">Payment
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab"
+                  aria-controls="checkout" aria-selected="false">Checkout
+          </button>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main id="hero-area" role="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <div class="tab-content" id="sdkTabsContent" style="padding: 20px;">
+
+          <!-- ADDRESS SEARCH & DETAILS EXAMPLE -->
+          <div class="tab-pane fade show active" id="address" role="tabpanel" aria-labelledby="address-tab">
+            <h3>Search Addresses</h3>
+            <input type="text" id="addressInput" class="form-control" placeholder="Enter address (min 3 characters)">
+            <ul id="autocompleteResults"></ul>
+            <div id="results"></div>
+          </div>
+
+          <!-- CATALOG AVAILABILITY EXAMPLE -->
+          <div id="catalog" class="tab-pane fade" role="tabpanel" aria-labelledby="catalog-tab">
+            <div class="catalog-section">
+              <div id="catalogAvailabilityForm" class="catalog-form">
+                <h3>Check Product Availability</h3>
+                <form id="availabilityForm">
+                  <div class="mb-3">
+                    <label for="upcs" class="form-label">UPCs (comma-separated)</label>
+                    <input type="text" class="form-control" id="upcs" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="zipCode" class="form-label">Zip Code</label>
+                    <input type="text" class="form-control" id="zipCode" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Check Availability</button>
+                </form>
+              </div>
+              <div id="availabilityResults"></div>
+            </div>
+            <div class="catalog-section">
+              <div id="catalogSearchForm" class="catalog-form">
+                <h3>Search Products</h3>
+                <form id="searchForm">
+                  <div class="mb-3">
+                    <label for="searchQuery" class="form-label">Search Query</label>
+                    <input type="text" class="form-control" id="searchQuery" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="searchZipCode" class="form-label">Zip Code</label>
+                    <input type="text" class="form-control" id="searchZipCode" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="priceRange" class="form-label">Price Range</label>
+                    <select class="form-select" id="priceRange">
+                      <option value="">All Prices</option>
+                      <option value="0-50">$0 - $50</option>
+                      <option value="50-100">$50 - $100</option>
+                      <option value="100-200">$100 - $200</option>
+                      <option value="200+">$200+</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category">
+                      <option value="">All Categories</option>
+                      <option value="WINE">Wine</option>
+                      <option value="SPIRITS">Spirits</option>
+                      <option value="BEER">Beer</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+              </div>
+              <div id="catalogResults"></div>
+            </div>
+          </div>
+
+          <!-- CATALOG SEARCH EXAMPLE -->
+          <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
+            <h3>Cart</h3>
+            <div class="cart-section">
+              <div id="cartForm" class="cart-form mb-4">
+                <div class="mb-3">
+                  <label for="cartId" class="form-label">Cart ID</label>
+                  <input type="text" class="form-control" id="cartId">
+                </div>
+                <button type="button" class="btn btn-primary" id="getCart">Get Cart</button>
+              </div>
+              <div id="cartResults"></div>
+              <div id="updateCartForm" class="cart-form mt-4">
+                <h4>Update Cart</h4>
+                <div class="mb-3">
+                  <label for="partNumber" class="form-label">Part Number</label>
+                  <input type="text" class="form-control" id="partNumber">
+                </div>
+                <div class="mb-3">
+                  <label for="quantity" class="form-label">Quantity</label>
+                  <input type="number" class="form-control" id="quantity" min="1">
+                </div>
+                <div class="mb-3">
+                  <label for="fulfillmentId" class="form-label">Fulfillment ID</label>
+                  <input type="text" class="form-control" id="fulfillmentId">
+                </div>
+                <button type="button" class="btn btn-primary" id="updateCart">Update Cart</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- USER EXAMPLE -->
+          <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
+            <h3>User Methods</h3>
+
+            <div class="user-section">
+              <h4>Create/Update User Session</h4>
+              <form id="userSessionForm">
+                <div class="mb-3">
+                  <label for="userEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="userEmail" required>
+                </div>
+                <div class="mb-3">
+                  <label for="userFirstName" class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="userFirstName">
+                </div>
+                <button type="submit" class="btn btn-primary">Create/Update Session</button>
+              </form>
+              <div id="userSessionResult" class="mt-3"></div>
+            </div>
+
+            <div class="user-section mt-4">
+              <h4>Purge User</h4>
+              <form id="purgeUserForm">
+                <div class="mb-3">
+                  <label for="purgeUserId" class="form-label">User ID or Email</label>
+                  <input type="text" class="form-control" id="purgeUserId" required>
+                </div>
+                <button type="submit" class="btn btn-danger">Purge User</button>
+              </form>
+              <div id="purgeUserResult" class="mt-3"></div>
+            </div>
+
+            <div class="user-section mt-4">
+              <h4>Update/Create Address</h4>
+              <form id="updateAddressForm">
+                <div class="mb-3">
+                  <label for="customerId" class="form-label">Customer ID</label>
+                  <input type="text" class="form-control" id="customerId" required>
+                </div>
+                <div class="mb-3">
+                  <label for="addressOne" class="form-label">Address Line 1</label>
+                  <input type="text" class="form-control" id="addressOne" required>
+                </div>
+                <div class="mb-3">
+                  <label for="addressCity" class="form-label">City</label>
+                  <input type="text" class="form-control" id="addressCity" required>
+                </div>
+                <div class="mb-3">
+                  <label for="addressState" class="form-label">State</label>
+                  <input type="text" class="form-control" id="addressState" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update/Create Address</button>
+              </form>
+              <div id="updateAddressResult" class="mt-3"></div>
+            </div>
+
+            <div class="user-section mt-4">
+              <h4>Purge Address</h4>
+              <form id="purgeAddressForm">
+                <div class="mb-3">
+                  <label for="purgeAddressId" class="form-label">Address ID</label>
+                  <input type="text" class="form-control" id="purgeAddressId" required>
+                </div>
+                <button type="submit" class="btn btn-danger">Purge Address</button>
+              </form>
+              <div id="purgeAddressResult" class="mt-3"></div>
+            </div>
+          </div>
+
+          <!-- PAYMENT EXAMPLE -->
+          <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
+            <h3>Payment Method</h3>
+            <div id="paymentTokenResult" class="mt-3"></div>
+            <div id="payment-element-container" class="mb-3"></div>
+            <button id="generateTokenButton" class="btn btn-primary">Generate Payment Token</button>
+          </div>
+
+          <!-- CHECKOUT EXAMPLE -->
+          <div class="tab-pane fade" id="checkout" role="tabpanel" aria-labelledby="checkout-tab">
+            <h3>Checkout</h3>
+            <form id="checkoutForm">
+              <div class="mb-3">
+                <label for="cartId" class="form-label">Cart ID</label>
+                <input type="text" class="form-control" id="checkoutCartId" required>
+              </div>
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="recipientFirstName" class="form-label">Recipient First Name</label>-->
+              <!--                <input type="text" class="form-control" id="recipientFirstName" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="recipientLastName" class="form-label">Recipient Last Name</label>-->
+              <!--                <input type="text" class="form-control" id="recipientLastName" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="recipientEmail" class="form-label">Recipient Email</label>-->
+              <!--                <input type="email" class="form-control" id="recipientEmail" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="recipientPhone" class="form-label">Recipient Phone</label>-->
+              <!--                <input type="text" class="form-control" id="recipientPhone" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="recipientBirthDate" class="form-label">Recipient Birth Date</label>-->
+              <!--                <input type="date" class="form-control" id="recipientBirthDate" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="billingFirstName" class="form-label">Billing First Name</label>-->
+              <!--                <input type="text" class="form-control" id="billingFirstName" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="billingLastName" class="form-label">Billing Last Name</label>-->
+              <!--                <input type="text" class="form-control" id="billingLastName" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="billingEmail" class="form-label">Billing Email</label>-->
+              <!--                <input type="email" class="form-control" id="billingEmail" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="billingPhone" class="form-label">Billing Phone</label>-->
+              <!--                <input type="text" class="form-control" id="billingPhone" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="billingAddressOne" class="form-label">Billing Address Line 1</label>-->
+              <!--                <input type="text" class="form-control" id="billingAddressOne" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="billingCity" class="form-label">Billing City</label>-->
+              <!--                <input type="text" class="form-control" id="billingCity" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="billingState" class="form-label">Billing State</label>-->
+              <!--                <input type="text" class="form-control" id="billingState" required>-->
+              <!--              </div>-->
+
+              <!--              <div class="mb-3">-->
+              <!--                <label for="billingZip" class="form-label">Billing Zip</label>-->
+              <!--                <input type="text" class="form-control" id="billingZip" required>-->
+              <!--              </div>-->
+
+              <button type="submit" class="btn btn-primary">Prepare Checkout</button>
+            </form>
+
+            <div id="checkoutResults" class="mt-3"></div>
+
+            <hr>
+
+            <!-- New Complete Checkout Form -->
+            <h3>Complete Checkout</h3>
+            <form id="completeCheckoutForm">
+              <div class="mb-3">
+                <label for="checkoutToken" class="form-label">Checkout Token</label>
+                <input type="text" class="form-control" id="checkoutToken" required>
+              </div>
+              <div class="mb-3">
+                <label for="paymentId" class="form-label">Payment ID</label>
+                <input type="text" class="form-control" id="paymentId" required>
+              </div>
+              <button type="submit" class="btn btn-success">Complete Checkout</button>
+            </form>
+
+            <div id="completeCheckoutResults" class="mt-3"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer-top">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="https://assets.liquidcommerce.co/development/cloud-sdk-logo.svg" style="max-width: 250px;" alt="Logo">
+      </div>
+      <div>
+        <small>© Liquid Commerce Technologies</small>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../dist/liquidcommerce-cloud-sdk.umd.js"></script>
+<script>
+  const API_KEY = 'PUT_YOUR_KEY_HERE';
+  const GOOGLE_PLACES_API_KEY = 'PUT_YOUR_KEY_HERE';
+  const NEW_YORK_ADDRESS = {
+    one: '100 madison ave',
+    two: 'apt 1707',
+    city: 'New york',
+    state: 'NY',
+    zip: '10016',
+  };
+
+  let client;
+
+  function debounce( func, wait ) {
+    let timeout;
+    return function executedFunction( ...args ) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  async function initSDK() {
+    try {
+      return await window.LiquidCommerce(API_KEY, {
+        googlePlacesApiKey: GOOGLE_PLACES_API_KEY,
+        env: 'stage',
+      });
+    } catch (error) {
+      console.error('Failed to initialize SDK:', error);
+      document.getElementById('results').innerHTML = `<p>Error initializing SDK: ${error.message}</p>`;
+    }
+  }
+
+  async function searchAddress() {
+    const addressInput = document.getElementById('addressInput');
+    const autocompleteResults = document.getElementById('autocompleteResults');
+
+    if (!client) {
+      autocompleteResults.innerHTML = '<li>SDK not initialized. Please try again.</li>';
+      return;
+    }
+
+    const input = addressInput.value.trim();
+
+    if (input.length < 3) {
+      autocompleteResults.innerHTML = '';
+      return;
+    }
+
+    try {
+      const results = await client.address.autocomplete({ input });
+      autocompleteResults.innerHTML = results.data.map(result =>
+        `<li data-id="${result.id}">${result.description}</li>`,
+      ).join('');
+    } catch (error) {
+      autocompleteResults.innerHTML = `<li>Error: ${error.message}</li>`;
+    }
+  }
+
+  async function getDetails( id ) {
+    const resultsDiv = document.getElementById('results');
+
+    if (!client) {
+      resultsDiv.innerHTML = '<p>SDK not initialized. Please try again.</p>';
+      return;
+    }
+
+    try {
+      const detailsResult = await client.address.details({ id });
+      let html = '<h2>Address Details:</h2>';
+      html += `<p>Formatted Address: ${detailsResult.data.formattedAddress}</p>`;
+      html += `<p>Latitude: ${detailsResult.data.coords.lat}</p>`;
+      html += `<p>Longitude: ${detailsResult.data.coords.long}</p>`;
+      resultsDiv.innerHTML = html;
+    } catch (error) {
+      resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+    }
+  }
+
+  async function searchCatalog( event ) {
+    event.preventDefault();
+    const searchQuery = document.getElementById('searchQuery').value;
+    const zipCode = document.getElementById('searchZipCode').value;
+    const priceRange = document.getElementById('priceRange').value;
+    const category = document.getElementById('category').value;
+    const catalogResults = document.getElementById('catalogResults');
+
+    if (!client) {
+      catalogResults.innerHTML = '<p>SDK not initialized. Please try again.</p>';
+      return;
+    }
+
+    // const filters = [];
+    // if (priceRange) {
+    //   const [min, max] = priceRange.split('-');
+    //   filters.push({
+    //     key: 'price',
+    //     values: { min: min, max: max === '+' ? undefined : max },
+    //   });
+    // }
+    // if (category) {
+    //   filters.push({
+    //     key: 'categories',
+    //     values: [category],
+    //   });
+    // }
+
+    try {
+      const response = await client.catalog.search({
+        search: searchQuery,
+        loc: {
+          address: NEW_YORK_ADDRESS,
+        },
+        // filters: filters,
+      });
+      displayCatalogResults(response);
+    } catch (error) {
+      console.error('Error searching catalog:', error);
+      catalogResults.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  }
+
+  function displayCatalogResults( response ) {
+    const catalogResults = document.getElementById('catalogResults');
+    let html = '<h3 class="mb-4">Catalog Search Results:</h3>';
+
+    if (response.products && response.products.length > 0) {
+      html += '<div class="row row-cols-1 row-cols-md-2 g-4">';
+      response.products.forEach(product => {
+        html += `
+        <div class="col">
+          <div class="card h-100">
+            <img src="${product.images[0] || 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" alt="${product.name}">
+            <div class="card-body">
+              <h5 class="card-title">${product.name}</h5>
+              <p class="card-text">Brand: ${product.brand}</p>
+              <p class="card-text">Category: ${product.category}</p>
+              <h6>Available Sizes:</h6>
+              <ul class="list-group list-group-flush">
+                ${product.sizes.map(size => {
+          const availableVariants = size.variants.filter(variant => variant.stock > 0);
+          const lowestPrice = availableVariants.length > 0
+            ? Math.min(...availableVariants.map(variant => variant.price))
+            : null;
+          const formattedPrice = lowestPrice !== null
+            ? `$${(lowestPrice / 100).toFixed(2)}`
+            : 'Not available';
+          return `
+                    <li class="list-group-item">
+                      <strong>${size.size}</strong> - UPC: ${size.upc}
+                      <br>Lowest Price: ${formattedPrice}
+                      <br>Available Variants: ${availableVariants.length}
+                    </li>
+                  `;
+        }).join('')}
+              </ul>
+            </div>
+          </div>
+        </div>
+      `;
+      });
+      html += '</div>';
+    } else {
+      html += '<p>No products found for the given search criteria.</p>';
+    }
+
+    if (response.navigation) {
+      if (response.navigation.totalCount) {
+        html += `<p class="mt-3">Total results: ${response.navigation.totalCount}</p>`;
+      }
+
+      if (response.navigation.filters && response.navigation.filters.length > 0) {
+        html += '<h3 class="mt-4 mb-3">Available Filters:</h3>';
+        html += '<ul class="list-group">';
+        response.navigation.filters.forEach(filter => {
+          html += `
+            <li class="list-group-item">
+              <strong>${filter.bucket}:</strong>
+              ${filter.values.map(value => `${value.value} (${value.count})`).join(', ')}
+            </li>
+          `;
+        });
+        html += '</ul>';
+      }
+    }
+
+    catalogResults.innerHTML = html;
+
+    // Display metadata
+    if (response.metadata) {
+      const metadataHtml = `
+        <div class="mt-4">
+          <h4>Response Metadata:</h4>
+          <p>Request ID: ${response.metadata.requestId}</p>
+          <p>Timestamp: ${new Date(response.metadata.timestamp).toLocaleString()}</p>
+          <p>Path: ${response.metadata.path}</p>
+        </div>
+      `;
+      catalogResults.innerHTML += metadataHtml;
+    }
+  }
+
+  async function checkAvailability( event ) {
+    event.preventDefault();
+    const upcs = document.getElementById('upcs').value.split(',').map(upc => upc.trim());
+    const zipCode = document.getElementById('zipCode').value;
+    const availabilityResults = document.getElementById('availabilityResults');
+
+    if (!client) {
+      availabilityResults.innerHTML = '<p>SDK not initialized. Please try again.</p>';
+      return;
+    }
+
+    try {
+      const response = await client.catalog.availability({
+        upcs: upcs,
+        loc: {
+          address: NEW_YORK_ADDRESS,
+        },
+      });
+      displayAvailabilityResults(response);
+    } catch (error) {
+      console.error('Error checking availability:', error);
+      availabilityResults.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  }
+
+  function displayAvailabilityResults( response ) {
+    const availabilityResults = document.getElementById('availabilityResults');
+    let html = '<h4>Availability Results:</h4>';
+
+    if (response.products && response.products.length > 0) {
+      html += '<ul class="list-group">';
+      response.products.forEach(product => {
+        const availability = product.sizes[0].variants[0].stock > 0 ? 'In Stock' : 'Out of Stock';
+        html += `
+          <li class="list-group-item">
+            <h5>${product.name}</h5>
+            <p>UPC: ${product.sizes[0].upc}</p>
+            <p>Availability: ${availability}</p>
+            <p>Price: $${product.sizes[0].variants[0].price.toFixed(2)}</p>
+          </li>
+        `;
+      });
+      html += '</ul>';
+    } else {
+      html += '<p>No products found.</p>';
+    }
+
+    availabilityResults.innerHTML = html;
+  }
+
+  // Cart functionality
+  document.getElementById('getCart').addEventListener('click', async () => {
+    const cartId = document.getElementById('cartId').value;
+    try {
+      const cartResponse = await client.cart.get(cartId);
+      displayCartResults(cartResponse);
+    } catch (error) {
+      console.error('Error getting cart:', error);
+      alert('Failed to get cart. Please try again.');
+    }
+  });
+
+  function displayCartResults( cartResponse ) {
+    const cartResults = document.getElementById('cartResults');
+    cartResults.innerHTML = '';
+
+    if (cartResponse && cartResponse.cart && cartResponse.cart.id) {
+      const cart = cartResponse.cart;
+      const cartSummary = document.createElement('div');
+      cartSummary.innerHTML = `
+      <h4>Cart Summary</h4>
+      <p>Cart ID: ${cart.id}</p>
+      <p>Total Items: ${cart.quantity}</p>
+      <p>Subtotal: $${(cart.subtotal / 100).toFixed(2)}</p>
+      <p>Total: $${(cart.total / 100).toFixed(2)}</p>
+      <p>Platform Fee: $${(cart.platformFee / 100).toFixed(2)}</p>
+      <p>Shipping Fee: $${(cart.shippingFee / 100).toFixed(2)}</p>
+    `;
+      cartResults.appendChild(cartSummary);
+
+      if (cart.items && cart.items.length > 0) {
+        const itemsList = document.createElement('ul');
+        itemsList.className = 'list-group mt-3';
+        cart.items.forEach(item => {
+          const listItem = document.createElement('li');
+          listItem.className = 'list-group-item';
+          listItem.innerHTML = `
+          <strong>${item.name}</strong><br>
+          Part Number: ${item.partNumber}<br>
+          Quantity: ${item.quantity}<br>
+          Unit Price: $${(item.unitPrice / 100).toFixed(2)}<br>
+          Total: $${((item.quantity * item.unitPrice) / 100).toFixed(2)}
+        `;
+          itemsList.appendChild(listItem);
+        });
+        cartResults.appendChild(itemsList);
+      }
+
+      // Display retailer information
+      if (cart.retailers && cart.retailers.length > 0) {
+        const retailerInfo = document.createElement('div');
+        retailerInfo.className = 'mt-3';
+        retailerInfo.innerHTML = `
+        <h5>Retailer Information</h5>
+        <p>Name: ${cart.retailers[0].name}</p>
+        <p>Shipping Fee: $${(cart.retailers[0].shippingFee / 100).toFixed(2)}</p>
+      `;
+        cartResults.appendChild(retailerInfo);
+      }
+    } else {
+      cartResults.textContent = 'No cart data available.';
+    }
+  }
+
+  document.getElementById('updateCart').addEventListener('click', async () => {
+    const cartId = document.getElementById('cartId').value;
+    const partNumber = document.getElementById('partNumber').value;
+    const quantity = parseInt(document.getElementById('quantity').value, 10);
+    const fulfillmentId = document.getElementById('fulfillmentId').value;
+
+    try {
+      const updateParams = {
+        id: '66ccd83583c929c0419272ed',
+        items: [{
+          partNumber,
+          quantity,
+          fulfillmentId,
+        }],
+        loc: {
+          address: NEW_YORK_ADDRESS,
+        },
+      };
+      console.log('updateParams:', updateParams);
+
+      const updatedCartResponse = await client.cart.update(updateParams);
+
+      console.log('updatedCartResponse:', updatedCartResponse);
+      displayCartResults(updatedCartResponse);
+    } catch (error) {
+      console.error('Error updating cart:', error);
+      alert('Failed to update cart. Please try again.');
+    }
+  });
+
+
+  const debouncedSearchAddress = debounce(searchAddress, 300);
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    client = await initSDK();
+    const addressInput = document.getElementById('addressInput');
+    const autocompleteResults = document.getElementById('autocompleteResults');
+    const availabilityForm = document.getElementById('availabilityForm');
+    const searchForm = document.getElementById('searchForm');
+
+    addressInput.addEventListener('input', debouncedSearchAddress);
+
+    autocompleteResults.addEventListener('click', ( event ) => {
+      if (event.target.tagName === 'LI') {
+        const id = event.target.getAttribute('data-id');
+        addressInput.value = event.target.textContent;
+        autocompleteResults.innerHTML = '';
+        getDetails(id);
+      }
+    });
+
+    availabilityForm.addEventListener('submit', checkAvailability);
+    searchForm.addEventListener('submit', searchCatalog);
+  });
+
+  document.getElementById('userSessionForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const email = document.getElementById('userEmail').value;
+    const firstName = document.getElementById('userFirstName').value;
+    const userSessionResult = document.getElementById('userSessionResult');
+
+    try {
+      const sessionResponse = await client.user.session({ email, firstName });
+      userSessionResult.innerHTML = `
+        <ul>
+          <li>User ID: ${sessionResponse.data.id}</li>
+          <li>Email: ${sessionResponse.data.email}</li>
+          <li>Session Key: ${sessionResponse.data.session.key}</li>
+          <li>Session Secret: ${sessionResponse.data.session.secret}</li>
+          <li>Session Created At: ${sessionResponse.data.session.createdAt}</li>
+        </ul>
+      `;
+    } catch (error) {
+      console.error('Failed to create/update session:', error);
+      userSessionResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  document.getElementById('purgeUserForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const userIdOrEmail = document.getElementById('purgeUserId').value;
+    const purgeUserResult = document.getElementById('purgeUserResult');
+
+    try {
+      const purgeResponse = await client.user.purge(userIdOrEmail);
+      purgeUserResult.innerHTML = `<p>User purged successfully: ${purgeResponse.data.message}</p>`;
+    } catch (error) {
+      console.error('Failed to purge user:', error);
+      purgeUserResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  document.getElementById('updateAddressForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('customerId').value;
+    const one = document.getElementById('addressOne').value;
+    const city = document.getElementById('addressCity').value;
+    const state = document.getElementById('addressState').value;
+    const updateAddressResult = document.getElementById('updateAddressResult');
+
+    try {
+      const addressResponse = await client.user.updateAddress({
+        customerId,
+        one,
+        city,
+        state,
+        zip: '10004',
+        type: 'SHIPPING',
+        isDefault: true,
+      });
+      updateAddressResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
+    } catch (error) {
+      console.error('Failed to update/create address:', error);
+      updateAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  document.getElementById('purgeAddressForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const addressId = document.getElementById('purgeAddressId').value;
+    const purgeAddressResult = document.getElementById('purgeAddressResult');
+
+    try {
+      const purgeResponse = await client.user.purgeAddress(addressId);
+      purgeAddressResult.innerHTML = `<p>Address purged successfully: ${purgeResponse.data.message}</p>`;
+    } catch (error) {
+      console.error('Failed to purge address:', error);
+      purgeAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    client = await initSDK();
+
+    // Mount the payment element into the DOM
+    try {
+      await client.payment.mount({
+        clientSecret: 'seti_1PssqmKlQtMnlZB1gq5ukIrU_secret_QkNcWzd5pdJ2xnCEHarhzwOgwhnU32z', // Replace with actual client secret
+        key: 'pk_test_51NpD72KlQtMnlZB1QPsaYinBgxbOKH9TGgnHwRgbiSv2kgbgkxceSL533gVASo4P6tveQAdbTZ3JWIFG4BgvUpOO00liuzXxRu',
+        elementId: 'payment-element-container',
+        appearance: { theme: 'default' },
+        elementOptions: { layout: 'tabs' },
+      });
+      console.log('Payment element mounted');
+
+      client.payment.subscribe('change', ( event ) => {
+        console.log('Payment element changed:', event);
+      });
+
+      client.payment.subscribe('ready', ( event ) => {
+        console.log('Payment element is ready:', event);
+      });
+
+    } catch (error) {
+      console.error('Failed to mount payment element:', error);
+      document.getElementById('paymentTokenResult').innerHTML = `<p class="text-danger">Error mounting payment element: ${error.message}</p>`;
+    }
+
+    // Generate a payment token when the button is clicked
+    document.getElementById('generateTokenButton').addEventListener('click', async () => {
+      const paymentTokenResult = document.getElementById('paymentTokenResult');
+
+      try {
+        const token = await client.payment.generateToken();
+        if (token?.error) {
+          paymentTokenResult.innerHTML = `<p class="text-danger">Failed to generate payment token: ${token.error.message}</p>`;
+          console.error('Failed to generate payment token:', token.error.message);
+        } else {
+          paymentTokenResult.innerHTML = `
+          <ul>
+            <li>Token ID: ${token.id}</li>
+            <li>Card Brand: ${token.card?.brand}</li>
+            <li>Card Last 4: ${token.card?.last4}</li>
+            <li>Expiry: ${token.card?.expMonth}/${token.card?.expYear}</li>
+          </ul>
+        `;
+          console.log('Generated payment token:', token);
+        }
+      } catch (error) {
+        console.error('An unexpected error occurred:', error);
+        paymentTokenResult.innerHTML = `<p class="text-danger">Unexpected error: ${error.message}</p>`;
+      }
+    });
+  });
+
+  document.getElementById('checkoutForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+
+    const checkoutResults = document.getElementById('checkoutResults');
+
+    // Build the checkout object
+    const checkoutData = {
+      cartId: document.getElementById('checkoutCartId').value,
+      'recipient': {
+        'firstName': 'dioriJoe',
+        'lastName': 'John',
+        'email': 'john.diori.joe@gmail.com',
+        'phone': '9732119920',
+        'birthDate': '11-22-1998',
+        'hasAgeVerify': true,
+      },
+      'billingAddress': {
+        'firstName': 'NewJoe',
+        'lastName': 'NewJohn',
+        'email': 'joe.new.john@gmail.com',
+        'phone': '1234324987',
+        'one': '22 Washington Ave',
+        'two': '',
+        'city': 'Cliffside Park',
+        'state': 'NJ',
+        'zip': '07010',
+      },
+      'hasSubstitutionPolicy': true,
+      'isGift': false,
+      'billingSameAsShipping': true,
+      'giftOptions': {
+        'message': '',
+        'recipient': {
+          'name': '',
+          'phone': '',
+          'email': '',
+        },
+      },
+      'marketingPreferences': {
+        'canEmail': true,
+        'canSms': true,
+      },
+      'deliveryTips': [
+        {
+          'fulfillmentId': '6570c3ec700628ce1910c105',
+          'tip': 2500,
+        },
+      ],
+    };
+
+    try {
+      const prepareResponse = await client.checkout.prepare(checkoutData);
+      checkoutResults.innerHTML = `
+        <h4>Checkout Prepared Successfully</h4>
+        <p><strong>Token:</strong> ${prepareResponse.checkout.token}</p>
+        <p><strong>Total Amount:</strong> $${(prepareResponse.checkout.amounts.total / 100).toFixed(2)}</p>
+        <p><strong>Shipping Address:</strong> ${prepareResponse.checkout.shippingAddress.one}, ${prepareResponse.checkout.shippingAddress.city}, ${prepareResponse.checkout.shippingAddress.state}, ${prepareResponse.checkout.shippingAddress.zip}, ${prepareResponse.checkout.shippingAddress.country}</p>
+        <p><strong>Billing Address:</strong> ${prepareResponse.checkout.billingAddress.one}, ${prepareResponse.checkout.billingAddress.city}, ${prepareResponse.checkout.billingAddress.state}, ${prepareResponse.checkout.billingAddress.zip}, ${prepareResponse.checkout.billingAddress.country}</p>
+        <h5>Items:</h5>
+        <ul>
+          ${prepareResponse.checkout.items.map(item => `
+            <li>
+              <strong>${item.name}</strong> (${item.size}) - $${(item.price / 100).toFixed(2)} x ${item.quantity}
+              <br>Fulfillment ID: ${item.fulfillmentId}
+              <br>Retailer: ${item.retailerId}
+            </li>
+          `).join('')}
+        </ul>
+      `;
+    } catch (error) {
+      console.error('Failed to prepare checkout:', error);
+      checkoutResults.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  document.getElementById('completeCheckoutForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const completeCheckoutResults = document.getElementById('completeCheckoutResults');
+
+    // Build the complete checkout request object
+    const completeCheckoutData = {
+      token: document.getElementById('checkoutToken').value,
+      payment: document.getElementById('paymentId').value,
+    };
+
+    try {
+      const completeResponse = await client.checkout.complete(completeCheckoutData);
+
+      // Display the good response
+      completeCheckoutResults.innerHTML = `
+      <h4>Checkout Completed Successfully</h4>
+      <p><strong>Order Number:</strong> ${completeResponse.order.number}</p>
+      <p><strong>Message:</strong> ${completeResponse.message}</p>
+    `;
+    } catch (error) {
+      // Handle the error response
+      if (error?.statusCode === 5493) {
+        completeCheckoutResults.innerHTML = `
+        <h4 class="text-danger">Error Completing Checkout</h4>
+        <p><strong>Message:</strong> ${error.message}</p>
+      `;
+      } else {
+        completeCheckoutResults.innerHTML = `<p class="text-danger">An unexpected error occurred: ${error.message}</p>`;
+      }
+      console.error('Error completing checkout:', error);
+    }
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "esnext",
+    "lib": ["es2018", "dom", "dom.iterable"],
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "outDir": "./dist",
+    "baseUrl": "src",
+    "paths": {
+      "*": ["*"]
+    },
+    "types": ["node"],
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*", "src/global.d.ts", "src/index.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".eslintrc",
+    "**/dist",
+    "coverage",
+    "*.config.ts",
+    "**/*.spec.ts",
+    ".parcel-cache",
+    "demo",
+    "*.tgz",
+    "*.css",
+    "*.html",
+    "rollup.config.js"
+  ]
+}
