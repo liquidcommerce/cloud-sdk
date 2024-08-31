@@ -61,8 +61,8 @@ jobs:
 
       - name: Semantic Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
         run: pnpm semantic-release --debug
 
       - name: Upload UMD to GCP
