@@ -25,6 +25,11 @@ jobs:
           npm install -g pnpm@9.5.0  # Ensure the correct version of pnpm is installed
           pnpm install
 
+      - name: Set up Git user
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+
       - name: Lint and test
         run: |
           pnpm lint
