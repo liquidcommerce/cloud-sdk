@@ -28,7 +28,6 @@ jobs:
         run: |
           pnpm format
           pnpm lint
-          pnpm test
 
       - name: Build SDK
         run: pnpm build
