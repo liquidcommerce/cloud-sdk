@@ -21,9 +21,6 @@ jobs:
       - name: Pull latest changes
         run: git pull origin ${{ github.ref }}
 
-      - name: Show commit history
-        run: git log --oneline -5
-
       - name: Set up Node.js and pnpm
         uses: actions/setup-node@v3
         with:
