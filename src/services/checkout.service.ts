@@ -1,10 +1,5 @@
 import type { AuthenticatedService, CheckoutHelperService } from '../core';
-import type {
-  ICheckoutCompleteParams,
-  ICheckoutCompleteResponse,
-  ICheckoutPrepareParams,
-  ICheckoutPrepareResponse
-} from '../interfaces/checkout.interface';
+import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from '../interfaces/checkout.interface';
 import type { IApiResponseWithoutData } from '../types';
 
 /**
@@ -15,7 +10,7 @@ export class CheckoutService {
 
   constructor(
     private client: AuthenticatedService,
-    private checkoutHelperService: CheckoutHelperService
+    private checkoutHelperService: CheckoutHelperService,
   ) {}
 
   /**

@@ -24,6 +24,9 @@ export default [
     browser: true
   }),
   {
+    ignores: ['**/*.d.ts'],
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     ignores: ['node_modules', '**/dist', 'coverage', '*.config.ts', 'rollup.config.js', '*.d.ts'],
     plugins: {

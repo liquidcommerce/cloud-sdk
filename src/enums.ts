@@ -1,6 +1,13 @@
+// export enum LIQUID_COMMERCE_ENV {
+//   STAGE = 'stage',
+//   // PROD = 'prod',
+// }
+
 export enum LIQUID_COMMERCE_ENV {
+  LOC = 'loc',
   STAGE = 'stage',
-  // PROD = 'prod',
+  PROD = 'prod',
+  DEV = 'dev',
 }
 
 export enum ENUM_MODALITIES {
@@ -282,4 +289,3 @@ export enum ENUM_ADDRESS_TYPE {
   SHIPPING = 'shipping',
   BILLING = 'billing',
 }
-

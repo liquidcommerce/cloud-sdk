@@ -1,23 +1,14 @@
-import type {
-  ENUM_BEER,
-  ENUM_FOOD,
-  ENUM_MERCHANDISE,
-  ENUM_NON_ALCOHOLIC,
-  ENUM_READY_TO_DRINK,
-  ENUM_SPIRITS,
-  ENUM_WINE,
-  LIQUID_COMMERCE_ENV
-} from './enums';
+import type { ENUM_BEER, ENUM_FOOD, ENUM_MERCHANDISE, ENUM_NON_ALCOHOLIC, ENUM_READY_TO_DRINK, ENUM_SPIRITS, ENUM_WINE, LIQUID_COMMERCE_ENV } from './enums';
 
 export interface ICoreParams {
   refresh?: boolean;
 }
 
 /*
-*
-* If { refresh: true }, will return a refreshed access token
-*
-* */
+ *
+ * If { refresh: true }, will return a refreshed access token
+ *
+ * */
 export interface IAuthResponse {
   auth?: IAuthResponse;
 }
@@ -63,11 +54,4 @@ export interface ILiquidCommerceConfig {
   };
 }
 
-export type LiquidTaxonomy =
-  | ENUM_BEER
-  | ENUM_FOOD
-  | ENUM_MERCHANDISE
-  | ENUM_NON_ALCOHOLIC
-  | ENUM_READY_TO_DRINK
-  | ENUM_SPIRITS
-  | ENUM_WINE;
+export type LiquidTaxonomy = ENUM_BEER | ENUM_FOOD | ENUM_MERCHANDISE | ENUM_NON_ALCOHOLIC | ENUM_READY_TO_DRINK | ENUM_SPIRITS | ENUM_WINE;

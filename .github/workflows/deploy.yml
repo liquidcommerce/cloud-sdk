@@ -1,0 +1,60 @@
+name: Deploy SDK
+
+on:
+  push:
+    branches:
+      - beta
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js and pnpm
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm@9.5.0  # Ensure the correct version of pnpm is installed
+          pnpm install
+
+      - name: Lint and test
+        run: |
+          pnpm lint
+          pnpm test
+
+      - name: Build SDK
+        run: pnpm build
+
+      - name: Generate changelog
+        run: |
+          pnpm changelog
+          git add CHANGELOG.md
+          git commit -m "chore: update changelog"
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
+        run: |
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            pnpm publish --access public --registry https://registry.npmjs.org/ --organization @liquidcommerce
+          else
+            pnpm publish --tag beta --access restricted --registry https://registry.npmjs.org/ --organization @liquidcommercedev
+          fi
+
+      - name: Upload UMD to GCP
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          echo "${GCP_SA_KEY}" | base64 --decode > gcp-key.json
+          gcloud auth activate-service-account --key-file=gcp-key.json
+          gsutil cp umd/liquidcommerce-cloud-sdk.min.js \
+          $(if [ "${GITHUB_REF}" == "refs/heads/main" ]; then echo "gs://liquid-commerse-assets/sdk/cloud/liquidcommerce-cloud-sdk.min.js"; else echo "gs://liquid-commerse-assets/sdk/cloud/stage/liquidcommerce-cloud-sdk.min.js"; fi)

@@ -1,8 +1,0 @@
-{
-  "hooks": {
-    "pre-commit": "ts-node .husky/pre-commit.ts",
-    "commit-msg": "ts-node .husky/commit-msg.ts",
-    "prepare-commit-msg": "ts-node .husky/prepare-commit-msg",
-    "post-merge": "ts-node .husky/post-merge.ts"
-  }
-}

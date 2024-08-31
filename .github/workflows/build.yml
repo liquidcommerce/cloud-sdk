@@ -1,27 +1,34 @@
-name: Build and Lint check
+name: Lint and Build check
 
 on:
-  pull_request:
+  push:
     branches:
-      - '*'
+      - '**'  # Run on all branches
 
 jobs:
-  build-test-lint:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Use Node.js
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js and pnpm
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
-          cache: 'npm'
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org/'
 
-      - name: Run install
-        run: npm ci
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm@9.5.0
+          pnpm install
 
-      - name: Run Build
-        run: npm run build
+      - name: Lint and test
+        run: |
+          pnpm format
+          pnpm lint
+          pnpm test
 
-      - name: Run tests
-        run: npm run test -- --passWithNoTests
+      - name: Build SDK
+        run: pnpm build

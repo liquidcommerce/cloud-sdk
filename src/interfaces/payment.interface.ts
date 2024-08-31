@@ -61,7 +61,6 @@ export interface IPaymentElementEventMap {
   loaderstart: { elementType: 'payment' };
 }
 
-
 /**
  * Interface for the payment provider.
  * @interface

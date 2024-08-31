@@ -1,13 +1,15 @@
 import {
   ENUM_AVAILABILITY_VALUE,
-  ENUM_BEER, ENUM_FILTER_KEYS,
+  ENUM_BEER,
+  ENUM_FILTER_KEYS,
   ENUM_FOOD,
-  ENUM_MERCHANDISE, ENUM_NAVIGATION_ORDER_DIRECTION_TYPE,
+  ENUM_MERCHANDISE,
+  ENUM_NAVIGATION_ORDER_DIRECTION_TYPE,
   ENUM_NON_ALCOHOLIC,
   ENUM_ORDER_BY,
   ENUM_READY_TO_DRINK,
   ENUM_SPIRITS,
-  ENUM_WINE
+  ENUM_WINE,
 } from '../enums';
 import type { ICatalogParams } from '../interfaces/catalog.service.interface';
 import type { IAvailabilityParams } from '../services/catalog.service';
@@ -67,7 +69,7 @@ export class CatalogHelperService {
     if (errors.length > 0) {
       return {
         ...normalizedParams,
-        error: errors.join('. ')
+        error: errors.join('. '),
       };
     }
 
@@ -86,7 +88,7 @@ export class CatalogHelperService {
       throw new Error('UPCs must be a non-empty array of strings');
     }
 
-    if (!upcs.every(upc => typeof upc === 'string' && upc.trim().length > 0)) {
+    if (!upcs.every((upc) => typeof upc === 'string' && upc.trim().length > 0)) {
       throw new Error('All UPCs must be non-empty strings');
     }
   }
@@ -133,7 +135,7 @@ export class CatalogHelperService {
       errors.push('Maximum of 10 filters allowed');
     }
 
-    filters.forEach(filter => {
+    filters.forEach((filter) => {
       if (!Object.values(ENUM_FILTER_KEYS).includes(filter.key as ENUM_FILTER_KEYS)) {
         errors.push(`Invalid filter key: ${filter.key}`);
       }
@@ -206,7 +208,7 @@ export class CatalogHelperService {
   private validateCategoriesFilter(values: LiquidTaxonomy[], errors: string[]): void {
     if (!Array.isArray(values)) {
       errors.push('Categories filter must be an array');
-    } else if (!values.every(value => this.taxonomyValues.has(value))) {
+    } else if (!values.every((value) => this.taxonomyValues.has(value))) {
       errors.push('Invalid category value(s) in categories filter');
     }
   }
