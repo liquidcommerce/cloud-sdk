@@ -6,6 +6,11 @@ on:
       - beta
       - main
 
+permissions:
+  contents: write  # Allows the workflow to create, update, and delete files in the repository
+  packages: write  # Allows the workflow to publish and manage packages
+  pull-requests: write  # Optional: Allows the workflow to create and approve pull requests
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -43,14 +48,6 @@ jobs:
 
       - name: Build SDK
         run: pnpm build
-
-      - name: Debug Secrets
-        run: |
-          echo "GITHUB_TOKEN: ${GITHUB_TOKEN}"
-          echo "NPM_TOKEN: ${NPM_TOKEN}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
 
       - name: Update package.json for NPM organization
         run: |
