@@ -7,9 +7,9 @@ on:
       - main
 
 permissions:
-  contents: write  # Allows the workflow to create, update, and delete files in the repository
-  packages: write  # Allows the workflow to publish and manage packages
-  pull-requests: write  # Optional: Allows the workflow to create and approve pull requests
+  contents: write
+  packages: write
+  pull-requests: write
 
 jobs:
   deploy:
@@ -34,7 +34,7 @@ jobs:
 
       - name: Install pnpm
         run: |
-          npm install -g pnpm@9.5.0  # Ensure the correct version of pnpm is installed
+          npm install -g pnpm@9.5.0
           pnpm install
 
       - name: Set up Git user
