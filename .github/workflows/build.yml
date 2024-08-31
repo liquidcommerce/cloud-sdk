@@ -2,8 +2,9 @@ name: Lint and Build check
 
 on:
   push:
-    branches:
-      - '**'  # Run on all branches
+    branches-ignore:
+      - beta
+      - main
 
 jobs:
   build:
