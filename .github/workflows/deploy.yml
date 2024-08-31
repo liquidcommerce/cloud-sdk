@@ -58,11 +58,18 @@ jobs:
           fi
           cat package.json  # Optional: for debugging, to see the updated package.json
 
+      - name: Set up NPM Token
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.CLOUD_SDK_NPM_TOKEN }}" > ~/.npmrc
+          cat ~/.npmrc  # Optional: to debug and confirm the token is set correctly
+
       - name: Generate changelog
+        env:
+          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
         run: |
           pnpm changelog
           git add CHANGELOG.md
-          git commit -m "chore: update changelog"
+          git commit -m "chore: update changelog" || echo "No changes to commit"
 
       - name: Semantic Release
         env:
