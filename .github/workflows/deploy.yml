@@ -44,6 +44,14 @@ jobs:
       - name: Build SDK
         run: pnpm build
 
+      - name: Debug Secrets
+        run: |
+          echo "GITHUB_TOKEN: ${GITHUB_TOKEN}"
+          echo "NPM_TOKEN: ${NPM_TOKEN}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
+
       - name: Update package.json for NPM organization
         run: |
           if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
