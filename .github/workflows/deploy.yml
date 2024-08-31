@@ -68,7 +68,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
-        run: pnpm semantic-release --debug
+        run: pnpm semantic-release
 
       - name: Upload UMD to GCP
         env:
