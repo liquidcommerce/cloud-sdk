@@ -1,3 +1,10 @@
+# [1.0.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2024-08-31)
+
+
+### Bug Fixes
+
+* **workflow:** add NPM token setup for changelog generation ([1950151](https://github.com/liquidcommerce/cloud-sdk/commit/1950151ead881f09ff9845823d68e0b5810cbb6c))
+
 # 1.0.0-beta.1 (2024-08-31)
 
 
