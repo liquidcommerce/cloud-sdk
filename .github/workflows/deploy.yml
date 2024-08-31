@@ -37,6 +37,15 @@ jobs:
       - name: Build SDK
         run: pnpm build
 
+      - name: Update package.json for NPM organization
+        run: |
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            sed -i 's/"name": ".*"/"name": "@liquidcommerce\/cloud-sdk"/' package.json
+          else
+            sed -i 's/"name": ".*"/"name": "@liquidcommercedev\/cloud-sdk"/' package.json
+          fi
+          cat package.json  # Optional: for debugging, to see the updated package.json
+
       - name: Generate changelog
         run: |
           pnpm changelog
@@ -45,14 +54,9 @@ jobs:
 
       - name: Semantic Release
         env:
-          GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
-        run: |
-          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
-            pnpm publish --access public --registry https://registry.npmjs.org/ --organization @liquidcommerce
-          else
-            pnpm publish --tag beta --access restricted --registry https://registry.npmjs.org/ --organization @liquidcommercedev
-          fi
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm semantic-release
 
       - name: Upload UMD to GCP
         env:
