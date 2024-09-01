@@ -25,9 +25,6 @@ jobs:
           ref: ${{ github.ref }}
           clean: true
 
-      - name: Pull latest changes
-        run: git pull origin ${{ github.ref }}
-
       - name: Set up Node.js and pnpm
         uses: actions/setup-node@v3
         with:
@@ -39,14 +36,6 @@ jobs:
           npm install -g pnpm@9.5.0
           pnpm install
 
-      - name: Set up Git user
-        env:
-          CLOUD_USER_NAME: ${{ secrets.CLOUD_USER_NAME }}
-          CLOUD_USER_EMAIL: ${{ secrets.CLOUD_USER_EMAIL }}
-        run: |
-          git config --local user.name "${CLOUD_USER_NAME}"
-          git config --local user.email "${CLOUD_USER_EMAIL}"
-
       - name: Setup SSH Deploy Key
         env:
           CLOUD_DEPLOY_KEY: ${{ secrets.CLOUD_DEPLOY_KEY }}
@@ -54,14 +43,29 @@ jobs:
           mkdir -p ~/.ssh
           echo "$CLOUD_DEPLOY_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
 
-      - name: Update Git URL
-        run: git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
+      - name: Verify SSH key
+        run: |
+          ls -la ~/.ssh
+          sha256sum ~/.ssh/id_rsa
+          ssh-keygen -l -f ~/.ssh/id_rsa
+          cat ~/.ssh/known_hosts
+
+      - name: Test SSH Connection
+        run: ssh -T git@github.com || true
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ secrets.CLOUD_USER_NAME }}"
+          git config --global user.email "${{ secrets.CLOUD_USER_EMAIL }}"
+          git config --global core.sshCommand "ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=~/.ssh/known_hosts"
+          git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
 
       - name: Lint and test
-        run: |
-          pnpm lint
+        run: pnpm lint
 
       - name: Build SDK
         run: pnpm build
@@ -95,9 +99,11 @@ jobs:
           GIT_COMMITTER_NAME: ${{ secrets.CLOUD_USER_NAME }}
           GIT_COMMITTER_EMAIL: ${{ secrets.CLOUD_USER_EMAIL }}
           NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global core.sshCommand "ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=~/.ssh/known_hosts"
-          pnpm semantic-release -d
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add ~/.ssh/id_rsa
+          GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=~/.ssh/known_hosts" pnpm semantic-release --debug
 
       - name: Upload UMD to GCP
         env:
