@@ -71,9 +71,18 @@ jobs:
           git add CHANGELOG.md
           git commit -m "chore: update changelog" || echo "No changes to commit"
 
+      - name: Configure Git
+        env:
+          GIT_CREDENTIALS: ${{ secrets.CLOUD_GIT_CREDENTIALS }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global url."https://${GIT_CREDENTIALS}@github.com/".insteadOf "https://github.com/"
+
       - name: Semantic Release
         env:
-          GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
+          GIT_CREDENTIALS: ${{ secrets.CLOUD_GIT_CREDENTIALS }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
         run: pnpm semantic-release
 
