@@ -1,19 +1,9 @@
-import type {
-  IAddressAutocompleteParams,
-  IAddressAutocompleteResult,
-  IAddressDetailsParams,
-  IAddressDetailsResult
-} from '../services/address.service';
+import type { IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult } from '../services/address.service';
 import type { IAvailabilityParams, IAvailabilityResponse } from '../services/catalog.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from '../types';
 import type { ICart, ICartUpdateParams } from './cart.interface';
 import type { ICatalog, ICatalogParams } from './catalog.service.interface';
-import type {
-  ICheckoutCompleteParams,
-  ICheckoutCompleteResponse,
-  ICheckoutPrepareParams,
-  ICheckoutPrepareResponse
-} from './checkout.interface';
+import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from './checkout.interface';
 import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './payment.interface';
 import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserSessionParams } from './user.interface';
 
@@ -500,10 +490,7 @@ export interface IPaymentMethod {
    *
    * @throws {Error} - Throws an error if the payment element has not been initialized.
    */
-  subscribe<K extends keyof IPaymentElementEventMap>(
-    eventType: K,
-    handler: (event: IPaymentElementEventMap[K]) => void
-  ): void;
+  subscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler: (event: IPaymentElementEventMap[K]) => void): void;
 
   /**
    * Unsubscribes from a specific event type on the payment element.
@@ -534,10 +521,7 @@ export interface IPaymentMethod {
    *
    * @throws {Error} - Throws an error if the payment element has not been initialized.
    */
-  unsubscribe<K extends keyof IPaymentElementEventMap>(
-    eventType: K,
-    handler?: (event: IPaymentElementEventMap[K]) => void
-  ): void;
+  unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void;
 }
 
 export interface ICheckoutMethod {

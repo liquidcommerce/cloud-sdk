@@ -11,7 +11,7 @@ interface IAuthResponse {
 
   exp: number;
 
-  type: 'ACCESS_TOKEN'
+  type: 'ACCESS_TOKEN';
 }
 
 interface IRequestOptions {

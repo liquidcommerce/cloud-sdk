@@ -1,21 +1,7 @@
-import type {
-  Stripe,
-  StripeElements,
-  StripeElementsOptions,
-  StripeElementsOptionsClientSecret,
-  StripePaymentElement,
-  StripePaymentElementOptions,
-} from '@stripe/stripe-js';
+import type { Stripe, StripeElements, StripeElementsOptions, StripeElementsOptionsClientSecret, StripePaymentElement, StripePaymentElementOptions } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import type {
-  ILiquidPaymentConfig,
-  ILiquidPaymentElementOptions,
-  ILiquidPaymentError,
-  ILiquidPaymentToken,
-  IPaymentElementEventMap,
-  IPaymentProvider
-} from '../interfaces/payment.interface';
+import type { ILiquidPaymentConfig, ILiquidPaymentElementOptions, ILiquidPaymentError, ILiquidPaymentToken, IPaymentElementEventMap, IPaymentProvider } from '../interfaces/payment.interface';
 
 type ExtendedStripeElementsOptions = StripeElementsOptionsClientSecret & {
   paymentMethodCreation?: 'manual' | 'automatic';

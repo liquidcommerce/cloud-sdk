@@ -1,6 +1,6 @@
 import type { ICoreParams } from '../types';
 
-export interface IAddress{
+export interface IAddress {
   id?: string;
 
   one: string;

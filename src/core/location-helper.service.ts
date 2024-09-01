@@ -5,7 +5,6 @@ import type { ILoc } from '../interfaces/address.interface';
  * The LocationHelperService class provides methods to validate and normalize location objects.
  */
 export class LocationHelperService {
-
   /**
    * Validates and normalizes a location object.
    * @param {ILoc} loc - The location object to validate and normalize.

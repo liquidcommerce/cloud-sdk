@@ -13,9 +13,11 @@ import { CheckoutHelperService } from './checkout-helper.service';
 import { LocationHelperService } from './location-helper.service';
 import { PaymentProviderService } from './payment-provider.service';
 
-type ServiceFactory<T> = {
-  getInstance: (...args: any[]) => T;
-} | (new (...args: any[]) => T);
+type ServiceFactory<T> =
+  | {
+      getInstance: (...args: any[]) => T;
+    }
+  | (new (...args: any[]) => T);
 
 /**
  * The SingletonManager class is responsible for managing singleton instances of various services.
@@ -81,9 +83,7 @@ export class SingletonManager {
    */
   private getOrCreateService<T>(key: string, ServiceClass: ServiceFactory<T>, ...args: any[]): T {
     if (!this.services.has(key)) {
-      const service = 'getInstance' in ServiceClass
-        ? ServiceClass.getInstance(...args)
-        : new ServiceClass(...args);
+      const service = 'getInstance' in ServiceClass ? ServiceClass.getInstance(...args) : new ServiceClass(...args);
       this.services.set(key, service);
     }
 

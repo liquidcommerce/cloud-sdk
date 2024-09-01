@@ -73,7 +73,6 @@ export interface IPurgeResponse {
   message: string;
 }
 
-
 export interface IUserAddressParams extends ICoreParams {
   customerId: string;
 

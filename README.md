@@ -43,7 +43,7 @@ All API requests in production must be made over HTTPS. Calls made over plain HT
 import LiquidCommerce from '@liquidcommerce/cloud-sdk';
 
 // Your Account token provided to you through your account representative
-const client = await LiquidCommerce('dev_******************', {
+const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
   googlePlacesApiKey: 'YOUR_GOOGLE_PLACES_API_KEY',
   env: 'stage' // or 'prod'
 });

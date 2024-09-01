@@ -6,6 +6,3 @@
 
 # This file itself is owned by members who are assigned the Project Admin role in this project.
 CODEOWNERS @reservebar-tech @intellective-development
-
-# This Cloud Build file itself is owned by members who are assigned the Project Owner & Admin role in this project.
-cloudbuild.yaml @reservebar-tech @intellective-development

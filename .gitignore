@@ -331,6 +331,7 @@ out
 gen
 .vscode
 dist
+umd
 .webpack
 .serverless/**/*.zip
 
@@ -372,3 +373,5 @@ pnpm-debug.log*
 
 # temp directory
 .tmp
+
+.npmrc

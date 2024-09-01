@@ -12,7 +12,7 @@ export class CartService {
 
   constructor(
     private client: AuthenticatedService,
-    private cartHelperService: CartHelperService
+    private cartHelperService: CartHelperService,
   ) {}
 
   /**
@@ -27,10 +27,10 @@ export class CartService {
     try {
       let validatedId: boolean | string = this.cartHelperService.validateId(id);
 
-      validatedId = validatedId === '' ? false : validatedId
+      validatedId = validatedId === '' ? false : validatedId;
 
       if (validatedId) {
-        const params: { id?: string, refresh?: boolean } = { id: validatedId };
+        const params: { id?: string; refresh?: boolean } = { id: validatedId };
 
         if (typeof refresh === 'boolean') {
           params.refresh = refresh;
