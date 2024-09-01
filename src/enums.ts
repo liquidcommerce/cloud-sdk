@@ -1,4 +1,5 @@
 export enum LIQUID_COMMERCE_ENV {
+  DEV = 'dev',
   STAGE = 'stage',
   // PROD = 'prod',
 }
