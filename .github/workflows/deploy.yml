@@ -41,27 +41,36 @@ jobs:
           CLOUD_DEPLOY_KEY: ${{ secrets.CLOUD_DEPLOY_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "$CLOUD_DEPLOY_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          echo "Decoding and saving SSH key..."
+          echo "$CLOUD_DEPLOY_KEY" | base64 -d > ~/.ssh/id_ed25519 2>/dev/null || echo "$CLOUD_DEPLOY_KEY" | base64 --decode > ~/.ssh/id_ed25519
+          if [ ! -s ~/.ssh/id_ed25519 ]; then
+            echo "Error: Failed to decode SSH key"
+            exit 1
+          fi
+          chmod 600 ~/.ssh/id_ed25519
+          echo "SSH key file permissions:"
+          ls -l ~/.ssh/id_ed25519
+          echo "SSH key fingerprint:"
+          ssh-keygen -l -f ~/.ssh/id_ed25519
+          echo "Adding GitHub to known hosts..."
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
+          echo "Starting ssh-agent..."
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-
-      - name: Verify SSH key
-        run: |
-          ls -la ~/.ssh
-          sha256sum ~/.ssh/id_rsa
-          ssh-keygen -l -f ~/.ssh/id_rsa
-          cat ~/.ssh/known_hosts
+          echo "Adding SSH key to agent..."
+          ssh-add ~/.ssh/id_ed25519
+          echo "SSH key setup completed."
 
       - name: Test SSH Connection
-        run: ssh -T git@github.com || true
+        run: ssh -T git@github.com -o StrictHostKeyChecking=no || true
 
       - name: Configure Git
+        env:
+          CLOUD_USER_NAME: ${{ secrets.CLOUD_USER_NAME }}
+          CLOUD_USER_EMAIL: ${{ secrets.CLOUD_USER_EMAIL }}
         run: |
-          git config --global user.name "${{ secrets.CLOUD_USER_NAME }}"
-          git config --global user.email "${{ secrets.CLOUD_USER_EMAIL }}"
-          git config --global core.sshCommand "ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=~/.ssh/known_hosts"
+          git config --global user.name "${CLOUD_USER_NAME}"
+          git config --global user.email "${CLOUD_USER_EMAIL}"
+          git config --global core.sshCommand "ssh -i ~/.ssh/id_ed25519 -o UserKnownHostsFile=~/.ssh/known_hosts"
           git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
 
       - name: Lint and test
@@ -98,12 +107,10 @@ jobs:
           GIT_AUTHOR_EMAIL: ${{ secrets.CLOUD_USER_EMAIL }}
           GIT_COMMITTER_NAME: ${{ secrets.CLOUD_USER_NAME }}
           GIT_COMMITTER_EMAIL: ${{ secrets.CLOUD_USER_EMAIL }}
+          GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add ~/.ssh/id_rsa
-          GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=~/.ssh/known_hosts" pnpm semantic-release --debug
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o UserKnownHostsFile=~/.ssh/known_hosts" pnpm semantic-release --debug
 
       - name: Upload UMD to GCP
         env:
