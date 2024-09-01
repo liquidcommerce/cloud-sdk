@@ -44,6 +44,12 @@ jobs:
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
 
+      - name: Configure Git with PAT
+        env:
+          PAT_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
+        run: |
+          git config --global url."https://${PAT_TOKEN}@github.com/".insteadOf "https://github.com/"
+
       - name: Lint and test
         run: |
           pnpm lint
@@ -72,14 +78,6 @@ jobs:
           pnpm changelog
           git add CHANGELOG.md
           git commit -m "chore: update changelog" || echo "No changes to commit"
-
-      - name: Configure Git
-        env:
-          GIT_CREDENTIALS: ${{ secrets.CLOUD_GIT_CREDENTIALS }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global url."https://${GIT_CREDENTIALS}@github.com/".insteadOf "https://github.com/"
 
       - name: Semantic Release
         env:
