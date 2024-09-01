@@ -9,7 +9,9 @@ on:
 permissions:
   contents: write
   packages: write
-  pull-requests: write
+  issues: write # to be able to comment on released issues
+  pull-requests: write # to be able to comment on released pull requests
+  id-token: write # to enable use of OIDC for npm provenance
 
 jobs:
   deploy:
@@ -82,7 +84,7 @@ jobs:
       - name: Semantic Release
         env:
           GIT_CREDENTIALS: ${{ secrets.CLOUD_GIT_CREDENTIALS }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
         run: pnpm semantic-release
 
