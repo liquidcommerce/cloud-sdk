@@ -40,15 +40,18 @@ jobs:
           pnpm install
 
       - name: Set up Git user
+        env:
+          CLOUD_USER_NAME: ${{ secrets.CLOUD_USER_NAME }}
+          CLOUD_USER_EMAIL: ${{ secrets.CLOUD_USER_EMAIL }}
         run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
+          git config --local user.name "${CLOUD_USER_NAME}"
+          git config --local user.email "${CLOUD_USER_EMAIL}"
 
       - name: Configure Git with PAT
         env:
-          PAT_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
+          CLOUD_GIT_CREDENTIALS: ${{ secrets.CLOUD_GIT_CREDENTIALS }}
         run: |
-          git config --global url."https://${PAT_TOKEN}@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://${CLOUD_GIT_CREDENTIALS}@github.com/".insteadOf "https://github.com/"
 
       - name: Lint and test
         run: |
