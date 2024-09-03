@@ -1,3 +1,16 @@
+# [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0-beta.4...v1.1.0-beta.1) (2024-09-03)
+
+
+### Features
+
+* **env:** update environment variable handling and streamline exports ([12ddb81](https://github.com/liquidcommerce/cloud-sdk/commit/12ddb81c6c6b56707d30bfa742ad65956ef443ad))
+
+
+
+# [1.0.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0-beta.3...v1.0.0) (2024-09-01)
+
+
+
 # [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.1.0-beta.1) (2024-09-03)
 
 
