@@ -1,3 +1,7 @@
+# [1.0.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0-beta.3...v1.0.0) (2024-09-01)
+
+
+
 
 # 1.0.0 (2024-09-01)
 
