@@ -1,6 +1,6 @@
 {
   "name": "@liquidcommercedev/cloud-sdk",
-  "version": "1.1.0-beta.1",
+  "version": "0.0.0-semantically-released",
   "description": "LiquidCommerce Cloud SDK",
   "main": "./dist/index.cjs",
   "module": "./dist/index.esm.js",
