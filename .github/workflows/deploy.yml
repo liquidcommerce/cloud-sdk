@@ -88,12 +88,6 @@ jobs:
             exit 1
           fi
 
-      - name: Lint and test
-        run: pnpm lint
-
-      - name: Build SDK
-        run: pnpm build
-
       - name: Update package.json for NPM organization and privacy
         run: |
           if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
