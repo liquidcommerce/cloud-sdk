@@ -1,3 +1,16 @@
+# [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.1.0-beta.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* **enums, constants:** remove unused LOC and DEV environments ([7d1090d](https://github.com/liquidcommerce/cloud-sdk/commit/7d1090db18bc6f169094bc019c42b38899f6b20c))
+* **enums, constants:** remove unused LOC and DEV environments ([9b9cab6](https://github.com/liquidcommerce/cloud-sdk/commit/9b9cab690a8191649944acf248b2a285dd7c69ea))
+
+
+### Features
+
+* **env:** update environment variable handling and streamline exports ([12ddb81](https://github.com/liquidcommerce/cloud-sdk/commit/12ddb81c6c6b56707d30bfa742ad65956ef443ad))
+
 # [1.0.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0-beta.3...v1.0.0) (2024-09-01)
 
 
