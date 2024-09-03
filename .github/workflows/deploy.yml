@@ -94,7 +94,7 @@ jobs:
             sed -i 's/"name": ".*"/"name": "@liquidcommerce\/cloud-sdk"/' package.json
             sed -i 's/"private": true,/"private": false,/' package.json
           else
-            sed -i 's/"name": ".*"/"name": "@liquidcommercedev\/cloud-sdk"/' package.json
+            sed -i 's/"name": ".*"/"name": "@liquidcommerceteam\/cloud-sdk"/' package.json
             sed -i 's/"private": false,/"private": true,/' package.json
           fi
           cat package.json
