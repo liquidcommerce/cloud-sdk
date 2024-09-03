@@ -34,6 +34,7 @@ jobs:
       - name: Install pnpm
         run: |
           npm install -g pnpm@9.5.0
+          npm cache clean --force
           pnpm install
 
       - name: Setup SSH Deploy Key
