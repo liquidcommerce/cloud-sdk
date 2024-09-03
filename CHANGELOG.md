@@ -1,3 +1,10 @@
+# [1.1.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2024-09-03)
+
+
+### Bug Fixes
+
+* **deploy:** update version for semantic release ([6f01727](https://github.com/liquidcommerce/cloud-sdk/commit/6f017272ef496ebf110c567e6db3e40232cb52ac))
+
 # [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.1.0-beta.1) (2024-09-03)
 
 
