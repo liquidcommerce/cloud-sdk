@@ -110,14 +110,6 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ secrets.CLOUD_SDK_NPM_TOKEN }}" > ~/.npmrc
           cat ~/.npmrc
 
-      - name: Generate changelog
-        env:
-          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
-        run: |
-          pnpm changelog
-          git add CHANGELOG.md
-          git commit -m "chore: update changelog" || echo "No changes to commit"
-
       - name: Semantic Release
         env:
           GIT_AUTHOR_NAME: ${{ secrets.CLOUD_USER_NAME }}
