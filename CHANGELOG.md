@@ -1,3 +1,10 @@
+# [1.1.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2024-09-03)
+
+
+### Bug Fixes
+
+* **ci:** remove changelog generation from deploy workflow ([0cda373](https://github.com/liquidcommerce/cloud-sdk/commit/0cda373358ed87815baa94289f31e397c14d2ca3))
+
 ## [1.0.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.0.1) (2024-09-01)
 
 ### Bug Fixes
