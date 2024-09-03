@@ -111,7 +111,6 @@ jobs:
           cat ~/.npmrc
 
       - name: Generate changelog
-        if: github.ref == 'refs/heads/main'
         env:
           NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
         run: |
