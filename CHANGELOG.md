@@ -1,3 +1,10 @@
+# [1.1.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2024-09-03)
+
+
+### Bug Fixes
+
+* **workflows:** add npm cache clean step to deploy.yml ([50742fa](https://github.com/liquidcommerce/cloud-sdk/commit/50742fa72ea55de7c25f6ae50fca64e6b885e333))
+
 # [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.1.0-beta.1) (2024-09-03)
 
 
