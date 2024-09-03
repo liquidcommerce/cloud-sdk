@@ -73,6 +73,20 @@ jobs:
           git config --global core.sshCommand "ssh -i ~/.ssh/id_ed25519 -o UserKnownHostsFile=~/.ssh/known_hosts"
           git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
 
+      - name: Set up environment file
+        env:
+          ENV_MAIN: ${{ secrets.CLOUD_SDK_ENV_MAIN }}
+          ENV_BETA: ${{ secrets.CLOUD_SDK_ENV_BETA }}
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "$ENV_MAIN" > .env
+          elif [ "${{ github.ref }}" = "refs/heads/beta" ]; then
+            echo "$ENV_BETA" > .env
+          else
+            echo "Unsupported branch for deployment"
+            exit 1
+          fi
+
       - name: Lint and test
         run: pnpm lint
 
