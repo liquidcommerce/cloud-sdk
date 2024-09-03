@@ -93,12 +93,14 @@ jobs:
       - name: Build SDK
         run: pnpm build
 
-      - name: Update package.json for NPM organization
+      - name: Update package.json for NPM organization and privacy
         run: |
           if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
             sed -i 's/"name": ".*"/"name": "@liquidcommerce\/cloud-sdk"/' package.json
+            sed -i 's/"private": true,/"private": false,/' package.json
           else
             sed -i 's/"name": ".*"/"name": "@liquidcommercedev\/cloud-sdk"/' package.json
+            sed -i 's/"private": false,/"private": true,/' package.json
           fi
           cat package.json
 
@@ -108,6 +110,7 @@ jobs:
           cat ~/.npmrc
 
       - name: Generate changelog
+        if: github.ref == 'refs/heads/main'
         env:
           NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
         run: |
