@@ -1,66 +1,102 @@
-## [1.0.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.0.1) (2024-09-01)
+# [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.1.0-beta.1) (2024-09-03)
 
 
 ### Bug Fixes
 
+* **ci:** remove changelog generation from deploy workflow ([0cda373](https://github.com/liquidcommerce/cloud-sdk/commit/0cda373358ed87815baa94289f31e397c14d2ca3))
+* **ci:** remove conditional from changelog generation step in deploy workflow ([67d3357](https://github.com/liquidcommerce/cloud-sdk/commit/67d3357936d6ad95b6cfed18658067e5d4ee5cee))
+* **deploy:** update version for semantic release ([6f01727](https://github.com/liquidcommerce/cloud-sdk/commit/6f017272ef496ebf110c567e6db3e40232cb52ac))
 * **enums, constants:** remove unused LOC and DEV environments ([7d1090d](https://github.com/liquidcommerce/cloud-sdk/commit/7d1090db18bc6f169094bc019c42b38899f6b20c))
 * **enums, constants:** remove unused LOC and DEV environments ([9b9cab6](https://github.com/liquidcommerce/cloud-sdk/commit/9b9cab690a8191649944acf248b2a285dd7c69ea))
+* **package:** update package name to @liquidcommerceteam/cloud-sdk in package.json and deploy.yml ([b444aa7](https://github.com/liquidcommerce/cloud-sdk/commit/b444aa756105850ac863b447f5c09262f3b72d0b))
+* **package:** update version for semantic release ([e742085](https://github.com/liquidcommerce/cloud-sdk/commit/e742085806e1ee343491355409da9a0b974e2641))
+* **package:** update version for semantic release ([3d7c217](https://github.com/liquidcommerce/cloud-sdk/commit/3d7c217a05df29cf98b0ce3cc148b84a5b2d1251))
+* **workflows:** add npm cache clean step to deploy.yml ([50742fa](https://github.com/liquidcommerce/cloud-sdk/commit/50742fa72ea55de7c25f6ae50fca64e6b885e333))
+* **workflows:** update package.json privacy settings and changelog condition ([cf8a0dd](https://github.com/liquidcommerce/cloud-sdk/commit/cf8a0dd2debb0e5aa077f391030fca8b4082163e))
+
+
+### Features
+
+* **env:** update environment variable handling and streamline exports ([12ddb81](https://github.com/liquidcommerce/cloud-sdk/commit/12ddb81c6c6b56707d30bfa742ad65956ef443ad))
+
+# [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.1.0-beta.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* **ci:** remove changelog generation from deploy workflow ([0cda373](https://github.com/liquidcommerce/cloud-sdk/commit/0cda373358ed87815baa94289f31e397c14d2ca3))
+* **ci:** remove conditional from changelog generation step in deploy workflow ([67d3357](https://github.com/liquidcommerce/cloud-sdk/commit/67d3357936d6ad95b6cfed18658067e5d4ee5cee))
+* **deploy:** update version for semantic release ([6f01727](https://github.com/liquidcommerce/cloud-sdk/commit/6f017272ef496ebf110c567e6db3e40232cb52ac))
+* **enums, constants:** remove unused LOC and DEV environments ([7d1090d](https://github.com/liquidcommerce/cloud-sdk/commit/7d1090db18bc6f169094bc019c42b38899f6b20c))
+* **enums, constants:** remove unused LOC and DEV environments ([9b9cab6](https://github.com/liquidcommerce/cloud-sdk/commit/9b9cab690a8191649944acf248b2a285dd7c69ea))
+* **package:** update version for semantic release ([e742085](https://github.com/liquidcommerce/cloud-sdk/commit/e742085806e1ee343491355409da9a0b974e2641))
+* **package:** update version for semantic release ([3d7c217](https://github.com/liquidcommerce/cloud-sdk/commit/3d7c217a05df29cf98b0ce3cc148b84a5b2d1251))
+* **workflows:** add npm cache clean step to deploy.yml ([50742fa](https://github.com/liquidcommerce/cloud-sdk/commit/50742fa72ea55de7c25f6ae50fca64e6b885e333))
+* **workflows:** update package.json privacy settings and changelog condition ([cf8a0dd](https://github.com/liquidcommerce/cloud-sdk/commit/cf8a0dd2debb0e5aa077f391030fca8b4082163e))
+
+
+### Features
+
+* **env:** update environment variable handling and streamline exports ([12ddb81](https://github.com/liquidcommerce/cloud-sdk/commit/12ddb81c6c6b56707d30bfa742ad65956ef443ad))
+
+# [1.1.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2024-09-03)
+
+
+### Bug Fixes
+
+* **deploy:** update version for semantic release ([6f01727](https://github.com/liquidcommerce/cloud-sdk/commit/6f017272ef496ebf110c567e6db3e40232cb52ac))
+
+# [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.1.0-beta.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* **ci:** remove changelog generation from deploy workflow ([0cda373](https://github.com/liquidcommerce/cloud-sdk/commit/0cda373358ed87815baa94289f31e397c14d2ca3))
+* **ci:** remove conditional from changelog generation step in deploy workflow ([67d3357](https://github.com/liquidcommerce/cloud-sdk/commit/67d3357936d6ad95b6cfed18658067e5d4ee5cee))
+* **enums, constants:** remove unused LOC and DEV environments ([7d1090d](https://github.com/liquidcommerce/cloud-sdk/commit/7d1090db18bc6f169094bc019c42b38899f6b20c))
+* **enums, constants:** remove unused LOC and DEV environments ([9b9cab6](https://github.com/liquidcommerce/cloud-sdk/commit/9b9cab690a8191649944acf248b2a285dd7c69ea))
+* **package:** update version for semantic release ([3d7c217](https://github.com/liquidcommerce/cloud-sdk/commit/3d7c217a05df29cf98b0ce3cc148b84a5b2d1251))
+* **workflows:** add npm cache clean step to deploy.yml ([50742fa](https://github.com/liquidcommerce/cloud-sdk/commit/50742fa72ea55de7c25f6ae50fca64e6b885e333))
+* **workflows:** update package.json privacy settings and changelog condition ([cf8a0dd](https://github.com/liquidcommerce/cloud-sdk/commit/cf8a0dd2debb0e5aa077f391030fca8b4082163e))
+
+
+### Features
+
+* **env:** update environment variable handling and streamline exports ([12ddb81](https://github.com/liquidcommerce/cloud-sdk/commit/12ddb81c6c6b56707d30bfa742ad65956ef443ad))
+
+# [1.1.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.1.0-beta.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* **ci:** remove changelog generation from deploy workflow ([0cda373](https://github.com/liquidcommerce/cloud-sdk/commit/0cda373358ed87815baa94289f31e397c14d2ca3))
+* **ci:** remove conditional from changelog generation step in deploy workflow ([67d3357](https://github.com/liquidcommerce/cloud-sdk/commit/67d3357936d6ad95b6cfed18658067e5d4ee5cee))
+* **enums, constants:** remove unused LOC and DEV environments ([7d1090d](https://github.com/liquidcommerce/cloud-sdk/commit/7d1090db18bc6f169094bc019c42b38899f6b20c))
+* **enums, constants:** remove unused LOC and DEV environments ([9b9cab6](https://github.com/liquidcommerce/cloud-sdk/commit/9b9cab690a8191649944acf248b2a285dd7c69ea))
+* **workflows:** add npm cache clean step to deploy.yml ([50742fa](https://github.com/liquidcommerce/cloud-sdk/commit/50742fa72ea55de7c25f6ae50fca64e6b885e333))
+* **workflows:** update package.json privacy settings and changelog condition ([cf8a0dd](https://github.com/liquidcommerce/cloud-sdk/commit/cf8a0dd2debb0e5aa077f391030fca8b4082163e))
+
+
+### Features
+
+* **env:** update environment variable handling and streamline exports ([12ddb81](https://github.com/liquidcommerce/cloud-sdk/commit/12ddb81c6c6b56707d30bfa742ad65956ef443ad))
+
+# [1.1.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.0-beta.1...v1.1.0-beta.2) (2024-09-03)
+
+
+### Bug Fixes
+
+* **ci:** remove changelog generation from deploy workflow ([0cda373](https://github.com/liquidcommerce/cloud-sdk/commit/0cda373358ed87815baa94289f31e397c14d2ca3))
+
+## [1.0.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0...v1.0.1) (2024-09-01)
+
+### Bug Fixes
+
+* **enums, constants:** remove unused LOC and DEV environments ([7d1090d](https://github.com/liquidcommerce/cloud-sdk/commit/7d1090db18bc6f169094bc019c42b38899f6b20c))
+
 
 # [1.0.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0-beta.3...v1.0.0) (2024-09-01)
 
-
-
-
-# 1.0.0 (2024-09-01)
-
-
 ### Bug Fixes
 
 * **enums, constants:** remove unused LOC and DEV environments ([7d1090d](https://github.com/liquidcommerce/cloud-sdk/commit/7d1090db18bc6f169094bc019c42b38899f6b20c))
-* **enums, constants:** remove unused LOC and DEV environments ([9b9cab6](https://github.com/liquidcommerce/cloud-sdk/commit/9b9cab690a8191649944acf248b2a285dd7c69ea))
-
-# [1.0.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2024-09-01)
-
-
-### Bug Fixes
-
-* **ci:** configure SSH deploy key and update git URL during deployment ([7bb2c0f](https://github.com/liquidcommerce/cloud-sdk/commit/7bb2c0f4ed19f83a9d996eaac29e36fd9b871ca7))
-* **ci:** configure SSH deploy key and update git URL during deployment ([5f64f33](https://github.com/liquidcommerce/cloud-sdk/commit/5f64f3384eafe5f6befc68a1808257bffbe9fd45))
-* **ci:** configure SSH deploy key and update git URL during deployment ([010c93a](https://github.com/liquidcommerce/cloud-sdk/commit/010c93ac52cc6de862068c2b73765da7e45f1399))
-* **demo:** remove values from demo/index.html and README.md ([1d2e829](https://github.com/liquidcommerce/cloud-sdk/commit/1d2e8297f8053a2745826b6eaddd48528972f0f3))
-* **demo:** remove values from demo/index.html and README.md ([30c463c](https://github.com/liquidcommerce/cloud-sdk/commit/30c463c59a50397cfdd6457dd6f8fb440ed708d2))
-* **github-actions:** configure git and add missing GitHub token for semantic release ([9cacbe0](https://github.com/liquidcommerce/cloud-sdk/commit/9cacbe0df43f1867b367d7092b1cc2b5a968fe09))
-* **github-actions:** configure git and add missing GitHub token for semantic release ([f04001e](https://github.com/liquidcommerce/cloud-sdk/commit/f04001e43f7011c504024a54773fef6a755670f7))
-* **github-actions:** configure git and add missing GitHub token for semantic release ([7ccf5eb](https://github.com/liquidcommerce/cloud-sdk/commit/7ccf5ebae8ecc65c774b17c8cadd1e4f16cd75ee))
-* **workflows:** update Git credentials to use CLOUD_USER and CLOUD_GIT_CREDENTIALS secrets ([ec22ba8](https://github.com/liquidcommerce/cloud-sdk/commit/ec22ba8f47d740b894c5e81bb1329879e3646d7a))
-
-# [1.0.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2024-08-31)
-
-
-### Bug Fixes
-
-* **workflow:** add NPM token setup for changelog generation ([1950151](https://github.com/liquidcommerce/cloud-sdk/commit/1950151ead881f09ff9845823d68e0b5810cbb6c))
-
-# 1.0.0-beta.1 (2024-08-31)
-
-
-### Bug Fixes
-
-* **ci:** remove debug flag from semantic-release step in deploy workflow ([10796ad](https://github.com/liquidcommerce/cloud-sdk/commit/10796adf7f4543f87698e0de15c3ce20f1a4df6e))
-* **deploy:** update checkout and pull steps in deploy workflow ([3c5a088](https://github.com/liquidcommerce/cloud-sdk/commit/3c5a088affb804817ab4f056c59f380466ea70d5))
-* **deploy:** update checkout and pull steps in deploy workflow ([a497e53](https://github.com/liquidcommerce/cloud-sdk/commit/a497e535f6b565a6b584c6bba18dbb12b4c886cd))
-* **workflows:** update permissions and remove sensitive debug step in deploy.yml ([f064a64](https://github.com/liquidcommerce/cloud-sdk/commit/f064a64db2810906384ed9bb63f10fb47a7cc8da))
-
-# 0.0.0-semantically-released (2024-08-31)
-
-
-### Bug Fixes
-
-* **ci:** remove debug flag from semantic-release step in deploy workflow ([10796ad](https://github.com/liquidcommerce/cloud-sdk/commit/10796adf7f4543f87698e0de15c3ce20f1a4df6e))
-* **deploy:** update checkout and pull steps in deploy workflow ([3c5a088](https://github.com/liquidcommerce/cloud-sdk/commit/3c5a088affb804817ab4f056c59f380466ea70d5))
-* **deploy:** update checkout and pull steps in deploy workflow ([a497e53](https://github.com/liquidcommerce/cloud-sdk/commit/a497e535f6b565a6b584c6bba18dbb12b4c886cd))
-* **workflows:** update permissions and remove sensitive debug step in deploy.yml ([f064a64](https://github.com/liquidcommerce/cloud-sdk/commit/f064a64db2810906384ed9bb63f10fb47a7cc8da))
-
-
-
-## 1.1.1-beta.9 (2024-08-31)

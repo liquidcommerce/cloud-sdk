@@ -22,8 +22,12 @@ const commonPlugins = [
     preventAssignment: true,
     values: {
       'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.GOOGLE_PLACES_API_KEY': JSON.stringify(process.env.GOOGLE_PLACES_API_KEY),
-      'process.env.ENV': JSON.stringify(process.env.ENV),
+      'process.env.ENV_LOC': JSON.stringify(process.env.ENV_LOC),
+      'process.env.ENV_DEV': JSON.stringify(process.env.ENV_DEV),
+      'process.env.ENV_STAGE': JSON.stringify(process.env.ENV_STAGE),
+      'process.env.ENV_PROD': JSON.stringify(process.env.ENV_PROD),
     },
   }),
   typescript({

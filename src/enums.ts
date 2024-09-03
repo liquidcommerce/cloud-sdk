@@ -1,7 +1,8 @@
 export enum LIQUID_COMMERCE_ENV {
-  DEV = 'dev',
+  LOC = 'loc',
   STAGE = 'stage',
-  // PROD = 'prod',
+  PROD = 'prod',
+  DEV = 'dev',
 }
 
 export enum ENUM_MODALITIES {

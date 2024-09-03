@@ -3,6 +3,10 @@ declare namespace NodeJS {
   interface ProcessEnv {
     API_KEY: string;
     GOOGLE_PLACES_API_KEY: string;
-    ENV: 'local' | 'dev' | 'stage' | 'prod';
+    NODE_ENV: 'local' | 'dev' | 'staging' | 'production';
+    ENV_LOC: string;
+    ENV_DEV: string;
+    ENV_STAGE: string;
+    ENV_PROD: string;
   }
 }

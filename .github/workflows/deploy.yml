@@ -34,6 +34,7 @@ jobs:
       - name: Install pnpm
         run: |
           npm install -g pnpm@9.5.0
+          npm cache clean --force
           pnpm install
 
       - name: Setup SSH Deploy Key
@@ -73,18 +74,28 @@ jobs:
           git config --global core.sshCommand "ssh -i ~/.ssh/id_ed25519 -o UserKnownHostsFile=~/.ssh/known_hosts"
           git remote set-url origin git@github.com:${GITHUB_REPOSITORY}.git
 
-      - name: Lint and test
-        run: pnpm lint
+      - name: Set up environment file
+        env:
+          ENV_MAIN: ${{ secrets.CLOUD_SDK_ENV_MAIN }}
+          ENV_BETA: ${{ secrets.CLOUD_SDK_ENV_BETA }}
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "$ENV_MAIN" > .env
+          elif [ "${{ github.ref }}" = "refs/heads/beta" ]; then
+            echo "$ENV_BETA" > .env
+          else
+            echo "Unsupported branch for deployment"
+            exit 1
+          fi
 
-      - name: Build SDK
-        run: pnpm build
-
-      - name: Update package.json for NPM organization
+      - name: Update package.json for NPM organization and privacy
         run: |
           if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
             sed -i 's/"name": ".*"/"name": "@liquidcommerce\/cloud-sdk"/' package.json
+            sed -i 's/"private": true,/"private": false,/' package.json
           else
-            sed -i 's/"name": ".*"/"name": "@liquidcommercedev\/cloud-sdk"/' package.json
+            sed -i 's/"name": ".*"/"name": "@liquidcommerceteam\/cloud-sdk"/' package.json
+            sed -i 's/"private": false,/"private": true,/' package.json
           fi
           cat package.json
 
@@ -92,14 +103,6 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.CLOUD_SDK_NPM_TOKEN }}" > ~/.npmrc
           cat ~/.npmrc
-
-      - name: Generate changelog
-        env:
-          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
-        run: |
-          pnpm changelog
-          git add CHANGELOG.md
-          git commit -m "chore: update changelog" || echo "No changes to commit"
 
       - name: Semantic Release
         env:
