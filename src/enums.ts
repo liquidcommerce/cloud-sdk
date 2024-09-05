@@ -268,8 +268,11 @@ export enum CART_PARAM_ERROR_ENUM {
 export enum CART_EVENT_ENUM {
   OOS = 'OutOfStock',
   ITEMS_NOT_ADDED = 'ItemsNotAdded',
+  ITEMS_REQUESTED_NOT_ADDED = 'ItemsRequestedNotAdded',
   ITEM_NOT_ENGRAVED = 'ItemEngravingError',
   ADDRESS_CHANGE = 'AddressChange',
+  LOCATION_AVAILABILITY = 'LocationAvailability',
+  REMOVED_EXISTING_ITEMS = 'RemovedExistingCartItems',
   RETAILER_MIN = 'RetailerMinNotMet',
   NO_ITEMS_IN_CART = 'NoItemsInCart',
   INVALID_ID = 'InvalidId',

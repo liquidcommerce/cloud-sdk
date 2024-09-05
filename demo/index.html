@@ -292,8 +292,8 @@
             <div class="cart-section">
               <div id="cartForm" class="cart-form mb-4">
                 <div class="mb-3">
-                  <label for="cartId" class="form-label">Cart ID</label>
-                  <input type="text" class="form-control" id="cartId">
+                  <label for="cartIdGet" class="form-label">Cart ID</label>
+                  <input type="text" class="form-control" id="cartIdGet">
                 </div>
                 <button type="button" class="btn btn-primary" id="getCart">Get Cart</button>
               </div>
@@ -393,6 +393,17 @@
           <!-- PAYMENT EXAMPLE -->
           <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
             <h3>Payment Method</h3>
+            <form id="paymentForm">
+              <div class="mb-3">
+                <label for="sessionKey" class="form-label">Session Key</label>
+                <input type="text" class="form-control" id="sessionKey" required>
+              </div>
+              <div class="mb-3">
+                <label for="sessionSecret" class="form-label">Session Secret</label>
+                <input type="text" class="form-control" id="sessionSecret" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Mount Payment Element</button>
+            </form>
             <div id="paymentTokenResult" class="mt-3"></div>
             <div id="payment-element-container" class="mb-3"></div>
             <button id="generateTokenButton" class="btn btn-primary">Generate Payment Token</button>
@@ -403,7 +414,7 @@
             <h3>Checkout</h3>
             <form id="checkoutForm">
               <div class="mb-3">
-                <label for="cartId" class="form-label">Cart ID</label>
+                <label for="checkoutCartId" class="form-label">Checkout Cart ID</label>
                 <input type="text" class="form-control" id="checkoutCartId" required>
               </div>
 
@@ -775,7 +786,7 @@
 
   // Cart functionality
   document.getElementById('getCart').addEventListener('click', async () => {
-    const cartId = document.getElementById('cartId').value;
+    const cartId = document.getElementById('cartIdGet').value;
     try {
       const cartResponse = await client.cart.get(cartId);
       displayCartResults(cartResponse);
@@ -968,14 +979,19 @@
     }
   });
 
-  document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('paymentForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+
     client = await initSDK();
+
+    const clientSecret = document.getElementById('sessionSecret').value;
+    const key = document.getElementById('sessionKey').value;
 
     // Mount the payment element into the DOM
     try {
       await client.payment.mount({
-        clientSecret: 'REPLACE_WITH_SECRET_FROM_USER_SESSION', // Replace with actual client secret
-        key: 'REPLACE_WITH_KEY_FROM_USER_SESSION',
+        clientSecret,
+        key,
         elementId: 'payment-element-container',
         appearance: { theme: 'default' },
         elementOptions: { layout: 'tabs' },
@@ -1025,13 +1041,13 @@
   document.getElementById('checkoutForm').addEventListener('submit', async ( event ) => {
     event.preventDefault();
 
-    // const cartId = document.getElementById('cartId').value;
+    const cartId = document.getElementById('checkoutCartId').value;
 
     const checkoutResults = document.getElementById('checkoutResults');
 
     // Build the checkout object
     const checkoutData = {
-      cartId: '66d0a7bfeba2f812e6935a52',
+      cartId,
       'recipient': {
         'firstName': 'dioriJoe',
         'lastName': 'John',
