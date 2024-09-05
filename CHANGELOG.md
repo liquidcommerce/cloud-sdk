@@ -1,3 +1,9 @@
+## [1.1.1-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.0...v1.1.1-beta.1) (2024-09-05)
+
+
+### Bug Fixes
+
+* **demo:** replace static data ([114b54d](https://github.com/liquidcommerce/cloud-sdk/commit/114b54d007e2d06a261df85273b738cc51f4fa45))
 
 # [1.1.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.1...v1.1.0) (2024-09-03)
 
