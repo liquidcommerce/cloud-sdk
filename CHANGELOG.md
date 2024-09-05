@@ -1,5 +1,5 @@
-# [1.1.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.1...v1.1.0) (2024-09-03)
 
+# [1.1.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.0.1...v1.1.0) (2024-09-03)
 
 ### Bug Fixes
 
@@ -11,7 +11,6 @@
 * **package:** update version for semantic release ([3d7c217](https://github.com/liquidcommerce/cloud-sdk/commit/3d7c217a05df29cf98b0ce3cc148b84a5b2d1251))
 * **workflows:** add npm cache clean step to deploy.yml ([50742fa](https://github.com/liquidcommerce/cloud-sdk/commit/50742fa72ea55de7c25f6ae50fca64e6b885e333))
 * **workflows:** update package.json privacy settings and changelog condition ([cf8a0dd](https://github.com/liquidcommerce/cloud-sdk/commit/cf8a0dd2debb0e5aa077f391030fca8b4082163e))
-
 
 ### Features
 
