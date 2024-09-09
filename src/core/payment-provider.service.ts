@@ -120,6 +120,9 @@ export class PaymentProviderService implements IPaymentProvider {
       elements: this.elements,
     });
 
+    console.log({paymentMethod});
+    
+
     if (error) {
       return {
         type: error.type === 'validation_error' ? 'validation_error' : 'api_error',
