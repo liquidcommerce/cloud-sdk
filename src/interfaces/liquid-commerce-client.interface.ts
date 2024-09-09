@@ -417,11 +417,11 @@ export interface IUserMethod {
    * @see {@link IPurgeResponse} for the structure of the user's purged data state.
    */
   purgeAddress: (addressId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
-  
+
   addPayment: (params: IUserPaymentParams) => Promise<IApiResponseWithData<IUserPayment>>;
 
   updatePayment: (params: IUserPaymentParams) => Promise<IApiResponseWithData<IUserPayment>>;
-  
+
   purgePayment: (customerId: string, paymentId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
 }
 
