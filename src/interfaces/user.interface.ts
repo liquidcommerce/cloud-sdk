@@ -48,11 +48,11 @@ export interface ISavedCard {
 export interface IUserPayment {
   id: string;
 
+  customerId: string;
+
   type: string;
 
   isDefault: boolean;
-
-  paymentMethodId: string;
 
   card?: ISavedCard;
 }
@@ -114,15 +114,15 @@ export interface IUserAddressParams extends ICoreParams {
 
   zip: string;
 
-  isDefault?: boolean;
-
   type: ENUM_ADDRESS_TYPE;
+
+  isDefault?: boolean;
 }
 
 export interface IUserPaymentParams extends ICoreParams {
   customerId: string;
-  
+
   paymentMethodId: string;
 
-  isDefault: boolean;
+  isDefault?: boolean;
 }

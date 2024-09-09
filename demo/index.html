@@ -388,6 +388,38 @@
               </form>
               <div id="purgeAddressResult" class="mt-3"></div>
             </div>
+
+            <div class="user-section mt-4">
+              <h4>Update/Create Payment Method</h4>
+              <form id="updatePaymentMethodForm">
+                <div class="mb-3">
+                  <label for="paymentMethodCustomerId" class="form-label">Customer ID</label>
+                  <input type="text" class="form-control" id="paymentMethodCustomerId" required>
+                </div>
+                <div class="mb-3">
+                  <label for="paymentMethodId" class="form-label">Payment Method ID</label>
+                  <input type="text" class="form-control" id="paymentMethodId" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update/Create Payment Method</button>
+              </form>
+              <div id="updatePaymentMethodResult" class="mt-3"></div>
+            </div>
+
+            <div class="user-section mt-4">
+              <h4>Purge Payment Method</h4>
+              <form id="purgePaymentMethodForm">
+                <div class="mb-3">
+                  <label for="purgePaymentMethodCustomerId" class="form-label">Customer ID</label>
+                  <input type="text" class="form-control" id="purgePaymentMethodCustomerId" required>
+                </div>
+                <div class="mb-3">
+                  <label for="purgePaymentMethodId" class="form-label">Payment Method ID</label>
+                  <input type="text" class="form-control" id="purgePaymentMethodId" required>
+                </div>
+                <button type="submit" class="btn btn-danger">Purge Payment Method</button>
+              </form>
+              <div id="purgePaymentMethodResult" class="mt-3"></div>
+            </div>
           </div>
 
           <!-- PAYMENT EXAMPLE -->
@@ -527,10 +559,11 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://assets.liquidcommerce.co/sdk/cloud/stage/liquidcommerce-cloud-sdk.min.js"></script>
+<!-- <script src="https://assets.liquidcommerce.co/sdk/cloud/stage/liquidcommerce-cloud-sdk.min.js"></script> -->
+<script src="../umd/liquidcommerce-cloud-sdk.min.js"></script>
 <script>
-  const API_KEY = 'YOUR_LIQUIDCOMMERCE_API_KEY';
-  const GOOGLE_PLACES_API_KEY = 'PUT_YOUR_KEY_HERE';
+  const API_KEY = '73b6818b47bf2ecd24bf8981c0676e2944bfdd7bec2538585c94e6f1';
+  const GOOGLE_PLACES_API_KEY = 'AIzaSyD_LT-4RhPTrURUZjrrDtB3zIor0WFO6hE';
   const NEW_YORK_ADDRESS = {
     one: '100 madison ave',
     two: 'apt 1707',
@@ -557,7 +590,7 @@
     try {
       return await window.LiquidCommerce(API_KEY, {
         googlePlacesApiKey: GOOGLE_PLACES_API_KEY,
-        env: 'stage',
+        env: 'loc',
       });
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
@@ -976,6 +1009,40 @@
     } catch (error) {
       console.error('Failed to purge address:', error);
       purgeAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  document.getElementById('updatePaymentMethodForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('paymentMethodCustomerId').value;
+    const paymentMethodId = document.getElementById('paymentMethodId').value;
+    const updateResult = document.getElementById('updatePaymentMethodResult');
+
+    try {
+      const addressResponse = await client.user.updatePayment({
+        customerId,
+        paymentMethodId,
+        isDefault: false,
+      });
+      updateResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
+    } catch (error) {
+      console.error('Failed to update/create address:', error);
+      updateResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  document.getElementById('purgePaymentMethodForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('purgePaymentMethodCustomerId').value;
+    const paymentId = document.getElementById('purgePaymentMethodId').value;
+    const purgeResult = document.getElementById('purgePaymentMethodResult');
+
+    try {
+      const purgeResponse = await client.user.purgePayment(customerId, paymentId);
+      purgeResult.innerHTML = `<p>Payment method purged successfully: ${purgeResponse.data.message}</p>`;
+    } catch (error) {
+      console.error('Failed to purge payment method:', error);
+      purgeResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
     }
   });
 
