@@ -579,6 +579,63 @@ export interface IPaymentMethod {
    * @throws {Error} - Throws an error if the payment element has not been initialized.
    */
   unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void;
+
+  /**
+   * Collapses the payment element if it has been initialized.
+   *
+   * @returns {void}
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   liquidCommerce.payment.collapse();
+   *   console.log('Payment element collapsed');
+   * } catch (error) {
+   *   console.error('Failed to collapse payment element:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the payment element has not been initialized.
+   */
+  collapse(): void;
+
+  /**
+   * Unmounts the payment element from the DOM.
+   *
+   * @returns {void}
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   liquidCommerce.payment.unmount();
+   *   console.log('Payment element unmounted');
+   * } catch (error) {
+   *   console.error('Failed to unmount payment element:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the payment element has not been initialized.
+   */
+  unmount(): void;
+
+  /**
+   * Destroys the payment element if it has been initialized.
+   *
+   * @returns {void}
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   liquidCommerce.payment.destroy();
+   *   console.log('Payment element destroyed');
+   * } catch (error) {
+   *   console.error('Failed to destroy payment element:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the payment element has not been initialized.
+   */
+  destroy(): void;
 }
 
 export interface ICheckoutMethod {

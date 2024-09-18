@@ -258,4 +258,46 @@ export class PaymentProviderService implements IPaymentProvider {
       wallets: { applePay: 'auto', googlePay: 'auto' },
     };
   }
+
+  /**
+   * Unmounts the payment element from the DOM.
+   * Throws an error if the payment element has not been initialized.
+   *
+   * @return {void}
+   */
+  public unmount(): void {
+    if (!this.paymentElement) {
+      throw new Error('Payment Element has not been initialized');
+    }
+
+    this.paymentElement.unmount();
+  }
+
+  /**
+   * Collapses the payment element if it has been initialized.
+   * Throws an error if the payment element has not been initialized.
+   *
+   * @return {void}
+   */
+  public collapse(): void {
+    if (!this.paymentElement) {
+      throw new Error('Payment Element has not been initialized');
+    }
+
+    this.paymentElement.collapse();
+  }
+
+  /**
+   * Destroys the payment element if it has been initialized.
+   *
+   * @return {void} No return value.
+   * @throws {Error} Will throw an error if the payment element has not been initialized.
+   */
+  public destroy(): void {
+    if (!this.paymentElement) {
+      throw new Error('Payment Element has not been initialized');
+    }
+
+    this.paymentElement.destroy();
+  }
 }

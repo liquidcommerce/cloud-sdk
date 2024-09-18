@@ -117,6 +117,9 @@ const searchResults = await client.catalog.search({
 The `cart` method allows you to manage shopping carts.
 
 ```javascript
+// New Cart
+const existingCart = await client.cart.get();
+
 // Get an existing cart
 const existingCart = await client.cart.get('existing_cart_id');
 
@@ -154,8 +157,8 @@ const userSession = await client.user.session({
   firstName: "John"
 });
 
-// Update user address
-const updatedAddress = await client.user.updateAddress({
+// Add a new address for a user
+const newAddress = await client.user.addAddress({
   customerId: 'c1fbd454-a540-4f42-86e9-f87a98bf1812',
   one: '100 Madison St',
   city: 'New York',
@@ -165,11 +168,38 @@ const updatedAddress = await client.user.updateAddress({
   isDefault: true
 });
 
-// Purge user data
+// Update an existing address
+const updatedAddress = await client.user.updateAddress({
+  customerId: 'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+  one: '101 Madison St',
+  city: 'New York',
+  state: 'NY',
+  zip: '10004',
+  type: 'shipping',
+  isDefault: true
+});
+
+// Add a new payment method
+const newPayment = await client.user.addPayment({
+  customerId: 'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+  paymentMethodId: 'pm_1234567890abcdef',
+  isDefault: true
+});
+
+// Purge user data (by EMAIL)
 const purgeResponse = await client.user.purge('user@example.com');
+
+// Purge user data (by ID)
+const purgeResponse = await client.user.purge('c1fbd454-a540-4f42-86e9-f87a98bf1812');
 
 // Purge user address
 const addressPurgeResponse = await client.user.purgeAddress('26af8958-0deb-44ec-b9fd-ca150b198e45');
+
+// Purge user payment method
+const paymentPurgeResponse = await client.user.purgePayment(
+  'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+  'pm_1234567890abcdef'
+);
 ```
 
 ### Payment
@@ -195,6 +225,15 @@ client.payment.subscribe('change', (event) => {
 
 // Unsubscribe from payment events
 client.payment.unsubscribe('change');
+
+// Collapse the payment element
+client.payment.collapse();
+
+// Unmount the payment element
+client.payment.unmount();
+
+// Destroy the payment element
+client.payment.destroy();
 ```
 
 ### Checkout
