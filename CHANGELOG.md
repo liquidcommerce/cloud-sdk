@@ -1,3 +1,10 @@
+# [1.3.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.1...v1.3.0-beta.2) (2024-09-18)
+
+
+### Features
+
+* **payment:** add collapse, unmount, and destroy methods for payment element ([bb3a51c](https://github.com/liquidcommerce/cloud-sdk/commit/bb3a51cc8534de8a4cb567ef3390765458dffd5f))
+
 # [1.3.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.2.0...v1.3.0-beta.1) (2024-09-18)
 
 
