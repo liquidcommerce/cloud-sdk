@@ -418,10 +418,59 @@ export interface IUserMethod {
    */
   purgeAddress: (addressId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
 
+  /**
+   * Adds a new payment method for a user.
+   *
+   * @param {IUserPaymentParams} params - The parameters for adding a new payment method.
+   * @returns {Promise<IApiResponseWithData<IUserPayment>>} A promise that resolves to the API response with the added payment method data.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const newPayment = await liquidCommerce.user.addPayment({
+   *     customerId: 'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+   *     paymentMethodId: 'pm_1234567890abcdef',
+   *     isDefault: true
+   *   });
+   *
+   *   console.log('Added payment method:', newPayment?.data);
+   * } catch (error) {
+   *   console.error('Failed to add payment method:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the add payment request fails or if authentication is unsuccessful.
+   *
+   * @see {@link IUserPaymentParams} for the structure of the add payment request parameters.
+   * @see {@link IUserPayment} for the structure of the user's payment method data returned.
+   */
   addPayment: (params: IUserPaymentParams) => Promise<IApiResponseWithData<IUserPayment>>;
 
-  updatePayment: (params: IUserPaymentParams) => Promise<IApiResponseWithData<IUserPayment>>;
-
+  /**
+   * Purges a payment method for a user.
+   *
+   * @param {string} customerId - The ID of the customer.
+   * @param {string} paymentId - The ID of the payment method to purge.
+   * @returns {Promise<IApiResponseWithData<IPurgeResponse>>} A promise that resolves to the purge response.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const paymentPurgeResponse = await liquidCommerce.user.purgePayment(
+   *     'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+   *     'pm_1234567890abcdef'
+   *   );
+   *
+   *   console.log('Payment method purge response:', paymentPurgeResponse?.data);
+   * } catch (error) {
+   *   console.error('Failed to purge payment method:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the purge payment request fails or if authentication is unsuccessful.
+   *
+   * @see {@link IPurgeResponse} for the structure of the purge response data.
+   */
   purgePayment: (customerId: string, paymentId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
 }
 

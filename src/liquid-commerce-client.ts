@@ -189,18 +189,25 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *    Method for creating or updating a user session.
    * @property {function(identifier: string): Promise<IApiResponseWithData<IPurgeResponse>>} purge -
    *    Method for purging a user's data from the system.
+   * @property {function(params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>>} addAddress -
+   *    Method for adding a new address for a user.
    * @property {function(params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>>} updateAddress -
-   *    Method for updating or creating a user's address.
+   *    Method for updating an existing user's address.
    * @property {function(addressId: string): Promise<IApiResponseWithData<IPurgeResponse>>} purgeAddress -
    *    Method for purging a user's address.
+   * @property {function(params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>>} addPayment -
+   *    Method for adding a new payment method for a user.
+   * @property {function(customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>>} purgePayment -
+   *    Method for purging a user's payment method.
    *
    * @see {@link IUserSessionParams} for the structure of the session request parameters.
-   * @see {@link IUserAddressParams} for the structure of the address update request parameters.
+   * @see {@link IUserAddressParams} for the structure of the address add/update request parameters.
+   * @see {@link IUserPaymentParams} for the structure of the payment add request parameters.
    * @see {@link IUser} for the structure of the user data returned.
    * @see {@link IUserAddress} for the structure of the user's address data returned.
-   * @see {@link IPurgeResponse} for the structure of the user data returned.
-   *
-   * */
+   * @see {@link IUserPayment} for the structure of the user's payment method data returned.
+   * @see {@link IPurgeResponse} for the structure of the purge response data.
+   */
   public user: IUserMethod = {
     session: async (params: IUserSessionParams): Promise<IApiResponseWithData<IUser>> => {
       await this.ensureAuthenticated();
@@ -225,10 +232,6 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     addPayment: async (params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>> => {
       await this.ensureAuthenticated();
       return this.userService.addPayment(params);
-    },
-    updatePayment: async (params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>> => {
-      await this.ensureAuthenticated();
-      return this.userService.updatePayment(params);
     },
     purgePayment: async (customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>> => {
       await this.ensureAuthenticated();

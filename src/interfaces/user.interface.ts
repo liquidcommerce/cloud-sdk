@@ -68,6 +68,10 @@ export interface IUser {
 
   phone: string | null;
 
+  company: string | null;
+
+  profileImage: string | null;
+
   birthDate: string | null;
 
   createdAt: Date;
@@ -91,6 +95,10 @@ export interface IUserSessionParams extends ICoreParams {
   lastName?: string | null;
 
   phone?: string | null;
+
+  company?: string | null;
+
+  profileImage?: string | null;
 
   birthDate?: string | null;
 }

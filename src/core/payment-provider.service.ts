@@ -42,8 +42,7 @@ export class PaymentProviderService implements IPaymentProvider {
 
     try {
       this.stripe = await loadStripe(config.key);
-    } catch (e) {
-      console.error('Failed to load Stripe:', e);
+    } catch {
       throw new Error('Failed to initialize Stripe');
     }
 
@@ -55,8 +54,6 @@ export class PaymentProviderService implements IPaymentProvider {
 
     try {
       const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret);
-
-      console.info('setupIntent: ', setupIntent);
 
       if (setupIntent?.status === 'succeeded') {
         throw new Error(`The client secret (${this.clientSecret}) has already been used previously. Generate a new one through a use session.`);

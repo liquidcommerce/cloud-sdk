@@ -163,6 +163,102 @@
       background-color: #f8f9fa;
       border-top: none;
     }
+
+    @media (max-width: 991px) {
+      .nav-tabs {
+        display: none;
+      }
+    }
+
+    @media (min-width: 992px) {
+      #offcanvasTabs {
+        display: none !important;
+      }
+    }
+
+    /* Off-Canvas Menu Styling */
+    .offcanvas-header {
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .offcanvas-body {
+      padding: 1rem;
+    }
+
+    .nav-link {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      margin: 0.125rem 0;
+      border: none;
+      border-radius: 0.25rem;
+      background-color: #f8f9fa;
+      color: #333;
+      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    }
+
+    .nav-link:hover, .nav-link:focus {
+      background-color: #e2e6ea;
+      color: #000;
+      text-decoration: none;
+    }
+
+    .nav-link.active {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .session-result {
+      background-color: #f4f4f9;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .session-result h4, .session-result h5 {
+      color: #333;
+    }
+
+    .session-result p, .session-result li {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .session-result img {
+      border-radius: 50%;
+    }
+
+    .session-result ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .session-result li {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .session-detail {
+      font-family: monospace;
+      background-color: #f9f9f9;
+      border-left: 4px solid #007bff;
+      padding: 10px;
+      margin-bottom: 10px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .session-detail strong {
+      color: #333; /* Dark color for the labels (e.g., "Session Key:") */
+    }
+
   </style>
 </head>
 <body>
@@ -172,44 +268,86 @@
       <a href="index.html" class="navbar-brand">
         <img src="https://assets.liquidcommerce.co/development/cloud-sdk-logo.svg" style="max-width: 250px;" alt="Logo">
       </a>
-      <ul class="nav nav-tabs" id="sdkTabs" role="tablist">
 
+      <!-- Off-Canvas Trigger Button (visible on small screens) -->
+      <button class="btn btn-primary d-lg-none ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTabs" aria-controls="offcanvasTabs">
+        Menu
+      </button>
+
+      <!-- Off-Canvas Menu -->
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTabs" aria-labelledby="offcanvasTabsLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasTabsLabel">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="nav flex-column" id="menu-tabs">
+            <li class="nav-item">
+              <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
+                      aria-controls="address" aria-selected="false">Address
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="catalog-tab" data-bs-toggle="tab" data-bs-target="#catalog" type="button" role="tab"
+                      aria-controls="catalog" aria-selected="false">Catalog
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="cart-tab" data-bs-toggle="tab" data-bs-target="#cart" type="button" role="tab"
+                      aria-controls="cart" aria-selected="false">Cart
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab"
+                      aria-controls="user" aria-selected="false">User
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
+                      aria-controls="payment" aria-selected="false">Payment
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab"
+                      aria-controls="checkout" aria-selected="false">Checkout
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Original Tabs (visible on larger screens) -->
+      <ul class="nav nav-tabs d-none d-lg-flex ms-auto" id="sdkTabs" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
                   aria-controls="address" aria-selected="true">Address
           </button>
         </li>
-
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="catalog-tab" data-bs-toggle="tab" data-bs-target="#catalog" type="button" role="tab"
                   aria-controls="catalog" aria-selected="false">Catalog
           </button>
         </li>
-
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="cart-tab" data-bs-toggle="tab" data-bs-target="#cart" type="button" role="tab" aria-controls="cart"
                   aria-selected="false">Cart
           </button>
         </li>
-
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab"
                   aria-controls="user" aria-selected="false">User
           </button>
         </li>
-
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
                   aria-controls="payment" aria-selected="false">Payment
           </button>
         </li>
-
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab"
                   aria-controls="checkout" aria-selected="false">Checkout
           </button>
         </li>
-
       </ul>
     </div>
   </div>
@@ -338,7 +476,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Create/Update Session</button>
               </form>
-              <div id="userSessionResult" class="mt-3"></div>
+              <div id="userSessionResult" class="session-result"></div>
             </div>
 
             <div class="user-section mt-4">
@@ -388,6 +526,43 @@
               </form>
               <div id="purgeAddressResult" class="mt-3"></div>
             </div>
+
+            <div class="user-section mt-4">
+              <h4>Add Payment Method</h4>
+              <form id="addPaymentMethodForm">
+                <div class="mb-3">
+                  <label for="customerId" class="form-label">Customer ID</label>
+                  <input type="text" class="form-control" id="addPaymentCustomerId" required>
+                </div>
+                <div class="mb-3">
+                  <label for="paymentMethodId" class="form-label">Payment Method ID</label>
+                  <input type="text" class="form-control" id="paymentMethodId" required>
+                </div>
+                <div class="mb-3">
+                  <label for="isDefault" class="form-label">Set as Default?</label>
+                  <input type="checkbox" id="isDefault">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Payment Method</button>
+              </form>
+              <div id="addPaymentMethodResult" class="mt-3"></div>
+            </div>
+
+            <div class="user-section mt-4">
+              <h4>Purge Payment Method</h4>
+              <form id="purgePaymentMethodForm">
+                <div class="mb-3">
+                  <label for="purgeCustomerId" class="form-label">Customer ID</label>
+                  <input type="text" class="form-control" id="purgeCustomerId" required>
+                </div>
+                <div class="mb-3">
+                  <label for="purgePaymentId" class="form-label">Payment Method ID</label>
+                  <input type="text" class="form-control" id="purgePaymentId" required>
+                </div>
+                <button type="submit" class="btn btn-danger">Purge Payment Method</button>
+              </form>
+              <div id="purgePaymentMethodResult" class="mt-3"></div>
+            </div>
+
           </div>
 
           <!-- PAYMENT EXAMPLE -->
@@ -417,6 +592,8 @@
                 <label for="checkoutCartId" class="form-label">Checkout Cart ID</label>
                 <input type="text" class="form-control" id="checkoutCartId" required>
               </div>
+
+              <!-- UNCOMMENT AND ADD MORE FIELDS TO THE CHECKOUT EXAMPLE IF NEEDED -->
 
               <!--              <div class="mb-3">-->
               <!--                <label for="recipientFirstName" class="form-label">Recipient First Name</label>-->
@@ -526,11 +703,24 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 <script src="https://assets.liquidcommerce.co/sdk/cloud/stage/liquidcommerce-cloud-sdk.min.js"></script>
+<script src="../umd/liquidcommerce-cloud-sdk.min.js"></script>
 <script>
+  /**
+   * Liquid Commerce SDK Integration Script
+   *
+   * This script demonstrates the integration of the Liquid Commerce SDK
+   * for various e-commerce functionalities including address search,
+   * catalog search, cart management, user session handling, payment processing,
+   * and checkout flow.
+   */
+
+  // API Keys and Constants
   const API_KEY = 'YOUR_LIQUIDCOMMERCE_API_KEY';
-  const GOOGLE_PLACES_API_KEY = 'PUT_YOUR_KEY_HERE';
+  const GOOGLE_PLACES_API_KEY = 'PUT_YOUR_KEY_HERE'
   const NEW_YORK_ADDRESS = {
     one: '100 madison ave',
     two: 'apt 1707',
@@ -541,9 +731,15 @@
 
   let client;
 
-  function debounce( func, wait ) {
+  /**
+   * Debounce function to limit the rate at which a function can fire.
+   * @param {Function} func - The function to debounce
+   * @param {number} wait - The number of milliseconds to delay
+   * @returns {Function} A debounced version of the passed function
+   */
+  function debounce(func, wait) {
     let timeout;
-    return function executedFunction( ...args ) {
+    return function executedFunction(...args) {
       const later = () => {
         clearTimeout(timeout);
         func(...args);
@@ -553,6 +749,10 @@
     };
   }
 
+  /**
+   * Initialize the Liquid Commerce SDK
+   * @returns {Promise<Object>} The initialized SDK client
+   */
   async function initSDK() {
     try {
       return await window.LiquidCommerce(API_KEY, {
@@ -565,6 +765,9 @@
     }
   }
 
+  /**
+   * Search for an address using the SDK's autocomplete feature
+   */
   async function searchAddress() {
     const addressInput = document.getElementById('addressInput');
     const autocompleteResults = document.getElementById('autocompleteResults');
@@ -591,7 +794,11 @@
     }
   }
 
-  async function getDetails( id ) {
+  /**
+   * Get details for a selected address
+   * @param {string} id - The ID of the selected address
+   */
+  async function getDetails(id) {
     const resultsDiv = document.getElementById('results');
 
     if (!client) {
@@ -611,12 +818,13 @@
     }
   }
 
-  async function searchCatalog( event ) {
+  /**
+   * Search the catalog based on user input
+   * @param {Event} event - The form submission event
+   */
+  async function searchCatalog(event) {
     event.preventDefault();
     const searchQuery = document.getElementById('searchQuery').value;
-    const zipCode = document.getElementById('searchZipCode').value;
-    const priceRange = document.getElementById('priceRange').value;
-    const category = document.getElementById('category').value;
     const catalogResults = document.getElementById('catalogResults');
 
     if (!client) {
@@ -624,28 +832,12 @@
       return;
     }
 
-    // const filters = [];
-    // if (priceRange) {
-    //   const [min, max] = priceRange.split('-');
-    //   filters.push({
-    //     key: 'price',
-    //     values: { min: min, max: max === '+' ? undefined : max },
-    //   });
-    // }
-    // if (category) {
-    //   filters.push({
-    //     key: 'categories',
-    //     values: [category],
-    //   });
-    // }
-
     try {
       const response = await client.catalog.search({
         search: searchQuery,
         loc: {
           address: NEW_YORK_ADDRESS,
         },
-        // filters: filters,
       });
       displayCatalogResults(response);
     } catch (error) {
@@ -654,7 +846,11 @@
     }
   }
 
-  function displayCatalogResults( response ) {
+  /**
+   * Display catalog search results
+   * @param {Object} response - The catalog search response
+   */
+  function displayCatalogResults(response) {
     const catalogResults = document.getElementById('catalogResults');
     let html = '<h3 class="mb-4">Catalog Search Results:</h3>';
 
@@ -662,16 +858,16 @@
       html += '<div class="row row-cols-1 row-cols-md-2 g-4">';
       response.products.forEach(product => {
         html += `
-        <div class="col">
-          <div class="card h-100">
-            <img src="${product.images[0] || 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" alt="${product.name}">
-            <div class="card-body">
-              <h5 class="card-title">${product.name}</h5>
-              <p class="card-text">Brand: ${product.brand}</p>
-              <p class="card-text">Category: ${product.category}</p>
-              <h6>Available Sizes:</h6>
-              <ul class="list-group list-group-flush">
-                ${product.sizes.map(size => {
+      <div class="col">
+        <div class="card h-100">
+          <img src="${product.images[0] || 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" alt="${product.name}">
+          <div class="card-body">
+            <h5 class="card-title">${product.name}</h5>
+            <p class="card-text">Brand: ${product.brand}</p>
+            <p class="card-text">Category: ${product.category}</p>
+            <h6>Available Sizes:</h6>
+            <ul class="list-group list-group-flush">
+              ${product.sizes.map(size => {
           const availableVariants = size.variants.filter(variant => variant.stock > 0);
           const lowestPrice = availableVariants.length > 0
             ? Math.min(...availableVariants.map(variant => variant.price))
@@ -680,24 +876,25 @@
             ? `$${(lowestPrice / 100).toFixed(2)}`
             : 'Not available';
           return `
-                    <li class="list-group-item">
-                      <strong>${size.size}</strong> - UPC: ${size.upc}
-                      <br>Lowest Price: ${formattedPrice}
-                      <br>Available Variants: ${availableVariants.length}
-                    </li>
-                  `;
+                  <li class="list-group-item">
+                    <strong>${size.size}</strong> - UPC: ${size.upc}
+                    <br>Lowest Price: ${formattedPrice}
+                    <br>Available Variants: ${availableVariants.length}
+                  </li>
+                `;
         }).join('')}
-              </ul>
-            </div>
+            </ul>
           </div>
         </div>
-      `;
+      </div>
+    `;
       });
       html += '</div>';
     } else {
       html += '<p>No products found for the given search criteria.</p>';
     }
 
+    // Display navigation and filter information
     if (response.navigation) {
       if (response.navigation.totalCount) {
         html += `<p class="mt-3">Total results: ${response.navigation.totalCount}</p>`;
@@ -708,11 +905,11 @@
         html += '<ul class="list-group">';
         response.navigation.filters.forEach(filter => {
           html += `
-            <li class="list-group-item">
-              <strong>${filter.bucket}:</strong>
-              ${filter.values.map(value => `${value.value} (${value.count})`).join(', ')}
-            </li>
-          `;
+          <li class="list-group-item">
+            <strong>${filter.bucket}:</strong>
+            ${filter.values.map(value => `${value.value} (${value.count})`).join(', ')}
+          </li>
+        `;
         });
         html += '</ul>';
       }
@@ -723,18 +920,22 @@
     // Display metadata
     if (response.metadata) {
       const metadataHtml = `
-        <div class="mt-4">
-          <h4>Response Metadata:</h4>
-          <p>Request ID: ${response.metadata.requestId}</p>
-          <p>Timestamp: ${new Date(response.metadata.timestamp).toLocaleString()}</p>
-          <p>Path: ${response.metadata.path}</p>
-        </div>
-      `;
+      <div class="mt-4">
+        <h4>Response Metadata:</h4>
+        <p>Request ID: ${response.metadata.requestId}</p>
+        <p>Timestamp: ${new Date(response.metadata.timestamp).toLocaleString()}</p>
+        <p>Path: ${response.metadata.path}</p>
+      </div>
+    `;
       catalogResults.innerHTML += metadataHtml;
     }
   }
 
-  async function checkAvailability( event ) {
+  /**
+   * Check availability of products
+   * @param {Event} event - The form submission event
+   */
+  async function checkAvailability(event) {
     event.preventDefault();
     const upcs = document.getElementById('upcs').value.split(',').map(upc => upc.trim());
     const zipCode = document.getElementById('zipCode').value;
@@ -759,7 +960,11 @@
     }
   }
 
-  function displayAvailabilityResults( response ) {
+  /**
+   * Display availability results
+   * @param {Object} response - The availability check response
+   */
+  function displayAvailabilityResults(response) {
     const availabilityResults = document.getElementById('availabilityResults');
     let html = '<h4>Availability Results:</h4>';
 
@@ -768,13 +973,13 @@
       response.products.forEach(product => {
         const availability = product.sizes[0].variants[0].stock > 0 ? 'In Stock' : 'Out of Stock';
         html += `
-          <li class="list-group-item">
-            <h5>${product.name}</h5>
-            <p>UPC: ${product.sizes[0].upc}</p>
-            <p>Availability: ${availability}</p>
-            <p>Price: $${product.sizes[0].variants[0].price.toFixed(2)}</p>
-          </li>
-        `;
+        <li class="list-group-item">
+          <h5>${product.name}</h5>
+          <p>UPC: ${product.sizes[0].upc}</p>
+          <p>Availability: ${availability}</p>
+          <p>Price: $${product.sizes[0].variants[0].price.toFixed(2)}</p>
+        </li>
+      `;
       });
       html += '</ul>';
     } else {
@@ -784,7 +989,33 @@
     availabilityResults.innerHTML = html;
   }
 
-  // Cart functionality
+  // Event Listeners and Initialization
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    client = await initSDK();
+    const addressInput = document.getElementById('addressInput');
+    const autocompleteResults = document.getElementById('autocompleteResults');
+    const availabilityForm = document.getElementById('availabilityForm');
+    const searchForm = document.getElementById('searchForm');
+
+    const debouncedSearchAddress = debounce(searchAddress, 300);
+    addressInput.addEventListener('input', debouncedSearchAddress);
+
+    autocompleteResults.addEventListener('click', (event) => {
+      if (event.target.tagName === 'LI') {
+        const id = event.target.getAttribute('data-id');
+        addressInput.value = event.target.textContent;
+        autocompleteResults.innerHTML = '';
+        getDetails(id);
+      }
+    });
+
+    availabilityForm.addEventListener('submit', checkAvailability);
+    searchForm.addEventListener('submit', searchCatalog);
+  });
+
+  // Cart Management
+
   document.getElementById('getCart').addEventListener('click', async () => {
     const cartId = document.getElementById('cartIdGet').value;
     try {
@@ -796,7 +1027,11 @@
     }
   });
 
-  function displayCartResults( cartResponse ) {
+  /**
+   * Display cart results
+   * @param {Object} cartResponse - The cart response object
+   */
+  function displayCartResults(cartResponse) {
     const cartResults = document.getElementById('cartResults');
     cartResults.innerHTML = '';
 
@@ -804,14 +1039,14 @@
       const cart = cartResponse.cart;
       const cartSummary = document.createElement('div');
       cartSummary.innerHTML = `
-      <h4>Cart Summary</h4>
-      <p>Cart ID: ${cart.id}</p>
-      <p>Total Items: ${cart.quantity}</p>
-      <p>Subtotal: $${(cart.subtotal / 100).toFixed(2)}</p>
-      <p>Total: $${(cart.total / 100).toFixed(2)}</p>
-      <p>Platform Fee: $${(cart.platformFee / 100).toFixed(2)}</p>
-      <p>Shipping Fee: $${(cart.shippingFee / 100).toFixed(2)}</p>
-    `;
+    <h4>Cart Summary</h4>
+    <p>Cart ID: ${cart.id}</p>
+    <p>Total Items: ${cart.quantity}</p>
+    <p>Subtotal: $${(cart.subtotal / 100).toFixed(2)}</p>
+    <p>Total: $${(cart.total / 100).toFixed(2)}</p>
+    <p>Platform Fee: $${(cart.platformFee / 100).toFixed(2)}</p>
+    <p>Shipping Fee: $${(cart.shippingFee / 100).toFixed(2)}</p>
+  `;
       cartResults.appendChild(cartSummary);
 
       if (cart.items && cart.items.length > 0) {
@@ -821,12 +1056,12 @@
           const listItem = document.createElement('li');
           listItem.className = 'list-group-item';
           listItem.innerHTML = `
-          <strong>${item.name}</strong><br>
-          Part Number: ${item.partNumber}<br>
-          Quantity: ${item.quantity}<br>
-          Unit Price: $${(item.unitPrice / 100).toFixed(2)}<br>
-          Total: $${((item.quantity * item.unitPrice) / 100).toFixed(2)}
-        `;
+        <strong>${item.name}</strong><br>
+        Part Number: ${item.partNumber}<br>
+        Quantity: ${item.quantity}<br>
+        Unit Price: $${(item.unitPrice / 100).toFixed(2)}<br>
+        Total: $${((item.quantity * item.unitPrice) / 100).toFixed(2)}
+      `;
           itemsList.appendChild(listItem);
         });
         cartResults.appendChild(itemsList);
@@ -837,10 +1072,10 @@
         const retailerInfo = document.createElement('div');
         retailerInfo.className = 'mt-3';
         retailerInfo.innerHTML = `
-        <h5>Retailer Information</h5>
-        <p>Name: ${cart.retailers[0].name}</p>
-        <p>Shipping Fee: $${(cart.retailers[0].shippingFee / 100).toFixed(2)}</p>
-      `;
+      <h5>Retailer Information</h5>
+      <p>Name: ${cart.retailers[0].name}</p>
+      <p>Shipping Fee: $${(cart.retailers[0].shippingFee / 100).toFixed(2)}</p>
+    `;
         cartResults.appendChild(retailerInfo);
       }
     } else {
@@ -879,31 +1114,9 @@
   });
 
 
-  const debouncedSearchAddress = debounce(searchAddress, 300);
+  // User Session Management
 
-  document.addEventListener('DOMContentLoaded', async () => {
-    client = await initSDK();
-    const addressInput = document.getElementById('addressInput');
-    const autocompleteResults = document.getElementById('autocompleteResults');
-    const availabilityForm = document.getElementById('availabilityForm');
-    const searchForm = document.getElementById('searchForm');
-
-    addressInput.addEventListener('input', debouncedSearchAddress);
-
-    autocompleteResults.addEventListener('click', ( event ) => {
-      if (event.target.tagName === 'LI') {
-        const id = event.target.getAttribute('data-id');
-        addressInput.value = event.target.textContent;
-        autocompleteResults.innerHTML = '';
-        getDetails(id);
-      }
-    });
-
-    availabilityForm.addEventListener('submit', checkAvailability);
-    searchForm.addEventListener('submit', searchCatalog);
-  });
-
-  document.getElementById('userSessionForm').addEventListener('submit', async ( event ) => {
+  document.getElementById('userSessionForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     const email = document.getElementById('userEmail').value;
     const firstName = document.getElementById('userFirstName').value;
@@ -911,22 +1124,64 @@
 
     try {
       const sessionResponse = await client.user.session({ email, firstName });
-      userSessionResult.innerHTML = `
-        <ul>
-          <li>User ID: ${sessionResponse.data.id}</li>
-          <li>Email: ${sessionResponse.data.email}</li>
-          <li>Session Key: ${sessionResponse.data.session.key}</li>
-          <li>Session Secret: ${sessionResponse.data.session.secret}</li>
-          <li>Session Created At: ${sessionResponse.data.session.createdAt}</li>
-        </ul>
-      `;
+      displayUserSession(sessionResponse);
     } catch (error) {
       console.error('Failed to create/update session:', error);
       userSessionResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
     }
   });
 
-  document.getElementById('purgeUserForm').addEventListener('submit', async ( event ) => {
+  function displayUserSession(sessionResponse) {
+    const { data, metadata, message, statusCode } = sessionResponse;
+    const userSessionResult = document.getElementById('userSessionResult');
+    const formattedCreatedAt = new Date(data.createdAt).toLocaleString();
+    const formattedUpdatedAt = new Date(data.updatedAt).toLocaleString();
+
+    let addressesHtml = data.addresses.map(address => `
+        <p>
+            <strong>Address:</strong> ${address.one}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}
+            <br><strong>Type:</strong> ${address.type}, <strong>Default:</strong> ${address.isDefault ? 'Yes' : 'No'}
+        </p>
+    `).join('');
+
+    let paymentsHtml = data.savedPayments.map(payment => `
+        <li>
+            <strong>Type:</strong> ${payment.type}, <strong>Default:</strong> ${payment.isDefault ? 'Yes' : 'No'}
+            <br>Card: ${payment.card.brand} ending in ${payment.card.last4}, Expires ${payment.card.expMonth}/${payment.card.expYear}
+        </li>
+    `).join('');
+
+    let html = `
+        <h4>User Session Details</h4>
+        <p><strong>Status:</strong> ${statusCode} - ${message}</p>
+        <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
+        <p><strong>First Name:</strong> ${data.firstName || 'N/A'}</p>
+        <p><strong>Last Name:</strong> ${data.lastName || 'N/A'}</p>
+        <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
+        <p><strong>Profile Image:</strong> ${data.profileImage ? `<img src="${data.profileImage}" alt="Profile Image" style="width:100px;">` : 'N/A'}</p>
+        <p><strong>Created At:</strong> ${formattedCreatedAt}</p>
+        <p><strong>Updated At:</strong> ${formattedUpdatedAt}</p>
+        <h5>Addresses:</h5>
+        ${addressesHtml}
+        <h5>Saved Payments:</h5>
+        <ul>${paymentsHtml}</ul>
+        <h5>Session Key Details:</h5>
+        <div class="session-detail">
+            <strong>Session Key:</strong> ${data.session.key}
+        </div>
+        <div class="session-detail">
+            <strong>Session Secret:</strong> ${data.session.secret}
+        </div>
+    `;
+
+    userSessionResult.innerHTML = html;
+  }
+
+
+  /**
+   * Handle user purge request
+   */
+  document.getElementById('purgeUserForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     const userIdOrEmail = document.getElementById('purgeUserId').value;
     const purgeUserResult = document.getElementById('purgeUserResult');
@@ -940,7 +1195,10 @@
     }
   });
 
-  document.getElementById('updateAddressForm').addEventListener('submit', async ( event ) => {
+  /**
+   * Handle address update request
+   */
+  document.getElementById('updateAddressForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     const customerId = document.getElementById('customerId').value;
     const one = document.getElementById('addressOne').value;
@@ -965,7 +1223,10 @@
     }
   });
 
-  document.getElementById('purgeAddressForm').addEventListener('submit', async ( event ) => {
+  /**
+   * Handle address purge request
+   */
+  document.getElementById('purgeAddressForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     const addressId = document.getElementById('purgeAddressId').value;
     const purgeAddressResult = document.getElementById('purgeAddressResult');
@@ -979,7 +1240,70 @@
     }
   });
 
-  document.getElementById('paymentForm').addEventListener('submit', async ( event ) => {
+  // Payment Method Management
+
+  /**
+   * Handle add payment method request
+   */
+  document.getElementById('addPaymentMethodForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const customerId = document.getElementById('addPaymentCustomerId').value;
+    const paymentMethodId = document.getElementById('paymentMethodId').value;
+    const isDefault = document.getElementById('isDefault').checked;
+    const addPaymentMethodResult = document.getElementById('addPaymentMethodResult');
+
+    try {
+      const response = await client.user.addPayment({
+        customerId,
+        paymentMethodId,
+      });
+
+      addPaymentMethodResult.innerHTML = `
+    <p>Payment method added successfully:</p>
+    <ul>
+      <li>Payment Method ID: ${response.data.id}</li>
+      <li>Default: ${response.data.isDefault ? 'Yes' : 'No'}</li>
+    </ul>
+  `;
+    } catch (error) {
+      console.error('Failed to add payment method:', error);
+      addPaymentMethodResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle purge payment method request
+   */
+  document.getElementById('purgePaymentMethodForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const customerId = document.getElementById('purgeCustomerId').value;
+    const paymentMethodId = document.getElementById('purgePaymentId').value;
+    const purgePaymentMethodResult = document.getElementById('purgePaymentMethodResult');
+
+    try {
+      const response = await client.user.purgePayment(customerId, paymentMethodId);
+
+      purgePaymentMethodResult.innerHTML = `
+    <p>Payment method purged successfully.</p>
+    <ul>
+      <li>Deleted: ${response.data.deleted ? 'Yes' : 'No'}</li>
+      <li>Message: ${response.data.message}</li>
+    </ul>
+  `;
+    } catch (error) {
+      console.error('Failed to purge payment method:', error);
+      purgePaymentMethodResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  // Payment Processing
+
+  /**
+   * Handle payment form submission
+   */
+  document.getElementById('paymentForm').addEventListener('submit', async (event) => {
     event.preventDefault();
 
     client = await initSDK();
@@ -998,11 +1322,11 @@
       });
       console.log('Payment element mounted');
 
-      client.payment.subscribe('change', ( event ) => {
+      client.payment.subscribe('change', (event) => {
         console.log('Payment element changed:', event);
       });
 
-      client.payment.subscribe('ready', ( event ) => {
+      client.payment.subscribe('ready', (event) => {
         console.log('Payment element is ready:', event);
       });
 
@@ -1010,10 +1334,11 @@
       console.error('Failed to mount payment element:', error);
       document.getElementById('paymentTokenResult').innerHTML = `<p class="text-danger">Error mounting payment element: ${error.message}</p>`;
     }
-
   });
-  
-  // Generate a payment token when the button is clicked
+
+  /**
+   * Handle generate payment token request
+   */
   document.getElementById('generateTokenButton').addEventListener('click', async () => {
     const paymentTokenResult = document.getElementById('paymentTokenResult');
 
@@ -1024,13 +1349,13 @@
         console.error('Failed to generate payment token:', token.error.message);
       } else {
         paymentTokenResult.innerHTML = `
-        <ul>
-          <li>Token ID: ${token.id}</li>
-          <li>Card Brand: ${token.card?.brand}</li>
-          <li>Card Last 4: ${token.card?.last4}</li>
-          <li>Expiry: ${token.card?.expMonth}/${token.card?.expYear}</li>
-        </ul>
-      `;
+      <ul>
+        <li>Token ID: ${token.id}</li>
+        <li>Card Brand: ${token.card?.brand}</li>
+        <li>Card Last 4: ${token.card?.last4}</li>
+        <li>Expiry: ${token.card?.expMonth}/${token.card?.expYear}</li>
+      </ul>
+    `;
         console.log('Generated payment token:', token);
       }
     } catch (error) {
@@ -1039,11 +1364,15 @@
     }
   });
 
-  document.getElementById('checkoutForm').addEventListener('submit', async ( event ) => {
+  // Checkout Process
+
+  /**
+   * Handle checkout form submission
+   */
+  document.getElementById('checkoutForm').addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const cartId = document.getElementById('checkoutCartId').value;
-
     const checkoutResults = document.getElementById('checkoutResults');
 
     // Build the checkout object
@@ -1094,28 +1423,31 @@
     try {
       const prepareResponse = await client.checkout.prepare(checkoutData);
       checkoutResults.innerHTML = `
-        <h4>Checkout Prepared Successfully</h4>
-        <p><strong>Token:</strong> ${prepareResponse.checkout.token}</p>
-        <p><strong>Total Amount:</strong> $${(prepareResponse.checkout.amounts.total / 100).toFixed(2)}</p>
-        <p><strong>Shipping Address:</strong> ${prepareResponse.checkout.shippingAddress.one}, ${prepareResponse.checkout.shippingAddress.city}, ${prepareResponse.checkout.shippingAddress.state}, ${prepareResponse.checkout.shippingAddress.zip}, ${prepareResponse.checkout.shippingAddress.country}</p>
-        <p><strong>Billing Address:</strong> ${prepareResponse.checkout.billingAddress.one}, ${prepareResponse.checkout.billingAddress.city}, ${prepareResponse.checkout.billingAddress.state}, ${prepareResponse.checkout.billingAddress.zip}, ${prepareResponse.checkout.billingAddress.country}</p>
-        <h5>Items:</h5>
-        <ul>
-          ${prepareResponse.checkout.items.map(item => `
-            <li>
-              <strong>${item.name}</strong> (${item.size}) - $${(item.price / 100).toFixed(2)} x ${item.quantity}
-              <br>Fulfillment ID: ${item.fulfillmentId}
-              <br>Retailer: ${item.retailerId}
-            </li>
-          `).join('')}
-        </ul>
-      `;
+      <h4>Checkout Prepared Successfully</h4>
+      <p><strong>Token:</strong> ${prepareResponse.checkout.token}</p>
+      <p><strong>Total Amount:</strong> $${(prepareResponse.checkout.amounts.total / 100).toFixed(2)}</p>
+      <p><strong>Shipping Address:</strong> ${prepareResponse.checkout.shippingAddress.one}, ${prepareResponse.checkout.shippingAddress.city}, ${prepareResponse.checkout.shippingAddress.state}, ${prepareResponse.checkout.shippingAddress.zip}, ${prepareResponse.checkout.shippingAddress.country}</p>
+      <p><strong>Billing Address:</strong> ${prepareResponse.checkout.billingAddress.one}, ${prepareResponse.checkout.billingAddress.city}, ${prepareResponse.checkout.billingAddress.state}, ${prepareResponse.checkout.billingAddress.zip}, ${prepareResponse.checkout.billingAddress.country}</p>
+      <h5>Items:</h5>
+      <ul>
+        ${prepareResponse.checkout.items.map(item => `
+          <li>
+            <strong>${item.name}</strong> (${item.size}) - $${(item.price / 100).toFixed(2)} x ${item.quantity}
+            <br>Fulfillment ID: ${item.fulfillmentId}
+            <br>Retailer: ${item.retailerId}
+          </li>
+        `).join('')}
+      </ul>
+    `;
     } catch (error) {
       console.error('Failed to prepare checkout:', error);
       checkoutResults.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
     }
   });
 
+  /**
+   * Handle complete checkout form submission
+   */
   document.getElementById('completeCheckoutForm').addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -1130,26 +1462,25 @@
     try {
       const completeResponse = await client.checkout.complete(completeCheckoutData);
 
-      // Display the good response
+      // Display the successful response
       completeCheckoutResults.innerHTML = `
-      <h4>Checkout Completed Successfully</h4>
-      <p><strong>Order Number:</strong> ${completeResponse.order.number}</p>
-      <p><strong>Message:</strong> ${completeResponse.message}</p>
-    `;
+    <h4>Checkout Completed Successfully</h4>
+    <p><strong>Order Number:</strong> ${completeResponse.order.number}</p>
+    <p><strong>Message:</strong> ${completeResponse.message}</p>
+  `;
     } catch (error) {
       // Handle the error response
       if (error?.statusCode === 5493) {
         completeCheckoutResults.innerHTML = `
-        <h4 class="text-danger">Error Completing Checkout</h4>
-        <p><strong>Message:</strong> ${error.message}</p>
-      `;
+      <h4 class="text-danger">Error Completing Checkout</h4>
+      <p><strong>Message:</strong> ${error.message}</p>
+    `;
       } else {
         completeCheckoutResults.innerHTML = `<p class="text-danger">An unexpected error occurred: ${error.message}</p>`;
       }
       console.error('Error completing checkout:', error);
     }
   });
-
 </script>
 </body>
 </html>
