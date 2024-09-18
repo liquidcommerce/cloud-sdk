@@ -22,6 +22,8 @@ export class PaymentProviderService implements IPaymentProvider {
 
   private readonly eventsErrorMsg = 'The only Payment Element events allowed (change, ready, loaderstart, loadererror)';
 
+  private clientSecret: string | null = null;
+
   /**
    * Mounts the Stripe payment element to the specified container element on the page.
    *
@@ -40,13 +42,24 @@ export class PaymentProviderService implements IPaymentProvider {
 
     try {
       this.stripe = await loadStripe(config.key);
-    } catch (e) {
-      console.error('Failed to load Stripe:', e);
+    } catch {
       throw new Error('Failed to initialize Stripe');
     }
 
     if (!this.stripe) {
       throw new Error('Failed to initialize Stripe');
+    }
+
+    this.clientSecret = config.clientSecret;
+
+    try {
+      const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret);
+
+      if (setupIntent?.status === 'succeeded') {
+        throw new Error(`The client secret (${this.clientSecret}) has already been used previously. Generate a new one through a use session.`);
+      }
+    } catch (e) {
+      throw e;
     }
 
     const stripeElementsOptions: ExtendedStripeElementsOptions = {
@@ -66,16 +79,27 @@ export class PaymentProviderService implements IPaymentProvider {
   /**
    * Generate a payment token for a liquid payment.
    *
-   * This method generates a payment token using the Stripe API. The payment token represents the payment information provided by the user.
-   * The method first checks if the Stripe instance and the Stripe Elements instance have been initialized. If not, it returns an error indicating that the payment form has not been initialized.
+   * This method generates a payment token using the Stripe API. The payment token represents the payment
+   * information provided by the user. The method first checks if the Stripe instance and the Stripe Elements
+   * instance have been initialized. If not, it returns an error indicating that the payment form has not been
+   * initialized.
    *
-   * Next, the method submits the payment form using the `submit()` method of the Stripe Elements instance. If there is an error during the submission, it returns a validation error indicating the error message and code.
+   * Next, the method submits the payment form using the `submit()` method of the Stripe Elements instance.
+   * If there is an error during the submission, it returns a validation error indicating the error message
+   * and code.
    *
-   * After successful submission, the method creates a payment method using the `createPaymentMethod()` method of the Stripe instance, passing the Stripe Elements instance as a parameter. If there is an error during the creation of the payment method, it returns the appropriate error containing the error message, code, and parameter (if applicable).
+   * After successful submission, the method creates a payment method using the `createPaymentMethod()`
+   * method of the Stripe instance, passing the Stripe Elements instance as a parameter. If there is
+   * an error during the creation of the payment method, it returns the appropriate error containing
+   * the error message, code, and parameter (if applicable).
    *
-   * If the payment method is successfully created, the method returns the payment information in the form of an object containing the payment method's ID, type, and card details (if available), as well as the creation timestamp. The card details include the card brand, country, expiration month, expiration year, last 4 digits, and funding source.
+   * If the payment method is successfully created, the method returns the payment information in the form
+   * of an object containing the payment method's ID, type, and card details (if available), as well as the
+   * creation timestamp. The card details include the card brand, country, expiration month, expiration year,
+   * last 4 digits, and funding source.
    *
-   * If none of the above conditions are met, it returns an error indicating that the payment token generation has failed.
+   * If none of the above conditions are met, it returns an error indicating that the payment token generation
+   * has failed.
    *
    * @returns A Promise that resolves to either a LiquidPaymentToken object or a LiquidPaymentError object.
    *
@@ -92,13 +116,13 @@ export class PaymentProviderService implements IPaymentProvider {
    * - created (number): The timestamp indicating when the payment method was created.
    *
    * The LiquidPaymentError object has the following properties:
-   * - type (string): The type of the error (either 'client_error', 'validation_error', or 'api_error').
+   * - type (string): The type of the error (either 'client_error', 'validation_error', api_error, or 'confirm_error').
    * - message (string): The error message.
    * - code (string): The error code (if applicable).
    * - param (string): The error parameter (if applicable).
    */
   public async generateToken(): Promise<ILiquidPaymentToken | ILiquidPaymentError> {
-    if (!this.stripe || !this.elements) {
+    if (!this.stripe || !this.elements || !this.clientSecret) {
       return {
         type: 'client_error',
         message: 'Payment form has not been initialized',
@@ -119,6 +143,19 @@ export class PaymentProviderService implements IPaymentProvider {
     const { error, paymentMethod } = await this.stripe.createPaymentMethod({
       elements: this.elements,
     });
+
+    const confirmSetup = await this.stripe.confirmSetup({
+      elements: this.elements,
+      redirect: 'if_required',
+    });
+
+    if (confirmSetup.error) {
+      return {
+        type: 'confirm_error',
+        message: confirmSetup?.error?.message ?? '',
+        code: confirmSetup?.error?.code ?? '',
+      };
+    }
 
     if (error) {
       return {

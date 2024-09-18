@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.1...v1.2.0) (2024-09-05)
+
+
+### Features
+
+* **demo:** add session-based payment initialization and improve cart id handling ([89c8048](https://github.com/liquidcommerce/cloud-sdk/commit/89c804808027a2e1f34bf69e2de99425f2cf696c))
+
 # [1.2.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.1-beta.1...v1.2.0-beta.1) (2024-09-05)
 
 

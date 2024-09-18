@@ -4,11 +4,38 @@ import { SingletonManager } from './core';
 import { LIQUID_COMMERCE_ENV } from './enums';
 import type { ICart, ICartUpdateParams } from './interfaces/cart.interface';
 import type { ICatalog, ICatalogParams } from './interfaces/catalog.service.interface';
-import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from './interfaces/checkout.interface';
-import type { IAddressMethod, ICartMethod, ICatalogMethod, ICheckoutMethod, ILiquidCommerceClient, IPaymentMethod, IUserMethod } from './interfaces/liquid-commerce-client.interface';
+import type {
+  ICheckoutCompleteParams,
+  ICheckoutCompleteResponse,
+  ICheckoutPrepareParams,
+  ICheckoutPrepareResponse
+} from './interfaces/checkout.interface';
+import type {
+  IAddressMethod,
+  ICartMethod,
+  ICatalogMethod,
+  ICheckoutMethod,
+  ILiquidCommerceClient,
+  IPaymentMethod,
+  IUserMethod
+} from './interfaces/liquid-commerce-client.interface';
 import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './interfaces/payment.interface';
-import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserSessionParams } from './interfaces/user.interface';
-import type { AddressService, IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult } from './services/address.service';
+import type {
+  IPurgeResponse,
+  IUser,
+  IUserAddress,
+  IUserAddressParams,
+  IUserPayment,
+  IUserPaymentParams,
+  IUserSessionParams
+} from './interfaces/user.interface';
+import type {
+  AddressService,
+  IAddressAutocompleteParams,
+  IAddressAutocompleteResult,
+  IAddressDetailsParams,
+  IAddressDetailsResult
+} from './services/address.service';
 import type { CartService } from './services/cart.service';
 import type { CatalogService, IAvailabilityParams, IAvailabilityResponse } from './services/catalog.service';
 import type { CheckoutService } from './services/checkout.service';
@@ -189,18 +216,25 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *    Method for creating or updating a user session.
    * @property {function(identifier: string): Promise<IApiResponseWithData<IPurgeResponse>>} purge -
    *    Method for purging a user's data from the system.
+   * @property {function(params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>>} addAddress -
+   *    Method for adding a new address for a user.
    * @property {function(params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>>} updateAddress -
-   *    Method for updating or creating a user's address.
+   *    Method for updating an existing user's address.
    * @property {function(addressId: string): Promise<IApiResponseWithData<IPurgeResponse>>} purgeAddress -
    *    Method for purging a user's address.
+   * @property {function(params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>>} addPayment -
+   *    Method for adding a new payment method for a user.
+   * @property {function(customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>>} purgePayment -
+   *    Method for purging a user's payment method.
    *
    * @see {@link IUserSessionParams} for the structure of the session request parameters.
-   * @see {@link IUserAddressParams} for the structure of the address update request parameters.
+   * @see {@link IUserAddressParams} for the structure of the address add/update request parameters.
+   * @see {@link IUserPaymentParams} for the structure of the payment add request parameters.
    * @see {@link IUser} for the structure of the user data returned.
    * @see {@link IUserAddress} for the structure of the user's address data returned.
-   * @see {@link IPurgeResponse} for the structure of the user data returned.
-   *
-   * */
+   * @see {@link IUserPayment} for the structure of the user's payment method data returned.
+   * @see {@link IPurgeResponse} for the structure of the purge response data.
+   */
   public user: IUserMethod = {
     session: async (params: IUserSessionParams): Promise<IApiResponseWithData<IUser>> => {
       await this.ensureAuthenticated();
@@ -210,6 +244,10 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       await this.ensureAuthenticated();
       return this.userService.purge(identifier);
     },
+    addAddress: async (params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>> => {
+      await this.ensureAuthenticated();
+      return this.userService.addAddress(params);
+    },
     updateAddress: async (params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>> => {
       await this.ensureAuthenticated();
       return this.userService.updateAddress(params);
@@ -217,6 +255,14 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     purgeAddress: async (addressId: string): Promise<IApiResponseWithData<IPurgeResponse>> => {
       await this.ensureAuthenticated();
       return this.userService.purgeAddress(addressId);
+    },
+    addPayment: async (params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>> => {
+      await this.ensureAuthenticated();
+      return this.userService.addPayment(params);
+    },
+    purgePayment: async (customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>> => {
+      await this.ensureAuthenticated();
+      return this.userService.purgePayment(customerId, paymentId);
     },
   };
 
@@ -345,5 +391,7 @@ export type {
   IUserAddress,
   IUserAddressParams,
   IUserMethod,
+  IUserPayment,
+  IUserPaymentParams,
   IUserSessionParams,
 };

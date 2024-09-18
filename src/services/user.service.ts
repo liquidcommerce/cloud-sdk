@@ -1,5 +1,5 @@
 import type { AuthenticatedService } from '../core';
-import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserSessionParams } from '../interfaces/user.interface';
+import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserPayment, IUserPaymentParams, IUserSessionParams } from '../interfaces/user.interface';
 import type { IApiResponseWithData } from '../types';
 
 /**
@@ -50,6 +50,19 @@ export class UserService {
     }
   }
 
+  public async addAddress(params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>> {
+    try {
+      if (!params.customerId || !params.one || !params.city || !params.state || !params.zip || !params.type) {
+        throw new Error('Missing required parameters to add address');
+      }
+
+      return await this.client.post<IApiResponseWithData<IUserAddress>>(`${this.servicePath}/addresses/add`, params);
+    } catch (error) {
+      console.error('User address add request failed:', error);
+      throw error;
+    }
+  }
+
   /**
    * Updates or creates a new address for a user.
    *
@@ -84,6 +97,49 @@ export class UserService {
       }
 
       return await this.client.delete<IApiResponseWithData<IPurgeResponse>>(`${this.servicePath}/addresses/purge/${addressId}`);
+    } catch (error) {
+      console.error('Address purge request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Adds a new payment method for a user.
+   *
+   * @param {IUserPaymentParams} params - The parameters required to add a payment method.
+   * @param {string} params.customerId - The ID of the customer.
+   * @param {string} params.paymentMethodId - The ID of the payment method.
+   * @param {boolean} params.isDefault - Indicates whether the new payment method should be marked as default.
+   * @return {Promise<IApiResponseWithData<IUserPayment>>} - A promise that resolves to the response containing user payment information.
+   * @throws {Error} - Throws an error if required parameters are missing or if the request fails.
+   */
+  public async addPayment(params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>> {
+    try {
+      if (!params.customerId || !params.paymentMethodId) {
+        throw new Error('Missing required parameters to add payment');
+      }
+
+      return await this.client.post<IApiResponseWithData<IUserPayment>>(`${this.servicePath}/payments/add`, params);
+    } catch (error) {
+      console.error('User add payment request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Purges a payment record for a specified customer.
+   *
+   * @param {string} customerId - The ID of the customer whose payment record is to be purged.
+   * @param {string} paymentId - The ID of the payment record to be purged.
+   * @return {Promise<IApiResponseWithData<IPurgeResponse>>} A promise that resolves to the response of the purge request.
+   */
+  public async purgePayment(customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>> {
+    try {
+      if (!customerId || !paymentId) {
+        throw new Error('Missing required parameters for payment purge');
+      }
+
+      return await this.client.delete<IApiResponseWithData<IPurgeResponse>>(`${this.servicePath}/payments/purge/${customerId}/${paymentId}`);
     } catch (error) {
       console.error('Address purge request failed:', error);
       throw error;

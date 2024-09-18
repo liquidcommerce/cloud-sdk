@@ -25,12 +25,12 @@ export interface ILiquidPaymentToken {
   type?: string;
 
   card?: {
-    brand: string;
-    country: string;
-    expMonth: number;
-    expYear: number;
-    last4: string;
-    funding: string;
+    brand: string | null;
+    country: string | null;
+    expMonth: number | null;
+    expYear: number | null;
+    last4: string | null;
+    funding: string | null;
   };
 
   created?: number;
@@ -42,7 +42,7 @@ export interface ILiquidPaymentToken {
 }
 
 export interface ILiquidPaymentError {
-  type: 'validation_error' | 'api_error' | 'client_error';
+  type: 'validation_error' | 'api_error' | 'client_error' | 'confirm_error';
 
   message: string;
 
