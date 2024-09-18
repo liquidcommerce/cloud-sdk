@@ -1,3 +1,12 @@
+# [1.3.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.2.0...v1.3.0-beta.1) (2024-09-18)
+
+
+### Features
+
+* **payment:** add client secret validation and confirm setup intent in Stripe integration ([b00d90d](https://github.com/liquidcommerce/cloud-sdk/commit/b00d90d211c310911ceb1d3cd8251b884815b39e))
+* **payments:** add user payment methods and demo UI enhancements ([e7d0130](https://github.com/liquidcommerce/cloud-sdk/commit/e7d0130928bc372989f43bda0e52f5f62e752576))
+* **payments:** user payment method endpoints ([3ffc422](https://github.com/liquidcommerce/cloud-sdk/commit/3ffc42262d27232004402d6f40f1faad777500e0))
+
 # [1.2.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.1.1...v1.2.0) (2024-09-05)
 
 
