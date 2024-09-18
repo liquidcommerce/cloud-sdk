@@ -53,4 +53,30 @@ export class PaymentService {
   public unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void {
     this.paymentProvider.unsubscribe(eventType, handler);
   }
+
+  /**
+   * Collapses the payment element if it has been initialized.
+   * Throws an error if the payment element has not been initialized.
+   *
+   * @return {void}
+   * @throws {Error} Will throw an error if the payment element has not been initialized.
+   */
+  public collapse = (): void => this.paymentProvider.collapse()
+
+  /**
+   * Unmounts the payment element from the DOM.
+   * Throws an error if the payment element has not been initialized.
+   *
+   * @return {void}
+   * @throws {Error} Will throw an error if the payment element has not been initialized.
+   */
+  public unmount = (): void => this.paymentProvider.unmount()
+
+  /**
+   * Destroys the payment element if it has been initialized.
+   *
+   * @return {void} No return value.
+   * @throws {Error} Will throw an error if the payment element has not been initialized.
+   */
+  public destroy = (): void => this.paymentProvider.destroy();
 }
