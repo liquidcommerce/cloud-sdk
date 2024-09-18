@@ -31,6 +31,32 @@ export interface IUserAddress {
   isDefault?: boolean;
 }
 
+export interface ISavedCard {
+  brand: string | null;
+
+  country: string | null;
+
+  expMonth: number | null;
+
+  expYear: number | null;
+
+  last4: string | null;
+
+  funding: string | null;
+}
+
+export interface IUserPayment {
+  id: string;
+
+  customerId: string;
+
+  type: string;
+
+  isDefault: boolean;
+
+  card?: ISavedCard;
+}
+
 export interface IUser {
   id: string;
 
@@ -49,6 +75,8 @@ export interface IUser {
   updatedAt: Date;
 
   addresses: IUserAddress[];
+
+  savedPayments: IUserPayment[];
 
   session: IUserSession;
 }
@@ -86,7 +114,15 @@ export interface IUserAddressParams extends ICoreParams {
 
   zip: string;
 
-  isDefault?: boolean;
-
   type: ENUM_ADDRESS_TYPE;
+
+  isDefault?: boolean;
+}
+
+export interface IUserPaymentParams extends ICoreParams {
+  customerId: string;
+
+  paymentMethodId: string;
+
+  isDefault?: boolean;
 }

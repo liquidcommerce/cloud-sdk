@@ -1011,31 +1011,32 @@
       document.getElementById('paymentTokenResult').innerHTML = `<p class="text-danger">Error mounting payment element: ${error.message}</p>`;
     }
 
-    // Generate a payment token when the button is clicked
-    document.getElementById('generateTokenButton').addEventListener('click', async () => {
-      const paymentTokenResult = document.getElementById('paymentTokenResult');
+  });
+  
+  // Generate a payment token when the button is clicked
+  document.getElementById('generateTokenButton').addEventListener('click', async () => {
+    const paymentTokenResult = document.getElementById('paymentTokenResult');
 
-      try {
-        const token = await client.payment.generateToken();
-        if (token?.error) {
-          paymentTokenResult.innerHTML = `<p class="text-danger">Failed to generate payment token: ${token.error.message}</p>`;
-          console.error('Failed to generate payment token:', token.error.message);
-        } else {
-          paymentTokenResult.innerHTML = `
-          <ul>
-            <li>Token ID: ${token.id}</li>
-            <li>Card Brand: ${token.card?.brand}</li>
-            <li>Card Last 4: ${token.card?.last4}</li>
-            <li>Expiry: ${token.card?.expMonth}/${token.card?.expYear}</li>
-          </ul>
-        `;
-          console.log('Generated payment token:', token);
-        }
-      } catch (error) {
-        console.error('An unexpected error occurred:', error);
-        paymentTokenResult.innerHTML = `<p class="text-danger">Unexpected error: ${error.message}</p>`;
+    try {
+      const token = await client.payment.generateToken();
+      if (token?.error) {
+        paymentTokenResult.innerHTML = `<p class="text-danger">Failed to generate payment token: ${token.error.message}</p>`;
+        console.error('Failed to generate payment token:', token.error.message);
+      } else {
+        paymentTokenResult.innerHTML = `
+        <ul>
+          <li>Token ID: ${token.id}</li>
+          <li>Card Brand: ${token.card?.brand}</li>
+          <li>Card Last 4: ${token.card?.last4}</li>
+          <li>Expiry: ${token.card?.expMonth}/${token.card?.expYear}</li>
+        </ul>
+      `;
+        console.log('Generated payment token:', token);
       }
-    });
+    } catch (error) {
+      console.error('An unexpected error occurred:', error);
+      paymentTokenResult.innerHTML = `<p class="text-danger">Unexpected error: ${error.message}</p>`;
+    }
   });
 
   document.getElementById('checkoutForm').addEventListener('submit', async ( event ) => {

@@ -5,7 +5,7 @@ import type { ICart, ICartUpdateParams } from './cart.interface';
 import type { ICatalog, ICatalogParams } from './catalog.service.interface';
 import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from './checkout.interface';
 import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './payment.interface';
-import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserSessionParams } from './user.interface';
+import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserPayment, IUserPaymentParams, IUserSessionParams } from './user.interface';
 
 /**
  * Interface representing the LiquidCommerce client.
@@ -360,6 +360,8 @@ export interface IUserMethod {
    */
   purge: (identifier: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
 
+  addAddress: (params: IUserAddressParams) => Promise<IApiResponseWithData<IUserAddress>>;
+
   /**
    * Updates or creates a new address for a user.
    *
@@ -415,6 +417,12 @@ export interface IUserMethod {
    * @see {@link IPurgeResponse} for the structure of the user's purged data state.
    */
   purgeAddress: (addressId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
+
+  addPayment: (params: IUserPaymentParams) => Promise<IApiResponseWithData<IUserPayment>>;
+
+  updatePayment: (params: IUserPaymentParams) => Promise<IApiResponseWithData<IUserPayment>>;
+
+  purgePayment: (customerId: string, paymentId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
 }
 
 export interface IPaymentMethod {

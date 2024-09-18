@@ -7,7 +7,7 @@ import type { ICatalog, ICatalogParams } from './interfaces/catalog.service.inte
 import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from './interfaces/checkout.interface';
 import type { IAddressMethod, ICartMethod, ICatalogMethod, ICheckoutMethod, ILiquidCommerceClient, IPaymentMethod, IUserMethod } from './interfaces/liquid-commerce-client.interface';
 import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './interfaces/payment.interface';
-import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserSessionParams } from './interfaces/user.interface';
+import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserPayment, IUserPaymentParams, IUserSessionParams } from './interfaces/user.interface';
 import type { AddressService, IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult } from './services/address.service';
 import type { CartService } from './services/cart.service';
 import type { CatalogService, IAvailabilityParams, IAvailabilityResponse } from './services/catalog.service';
@@ -210,6 +210,10 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       await this.ensureAuthenticated();
       return this.userService.purge(identifier);
     },
+    addAddress: async (params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>> => {
+      await this.ensureAuthenticated();
+      return this.userService.addAddress(params);
+    },
     updateAddress: async (params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>> => {
       await this.ensureAuthenticated();
       return this.userService.updateAddress(params);
@@ -217,6 +221,18 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     purgeAddress: async (addressId: string): Promise<IApiResponseWithData<IPurgeResponse>> => {
       await this.ensureAuthenticated();
       return this.userService.purgeAddress(addressId);
+    },
+    addPayment: async (params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>> => {
+      await this.ensureAuthenticated();
+      return this.userService.addPayment(params);
+    },
+    updatePayment: async (params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>> => {
+      await this.ensureAuthenticated();
+      return this.userService.updatePayment(params);
+    },
+    purgePayment: async (customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>> => {
+      await this.ensureAuthenticated();
+      return this.userService.purgePayment(customerId, paymentId);
     },
   };
 
