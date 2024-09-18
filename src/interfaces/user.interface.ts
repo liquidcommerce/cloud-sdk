@@ -48,8 +48,6 @@ export interface ISavedCard {
 export interface IUserPayment {
   id: string;
 
-  customerId: string;
-
   type: string;
 
   isDefault: boolean;

@@ -4,11 +4,38 @@ import { SingletonManager } from './core';
 import { LIQUID_COMMERCE_ENV } from './enums';
 import type { ICart, ICartUpdateParams } from './interfaces/cart.interface';
 import type { ICatalog, ICatalogParams } from './interfaces/catalog.service.interface';
-import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from './interfaces/checkout.interface';
-import type { IAddressMethod, ICartMethod, ICatalogMethod, ICheckoutMethod, ILiquidCommerceClient, IPaymentMethod, IUserMethod } from './interfaces/liquid-commerce-client.interface';
+import type {
+  ICheckoutCompleteParams,
+  ICheckoutCompleteResponse,
+  ICheckoutPrepareParams,
+  ICheckoutPrepareResponse
+} from './interfaces/checkout.interface';
+import type {
+  IAddressMethod,
+  ICartMethod,
+  ICatalogMethod,
+  ICheckoutMethod,
+  ILiquidCommerceClient,
+  IPaymentMethod,
+  IUserMethod
+} from './interfaces/liquid-commerce-client.interface';
 import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './interfaces/payment.interface';
-import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserPayment, IUserPaymentParams, IUserSessionParams } from './interfaces/user.interface';
-import type { AddressService, IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult } from './services/address.service';
+import type {
+  IPurgeResponse,
+  IUser,
+  IUserAddress,
+  IUserAddressParams,
+  IUserPayment,
+  IUserPaymentParams,
+  IUserSessionParams
+} from './interfaces/user.interface';
+import type {
+  AddressService,
+  IAddressAutocompleteParams,
+  IAddressAutocompleteResult,
+  IAddressDetailsParams,
+  IAddressDetailsResult
+} from './services/address.service';
 import type { CartService } from './services/cart.service';
 import type { CatalogService, IAvailabilityParams, IAvailabilityResponse } from './services/catalog.service';
 import type { CheckoutService } from './services/checkout.service';
@@ -364,5 +391,7 @@ export type {
   IUserAddress,
   IUserAddressParams,
   IUserMethod,
+  IUserPayment,
+  IUserPaymentParams,
   IUserSessionParams,
 };
