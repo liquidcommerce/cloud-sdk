@@ -1,3 +1,10 @@
+# [1.3.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.2...v1.3.0-beta.3) (2024-09-19)
+
+
+### Features
+
+* **user:** add updatePayment method and params for user payment updates ([876b460](https://github.com/liquidcommerce/cloud-sdk/commit/876b46036a2a201516f944e7cd009d76f3e62509))
+
 # [1.3.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.1...v1.3.0-beta.2) (2024-09-18)
 
 
