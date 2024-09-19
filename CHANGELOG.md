@@ -1,3 +1,15 @@
+# [1.3.0-beta.5](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.4...v1.3.0-beta.5) (2024-09-19)
+
+
+### Bug Fixes
+
+* **demo:** correct SDK script URL and environment setting for staging ([9e1e9d3](https://github.com/liquidcommerce/cloud-sdk/commit/9e1e9d3208e3cb1d1a958aea1ca1b038e7755a18))
+
+
+### Features
+
+* added engraving at cart list item ([5bbf167](https://github.com/liquidcommerce/cloud-sdk/commit/5bbf16769b4854eaf8e2bc8c95d81dffea25e94e))
+
 # [1.3.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.3...v1.3.0-beta.4) (2024-09-19)
 
 
