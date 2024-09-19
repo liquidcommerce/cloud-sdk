@@ -129,6 +129,12 @@ export interface IUserPaymentParams extends ICoreParams {
   customerId: string;
 
   paymentMethodId: string;
+}
 
+export interface IUserPaymentAddParams extends IUserPaymentParams {
   isDefault?: boolean;
+}
+
+export interface IUserPaymentUpdateParams extends IUserPaymentParams {
+  isDefault: boolean;
 }
