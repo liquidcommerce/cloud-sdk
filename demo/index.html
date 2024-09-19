@@ -12,6 +12,7 @@
       padding-top: 80px;
       padding-bottom: 60px;
       background-color: #f8f9fa;
+      margin: 0;
     }
 
     .navbar-area, .footer-top {
@@ -40,6 +41,13 @@
     .navbar-brand img, .footer-logo img {
       height: 40px;
       width: auto;
+      max-width: 250px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     #hero-area {
@@ -91,6 +99,13 @@
 
     .nav-tabs {
       border-bottom: none;
+      margin-left: auto;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .nav-tabs .nav-item {
       margin-left: 20px;
     }
 
@@ -98,24 +113,21 @@
       color: #ffffff;
       border: none;
       padding: 10px 15px;
-      margin-right: 10px;
       transition: all 0.3s ease;
     }
 
-    .nav-tabs .nav-link.active {
-      color: #ffffff;
-      border-bottom: 2px solid #ffffff;
-      background-color: transparent;
-    }
-
+    .nav-tabs .nav-link.active,
     .nav-tabs .nav-link:hover {
-      color: rgba(255, 255, 255, 0.8);
+      color: #7ebcff;
+      background-color: transparent;
+      border-bottom: 2px solid #7ebcff;
     }
 
     .catalog-form {
       background-color: #f8f9fa;
       border-radius: 5px;
       margin-bottom: 20px;
+      padding: 20px;
     }
 
     .catalog-form h3 {
@@ -164,19 +176,36 @@
       border-top: none;
     }
 
-    @media (max-width: 991px) {
-      .nav-tabs {
-        display: none;
-      }
+    .navbar-toggler {
+      display: none;
+      padding: 0.25rem;
+      font-size: 1rem;
+      background-color: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 0.25rem;
+      transition: box-shadow 0.15s ease-in-out;
     }
 
-    @media (min-width: 992px) {
-      #offcanvasTabs {
-        display: none !important;
-      }
+    .navbar-toggler-icon {
+      display: inline-block;
+      width: 1.5em;
+      height: 1.5em;
+      vertical-align: middle;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100%;
     }
 
-    /* Off-Canvas Menu Styling */
+    .navbar-toggler:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .navbar-toggler:focus {
+      outline: 0;
+      box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.25);
+    }
+
     .offcanvas-header {
       border-bottom: 1px solid #dee2e6;
     }
@@ -185,7 +214,7 @@
       padding: 1rem;
     }
 
-    .nav-link {
+    .offcanvas-body .nav-link {
       display: block;
       width: 100%;
       text-align: left;
@@ -198,13 +227,14 @@
       transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
     }
 
-    .nav-link:hover, .nav-link:focus {
+    .offcanvas-body .nav-link:hover,
+    .offcanvas-body .nav-link:focus {
       background-color: #e2e6ea;
       color: #000;
       text-decoration: none;
     }
 
-    .nav-link.active {
+    .offcanvas-body .nav-link.active {
       background-color: #007bff;
       color: #fff;
     }
@@ -222,7 +252,7 @@
     }
 
     .session-result p, .session-result li {
-      color: #666;
+      color: #777;
       font-size: 14px;
       line-height: 1.6;
     }
@@ -256,7 +286,7 @@
     }
 
     .session-detail strong {
-      color: #333; /* Dark color for the labels (e.g., "Session Key:") */
+      color: #333;
     }
 
     .payment-method-container {
@@ -366,6 +396,22 @@
       margin-top: 1.5rem;
     }
 
+    @media (max-width: 1200px) {
+      .nav-tabs .nav-item {
+        margin-left: 15px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .nav-tabs {
+        display: none;
+      }
+
+      .navbar-toggler {
+        display: block;
+      }
+    }
+
     @media (max-width: 768px) {
       .payment-method-container {
         padding: 1rem;
@@ -380,66 +426,28 @@
       }
     }
 
+    @media (min-width: 992px) {
+      #offcanvasTabs {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
+
 <header class="navbar-area">
   <div class="container">
-    <div class="d-flex align-items-center">
+    <div class="d-flex justify-content-between align-items-center w-100">
       <a href="index.html" class="navbar-brand">
         <img src="https://assets.liquidcommerce.co/development/cloud-sdk-logo.svg" style="max-width: 250px;" alt="Logo">
       </a>
-
-      <!-- Off-Canvas Trigger Button (visible on small screens) -->
-      <button class="btn btn-primary d-lg-none ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTabs"
-              aria-controls="offcanvasTabs">
-        Menu
+      <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTabs"
+              aria-controls="offcanvasTabs" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Off-Canvas Menu -->
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTabs" aria-labelledby="offcanvasTabsLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasTabsLabel">Menu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <ul class="nav flex-column" id="menu-tabs">
-            <li class="nav-item">
-              <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
-                      aria-controls="address" aria-selected="false">Address
-              </button>
-            </li>
-            <li class="nav-item">
-              <button class="nav-link" id="catalog-tab" data-bs-toggle="tab" data-bs-target="#catalog" type="button" role="tab"
-                      aria-controls="catalog" aria-selected="false">Catalog
-              </button>
-            </li>
-            <li class="nav-item">
-              <button class="nav-link" id="cart-tab" data-bs-toggle="tab" data-bs-target="#cart" type="button" role="tab"
-                      aria-controls="cart" aria-selected="false">Cart
-              </button>
-            </li>
-            <li class="nav-item">
-              <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab"
-                      aria-controls="user" aria-selected="false">User
-              </button>
-            </li>
-            <li class="nav-item">
-              <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
-                      aria-controls="payment" aria-selected="false">Payment
-              </button>
-            </li>
-            <li class="nav-item">
-              <button class="nav-link" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab"
-                      aria-controls="checkout" aria-selected="false">Checkout
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-
       <!-- Original Tabs (visible on larger screens) -->
-      <ul class="nav nav-tabs d-none d-lg-flex ms-auto" id="sdkTabs" role="tablist">
+      <ul class="nav nav-tabs d-none d-lg-flex" id="sdkTabs" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
                   aria-controls="address" aria-selected="true">Address
@@ -461,8 +469,8 @@
           </button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-aria-controls=" payment
-          " aria-selected="false">Payment
+          <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
+                  aria-controls="payment" aria-selected="false">Payment
           </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -471,6 +479,49 @@
           </button>
         </li>
       </ul>
+    </div>
+  </div>
+
+    <!-- Off-Canvas Menu -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTabs" aria-labelledby="offcanvasTabsLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasTabsLabel">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="nav flex-column" id="menu-tabs">
+          <li class="nav-item">
+            <button class="nav-link active" id="address-tab-mobile" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
+                    aria-controls="address" aria-selected="true">Address
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="catalog-tab-mobile" data-bs-toggle="tab" data-bs-target="#catalog" type="button" role="tab"
+                    aria-controls="catalog" aria-selected="false">Catalog
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="cart-tab-mobile" data-bs-toggle="tab" data-bs-target="#cart" type="button" role="tab"
+                    aria-controls="cart" aria-selected="false">Cart
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="user-tab-mobile" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab"
+                    aria-controls="user" aria-selected="false">User
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="payment-tab-mobile" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
+                    aria-controls="payment" aria-selected="false">Payment
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="checkout-tab-mobile" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab"
+                    aria-controls="checkout" aria-selected="false">Checkout
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </header>
@@ -1340,7 +1391,8 @@
       const response = await client.user.addPayment({
         customerId,
         paymentMethodId,
-
+        // comment out to test multiple scenarios
+        isDefault,
       });
 
       addPaymentMethodResult.innerHTML = `
@@ -1370,6 +1422,7 @@
       const response = await client.user.updatePayment({
         customerId,
         paymentMethodId,
+        // comment out to test multiple scenarios
         isDefault,
       });
 
