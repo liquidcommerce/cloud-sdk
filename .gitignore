@@ -375,3 +375,5 @@ pnpm-debug.log*
 .tmp
 
 .npmrc
+demo/index-internal.html
+rollup-internal.config.js

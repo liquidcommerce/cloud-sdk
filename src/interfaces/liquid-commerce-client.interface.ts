@@ -1,11 +1,30 @@
-import type { IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult } from '../services/address.service';
+import type {
+  IAddressAutocompleteParams,
+  IAddressAutocompleteResult,
+  IAddressDetailsParams,
+  IAddressDetailsResult
+} from '../services/address.service';
 import type { IAvailabilityParams, IAvailabilityResponse } from '../services/catalog.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from '../types';
 import type { ICart, ICartUpdateParams } from './cart.interface';
 import type { ICatalog, ICatalogParams } from './catalog.service.interface';
-import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from './checkout.interface';
+import type {
+  ICheckoutCompleteParams,
+  ICheckoutCompleteResponse,
+  ICheckoutPrepareParams,
+  ICheckoutPrepareResponse
+} from './checkout.interface';
 import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './payment.interface';
-import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserSessionParams } from './user.interface';
+import type {
+  IPurgeResponse,
+  IUser,
+  IUserAddress,
+  IUserAddressParams,
+  IUserPayment,
+  IUserPaymentAddParams,
+  IUserPaymentUpdateParams,
+  IUserSessionParams
+} from './user.interface';
 
 /**
  * Interface representing the LiquidCommerce client.
@@ -361,6 +380,38 @@ export interface IUserMethod {
   purge: (identifier: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
 
   /**
+   * Adds a new address for a user.
+   *
+   * @param {IUserAddressParams} params - The parameters for adding a new address.
+   * @returns {Promise<IApiResponseWithData<IUserAddress>>} A promise that resolves to the API response with the added address data.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const newAddress = await liquidCommerce.user.addAddress({
+   *     customerId: 'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+   *     one: '100 Madison St',
+   *     city: 'New York',
+   *     state: 'NY',
+   *     zip: '10004',
+   *     type: 'shipping',
+   *     isDefault: true
+   *   });
+   *
+   *   console.log('Added address:', newAddress?.data);
+   * } catch (error) {
+   *   console.error('Failed to add address:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the add address request fails or if authentication is unsuccessful.
+   *
+   * @see {@link IUserAddressParams} for the structure of the add address request parameters.
+   * @see {@link IUserAddress} for the structure of the user's address data returned.
+   */
+  addAddress: (params: IUserAddressParams) => Promise<IApiResponseWithData<IUserAddress>>;
+
+  /**
    * Updates or creates a new address for a user.
    *
    * @param {IUserAddressParams} params - The parameters for updating or creating an address.
@@ -415,6 +466,89 @@ export interface IUserMethod {
    * @see {@link IPurgeResponse} for the structure of the user's purged data state.
    */
   purgeAddress: (addressId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
+
+  /**
+   * Adds a new payment method for a user.
+   *
+   * @param {IUserPaymentAddParams} params - The parameters for adding a new payment method.
+   * @returns {Promise<IApiResponseWithData<IUserPayment>>} A promise that resolves to the API response with the added payment method data.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const newPayment = await liquidCommerce.user.addPayment({
+   *     customerId: 'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+   *     paymentMethodId: 'pm_1234567890abcdef',
+   *     isDefault: true
+   *   });
+   *
+   *   console.log('Added payment method:', newPayment?.data);
+   * } catch (error) {
+   *   console.error('Failed to add payment method:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the add payment request fails or if authentication is unsuccessful.
+   *
+   * @see {@link IUserPaymentParams} for the structure of the add payment request parameters.
+   * @see {@link IUserPayment} for the structure of the user's payment method data returned.
+   */
+  addPayment: (params: IUserPaymentAddParams) => Promise<IApiResponseWithData<IUserPayment>>;
+
+  /**
+   * Updates a payment method for a user.
+   *
+   * @param {IUserPaymentUpdateParams} params - The parameters for updating a payment method.
+   * @returns {Promise<IApiResponseWithData<IUserPayment>>} A promise that resolves to the API response with the updated payment method data.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const updatedPayment = await liquidCommerce.user.updatePayment({
+   *     customerId: 'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+   *     paymentMethodId: 'pm_1234567890abcdef',
+   *     isDefault: true
+   *   });
+   *
+   *   console.log('Updated payment method:', updatedPayment?.data);
+   * } catch (error) {
+   *   console.error('Failed to update payment method:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the update payment request fails or if authentication is unsuccessful.
+   *
+   * @see {@link IUserPaymentUpdateParams} for the structure of the update payment request parameters.
+   * @see {@link IUserPayment} for the structure of the user's payment method data returned.
+   */
+  updatePayment: (params: IUserPaymentUpdateParams) => Promise<IApiResponseWithData<IUserPayment>>;
+
+  /**
+   * Purges a payment method for a user.
+   *
+   * @param {string} customerId - The ID of the customer.
+   * @param {string} paymentId - The ID of the payment method to purge.
+   * @returns {Promise<IApiResponseWithData<IPurgeResponse>>} A promise that resolves to the purge response.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const paymentPurgeResponse = await liquidCommerce.user.purgePayment(
+   *     'c1fbd454-a540-4f42-86e9-f87a98bf1812',
+   *     'pm_1234567890abcdef'
+   *   );
+   *
+   *   console.log('Payment method purge response:', paymentPurgeResponse?.data);
+   * } catch (error) {
+   *   console.error('Failed to purge payment method:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the purge payment request fails or if authentication is unsuccessful.
+   *
+   * @see {@link IPurgeResponse} for the structure of the purge response data.
+   */
+  purgePayment: (customerId: string, paymentId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
 }
 
 export interface IPaymentMethod {
@@ -522,6 +656,63 @@ export interface IPaymentMethod {
    * @throws {Error} - Throws an error if the payment element has not been initialized.
    */
   unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void;
+
+  /**
+   * Collapses the payment element if it has been initialized.
+   *
+   * @returns {void}
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   liquidCommerce.payment.collapse();
+   *   console.log('Payment element collapsed');
+   * } catch (error) {
+   *   console.error('Failed to collapse payment element:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the payment element has not been initialized.
+   */
+  collapse(): void;
+
+  /**
+   * Unmounts the payment element from the DOM.
+   *
+   * @returns {void}
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   liquidCommerce.payment.unmount();
+   *   console.log('Payment element unmounted');
+   * } catch (error) {
+   *   console.error('Failed to unmount payment element:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the payment element has not been initialized.
+   */
+  unmount(): void;
+
+  /**
+   * Destroys the payment element if it has been initialized.
+   *
+   * @returns {void}
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   liquidCommerce.payment.destroy();
+   *   console.log('Payment element destroyed');
+   * } catch (error) {
+   *   console.error('Failed to destroy payment element:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the payment element has not been initialized.
+   */
+  destroy(): void;
 }
 
 export interface ICheckoutMethod {
