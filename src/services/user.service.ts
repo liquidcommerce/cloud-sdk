@@ -1,5 +1,14 @@
 import type { AuthenticatedService } from '../core';
-import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserPayment, IUserPaymentParams, IUserSessionParams } from '../interfaces/user.interface';
+import type {
+  IPurgeResponse,
+  IUser,
+  IUserAddress,
+  IUserAddressParams,
+  IUserPayment,
+  IUserPaymentAddParams,
+  IUserPaymentUpdateParams,
+  IUserSessionParams
+} from '../interfaces/user.interface';
 import type { IApiResponseWithData } from '../types';
 
 /**
@@ -113,13 +122,39 @@ export class UserService {
    * @return {Promise<IApiResponseWithData<IUserPayment>>} - A promise that resolves to the response containing user payment information.
    * @throws {Error} - Throws an error if required parameters are missing or if the request fails.
    */
-  public async addPayment(params: IUserPaymentParams): Promise<IApiResponseWithData<IUserPayment>> {
+  public async addPayment(params: IUserPaymentAddParams): Promise<IApiResponseWithData<IUserPayment>> {
     try {
       if (!params.customerId || !params.paymentMethodId) {
         throw new Error('Missing required parameters to add payment');
       }
 
+      if (params?.isDefault === undefined) {
+        delete params?.isDefault;
+      }
+
       return await this.client.post<IApiResponseWithData<IUserPayment>>(`${this.servicePath}/payments/add`, params);
+    } catch (error) {
+      console.error('User add payment request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Updates whether the default payment method for a user.
+   *
+   * @param {IUserPaymentParams} params - The payment parameters required to update payment. Must include `customerId`,
+   *  `paymentMethodId`, and a boolean `isDefault`.
+   * @returns {Promise<IApiResponseWithData<IUserPayment>>} - A promise that resolves to the API response containing
+   *  the updated payment information.
+   * @throws {Error} - Throws an error if required parameters are missing or the request fails.
+   */
+  public async updatePayment(params: IUserPaymentUpdateParams): Promise<IApiResponseWithData<IUserPayment>> {
+    try {
+      if (!params.customerId || !params.paymentMethodId || params?.isDefault === undefined || typeof params?.isDefault !== 'boolean') {
+        throw new Error('Missing required parameters to add payment');
+      }
+
+      return await this.client.post<IApiResponseWithData<IUserPayment>>(`${this.servicePath}/payments/update`, params);
     } catch (error) {
       console.error('User add payment request failed:', error);
       throw error;
