@@ -1,3 +1,10 @@
+# [1.3.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.3...v1.3.0-beta.4) (2024-09-19)
+
+
+### Features
+
+* **ui:** improve navbar and add mobile-friendly off-canvas menu ([68bc8d4](https://github.com/liquidcommerce/cloud-sdk/commit/68bc8d40fd793a7e415ae0783f70fb226866b7ff))
+
 # [1.3.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.2...v1.3.0-beta.3) (2024-09-19)
 
 
