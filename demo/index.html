@@ -632,6 +632,7 @@
                   <input type="text" class="form-control" id="cartIdGet">
                 </div>
                 <button type="button" class="btn btn-primary" id="getCart">Get Cart</button>
+                <span id="cartEventMessage"></span>
               </div>
               <div id="cartResults"></div>
               <div id="engravingModalContainer"></div>
@@ -1192,11 +1193,14 @@
    */
   function displayCartResults( cartResponse ) {
     const cartResults = document.getElementById('cartResults');
+    const cartEventMessage = document.getElementById('cartEventMessage');
     cartResults.innerHTML = '';
 
     if (cartResponse && cartResponse.cart && cartResponse.cart.id) {
       const cart = cartResponse.cart;
       const cartSummary = document.createElement('div');
+      const cartEvent = document.createElement('div');
+
       cartSummary.innerHTML = `
     <h4>Cart Summary</h4>
     <p>Cart ID: ${cart.id}</p>
@@ -1206,6 +1210,13 @@
     <p>Platform Fee: $${(cart.platformFee / 100).toFixed(2)}</p>
     <p>Shipping Fee: $${(cart.shippingFee / 100).toFixed(2)}</p>
   `;
+
+   if (cart.events && cart.events.length > 0) {
+     cartEvent.innerHTML = `
+     <p><b>Message</b>: ${cart.events[0].message}</p>
+     `;
+      cartResults.appendChild(cartEvent);
+   }
       cartResults.appendChild(cartSummary);
 
       function findFulfillmentOfRetailer(cart, itemRetailerId, itemFulfillmentId) {
@@ -1224,6 +1235,7 @@
             itemsList.className = 'list-group mt-3';
 
             cart.items.forEach((item, index) => {
+              const retailer = cart.retailers.find((r) => r.id === item.retailerId);
               const retailerFulfillment = findFulfillmentOfRetailer(cart, item.retailerId, item.fulfillmentId);
 
               const listItem = document.createElement('li');
@@ -1236,14 +1248,18 @@
 
               const itemDetails = [
                 { label: 'Part Number', value: item.partNumber },
-                { label: 'Quantity', value: item.quantity },
+                { label: 'Quantity', value: `<b>${item.quantity}</b>`},
+                { label: 'Size', value: item.size },
                 { label: 'Unit Price', value: `$${(item.unitPrice / 100).toFixed(2)}` },
-                { label: 'Total', value: `$${((item.quantity * item.unitPrice) / 100).toFixed(2)}` },
+                { label: 'Total', value: `<b>$${((item.quantity * item.unitPrice) / 100).toFixed(2)}</b>` },
+                { label: 'Retailer Name', value: `<b>${retailer.name}</b>` },
+                { label: 'Retailer Shipping Fee', value: `$${(retailer.shippingFee / 100).toFixed(2)}` },
+                { label: 'Fulfillment ID', value: item.fulfillmentId },
               ];
 
               itemDetails.forEach((detail) => {
                 const span = document.createElement('span');
-                span.textContent = `${detail.label}: ${detail.value}`;
+                 span.innerHTML = `${detail.label}: ${detail.value}`;
                 listItem.appendChild(span);
                 listItem.appendChild(document.createElement('br'));
               });
@@ -1285,19 +1301,6 @@
 
             cartResults.appendChild(itemsList);
           }
-
-
-      // Display retailer information
-      if (cart.retailers && cart.retailers.length > 0) {
-        const retailerInfo = document.createElement('div');
-        retailerInfo.className = 'mt-3';
-        retailerInfo.innerHTML = `
-      <h5>Retailer Information</h5>
-      <p>Name: ${cart.retailers[0].name}</p>
-      <p>Shipping Fee: $${(cart.retailers[0].shippingFee / 100).toFixed(2)}</p>
-    `;
-        cartResults.appendChild(retailerInfo);
-      }
     } else {
       cartResults.textContent = 'No cart data available.';
     }
