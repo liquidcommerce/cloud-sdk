@@ -289,8 +289,8 @@
       color: #333;
     }
 
-    .payment-method-container {
-      max-width: 600px;
+    .section-container {
+      max-width: auto;
       margin: 0 auto;
       padding: 2rem;
       background-color: #f8f9fa;
@@ -301,7 +301,7 @@
     .section-title {
       font-size: 1.8rem;
       color: #333;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.5rem;
       text-align: center;
     }
 
@@ -336,6 +336,7 @@
       font-size: 1rem;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      width: 100%;
     }
 
     .btn-primary {
@@ -390,10 +391,14 @@
     }
 
     .button-group {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.5rem;
       margin-top: 1.5rem;
+    }
+
+    .button-group .btn {
+      width: 100%;
     }
 
     @media (max-width: 1200px) {
@@ -407,18 +412,26 @@
         display: none;
       }
 
+      .section-title {
+        font-size: 1.6rem;
+      }
+
       .navbar-toggler {
         display: block;
       }
     }
 
     @media (max-width: 768px) {
-      .payment-method-container {
+      .section-container {
         padding: 1rem;
       }
 
+      .section-title {
+        font-size: 1.4rem;
+      }
+
       .button-group {
-        flex-direction: column;
+        grid-template-columns: 1fr;
       }
 
       .btn {
@@ -559,17 +572,20 @@
 
           <!-- ADDRESS SEARCH & DETAILS EXAMPLE -->
           <div class="tab-pane fade show active" id="address" role="tabpanel" aria-labelledby="address-tab">
-            <h3>Search Addresses</h3>
+           <div class="section-container">
+             <h2 class="section-title mb-3">Search Addresses</h3>
             <input type="text" id="addressInput" class="form-control" placeholder="Enter address (min 3 characters)">
             <ul id="autocompleteResults"></ul>
             <div id="results"></div>
+           </div>
           </div>
 
           <!-- CATALOG AVAILABILITY EXAMPLE -->
           <div id="catalog" class="tab-pane fade" role="tabpanel" aria-labelledby="catalog-tab">
+           <div class="section-container">
             <div class="catalog-section">
               <div id="catalogAvailabilityForm" class="catalog-form">
-                <h3>Check Product Availability</h3>
+                <h2 class="section-title">Check Product Availability</h2>
                 <form id="availabilityForm">
                   <div class="mb-3">
                     <label for="upcs" class="form-label">UPCs (comma-separated)</label>
@@ -584,9 +600,11 @@
               </div>
               <div id="availabilityResults"></div>
             </div>
+            <hr>
+
             <div class="catalog-section">
               <div id="catalogSearchForm" class="catalog-form">
-                <h3>Search Products</h3>
+                <h2 class="section-title">Search Products</h2>
                 <form id="searchForm">
                   <div class="mb-3">
                     <label for="searchQuery" class="form-label">Search Query</label>
@@ -620,11 +638,13 @@
               </div>
               <div id="catalogResults"></div>
             </div>
+           </div>
           </div>
 
           <!-- CART EXAMPLE -->
           <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
-            <h3>Cart</h3>
+           <div class="section-container">
+             <h2 class="section-title">Cart</h2>
             <div class="cart-section">
               <div id="cartForm" class="cart-form mb-4">
                 <div class="mb-3">
@@ -636,8 +656,10 @@
               </div>
               <div id="cartResults"></div>
               <div id="engravingModalContainer"></div>
+              <hr>
+
               <div id="updateCartForm" class="cart-form mt-4">
-                <h4>Update Cart</h4>
+                <h5>Update Cart</h5>
                 <div class="mb-3">
                   <label for="cartIdUpdate" class="form-label">Cart ID</label>
                   <input type="text" class="form-control" id="cartIdUpdate">
@@ -657,14 +679,16 @@
                 <button type="button" class="btn btn-primary" id="updateCart">Update Cart</button>
               </div>
             </div>
+            </div>
           </div>
 
           <!-- USER EXAMPLE -->
           <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
-            <h3>User Methods</h3>
+           <div class="section-container">
+            <h2 class="section-title">User Methods</h2>
 
             <div class="user-section">
-              <h4>Create/Update User Session</h4>
+              <h5>Create/Update User Session</h5>
               <form id="userSessionForm">
                 <div class="mb-3">
                   <label for="userEmail" class="form-label">Email</label>
@@ -678,9 +702,10 @@
               </form>
               <div id="userSessionResult" class="session-result"></div>
             </div>
+            <hr>
 
             <div class="user-section mt-4">
-              <h4>Purge User</h4>
+              <h5>Purge User</h5>
               <form id="purgeUserForm">
                 <div class="mb-3">
                   <label for="purgeUserId" class="form-label">User ID or Email</label>
@@ -690,9 +715,10 @@
               </form>
               <div id="purgeUserResult" class="mt-3"></div>
             </div>
+            <hr>
 
             <div class="user-section mt-4">
-              <h4>Update/Create Address</h4>
+              <h5>Update/Create Address</h>
               <form id="updateAddressForm">
                 <div class="mb-3">
                   <label for="customerId" class="form-label">Customer ID</label>
@@ -718,9 +744,10 @@
               </form>
               <div id="updateAddressResult" class="mt-3"></div>
             </div>
+            <hr>
 
             <div class="user-section mt-4">
-              <h4>Purge Address</h4>
+              <h5>Purge Address</h5>
               <form id="purgeAddressForm">
                 <div class="mb-3">
                   <label for="purgeAddressId" class="form-label">Address ID</label>
@@ -730,9 +757,10 @@
               </form>
               <div id="purgeAddressResult" class="mt-3"></div>
             </div>
+            <hr>
 
             <div class="user-section mt-4">
-              <h4>Add Payment Method</h4>
+              <h5>Add Payment Method</h>
               <form id="addPaymentMethodForm">
                 <div class="mb-3">
                   <label for="customerId" class="form-label">Customer ID</label>
@@ -750,9 +778,10 @@
               </form>
               <div id="addPaymentMethodResult" class="mt-3"></div>
             </div>
+            <hr>
 
             <div class="user-section mt-4">
-              <h4>Update Payment Method</h4>
+              <h5>Update Payment Method</h5>
               <form id="updatePaymentMethodForm">
                 <div class="mb-3">
                   <label for="updatePaymentCustomerId" class="form-label">Customer ID</label>
@@ -770,9 +799,10 @@
               </form>
               <div id="updatePaymentMethodResult" class="mt-3"></div>
             </div>
+            <hr>
 
             <div class="user-section mt-4">
-              <h4>Purge Payment Method</h4>
+              <h5>Purge Payment Method</h5>
               <form id="purgePaymentMethodForm">
                 <div class="mb-3">
                   <label for="purgeCustomerId" class="form-label">Customer ID</label>
@@ -786,13 +816,12 @@
               </form>
               <div id="purgePaymentMethodResult" class="mt-3"></div>
             </div>
-
-
+           </div>
           </div>
 
           <!-- PAYMENT EXAMPLE -->
           <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
-            <div class="payment-method-container">
+            <div class="section-container">
               <h2 class="section-title">Payment Method</h2>
               <form id="paymentForm" class="payment-form">
                 <div class="form-group">
@@ -818,7 +847,8 @@
 
           <!-- CHECKOUT EXAMPLE -->
           <div class="tab-pane fade" id="checkout" role="tabpanel" aria-labelledby="checkout-tab">
-            <h3>Checkout</h3>
+           <div class="section-container">
+             <h2 class="section-title">Checkout</h2>
             <form id="checkoutForm">
               <div class="mb-3">
                 <label for="checkoutCartId" class="form-label">Checkout Cart ID</label>
@@ -832,7 +862,7 @@
             <hr>
 
             <!-- Complete Checkout Form -->
-            <h3>Complete Checkout</h3>
+             <h2 class="section-title">Complete Checkout</h2>
             <form id="completeCheckoutForm">
               <div class="mb-3">
                 <label for="checkoutToken" class="form-label">Checkout Token</label>
@@ -846,6 +876,7 @@
             </form>
 
             <div id="completeCheckoutResults" class="mt-3"></div>
+            </div>
           </div>
 
         </div>
@@ -1276,7 +1307,7 @@
                   listItem.appendChild(engravingText);
                   const engravingButton = document.createElement('button');
                   engravingButton.type = 'button';
-                  engravingButton.className = 'btn btn-primary p-1';
+                  engravingButton.className = 'btn btn-primary p-1 w-auto';
                   engravingButton.textContent = 'Add Engraving';
                   engravingButton.onclick = function () {
                     openEngravingModal(item, cart);
@@ -1288,7 +1319,7 @@
 
                   const editEngravingButton = document.createElement('button');
                   editEngravingButton.type = 'button';
-                  editEngravingButton.className = 'btn btn-primary p-1';
+                  editEngravingButton.className = 'btn btn-primary p-1 w-auto';
                   editEngravingButton.textContent = 'Edit Engraving';
                   editEngravingButton.onclick = function () {
                     openEngravingModal(item, cart);
@@ -1333,7 +1364,7 @@ function openEngravingModal(item, cart) {
 
   const closeButton = document.createElement('button');
   closeButton.type = 'button';
-  closeButton.className = 'btn btn-secondary';
+  closeButton.className = 'btn btn-secondary w-auto';
   closeButton.setAttribute('data-dismiss', 'modal');
   closeButton.setAttribute('aria-label', 'Close');
   closeButton.onclick = closeModal;
@@ -1369,13 +1400,13 @@ function openEngravingModal(item, cart) {
 
   const closeModalButton = document.createElement('button');
   closeModalButton.type = 'button';
-  closeModalButton.className = 'btn btn-secondary';
+  closeModalButton.className = 'btn btn-secondary w-auto';
   closeModalButton.textContent = 'Close';
   closeModalButton.onclick = closeModal;
 
   const saveButton = document.createElement('button');
   saveButton.type = 'button';
-  saveButton.className = 'btn btn-primary';
+  saveButton.className = 'btn btn-primary w-auto';
   saveButton.textContent = 'Save Engraving';
   saveButton.onclick = function () {
     saveEngraving(item, cart);
