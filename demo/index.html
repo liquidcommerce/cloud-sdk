@@ -710,6 +710,10 @@
                   <label for="addressState" class="form-label">State</label>
                   <input type="text" class="form-control" id="addressState" required>
                 </div>
+                <div class="mb-3"></div>
+                  <label for="isDefaultAddress" class="form-label">Set as Default?</label>
+                  <input type="checkbox" id="isDefaultAddress">
+                </div>
                 <button type="submit" class="btn btn-primary">Update/Create Address</button>
               </form>
               <div id="updateAddressResult" class="mt-3"></div>
@@ -1505,14 +1509,22 @@ async function saveEngraving(item, cart) {
     const formattedCreatedAt = new Date(data.createdAt).toLocaleString();
     const formattedUpdatedAt = new Date(data.updatedAt).toLocaleString();
 
-    let addressesHtml = data.addresses.map(address => `
+    let addressesHtml =data.addresses.length===0 ? `
+        <p>
+            There are no saved addresses for this user.
+        </p>
+    ` : data.addresses.map(address => `
         <p>
             <strong>Address:</strong> ${address.one}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}
             <br><strong>Type:</strong> ${address.type}, <strong>Default:</strong> ${address.isDefault ? 'Yes' : 'No'}
         </p>
     `).join('');
 
-    let paymentsHtml = data.savedPayments.map(payment => `
+    let paymentsHtml = data.savedPayments.length===0 ? `
+        <p>
+            There are no saved payments for this user.
+        </p>
+    ` : data.savedPayments.map(payment => `
         <li>
             <strong>Type:</strong> ${payment.type}, <strong>Default:</strong> ${payment.isDefault ? 'Yes' : 'No'}
             <br>Card: ${payment.card.brand} ending in ${payment.card.last4}, Expires ${payment.card.expMonth}/${payment.card.expYear}
@@ -1573,6 +1585,7 @@ async function saveEngraving(item, cart) {
     const one = document.getElementById('addressOne').value;
     const city = document.getElementById('addressCity').value;
     const state = document.getElementById('addressState').value;
+    const isDefault = document.getElementById('isDefaultAddress').checked;
     const updateAddressResult = document.getElementById('updateAddressResult');
 
     try {
@@ -1583,7 +1596,7 @@ async function saveEngraving(item, cart) {
         state,
         zip: '10004',
         type: 'SHIPPING',
-        isDefault: true,
+        isDefault,
       });
       updateAddressResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
     } catch (error) {
