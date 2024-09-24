@@ -148,6 +148,20 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 
+    .availability-product{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap:20px;
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .availability-product-image{
+      height: 220px;
+      object-fit: cover;
+    }
+
     .card-img-top {
       height: 200px;
       object-fit: cover;
@@ -437,6 +451,13 @@
       .btn {
         width: 100%;
       }
+
+      .availability-product{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+      }
+
     }
 
     @media (min-width: 992px) {
@@ -1169,10 +1190,16 @@
         const availability = product.sizes[0].variants[0].stock > 0 ? 'In Stock' : 'Out of Stock';
         html += `
         <li class="list-group-item">
-          <h5>${product.name}</h5>
-          <p>UPC: ${product.sizes[0].upc}</p>
-          <p>Availability: ${availability}</p>
-          <p>Price: $${product.sizes[0].variants[0].price.toFixed(2)}</p>
+          <div class="availability-product">
+            <img src="${product.images[0] || 'https://via.placeholder.com/300x200?text=No+Image'}" class="availability-product-image" alt="${product.name}">
+            <div>
+              <h5><b>${product.name}</b></h5>
+              <p>UPC: ${product.sizes[0].upc}</p>
+              <p>Size: ${product.sizes[0].size}</p>
+              <p>Availability: ${availability}</p>
+              <p>Price: $${product.sizes[0].variants[0].price.toFixed(2)}</p>
+            </div>
+          </div>
         </li>
       `;
       });
