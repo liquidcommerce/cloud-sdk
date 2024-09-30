@@ -84,7 +84,7 @@
 
     #results, #availabilityResults, #catalogResults {
       background: #ffffff;
-      padding: 20px;
+      padding: 10px;
       border-radius: 5px;
       margin-top: 20px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -142,6 +142,7 @@
       transition: box-shadow 0.3s ease-in-out;
       border: none;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
     }
 
     .card:hover {
@@ -923,7 +924,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 <script src="https://assets.liquidcommerce.co/sdk/cloud/stage/liquidcommerce-cloud-sdk.min.js"></script>
-<!--<script src="../umd/liquidcommerce-cloud-sdk.min.js"></script>-->
+<!-- <script src="../umd/liquidcommerce-cloud-sdk.min.js"></script> -->
 <script>
   /**
    * Liquid Commerce SDK Integration Script
@@ -1071,18 +1072,24 @@
     let html = '<h3 class="mb-4">Catalog Search Results:</h3>';
 
     if (response.products && response.products.length > 0) {
-      html += '<div class="row row-cols-1 row-cols-md-2 g-4">';
+      html += '<div class="col row-cols-1 row-cols-md-2">';
       response.products.forEach(product => {
         html += `
-      <div class="col">
-        <div class="card h-100">
-          <img src="${product.images[0] || 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" alt="${product.name}">
-          <div class="card-body">
+      <div class="col w-100 mb-3">
+        <div class="card">
+         <div class="row p-2" style="align-items: center">
+          <div class="w-50">
+            <img src="${product.images[0] || 'https://via.placeholder.com/300x200?text=No+Image'}" class="card-img-top" alt="${product.name}">
+          </div>
+          <div class="w-50">
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">Brand: ${product.brand}</p>
             <p class="card-text">Category: ${product.category}</p>
+          </div>
+         </div>
+          <div class="card-body">
             <h6>Available Sizes:</h6>
-            <ul class="list-group list-group-flush">
+            <div class="d-flex flex-wrap gap-2 p-2 w-100">
               ${product.sizes.map(size => {
           const availableVariants = size.variants.filter(variant => variant.stock > 0);
           const lowestPrice = availableVariants.length > 0
@@ -1092,14 +1099,15 @@
             ? `$${(lowestPrice / 100).toFixed(2)}`
             : 'Not available';
           return `
-                  <li class="list-group-item">
-                    <strong>${size.size}</strong> - UPC: ${size.upc}
-                    <br>Lowest Price: ${formattedPrice}
-                    <br>Available Variants: ${availableVariants.length}
-                  </li>
+            <div class="flex-grow-1 flex-shrink-0 flex-basis-0 min-width-0 p-3 border rounded shadow-sm" style="min-width: 200px;">
+         <h5 class="mb-2"><strong>${size.size}</strong></h5>
+               <p class="mb-1">UPC: ${size.upc}</p>
+               <p class="mb-1">Lowest Price: <span class="text-primary">${formattedPrice}</span></p>
+               <p class="mb-0">Available Variants: <span class="badge bg-secondary">${availableVariants.length}</span></p>
+            </div>
                 `;
         }).join('')}
-            </ul>
+            </div>
           </div>
         </div>
       </div>
