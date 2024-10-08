@@ -30,6 +30,28 @@ export interface ICheckoutRecipient {
   hasAgeVerify?: boolean;
 }
 
+export interface IBillingAddress {
+  firstName: string;
+
+  lastName: string;
+
+  email: string;
+
+  phone: string;
+
+  one: string;
+
+  two?: string;
+
+  city: string;
+
+  state: string;
+
+  zip: string;
+
+  country?: string;
+}
+
 /**
  * Represents the recipient information for gift options during checkout.
  */
@@ -86,9 +108,9 @@ export interface ICheckoutDeliveryTip {
 export interface ICheckoutPrepareParams extends ICoreParams {
   cartId: string;
 
-  recipient: ICheckoutRecipient;
+  recipient?: ICheckoutRecipient;
 
-  billingAddress?: ILoc;
+  billingAddress?: IBillingAddress;
 
   hasSubstitutionPolicy: boolean;
 
@@ -129,7 +151,7 @@ export interface ICheckoutPrepareResponse {
 
   shippingAddress: ILoc;
 
-  billingAddress: ILoc;
+  billingAddress: IBillingAddress;
 
   items: ICartItem[];
 

@@ -1,21 +1,6 @@
 import type { AuthenticatedService, CatalogHelperService } from '../core';
-import type { ILocBase } from '../interfaces/address.interface';
-import type { IProduct } from '../interfaces/catalog.interface';
-import type { ICatalog, ICatalogParams } from '../interfaces/catalog.service.interface';
-import type { IRetailer } from '../interfaces/retailer.interface';
+import type { IAvailabilityParams, IAvailabilityResponse, ICatalog, ICatalogParams } from '../interfaces/catalog.service.interface';
 import type { IApiResponseWithoutData } from '../types';
-
-export interface IAvailabilityParams extends ILocBase {
-  upcs: string[];
-
-  shouldShowOffHours?: boolean;
-}
-
-export interface IAvailabilityResponse {
-  products: IProduct[];
-
-  retailers: IRetailer[];
-}
 
 /**
  * The CatalogService class provides methods for interacting with the catalog API.

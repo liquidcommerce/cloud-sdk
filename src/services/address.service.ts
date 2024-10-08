@@ -1,26 +1,5 @@
 import type { AuthenticatedService } from '../core';
-import type { ICoords } from '../interfaces/address.interface';
-import type { IApiResponseWithData, ICoreParams } from '../types';
-
-export interface IAddressAutocompleteParams extends ICoreParams {
-  input: string;
-}
-
-export interface IAddressAutocompleteResult {
-  id: string;
-
-  description: string;
-}
-
-export interface IAddressDetailsParams extends ICoreParams {
-  id: string;
-}
-
-export interface IAddressDetailsResult {
-  formattedAddress: string;
-
-  coords: ICoords;
-}
+import type { IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult, IApiResponseWithData } from '../types';
 
 type AddressServiceResponse<T> = IApiResponseWithData<T>;
 

@@ -12,7 +12,7 @@ import {
   ENUM_WINE,
 } from '../enums';
 import type { ICatalogParams } from '../interfaces/catalog.service.interface';
-import type { IAvailabilityParams } from '../services/catalog.service';
+import type { IAvailabilityParams } from '../interfaces/catalog.service.interface';
 import type { LiquidTaxonomy } from '../types';
 import type { LocationHelperService } from './location-helper.service';
 

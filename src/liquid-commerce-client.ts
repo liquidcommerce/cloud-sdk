@@ -2,49 +2,51 @@ import { DEFAULT_BASE_URLS } from './constants/core.constant';
 import type { AuthenticatedService } from './core';
 import { SingletonManager } from './core';
 import { LIQUID_COMMERCE_ENV } from './enums';
-import type { ICart, ICartUpdateParams } from './interfaces/cart.interface';
-import type { ICatalog, ICatalogParams } from './interfaces/catalog.service.interface';
+import type { AddressService } from './services/address.service';
+import type { CartService } from './services/cart.service';
+import type { CatalogService } from './services/catalog.service';
+import type { CheckoutService } from './services/checkout.service';
+import type { PaymentService } from './services/payment.service';
+import type { UserService } from './services/user.service';
 import type {
+  IAddressAutocompleteParams,
+  IAddressAutocompleteResult,
+  IAddressDetailsParams,
+  IAddressDetailsResult,
+  IAddressMethod,
+  IApiResponseWithData,
+  IApiResponseWithoutData,
+  IAvailabilityParams,
+  IAvailabilityResponse,
+  ICart,
+  ICartMethod,
+  ICartUpdateParams,
+  ICatalog,
+  ICatalogMethod,
+  ICatalogParams,
   ICheckoutCompleteParams,
   ICheckoutCompleteResponse,
-  ICheckoutPrepareParams,
-  ICheckoutPrepareResponse
-} from './interfaces/checkout.interface';
-import type {
-  IAddressMethod,
-  ICartMethod,
-  ICatalogMethod,
   ICheckoutMethod,
+  ICheckoutPrepareParams,
+  ICheckoutPrepareResponse,
   ILiquidCommerceClient,
+  ILiquidCommerceConfig,
+  ILiquidPaymentConfig,
+  ILiquidPaymentToken,
+  IPaymentElementEventMap,
   IPaymentMethod,
-  IUserMethod
-} from './interfaces/liquid-commerce-client.interface';
-import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './interfaces/payment.interface';
-import type {
   IPurgeResponse,
   IUser,
   IUserAddress,
   IUserAddressParams,
+  IUserMethod,
   IUserPayment,
   IUserPaymentAddParams,
   IUserPaymentUpdateParams,
-  IUserSessionParams} from './interfaces/user.interface';
-import type {
-  AddressService,
-  IAddressAutocompleteParams,
-  IAddressAutocompleteResult,
-  IAddressDetailsParams,
-  IAddressDetailsResult
-} from './services/address.service';
-import type { CartService } from './services/cart.service';
-import type { CatalogService, IAvailabilityParams, IAvailabilityResponse } from './services/catalog.service';
-import type { CheckoutService } from './services/checkout.service';
-import type { PaymentService } from './services/payment.service';
-import type { UserService } from './services/user.service';
-import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from './types';
-
+  IUserSessionParams,
+} from './types';
 /**
- * The LiquidCommerceClient class is a client for interacting with the LiquidCommerce Cloud APIs.
+ * The LiquidCommerceClient class is a client for interacting with the LiquidCommerce Cloud  APIs.
  * This client encapsulates the logic for working with various services, including addresses, catalog products,
  * carts, users, payments, checkouts, and orders.
  *
@@ -328,7 +330,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     },
     destroy: (): void => {
       this.paymentService.destroy();
-    }
+    },
   };
 
   /**
@@ -381,43 +383,3 @@ export async function LiquidCommerce(apiKey: string, config: ILiquidCommerceConf
   const client = await singletonManager.getLiquidCommerceClient(apiKey, config);
   return client as LiquidCommerceClient;
 }
-
-export { LIQUID_COMMERCE_ENV };
-
-export type {
-  IAddressAutocompleteParams,
-  IAddressAutocompleteResult,
-  IAddressDetailsParams,
-  IAddressDetailsResult,
-  IAddressMethod,
-  IApiResponseWithData,
-  IApiResponseWithoutData,
-  IAvailabilityParams,
-  IAvailabilityResponse,
-  ICart,
-  ICartMethod,
-  ICartUpdateParams,
-  ICatalog,
-  ICatalogMethod,
-  ICatalogParams,
-  ICheckoutCompleteParams,
-  ICheckoutCompleteResponse,
-  ICheckoutMethod,
-  ICheckoutPrepareParams,
-  ICheckoutPrepareResponse,
-  ILiquidCommerceClient,
-  ILiquidCommerceConfig,
-  ILiquidPaymentConfig,
-  ILiquidPaymentToken,
-  IPaymentElementEventMap,
-  IPaymentMethod,
-  IPurgeResponse,
-  IUser,
-  IUserAddress,
-  IUserAddressParams,
-  IUserMethod,
-  IUserPayment,
-  IUserPaymentAddParams,
-  IUserPaymentUpdateParams,
-  IUserSessionParams,
-};
