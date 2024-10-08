@@ -1,3 +1,17 @@
+# [1.3.0-beta.6](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.5...v1.3.0-beta.6) (2024-10-08)
+
+
+### Bug Fixes
+
+* exported all types and created billing address interface ([740436e](https://github.com/liquidcommerce/cloud-sdk/commit/740436e98ec17d584380d6a6988314a5db702243))
+* removed an extra div at address isDefault ([e1ecf99](https://github.com/liquidcommerce/cloud-sdk/commit/e1ecf99ff7964bb556abe3bc40959bbf913a993c))
+
+
+### Features
+
+* Added no data for addresses/payments text and is default checkbox for addresses ([70e2628](https://github.com/liquidcommerce/cloud-sdk/commit/70e26281ea3b41a519604703e86a44ed76c67dc6))
+* added retailers for each product in cart and show event message when getting cart ([c12c730](https://github.com/liquidcommerce/cloud-sdk/commit/c12c7308517f4e6a177c59c0f0c9aa6ec9c8ed4e))
+
 # [1.3.0-beta.5](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.4...v1.3.0-beta.5) (2024-09-19)
 
 
