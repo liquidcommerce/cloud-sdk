@@ -1,5 +1,5 @@
 import type { AuthenticatedService, CartHelperService } from '../core';
-import type { ICart, ICartUpdateParams } from '../interfaces/cart.interface';
+import type { ICart, ICartUpdateParams } from '../interfaces';
 import type { IApiResponseWithoutData } from '../types';
 
 /**
@@ -12,7 +12,7 @@ export class CartService {
 
   constructor(
     private client: AuthenticatedService,
-    private cartHelperService: CartHelperService,
+    private cartHelperService: CartHelperService
   ) {}
 
   /**
@@ -56,7 +56,10 @@ export class CartService {
   public async update(params: ICartUpdateParams): Promise<IApiResponseWithoutData<ICart>> {
     try {
       const validatedParams = this.cartHelperService.validateAndNormalizeParams(params);
-      return await this.client.post<IApiResponseWithoutData<ICart>>(this.servicePath, validatedParams);
+      return await this.client.post<IApiResponseWithoutData<ICart>>(
+        this.servicePath,
+        validatedParams
+      );
     } catch (error) {
       console.error('Cart update request failed:', error);
       throw error;

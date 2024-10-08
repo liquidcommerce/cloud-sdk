@@ -1,17 +1,9 @@
-import type { IApiResponseWithData } from '../types';
+import type { IApiResponseWithData, IAuth } from '../types';
 
 interface IAuthConfig {
   apiKey: string;
 
   baseURL: string;
-}
-
-interface IAuthResponse {
-  token: string;
-
-  exp: number;
-
-  type: 'ACCESS_TOKEN';
 }
 
 interface IRequestOptions {
@@ -160,7 +152,10 @@ export class AuthenticatedService {
    * @returns {Promise<ICustomResponse>} - A Promise that resolves to a custom response object.
    * @throws {TypeError} - If the network request fails.
    */
-  private xhrFetch: HttpClient = (url: string, options: IHttpClientOptions): Promise<ICustomResponse> =>
+  private xhrFetch: HttpClient = (
+    url: string,
+    options: IHttpClientOptions
+  ): Promise<ICustomResponse> =>
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(options.method || 'GET', url);
@@ -183,7 +178,7 @@ export class AuthenticatedService {
                 if (name) acc[name] = value;
                 return acc;
               },
-              {} as Record<string, string>,
+              {} as Record<string, string>
             ),
           json: () => Promise.resolve(JSON.parse(xhr.responseText)),
           text: () => Promise.resolve(xhr.responseText),
@@ -226,7 +221,10 @@ export class AuthenticatedService {
 
     this.isAuthenticating = true;
     try {
-      const response = await this.requestWithoutAuth<IApiResponseWithData<IAuthResponse>>('/authentication', { method: 'GET' });
+      const response = await this.requestWithoutAuth<IApiResponseWithData<IAuth>>(
+        '/authentication',
+        { method: 'GET' }
+      );
       this.accessToken = response?.data?.token;
       this.tokenExpiration = Date.now() + response?.data?.exp * 1000;
     } catch (error) {
@@ -327,7 +325,11 @@ export class AuthenticatedService {
    *
    * @throws {Error} - If an error occurs while making the request.
    */
-  public async post<T = any>(path: string, body?: any, headers?: Record<string, string>): Promise<T> {
+  public async post<T = any>(
+    path: string,
+    body?: any,
+    headers?: Record<string, string>
+  ): Promise<T> {
     return this.request<T>(path, { method: 'POST', body, headers });
   }
 
@@ -339,7 +341,11 @@ export class AuthenticatedService {
    * @param {Record<string, string>} [headers] - The optional headers of the request.
    * @return {Promise<T>} A Promise that resolves with the response data.
    */
-  public async put<T = any>(path: string, body?: any, headers?: Record<string, string>): Promise<T> {
+  public async put<T = any>(
+    path: string,
+    body?: any,
+    headers?: Record<string, string>
+  ): Promise<T> {
     return this.request<T>(path, { method: 'PUT', body, headers });
   }
 

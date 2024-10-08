@@ -1,7 +1,21 @@
-import type { Stripe, StripeElements, StripeElementsOptions, StripeElementsOptionsClientSecret, StripePaymentElement, StripePaymentElementOptions } from '@stripe/stripe-js';
+import type {
+  Stripe,
+  StripeElements,
+  StripeElementsOptions,
+  StripeElementsOptionsClientSecret,
+  StripePaymentElement,
+  StripePaymentElementOptions,
+} from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import type { ILiquidPaymentConfig, ILiquidPaymentElementOptions, ILiquidPaymentError, ILiquidPaymentToken, IPaymentElementEventMap, IPaymentProvider } from '../interfaces/payment.interface';
+import type {
+  ILiquidPaymentConfig,
+  ILiquidPaymentElementOptions,
+  ILiquidPaymentError,
+  ILiquidPaymentToken,
+  IPaymentElementEventMap,
+  IPaymentProvider,
+} from '../interfaces';
 
 type ExtendedStripeElementsOptions = StripeElementsOptionsClientSecret & {
   paymentMethodCreation?: 'manual' | 'automatic';
@@ -20,7 +34,8 @@ export class PaymentProviderService implements IPaymentProvider {
 
   private readonly events = ['ready', 'change', 'loaderror', 'loaderstart'];
 
-  private readonly eventsErrorMsg = 'The only Payment Element events allowed (change, ready, loaderstart, loadererror)';
+  private readonly eventsErrorMsg =
+    'The only Payment Element events allowed (change, ready, loaderstart, loadererror)';
 
   private clientSecret: string | null = null;
 
@@ -56,7 +71,9 @@ export class PaymentProviderService implements IPaymentProvider {
       const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret);
 
       if (setupIntent?.status === 'succeeded') {
-        throw new Error(`The client secret (${this.clientSecret}) has already been used previously. Generate a new one through a use session.`);
+        throw new Error(
+          `The client secret (${this.clientSecret}) has already been used previously. Generate a new one through a use session.`
+        );
       }
     } catch (e) {
       throw e;
@@ -70,7 +87,9 @@ export class PaymentProviderService implements IPaymentProvider {
 
     this.elements = this.stripe.elements(stripeElementsOptions);
 
-    const paymentElementOptions: StripePaymentElementOptions = this.mapElementOptions(config.elementOptions);
+    const paymentElementOptions: StripePaymentElementOptions = this.mapElementOptions(
+      config.elementOptions
+    );
     this.paymentElement = this.elements.create('payment', paymentElementOptions);
 
     this.paymentElement.mount(`#${config.elementId}`);
@@ -198,7 +217,10 @@ export class PaymentProviderService implements IPaymentProvider {
    * @throws {Error} - If the payment element has not been initialized.
    * @return {void}
    */
-  public subscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler: (event: IPaymentElementEventMap[K]) => void): void {
+  public subscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler: (event: IPaymentElementEventMap[K]) => void
+  ): void {
     if (!this.paymentElement) {
       throw new Error('Payment Element has not been initialized');
     }
@@ -218,7 +240,10 @@ export class PaymentProviderService implements IPaymentProvider {
    * @throws {Error} - Thrown if the payment element has not been initialized.
    * @return {void}
    */
-  public unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void {
+  public unsubscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler?: (event: IPaymentElementEventMap[K]) => void
+  ): void {
     if (!this.paymentElement) {
       throw new Error('Payment Element has not been initialized');
     }
@@ -237,7 +262,9 @@ export class PaymentProviderService implements IPaymentProvider {
    * @param appearance - The appearance options from the LiquidPaymentConfig object.
    * @returns The appearance options for the StripeElementsOptions object.
    */
-  private mapAppearance(appearance?: ILiquidPaymentConfig['appearance']): StripeElementsOptions['appearance'] {
+  private mapAppearance(
+    appearance?: ILiquidPaymentConfig['appearance']
+  ): StripeElementsOptions['appearance'] {
     if (!appearance) return undefined;
 
     return {

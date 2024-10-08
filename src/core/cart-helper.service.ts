@@ -1,5 +1,5 @@
 import { CART_PARAM_ERROR_ENUM } from '../enums';
-import type { ICartUpdateItem, ICartUpdateParams } from '../interfaces/cart.interface';
+import type { ICartUpdateItem, ICartUpdateParams } from '../interfaces';
 import type { LocationHelperService } from './location-helper.service';
 
 /**
@@ -74,14 +74,20 @@ export class CartHelperService {
       throw new Error(CART_PARAM_ERROR_ENUM.INVALID_PART_NUMBER);
     }
 
-    if (!normalizedItem.fulfillmentId || typeof normalizedItem.fulfillmentId !== 'string' || normalizedItem.fulfillmentId.trim().length === 0) {
+    if (
+      !normalizedItem.fulfillmentId ||
+      typeof normalizedItem.fulfillmentId !== 'string' ||
+      normalizedItem.fulfillmentId.trim().length === 0
+    ) {
       throw new Error(CART_PARAM_ERROR_ENUM.INVALID_FULFILLMENT_ID);
     }
 
     normalizedItem.quantity = Math.max(0, Math.floor(normalizedItem.quantity));
 
     if (normalizedItem.engravingLines) {
-      normalizedItem.engravingLines = normalizedItem.engravingLines.map((line) => line.trim()).filter((line) => line.length > 0);
+      normalizedItem.engravingLines = normalizedItem.engravingLines
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
     }
 
     return normalizedItem;

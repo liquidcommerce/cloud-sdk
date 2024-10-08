@@ -1,5 +1,9 @@
-import type { IAddress } from '../interfaces/address.interface';
-import type { ICheckoutCompleteParams, ICheckoutPrepareParams, ICheckoutRecipient } from '../interfaces/checkout.interface';
+import type {
+  IAddress,
+  ICheckoutCompleteParams,
+  ICheckoutPrepareParams,
+  ICheckoutRecipient,
+} from '../interfaces';
 import type { LocationHelperService } from './location-helper.service';
 
 /**
@@ -67,7 +71,9 @@ export class CheckoutHelperService {
    *
    * @return {ICheckoutCompleteParams} The validated and normalized complete checkout parameters.
    */
-  public validateAndNormalizeCompleteParams(params: ICheckoutCompleteParams): ICheckoutCompleteParams {
+  public validateAndNormalizeCompleteParams(
+    params: ICheckoutCompleteParams
+  ): ICheckoutCompleteParams {
     const normalizedParams = { ...params };
 
     // Validate token
@@ -102,7 +108,10 @@ export class CheckoutHelperService {
 
     const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'birthDate'];
     requiredFields.forEach((field) => {
-      if (!recipient[field as keyof ICheckoutRecipient] || typeof recipient[field as keyof ICheckoutRecipient] !== 'string') {
+      if (
+        !recipient[field as keyof ICheckoutRecipient] ||
+        typeof recipient[field as keyof ICheckoutRecipient] !== 'string'
+      ) {
         throw new Error(`Invalid recipient ${field}`);
       }
     });
@@ -121,9 +130,21 @@ export class CheckoutHelperService {
       throw new Error('Invalid address');
     }
 
-    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'one', 'city', 'state', 'zip'];
+    const requiredFields = [
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'one',
+      'city',
+      'state',
+      'zip',
+    ];
     requiredFields.forEach((field) => {
-      if (!address[field as keyof IAddress] || typeof address[field as keyof IAddress] !== 'string') {
+      if (
+        !address[field as keyof IAddress] ||
+        typeof address[field as keyof IAddress] !== 'string'
+      ) {
         throw new Error(`Invalid address ${field}`);
       }
     });
@@ -167,7 +188,9 @@ export class CheckoutHelperService {
    *
    * @throws {Error} The error thrown if the marketing preferences are invalid.
    */
-  private validateMarketingPreferences(preferences: ICheckoutPrepareParams['marketingPreferences']): void {
+  private validateMarketingPreferences(
+    preferences: ICheckoutPrepareParams['marketingPreferences']
+  ): void {
     if (!preferences || typeof preferences !== 'object') {
       throw new Error('Invalid marketingPreferences');
     }

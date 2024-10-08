@@ -149,16 +149,16 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 
-    .availability-product{
+    .availability-product {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap:20px;
+      gap: 20px;
       padding: 20px;
       border-bottom: 1px solid #ddd;
     }
 
-    .availability-product-image{
+    .availability-product-image {
       height: 220px;
       object-fit: cover;
     }
@@ -196,7 +196,7 @@
       padding: 0.25rem;
       font-size: 1rem;
       background-color: transparent;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 0.25rem;
       transition: box-shadow 0.15s ease-in-out;
     }
@@ -213,12 +213,12 @@
     }
 
     .navbar-toggler:hover {
-      background-color: rgba(255,255,255,0.1);
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     .navbar-toggler:focus {
       outline: 0;
-      box-shadow: 0 0 0 0.25rem rgba(255,255,255,0.25);
+      box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
     }
 
     .offcanvas-header {
@@ -453,7 +453,7 @@
         width: 100%;
       }
 
-      .availability-product{
+      .availability-product {
         display: flex;
         flex-direction: column;
         text-align: center;
@@ -468,29 +468,29 @@
     }
 
     .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-      }
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
 
     .modal-dialog {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-      }
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+    }
 
     .show {
-        display: block;
-      }
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -542,47 +542,47 @@
     </div>
   </div>
 
-    <!-- Off-Canvas Menu -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTabs" aria-labelledby="offcanvasTabsLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasTabsLabel">Menu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <ul class="nav flex-column" id="menu-tabs">
-          <li class="nav-item">
-            <button class="nav-link active" id="address-tab-mobile" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
-                    aria-controls="address" aria-selected="true">Address
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link" id="catalog-tab-mobile" data-bs-toggle="tab" data-bs-target="#catalog" type="button" role="tab"
-                    aria-controls="catalog" aria-selected="false">Catalog
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link" id="cart-tab-mobile" data-bs-toggle="tab" data-bs-target="#cart" type="button" role="tab"
-                    aria-controls="cart" aria-selected="false">Cart
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link" id="user-tab-mobile" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab"
-                    aria-controls="user" aria-selected="false">User
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link" id="payment-tab-mobile" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
-                    aria-controls="payment" aria-selected="false">Payment
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link" id="checkout-tab-mobile" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab"
-                    aria-controls="checkout" aria-selected="false">Checkout
-            </button>
-          </li>
-        </ul>
-      </div>
+  <!-- Off-Canvas Menu -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTabs" aria-labelledby="offcanvasTabsLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasTabsLabel">Menu</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+    <div class="offcanvas-body">
+      <ul class="nav flex-column" id="menu-tabs">
+        <li class="nav-item">
+          <button class="nav-link active" id="address-tab-mobile" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
+                  aria-controls="address" aria-selected="true">Address
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="catalog-tab-mobile" data-bs-toggle="tab" data-bs-target="#catalog" type="button" role="tab"
+                  aria-controls="catalog" aria-selected="false">Catalog
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="cart-tab-mobile" data-bs-toggle="tab" data-bs-target="#cart" type="button" role="tab"
+                  aria-controls="cart" aria-selected="false">Cart
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="user-tab-mobile" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab"
+                  aria-controls="user" aria-selected="false">User
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="payment-tab-mobile" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
+                  aria-controls="payment" aria-selected="false">Payment
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="checkout-tab-mobile" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab"
+                  aria-controls="checkout" aria-selected="false">Checkout
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
   </div>
 </header>
 
@@ -594,251 +594,270 @@
 
           <!-- ADDRESS SEARCH & DETAILS EXAMPLE -->
           <div class="tab-pane fade show active" id="address" role="tabpanel" aria-labelledby="address-tab">
-           <div class="section-container">
-             <h2 class="section-title mb-3">Search Addresses</h3>
-            <input type="text" id="addressInput" class="form-control" placeholder="Enter address (min 3 characters)">
-            <ul id="autocompleteResults"></ul>
-            <div id="results"></div>
-           </div>
+            <div class="section-container">
+              <h2 class="section-title mb-3">Search Addresses</h3>
+                <input type="text" id="addressInput" class="form-control" placeholder="Enter address (min 3 characters)">
+                <ul id="autocompleteResults"></ul>
+                <div id="results"></div>
+            </div>
           </div>
 
           <!-- CATALOG AVAILABILITY EXAMPLE -->
           <div id="catalog" class="tab-pane fade" role="tabpanel" aria-labelledby="catalog-tab">
-           <div class="section-container">
-            <div class="catalog-section">
-              <div id="catalogAvailabilityForm" class="catalog-form">
-                <h2 class="section-title">Check Product Availability</h2>
-                <form id="availabilityForm">
-                  <div class="mb-3">
-                    <label for="upcs" class="form-label">UPCs (comma-separated)</label>
-                    <input type="text" class="form-control" id="upcs" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="zipCode" class="form-label">Zip Code</label>
-                    <input type="text" class="form-control" id="zipCode" required>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Check Availability</button>
-                </form>
+            <div class="section-container">
+              <div class="catalog-section">
+                <div id="catalogAvailabilityForm" class="catalog-form">
+                  <h2 class="section-title">Check Product Availability</h2>
+                  <form id="availabilityForm">
+                    <div class="mb-3">
+                      <label for="upcs" class="form-label">UPCs (comma-separated)</label>
+                      <input type="text" class="form-control" id="upcs" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="zipCode" class="form-label">Zip Code</label>
+                      <input type="text" class="form-control" id="zipCode" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Check Availability</button>
+                  </form>
+                </div>
+                <div id="availabilityResults"></div>
               </div>
-              <div id="availabilityResults"></div>
-            </div>
-            <hr>
+              <hr>
 
-            <div class="catalog-section">
-              <div id="catalogSearchForm" class="catalog-form">
-                <h2 class="section-title">Search Products</h2>
-                <form id="searchForm">
-                  <div class="mb-3">
-                    <label for="searchQuery" class="form-label">Search Query</label>
-                    <input type="text" class="form-control" id="searchQuery" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="searchZipCode" class="form-label">Zip Code</label>
-                    <input type="text" class="form-control" id="searchZipCode" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="priceRange" class="form-label">Price Range</label>
-                    <select class="form-select" id="priceRange">
-                      <option value="">All Prices</option>
-                      <option value="0-50">$0 - $50</option>
-                      <option value="50-100">$50 - $100</option>
-                      <option value="100-200">$100 - $200</option>
-                      <option value="200+">$200+</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label for="category" class="form-label">Category</label>
-                    <select class="form-select" id="category">
-                      <option value="">All Categories</option>
-                      <option value="WINE">Wine</option>
-                      <option value="SPIRITS">Spirits</option>
-                      <option value="BEER">Beer</option>
-                    </select>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Search</button>
-                </form>
+              <div class="catalog-section">
+                <div id="catalogSearchForm" class="catalog-form">
+                  <h2 class="section-title">Search Products</h2>
+                  <form id="searchForm">
+                    <div class="mb-3">
+                      <label for="searchQuery" class="form-label">Search Query</label>
+                      <input type="text" class="form-control" id="searchQuery">
+                    </div>
+                    <div class="mb-3">
+                      <label for="searchZipCode" class="form-label">Zip Code</label>
+                      <input type="text" class="form-control" id="searchZipCode">
+                    </div>
+                    <div class="mb-3">
+                      <label for="priceRange" class="form-label">Price Range</label>
+                      <select class="form-select" id="priceRange">
+                        <option value="">All Prices</option>
+                        <option value="0-50">$0 - $50</option>
+                        <option value="50-100">$50 - $100</option>
+                        <option value="100-200">$100 - $200</option>
+                        <option value="200+">$200+</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="category" class="form-label">Category</label>
+                      <select class="form-select" id="category">
+                        <option value="">All Categories</option>
+                        <option value="SPIRITS > TEQUILA">TEQUILA</option>
+                        <option value="SPIRITS > GIN">GIN</option>
+                        <option value="SPIRITS > WHISKEY">WHISKEY</option>
+                        <option value="WINE > CHAMPAGNE & SPARKLING">CHAMPAGNE & SPARKLING</option>
+                        <option value="WINE > RED WINE">RED WINE</option>
+                        <option value="WINE > WHITE WINE">WHITE WINE</option>
+                        <option value="BEER">BEER</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="engraving" class="form-label">Engraving</label>
+                      <select class="form-select" id="engraving">
+                        <option value="">All</option>
+                        <option value="YES">Yes</option>
+                        <option value="NO">No</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="fulfillment" class="form-label">Fulfillment</label>
+                      <select class="form-select" id="fulfillment" multiple>
+                        <option value="shipping">Shipping</option>
+                        <option value="onDemand">On Demand</option>
+                      </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                  </form>
+                </div>
+                <div id="catalogResults"></div>
               </div>
-              <div id="catalogResults"></div>
             </div>
-           </div>
           </div>
 
           <!-- CART EXAMPLE -->
           <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
-           <div class="section-container">
-             <h2 class="section-title">Cart</h2>
-            <div class="cart-section">
-              <div id="cartForm" class="cart-form mb-4">
-                <div class="mb-3">
-                  <label for="cartIdGet" class="form-label">Cart ID</label>
-                  <input type="text" class="form-control" id="cartIdGet">
+            <div class="section-container">
+              <h2 class="section-title">Cart</h2>
+              <div class="cart-section">
+                <div id="cartForm" class="cart-form mb-4">
+                  <div class="mb-3">
+                    <label for="cartIdGet" class="form-label">Cart ID</label>
+                    <input type="text" class="form-control" id="cartIdGet">
+                  </div>
+                  <button type="button" class="btn btn-primary" id="getCart">Get Cart</button>
+                  <span id="cartEventMessage"></span>
                 </div>
-                <button type="button" class="btn btn-primary" id="getCart">Get Cart</button>
-                <span id="cartEventMessage"></span>
-              </div>
-              <div id="cartResults"></div>
-              <div id="engravingModalContainer"></div>
-              <hr>
+                <div id="cartResults"></div>
+                <div id="engravingModalContainer"></div>
+                <hr>
 
-              <div id="updateCartForm" class="cart-form mt-4">
-                <h5>Update Cart</h5>
-                <div class="mb-3">
-                  <label for="cartIdUpdate" class="form-label">Cart ID</label>
-                  <input type="text" class="form-control" id="cartIdUpdate">
+                <div id="updateCartForm" class="cart-form mt-4">
+                  <h5>Update Cart</h5>
+                  <div class="mb-3">
+                    <label for="cartIdUpdate" class="form-label">Cart ID</label>
+                    <input type="text" class="form-control" id="cartIdUpdate">
+                  </div>
+                  <div class="mb-3">
+                    <label for="partNumber" class="form-label">Part Number</label>
+                    <input type="text" class="form-control" id="partNumber">
+                  </div>
+                  <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="quantity" min="1">
+                  </div>
+                  <div class="mb-3">
+                    <label for="fulfillmentId" class="form-label">Fulfillment ID</label>
+                    <input type="text" class="form-control" id="fulfillmentId">
+                  </div>
+                  <button type="button" class="btn btn-primary" id="updateCart">Update Cart</button>
                 </div>
-                <div class="mb-3">
-                  <label for="partNumber" class="form-label">Part Number</label>
-                  <input type="text" class="form-control" id="partNumber">
-                </div>
-                <div class="mb-3">
-                  <label for="quantity" class="form-label">Quantity</label>
-                  <input type="number" class="form-control" id="quantity" min="1">
-                </div>
-                <div class="mb-3">
-                  <label for="fulfillmentId" class="form-label">Fulfillment ID</label>
-                  <input type="text" class="form-control" id="fulfillmentId">
-                </div>
-                <button type="button" class="btn btn-primary" id="updateCart">Update Cart</button>
               </div>
-            </div>
             </div>
           </div>
 
           <!-- USER EXAMPLE -->
           <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
-           <div class="section-container">
-            <h2 class="section-title">User Methods</h2>
+            <div class="section-container">
+              <h2 class="section-title">User Methods</h2>
 
-            <div class="user-section">
-              <h5>Create/Update User Session</h5>
-              <form id="userSessionForm">
-                <div class="mb-3">
-                  <label for="userEmail" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="userEmail" required>
-                </div>
-                <div class="mb-3">
-                  <label for="userFirstName" class="form-label">First Name</label>
-                  <input type="text" class="form-control" id="userFirstName">
-                </div>
-                <button type="submit" class="btn btn-primary">Create/Update Session</button>
-              </form>
-              <div id="userSessionResult" class="session-result"></div>
-            </div>
-            <hr>
+              <div class="user-section">
+                <h5>Create/Update User Session</h5>
+                <form id="userSessionForm">
+                  <div class="mb-3">
+                    <label for="userEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="userEmail" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="userFirstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="userFirstName">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Create/Update Session</button>
+                </form>
+                <div id="userSessionResult" class="session-result"></div>
+              </div>
+              <hr>
 
-            <div class="user-section mt-4">
-              <h5>Purge User</h5>
-              <form id="purgeUserForm">
-                <div class="mb-3">
-                  <label for="purgeUserId" class="form-label">User ID or Email</label>
-                  <input type="text" class="form-control" id="purgeUserId" required>
-                </div>
-                <button type="submit" class="btn btn-danger">Purge User</button>
-              </form>
-              <div id="purgeUserResult" class="mt-3"></div>
-            </div>
-            <hr>
+              <div class="user-section mt-4">
+                <h5>Purge User</h5>
+                <form id="purgeUserForm">
+                  <div class="mb-3">
+                    <label for="purgeUserId" class="form-label">User ID or Email</label>
+                    <input type="text" class="form-control" id="purgeUserId" required>
+                  </div>
+                  <button type="submit" class="btn btn-danger">Purge User</button>
+                </form>
+                <div id="purgeUserResult" class="mt-3"></div>
+              </div>
+              <hr>
 
-            <div class="user-section mt-4">
-              <h5>Update/Create Address</h>
-              <form id="updateAddressForm">
-                <div class="mb-3">
-                  <label for="customerId" class="form-label">Customer ID</label>
-                  <input type="text" class="form-control" id="customerId" required>
-                </div>
-                <div class="mb-3">
-                  <label for="addressOne" class="form-label">Address Line 1</label>
-                  <input type="text" class="form-control" id="addressOne" required>
-                </div>
-                <div class="mb-3">
-                  <label for="addressCity" class="form-label">City</label>
-                  <input type="text" class="form-control" id="addressCity" required>
-                </div>
-                <div class="mb-3">
-                  <label for="addressState" class="form-label">State</label>
-                  <input type="text" class="form-control" id="addressState" required>
-                </div>
-                <div class="mb-3">
-                  <label for="isDefaultAddress" class="form-label">Set as Default?</label>
-                  <input type="checkbox" id="isDefaultAddress">
-                </div>
-                <button type="submit" class="btn btn-primary">Update/Create Address</button>
-              </form>
-              <div id="updateAddressResult" class="mt-3"></div>
-            </div>
-            <hr>
+              <div class="user-section mt-4">
+                <h5>Update/Create Address</h>
+                  <form id="updateAddressForm">
+                    <div class="mb-3">
+                      <label for="customerId" class="form-label">Customer ID</label>
+                      <input type="text" class="form-control" id="customerId" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="addressOne" class="form-label">Address Line 1</label>
+                      <input type="text" class="form-control" id="addressOne" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="addressCity" class="form-label">City</label>
+                      <input type="text" class="form-control" id="addressCity" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="addressState" class="form-label">State</label>
+                      <input type="text" class="form-control" id="addressState" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="isDefaultAddress" class="form-label">Set as Default?</label>
+                      <input type="checkbox" id="isDefaultAddress">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
+                  </form>
+                  <div id="updateAddressResult" class="mt-3"></div>
+              </div>
+              <hr>
 
-            <div class="user-section mt-4">
-              <h5>Purge Address</h5>
-              <form id="purgeAddressForm">
-                <div class="mb-3">
-                  <label for="purgeAddressId" class="form-label">Address ID</label>
-                  <input type="text" class="form-control" id="purgeAddressId" required>
-                </div>
-                <button type="submit" class="btn btn-danger">Purge Address</button>
-              </form>
-              <div id="purgeAddressResult" class="mt-3"></div>
-            </div>
-            <hr>
+              <div class="user-section mt-4">
+                <h5>Purge Address</h5>
+                <form id="purgeAddressForm">
+                  <div class="mb-3">
+                    <label for="purgeAddressId" class="form-label">Address ID</label>
+                    <input type="text" class="form-control" id="purgeAddressId" required>
+                  </div>
+                  <button type="submit" class="btn btn-danger">Purge Address</button>
+                </form>
+                <div id="purgeAddressResult" class="mt-3"></div>
+              </div>
+              <hr>
 
-            <div class="user-section mt-4">
-              <h5>Add Payment Method</h>
-              <form id="addPaymentMethodForm">
-                <div class="mb-3">
-                  <label for="customerId" class="form-label">Customer ID</label>
-                  <input type="text" class="form-control" id="addPaymentCustomerId" required>
-                </div>
-                <div class="mb-3">
-                  <label for="paymentMethodId" class="form-label">Payment Method ID</label>
-                  <input type="text" class="form-control" id="paymentMethodId" required>
-                </div>
-                <div class="mb-3">
-                  <label for="isDefault" class="form-label">Set as Default?</label>
-                  <input type="checkbox" id="isDefault">
-                </div>
-                <button type="submit" class="btn btn-primary">Add Payment Method</button>
-              </form>
-              <div id="addPaymentMethodResult" class="mt-3"></div>
-            </div>
-            <hr>
+              <div class="user-section mt-4">
+                <h5>Add Payment Method</h>
+                  <form id="addPaymentMethodForm">
+                    <div class="mb-3">
+                      <label for="customerId" class="form-label">Customer ID</label>
+                      <input type="text" class="form-control" id="addPaymentCustomerId" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="paymentMethodId" class="form-label">Payment Method ID</label>
+                      <input type="text" class="form-control" id="paymentMethodId" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="isDefault" class="form-label">Set as Default?</label>
+                      <input type="checkbox" id="isDefault">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Payment Method</button>
+                  </form>
+                  <div id="addPaymentMethodResult" class="mt-3"></div>
+              </div>
+              <hr>
 
-            <div class="user-section mt-4">
-              <h5>Update Payment Method</h5>
-              <form id="updatePaymentMethodForm">
-                <div class="mb-3">
-                  <label for="updatePaymentCustomerId" class="form-label">Customer ID</label>
-                  <input type="text" class="form-control" id="updatePaymentCustomerId" required>
-                </div>
-                <div class="mb-3">
-                  <label for="updatePaymentMethodId" class="form-label">Payment Method ID</label>
-                  <input type="text" class="form-control" id="updatePaymentMethodId" required>
-                </div>
-                <div class="mb-3">
-                  <label for="updateIsDefault" class="form-label">Set as Default?</label>
-                  <input type="checkbox" id="updateIsDefault">
-                </div>
-                <button type="submit" class="btn btn-primary">Update Payment Method</button>
-              </form>
-              <div id="updatePaymentMethodResult" class="mt-3"></div>
-            </div>
-            <hr>
+              <div class="user-section mt-4">
+                <h5>Update Payment Method</h5>
+                <form id="updatePaymentMethodForm">
+                  <div class="mb-3">
+                    <label for="updatePaymentCustomerId" class="form-label">Customer ID</label>
+                    <input type="text" class="form-control" id="updatePaymentCustomerId" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="updatePaymentMethodId" class="form-label">Payment Method ID</label>
+                    <input type="text" class="form-control" id="updatePaymentMethodId" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="updateIsDefault" class="form-label">Set as Default?</label>
+                    <input type="checkbox" id="updateIsDefault">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update Payment Method</button>
+                </form>
+                <div id="updatePaymentMethodResult" class="mt-3"></div>
+              </div>
+              <hr>
 
-            <div class="user-section mt-4">
-              <h5>Purge Payment Method</h5>
-              <form id="purgePaymentMethodForm">
-                <div class="mb-3">
-                  <label for="purgeCustomerId" class="form-label">Customer ID</label>
-                  <input type="text" class="form-control" id="purgeCustomerId" required>
-                </div>
-                <div class="mb-3">
-                  <label for="purgePaymentId" class="form-label">Payment Method ID</label>
-                  <input type="text" class="form-control" id="purgePaymentId" required>
-                </div>
-                <button type="submit" class="btn btn-danger">Purge Payment Method</button>
-              </form>
-              <div id="purgePaymentMethodResult" class="mt-3"></div>
+              <div class="user-section mt-4">
+                <h5>Purge Payment Method</h5>
+                <form id="purgePaymentMethodForm">
+                  <div class="mb-3">
+                    <label for="purgeCustomerId" class="form-label">Customer ID</label>
+                    <input type="text" class="form-control" id="purgeCustomerId" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="purgePaymentId" class="form-label">Payment Method ID</label>
+                    <input type="text" class="form-control" id="purgePaymentId" required>
+                  </div>
+                  <button type="submit" class="btn btn-danger">Purge Payment Method</button>
+                </form>
+                <div id="purgePaymentMethodResult" class="mt-3"></div>
+              </div>
             </div>
-           </div>
           </div>
 
           <!-- PAYMENT EXAMPLE -->
@@ -869,35 +888,35 @@
 
           <!-- CHECKOUT EXAMPLE -->
           <div class="tab-pane fade" id="checkout" role="tabpanel" aria-labelledby="checkout-tab">
-           <div class="section-container">
-             <h2 class="section-title">Checkout</h2>
-            <form id="checkoutForm">
-              <div class="mb-3">
-                <label for="checkoutCartId" class="form-label">Checkout Cart ID</label>
-                <input type="text" class="form-control" id="checkoutCartId" required>
-              </div>
-              <button type="submit" class="btn btn-primary">Prepare Checkout</button>
-            </form>
+            <div class="section-container">
+              <h2 class="section-title">Checkout</h2>
+              <form id="checkoutForm">
+                <div class="mb-3">
+                  <label for="checkoutCartId" class="form-label">Checkout Cart ID</label>
+                  <input type="text" class="form-control" id="checkoutCartId" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Prepare Checkout</button>
+              </form>
 
-            <div id="checkoutResults" class="mt-3"></div>
+              <div id="checkoutResults" class="mt-3"></div>
 
-            <hr>
+              <hr>
 
-            <!-- Complete Checkout Form -->
-             <h2 class="section-title">Complete Checkout</h2>
-            <form id="completeCheckoutForm">
-              <div class="mb-3">
-                <label for="checkoutToken" class="form-label">Checkout Token</label>
-                <input type="text" class="form-control" id="checkoutToken" required>
-              </div>
-              <div class="mb-3">
-                <label for="paymentId" class="form-label">Payment ID</label>
-                <input type="text" class="form-control" id="paymentId" required>
-              </div>
-              <button type="submit" class="btn btn-success">Complete Checkout</button>
-            </form>
+              <!-- Complete Checkout Form -->
+              <h2 class="section-title">Complete Checkout</h2>
+              <form id="completeCheckoutForm">
+                <div class="mb-3">
+                  <label for="checkoutToken" class="form-label">Checkout Token</label>
+                  <input type="text" class="form-control" id="checkoutToken" required>
+                </div>
+                <div class="mb-3">
+                  <label for="paymentId" class="form-label">Payment ID</label>
+                  <input type="text" class="form-control" id="paymentId" required>
+                </div>
+                <button type="submit" class="btn btn-success">Complete Checkout</button>
+              </form>
 
-            <div id="completeCheckoutResults" class="mt-3"></div>
+              <div id="completeCheckoutResults" class="mt-3"></div>
             </div>
           </div>
 
@@ -974,7 +993,7 @@
     try {
       return await window.LiquidCommerce(API_KEY, {
         googlePlacesApiKey: GOOGLE_PLACES_API_KEY,
-        env: 'stage',
+        env: 'dev',
       });
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
@@ -1039,9 +1058,13 @@
    * Search the catalog based on user input
    * @param {Event} event - The form submission event
    */
-  async function searchCatalog( event ) {
+  async function searchCatalog(event) {
     event.preventDefault();
     const searchQuery = document.getElementById('searchQuery').value;
+    const category = document.getElementById('category').value;
+    const engraving = document.getElementById('engraving').value;
+    const fulfillmentSelect = document.getElementById('fulfillment');
+    const fulfillment = Array.from(fulfillmentSelect.selectedOptions).map(option => option.value);
     const catalogResults = document.getElementById('catalogResults');
 
     if (!client) {
@@ -1050,11 +1073,38 @@
     }
 
     try {
+      const filters = [];
+
+      if (category) {
+        filters.push({
+          key: "categories",
+          values: [category]
+        });
+      }
+
+      console.log("engraving: ", engraving)
+      if (engraving) {
+        filters.push({
+          key: "engraving",
+          values: engraving
+        });
+      }
+
+      if (fulfillment.length > 0) {
+        filters.push({
+          key: "fulfillment",
+          values: fulfillment
+        });
+      }
+
       const response = await client.catalog.search({
         search: searchQuery,
         loc: {
           address: NEW_YORK_ADDRESS,
         },
+        filters: filters,
+        isLegacy: true,
+        isLean: false,
       });
       displayCatalogResults(response);
     } catch (error) {
@@ -1176,6 +1226,8 @@
         loc: {
           address: NEW_YORK_ADDRESS,
         },
+        isLegacy: true,
+        isLean: false,
       });
       displayAvailabilityResults(response);
     } catch (error) {
@@ -1281,244 +1333,242 @@
     <p>Shipping Fee: $${(cart.shippingFee / 100).toFixed(2)}</p>
   `;
 
-   if (cart.events && cart.events.length > 0) {
-     cartEvent.innerHTML = `
+      if (cart.events && cart.events.length > 0) {
+        cartEvent.innerHTML = `
      <p><b>Message</b>: ${cart.events[0].message}</p>
      `;
-      cartResults.appendChild(cartEvent);
-   }
+        cartResults.appendChild(cartEvent);
+      }
       cartResults.appendChild(cartSummary);
 
-      function findFulfillmentOfRetailer(cart, itemRetailerId, itemFulfillmentId) {
-        const itemWithRetailer = cart.items.find((item) => item.retailerId === itemRetailerId);
+      function findFulfillmentOfRetailer( cart, itemRetailerId, itemFulfillmentId ) {
+        const itemWithRetailer = cart.items.find(( item ) => item.retailerId === itemRetailerId);
         if (!itemWithRetailer) {
-           return null;
+          return null;
         }
-        const retailer = cart.retailers.find((retailer) => retailer.id === itemRetailerId);
-        return retailer.fulfillments.find((fulfillment) => fulfillment.id === itemFulfillmentId);
-       }
+        const retailer = cart.retailers.find(( retailer ) => retailer.id === itemRetailerId);
+        return retailer.fulfillments.find(( fulfillment ) => fulfillment.id === itemFulfillmentId);
+      }
 
 
+      if (cart.items && cart.items.length > 0) {
+        const itemsList = document.createElement('ul');
+        itemsList.className = 'list-group mt-3';
 
-              if (cart.items && cart.items.length > 0) {
-            const itemsList = document.createElement('ul');
-            itemsList.className = 'list-group mt-3';
+        cart.items.forEach(( item, index ) => {
+          const retailer = cart.retailers.find(( r ) => r.id === item.retailerId);
+          const retailerFulfillment = findFulfillmentOfRetailer(cart, item.retailerId, item.fulfillmentId);
 
-            cart.items.forEach((item, index) => {
-              const retailer = cart.retailers.find((r) => r.id === item.retailerId);
-              const retailerFulfillment = findFulfillmentOfRetailer(cart, item.retailerId, item.fulfillmentId);
+          const listItem = document.createElement('li');
+          listItem.className = 'list-group-item';
 
-              const listItem = document.createElement('li');
-              listItem.className = 'list-group-item';
+          const itemName = document.createElement('strong');
+          itemName.textContent = item.name;
+          listItem.appendChild(itemName);
+          listItem.appendChild(document.createElement('br'));
 
-              const itemName = document.createElement('strong');
-              itemName.textContent = item.name;
-              listItem.appendChild(itemName);
-              listItem.appendChild(document.createElement('br'));
+          const itemDetails = [
+            { label: 'Part Number', value: item.partNumber },
+            { label: 'Quantity', value: `<b>${item.quantity}</b>` },
+            { label: 'Size', value: item.size },
+            { label: 'Unit Price', value: `$${(item.unitPrice / 100).toFixed(2)}` },
+            { label: 'Total', value: `<b>$${((item.quantity * item.unitPrice) / 100).toFixed(2)}</b>` },
+            { label: 'Retailer Name', value: `<b>${retailer.name}</b>` },
+            { label: 'Retailer Shipping Fee', value: `$${(retailer.shippingFee / 100).toFixed(2)}` },
+            { label: 'Fulfillment ID', value: item.fulfillmentId },
+          ];
 
-              const itemDetails = [
-                { label: 'Part Number', value: item.partNumber },
-                { label: 'Quantity', value: `<b>${item.quantity}</b>`},
-                { label: 'Size', value: item.size },
-                { label: 'Unit Price', value: `$${(item.unitPrice / 100).toFixed(2)}` },
-                { label: 'Total', value: `<b>$${((item.quantity * item.unitPrice) / 100).toFixed(2)}</b>` },
-                { label: 'Retailer Name', value: `<b>${retailer.name}</b>` },
-                { label: 'Retailer Shipping Fee', value: `$${(retailer.shippingFee / 100).toFixed(2)}` },
-                { label: 'Fulfillment ID', value: item.fulfillmentId },
-              ];
+          itemDetails.forEach(( detail ) => {
+            const span = document.createElement('span');
+            span.innerHTML = `${detail.label}: ${detail.value}`;
+            listItem.appendChild(span);
+            listItem.appendChild(document.createElement('br'));
+          });
 
-              itemDetails.forEach((detail) => {
-                const span = document.createElement('span');
-                 span.innerHTML = `${detail.label}: ${detail.value}`;
-                listItem.appendChild(span);
-                listItem.appendChild(document.createElement('br'));
-              });
+          if (retailerFulfillment.canEngrave === true) {
+            const engravingLines = item.attributes?.engraving?.lines || [];
 
-              if (retailerFulfillment.canEngrave === true) {
-                const engravingLines = item.attributes?.engraving?.lines || [];
+            if (engravingLines.length === 0) {
+              const engravingText = document.createTextNode('This item is engravable. Add custom engraving by clicking the button. ');
+              listItem.appendChild(engravingText);
+              const engravingButton = document.createElement('button');
+              engravingButton.type = 'button';
+              engravingButton.className = 'btn btn-primary p-1 w-auto';
+              engravingButton.textContent = 'Add Engraving';
+              engravingButton.onclick = function() {
+                openEngravingModal(item, cart);
+              };
+              listItem.appendChild(engravingButton);
+            } else {
+              const engravingInfo = document.createTextNode(`This item has been engraved. Current Engraving: ${engravingLines.join(', ')}.  `);
+              listItem.appendChild(engravingInfo);
 
-                if (engravingLines.length === 0) {
-                  const engravingText = document.createTextNode('This item is engravable. Add custom engraving by clicking the button. ');
-                  listItem.appendChild(engravingText);
-                  const engravingButton = document.createElement('button');
-                  engravingButton.type = 'button';
-                  engravingButton.className = 'btn btn-primary p-1 w-auto';
-                  engravingButton.textContent = 'Add Engraving';
-                  engravingButton.onclick = function () {
-                    openEngravingModal(item, cart);
-                  };
-                  listItem.appendChild(engravingButton);
-                } else {
-                  const engravingInfo = document.createTextNode(`This item has been engraved. Current Engraving: ${engravingLines.join(', ')}.  `);
-                  listItem.appendChild(engravingInfo);
-
-                  const editEngravingButton = document.createElement('button');
-                  editEngravingButton.type = 'button';
-                  editEngravingButton.className = 'btn btn-primary p-1 w-auto';
-                  editEngravingButton.textContent = 'Edit Engraving';
-                  editEngravingButton.onclick = function () {
-                    openEngravingModal(item, cart);
-                  };
-                  listItem.appendChild(editEngravingButton);
-                }
-              } else {
-                const notEngravableText = document.createTextNode('This item is not engravable.');
-                listItem.appendChild(notEngravableText);
-              }
-
-              itemsList.appendChild(listItem);
-            });
-
-            cartResults.appendChild(itemsList);
+              const editEngravingButton = document.createElement('button');
+              editEngravingButton.type = 'button';
+              editEngravingButton.className = 'btn btn-primary p-1 w-auto';
+              editEngravingButton.textContent = 'Edit Engraving';
+              editEngravingButton.onclick = function() {
+                openEngravingModal(item, cart);
+              };
+              listItem.appendChild(editEngravingButton);
+            }
+          } else {
+            const notEngravableText = document.createTextNode('This item is not engravable.');
+            listItem.appendChild(notEngravableText);
           }
+
+          itemsList.appendChild(listItem);
+        });
+
+        cartResults.appendChild(itemsList);
+      }
     } else {
       cartResults.textContent = 'No cart data available.';
     }
   }
 
-function openEngravingModal(item, cart) {
-  const modalContainer = document.createElement('div');
-  modalContainer.className = 'modal';
-  modalContainer.id = 'engravingModal';
-  modalContainer.tabIndex = '-1';
-  modalContainer.setAttribute('role', 'dialog');
+  function openEngravingModal( item, cart ) {
+    const modalContainer = document.createElement('div');
+    modalContainer.className = 'modal';
+    modalContainer.id = 'engravingModal';
+    modalContainer.tabIndex = '-1';
+    modalContainer.setAttribute('role', 'dialog');
 
-  const modalDialog = document.createElement('div');
-  modalDialog.className = 'modal-dialog';
-  modalDialog.setAttribute('role', 'document');
+    const modalDialog = document.createElement('div');
+    modalDialog.className = 'modal-dialog';
+    modalDialog.setAttribute('role', 'document');
 
-  const modalContent = document.createElement('div');
-  modalContent.className = 'modal-content';
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
 
-  const modalHeader = document.createElement('div');
-  modalHeader.className = 'modal-header';
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'modal-header';
 
-  const modalTitle = document.createElement('h5');
-  modalTitle.className = 'modal-title';
-  modalTitle.textContent = 'Add Engraving';
+    const modalTitle = document.createElement('h5');
+    modalTitle.className = 'modal-title';
+    modalTitle.textContent = 'Add Engraving';
 
-  const closeButton = document.createElement('button');
-  closeButton.type = 'button';
-  closeButton.className = 'btn btn-secondary w-auto';
-  closeButton.setAttribute('data-dismiss', 'modal');
-  closeButton.setAttribute('aria-label', 'Close');
-  closeButton.onclick = closeModal;
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.className = 'btn btn-secondary w-auto';
+    closeButton.setAttribute('data-dismiss', 'modal');
+    closeButton.setAttribute('aria-label', 'Close');
+    closeButton.onclick = closeModal;
 
-  const closeSpan = document.createElement('span');
-  closeSpan.setAttribute('aria-hidden', 'true');
-  closeSpan.innerHTML = '&times;';
+    const closeSpan = document.createElement('span');
+    closeSpan.setAttribute('aria-hidden', 'true');
+    closeSpan.innerHTML = '&times;';
 
-  closeButton.appendChild(closeSpan);
-  modalHeader.appendChild(modalTitle);
-  modalHeader.appendChild(closeButton);
+    closeButton.appendChild(closeSpan);
+    modalHeader.appendChild(modalTitle);
+    modalHeader.appendChild(closeButton);
 
-  const modalBody = document.createElement('div');
-  modalBody.className = 'modal-body';
+    const modalBody = document.createElement('div');
+    modalBody.className = 'modal-body';
 
-  const existingLines = item.attributes?.engraving?.lines || ['', ''];
-  const maxCharsPerLine = item.attributes?.engraving?.maxCharsPerLine;
-  const noOfLines = item.attributes?.engraving?.maxLines || 2;
+    const existingLines = item.attributes?.engraving?.lines || ['', ''];
+    const maxCharsPerLine = item.attributes?.engraving?.maxCharsPerLine;
+    const noOfLines = item.attributes?.engraving?.maxLines || 2;
 
-  for (let i = 0; i < noOfLines; i++) {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'form-control mb-2 rounded-none border-x-0 border-t-0 border-b-foreground-medium font-sourceSans3 text-[12px] focus-visible:border-b-foreground-medium focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0';
-    input.id = `engravingLine${i + 1}`;
-    input.placeholder = `Line ${i + 1}`;
-    input.value = existingLines[i] || '';
-    input.maxLength = maxCharsPerLine;
-    modalBody.appendChild(input);
-  }
-
-  const modalFooter = document.createElement('div');
-  modalFooter.className = 'modal-footer';
-
-  const closeModalButton = document.createElement('button');
-  closeModalButton.type = 'button';
-  closeModalButton.className = 'btn btn-secondary w-auto';
-  closeModalButton.textContent = 'Close';
-  closeModalButton.onclick = closeModal;
-
-  const saveButton = document.createElement('button');
-  saveButton.type = 'button';
-  saveButton.className = 'btn btn-primary w-auto';
-  saveButton.textContent = 'Save Engraving';
-  saveButton.onclick = function () {
-    saveEngraving(item, cart);
-  };
-
-  modalFooter.appendChild(closeModalButton);
-  modalFooter.appendChild(saveButton);
-
-  modalContent.appendChild(modalHeader);
-  modalContent.appendChild(modalBody);
-  modalContent.appendChild(modalFooter);
-
-  modalDialog.appendChild(modalContent);
-  modalContainer.appendChild(modalDialog);
-
-  const engravingModalContainer = document.getElementById('engravingModalContainer');
-  engravingModalContainer.innerHTML = '';
-  engravingModalContainer.appendChild(modalContainer);
-
-  modalContainer.style.display = 'block';
-  modalContainer.classList.add('show');
-}
-
-function closeModal() {
-  const modal = document.getElementById('engravingModal');
-  if (modal) {
-    modal.style.display = 'none';
-    modal.classList.remove('show');
-    const engravingModalContainer = document.getElementById('engravingModalContainer');
-    engravingModalContainer.innerHTML = '';
-  }
-}
-
-async function saveEngraving(item, cart) {
-  const engravingLines = Array.from({ length: item.attributes?.engraving?.maxLines || 2 }, (_, i) =>
-    document.getElementById(`engravingLine${i + 1}`).value
-  );
-
-  const cartId = cart.id;
-  const partNumber = item.partNumber;
-  const address = cart.loc.address;
-
-  try {
-    const itemIndex = cart.items.findIndex((cartItem) => cartItem.partNumber === partNumber);
-
-    if (itemIndex === -1) {
-      throw new Error('Item not found in cart');
+    for (let i = 0; i < noOfLines; i++) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'form-control mb-2 rounded-none border-x-0 border-t-0 border-b-foreground-medium font-sourceSans3 text-[12px] focus-visible:border-b-foreground-medium focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0';
+      input.id = `engravingLine${i + 1}`;
+      input.placeholder = `Line ${i + 1}`;
+      input.value = existingLines[i] || '';
+      input.maxLength = maxCharsPerLine;
+      modalBody.appendChild(input);
     }
 
-    const updatedItems = cart.items.map((cartItem, index) => {
-      if (index === itemIndex) {
-        return {
-          ...cartItem,
-          engravingLines: engravingLines.filter(Boolean),
-        };
-      }
-      return cartItem;
-    });
+    const modalFooter = document.createElement('div');
+    modalFooter.className = 'modal-footer';
 
-    const updateParams = {
-      id: cartId,
-      items: updatedItems,
-      loc: {
-        address: address,
-      },
+    const closeModalButton = document.createElement('button');
+    closeModalButton.type = 'button';
+    closeModalButton.className = 'btn btn-secondary w-auto';
+    closeModalButton.textContent = 'Close';
+    closeModalButton.onclick = closeModal;
+
+    const saveButton = document.createElement('button');
+    saveButton.type = 'button';
+    saveButton.className = 'btn btn-primary w-auto';
+    saveButton.textContent = 'Save Engraving';
+    saveButton.onclick = function() {
+      saveEngraving(item, cart);
     };
 
-    const updatedCartResponse = await client.cart.update(updateParams);
+    modalFooter.appendChild(closeModalButton);
+    modalFooter.appendChild(saveButton);
 
-    displayCartResults(updatedCartResponse);
-    closeModal();
-  } catch (error) {
-    console.error('Error updating engraving:', error);
-    alert('Failed to update engraving. Please try again.');
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+
+    modalDialog.appendChild(modalContent);
+    modalContainer.appendChild(modalDialog);
+
+    const engravingModalContainer = document.getElementById('engravingModalContainer');
+    engravingModalContainer.innerHTML = '';
+    engravingModalContainer.appendChild(modalContainer);
+
+    modalContainer.style.display = 'block';
+    modalContainer.classList.add('show');
   }
-}
 
+  function closeModal() {
+    const modal = document.getElementById('engravingModal');
+    if (modal) {
+      modal.style.display = 'none';
+      modal.classList.remove('show');
+      const engravingModalContainer = document.getElementById('engravingModalContainer');
+      engravingModalContainer.innerHTML = '';
+    }
+  }
+
+  async function saveEngraving( item, cart ) {
+    const engravingLines = Array.from({ length: item.attributes?.engraving?.maxLines || 2 }, ( _, i ) =>
+      document.getElementById(`engravingLine${i + 1}`).value,
+    );
+
+    const cartId = cart.id;
+    const partNumber = item.partNumber;
+    const address = cart.loc.address;
+
+    try {
+      const itemIndex = cart.items.findIndex(( cartItem ) => cartItem.partNumber === partNumber);
+
+      if (itemIndex === -1) {
+        throw new Error('Item not found in cart');
+      }
+
+      const updatedItems = cart.items.map(( cartItem, index ) => {
+        if (index === itemIndex) {
+          return {
+            ...cartItem,
+            engravingLines: engravingLines.filter(Boolean),
+          };
+        }
+        return cartItem;
+      });
+
+      const updateParams = {
+        id: cartId,
+        items: updatedItems,
+        loc: {
+          address: address,
+        },
+      };
+
+      const updatedCartResponse = await client.cart.update(updateParams);
+
+      displayCartResults(updatedCartResponse);
+      closeModal();
+    } catch (error) {
+      console.error('Error updating engraving:', error);
+      alert('Failed to update engraving. Please try again.');
+    }
+  }
 
 
   document.getElementById('updateCart').addEventListener('click', async () => {
@@ -1575,7 +1625,7 @@ async function saveEngraving(item, cart) {
     const formattedCreatedAt = new Date(data.createdAt).toLocaleString();
     const formattedUpdatedAt = new Date(data.updatedAt).toLocaleString();
 
-    let addressesHtml =data.addresses.length===0 ? `
+    let addressesHtml = data.addresses.length === 0 ? `
         <p>
             There are no saved addresses for this user.
         </p>
@@ -1586,7 +1636,7 @@ async function saveEngraving(item, cart) {
         </p>
     `).join('');
 
-    let paymentsHtml = data.savedPayments.length===0 ? `
+    let paymentsHtml = data.savedPayments.length === 0 ? `
         <p>
             There are no saved payments for this user.
         </p>
@@ -1657,10 +1707,10 @@ async function saveEngraving(item, cart) {
     try {
       const addressResponse = await client.user.updateAddress({
         customerId,
-        one,
-        city,
-        state,
-        zip: '10004',
+        one: NEW_YORK_ADDRESS.one,
+        city: NEW_YORK_ADDRESS.city,
+        state: NEW_YORK_ADDRESS.state,
+        zip: NEW_YORK_ADDRESS.zip,
         type: 'SHIPPING',
         isDefault,
       });
