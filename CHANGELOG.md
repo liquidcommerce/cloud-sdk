@@ -1,3 +1,10 @@
+# [1.3.0-beta.7](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.6...v1.3.0-beta.7) (2024-10-08)
+
+
+### Features
+
+* **interfaces:** remove unused catalog service interface and update catalog search and availability ([339ea8c](https://github.com/liquidcommerce/cloud-sdk/commit/339ea8c8d6e0eaae36e9326147bbb52490ef306e))
+
 # [1.3.0-beta.6](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.5...v1.3.0-beta.6) (2024-10-08)
 
 
