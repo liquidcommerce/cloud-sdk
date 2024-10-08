@@ -1,30 +1,11 @@
-import type {
-  IAddressAutocompleteParams,
-  IAddressAutocompleteResult,
-  IAddressDetailsParams,
-  IAddressDetailsResult
-} from '../services/address.service';
-import type { IAvailabilityParams, IAvailabilityResponse } from '../services/catalog.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from '../types';
+import type { IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult } from './address.interface';
 import type { ICart, ICartUpdateParams } from './cart.interface';
+import type { IAvailabilityParams, IAvailabilityResponse } from './catalog.service.interface';
 import type { ICatalog, ICatalogParams } from './catalog.service.interface';
-import type {
-  ICheckoutCompleteParams,
-  ICheckoutCompleteResponse,
-  ICheckoutPrepareParams,
-  ICheckoutPrepareResponse
-} from './checkout.interface';
+import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from './checkout.interface';
 import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './payment.interface';
-import type {
-  IPurgeResponse,
-  IUser,
-  IUserAddress,
-  IUserAddressParams,
-  IUserPayment,
-  IUserPaymentAddParams,
-  IUserPaymentUpdateParams,
-  IUserSessionParams
-} from './user.interface';
+import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserPayment, IUserPaymentAddParams, IUserPaymentUpdateParams, IUserSessionParams } from './user.interface';
 
 /**
  * Interface representing the LiquidCommerce client.

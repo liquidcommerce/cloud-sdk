@@ -55,3 +55,5 @@ export interface ILiquidCommerceConfig {
 }
 
 export type LiquidTaxonomy = ENUM_BEER | ENUM_FOOD | ENUM_MERCHANDISE | ENUM_NON_ALCOHOLIC | ENUM_READY_TO_DRINK | ENUM_SPIRITS | ENUM_WINE;
+
+export * from './interfaces/index';

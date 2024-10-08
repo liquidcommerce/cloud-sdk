@@ -4,25 +4,25 @@ import type { ILocBase } from './address.interface';
 import type { IProduct } from './catalog.interface';
 import type { IRetailer } from './retailer.interface';
 
-interface ICategoryFilter {
+export interface ICategoryFilter {
   key: ENUM_FILTER_KEYS.CATEGORIES | 'categories';
 
   values: LiquidTaxonomy[];
 }
 
-interface IPriceFilter {
+export interface IPriceFilter {
   key: ENUM_FILTER_KEYS.PRICE | 'price';
 
   values: { min?: number | string; max?: number | string };
 }
 
-interface IAvailabilityFilter {
+export interface IAvailabilityFilter {
   key: ENUM_FILTER_KEYS.AVAILABILITY | 'availability';
 
   values: ENUM_AVAILABILITY_VALUE | keyof typeof ENUM_AVAILABILITY_VALUE;
 }
 
-interface IFilter {
+export interface IFilter {
   key: Omit<ENUM_FILTER_KEYS, ENUM_FILTER_KEYS.CATEGORIES | ENUM_FILTER_KEYS.PRICE | ENUM_FILTER_KEYS.AVAILABILITY>;
 
   values: string | string[] | number | number[];
@@ -56,25 +56,25 @@ export interface ICatalog {
   navigation?: INavigationSchema;
 }
 
-interface IFilterValue {
+export interface IFilterValue {
   value: LiquidTaxonomy | ENUM_AVAILABILITY_VALUE | string;
 
   count: number;
 }
 
-interface IFilterSchema {
+export interface IFilterSchema {
   bucket: ENUM_FILTER_KEYS;
 
   values: IFilterValue[];
 }
 
-interface ICursorSchema {
+export interface ICursorSchema {
   nextPageToken: string;
 
   previousPageToken: string;
 }
 
-interface INavigationSchema {
+export interface INavigationSchema {
   id: string;
 
   correctedQuery: string;
@@ -94,4 +94,16 @@ interface INavigationSchema {
   cursor: ICursorSchema;
 
   filters: IFilterSchema[];
+}
+
+export interface IAvailabilityParams extends ILocBase {
+  upcs: string[];
+
+  shouldShowOffHours?: boolean;
+}
+
+export interface IAvailabilityResponse {
+  products: IProduct[];
+
+  retailers: IRetailer[];
 }
