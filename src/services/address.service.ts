@@ -1,7 +1,11 @@
 import type { AuthenticatedService } from '../core';
-import type { IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult, IApiResponseWithData } from '../types';
-
-type AddressServiceResponse<T> = IApiResponseWithData<T>;
+import type {
+  IAddressAutocompleteParams,
+  IAddressAutocompleteResult,
+  IAddressDetailsParams,
+  IAddressDetailsResult,
+} from '../interfaces';
+import type { AddressServiceResponse } from '../types';
 
 /**
  * Represents a service for interacting with address-related functionality.
@@ -20,12 +24,18 @@ export class AddressService {
    * @return {Promise<AddressServiceResponse<IAddressAutocompleteResult[]>>} - A Promise that resolves to the autocomplete response.
    * @throws {Error} - If the autocomplete request fails.
    */
-  public async autocomplete(params: IAddressAutocompleteParams, googlePlacesApiKey: string): Promise<AddressServiceResponse<IAddressAutocompleteResult[]>> {
+  public async autocomplete(
+    params: IAddressAutocompleteParams,
+    googlePlacesApiKey: string
+  ): Promise<AddressServiceResponse<IAddressAutocompleteResult[]>> {
     try {
-      return await this.client.post<AddressServiceResponse<IAddressAutocompleteResult[]>>('/address/autocomplete', {
-        ...params,
-        key: googlePlacesApiKey,
-      });
+      return await this.client.post<AddressServiceResponse<IAddressAutocompleteResult[]>>(
+        '/address/autocomplete',
+        {
+          ...params,
+          key: googlePlacesApiKey,
+        }
+      );
     } catch (error) {
       console.error('Address autocomplete request failed:', error);
       throw error;
@@ -41,12 +51,18 @@ export class AddressService {
    * @return {Promise<AddressServiceResponse<IAddressDetailsResult>>} A promise that resolves to the response containing the detailed information about an address.
    * @throws {Error} if the request to retrieve address details fails.
    */
-  public async details(params: IAddressDetailsParams, googlePlacesApiKey: string): Promise<AddressServiceResponse<IAddressDetailsResult>> {
+  public async details(
+    params: IAddressDetailsParams,
+    googlePlacesApiKey: string
+  ): Promise<AddressServiceResponse<IAddressDetailsResult>> {
     try {
-      return await this.client.post<AddressServiceResponse<IAddressDetailsResult>>('/address/details', {
-        ...params,
-        key: googlePlacesApiKey,
-      });
+      return await this.client.post<AddressServiceResponse<IAddressDetailsResult>>(
+        '/address/details',
+        {
+          ...params,
+          key: googlePlacesApiKey,
+        }
+      );
     } catch (error) {
       console.error('Address details request failed:', error);
       throw error;

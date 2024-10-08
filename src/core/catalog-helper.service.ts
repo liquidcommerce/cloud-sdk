@@ -1,9 +1,12 @@
 import {
   ENUM_AVAILABILITY_VALUE,
   ENUM_BEER,
+  ENUM_ENGRAVING,
   ENUM_FILTER_KEYS,
   ENUM_FOOD,
   ENUM_MERCHANDISE,
+  ENUM_MISCELLANEOUS,
+  ENUM_MODALITIES,
   ENUM_NAVIGATION_ORDER_DIRECTION_TYPE,
   ENUM_NON_ALCOHOLIC,
   ENUM_ORDER_BY,
@@ -11,8 +14,7 @@ import {
   ENUM_SPIRITS,
   ENUM_WINE,
 } from '../enums';
-import type { ICatalogParams } from '../interfaces/catalog.service.interface';
-import type { IAvailabilityParams } from '../interfaces/catalog.service.interface';
+import type { IAvailabilityParams, ICatalogParams } from '../interfaces';
 import type { LiquidTaxonomy } from '../types';
 import type { LocationHelperService } from './location-helper.service';
 
@@ -32,6 +34,7 @@ export class CatalogHelperService {
       ...Object.values(ENUM_READY_TO_DRINK),
       ...Object.values(ENUM_SPIRITS),
       ...Object.values(ENUM_WINE),
+      ...Object.values(ENUM_MISCELLANEOUS),
     ]);
   }
 
@@ -56,7 +59,9 @@ export class CatalogHelperService {
    * @param {ICatalogParams} params - The search parameters to be validated and normalized.
    * @returns {ICatalogParams} - The validated and normalized search parameters.
    */
-  public validateAndNormalizeSearchParams(params: ICatalogParams): ICatalogParams & { error?: string } {
+  public validateAndNormalizeSearchParams(
+    params: ICatalogParams
+  ): ICatalogParams & { error?: string } {
     const errors: string[] = [];
     const normalizedParams = { ...params };
 
@@ -115,8 +120,14 @@ export class CatalogHelperService {
    *
    * @return {void} This method does not return any value.
    */
-  private validateOrderDirection(orderDirection: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE | undefined, errors: string[]): void {
-    if (orderDirection && !Object.values(ENUM_NAVIGATION_ORDER_DIRECTION_TYPE).includes(orderDirection)) {
+  private validateOrderDirection(
+    orderDirection: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE | undefined,
+    errors: string[]
+  ): void {
+    if (
+      orderDirection &&
+      !Object.values(ENUM_NAVIGATION_ORDER_DIRECTION_TYPE).includes(orderDirection)
+    ) {
       errors.push(`Invalid orderDirection value: ${orderDirection}`);
     }
   }
@@ -144,14 +155,44 @@ export class CatalogHelperService {
         case ENUM_FILTER_KEYS.AVAILABILITY:
           this.validateAvailabilityFilter(filter.values as ENUM_AVAILABILITY_VALUE, errors);
           break;
-        case ENUM_FILTER_KEYS.BRANDS:
-          this.validateArrayFilter(filter.values, 30, 'brands', errors);
+        case ENUM_FILTER_KEYS.FULFILLMENT:
+          this.validateFulfillmentFilter(filter.values as ENUM_MODALITIES[], errors);
+          break;
+        case ENUM_FILTER_KEYS.ENGRAVING:
+          this.validateEngravingFilter(filter.values as ENUM_ENGRAVING, errors);
           break;
         case ENUM_FILTER_KEYS.CATEGORIES:
           this.validateCategoriesFilter(filter.values as LiquidTaxonomy[], errors);
           break;
+        case ENUM_FILTER_KEYS.BRANDS:
+          this.validateArrayFilter(filter.values, 75, 'brands', errors);
+          break;
+        case ENUM_FILTER_KEYS.FLAVOR:
+          this.validateArrayFilter(filter.values, 25, 'flavor', errors);
+          break;
+        case ENUM_FILTER_KEYS.REGION:
+          this.validateArrayFilter(filter.values, 25, 'region', errors);
+          break;
+        case ENUM_FILTER_KEYS.VARIETY:
+          this.validateArrayFilter(filter.values, 25, 'variety', errors);
+          break;
+        case ENUM_FILTER_KEYS.SIZES:
+          this.validateArrayFilter(filter.values, 25, 'sizes', errors);
+          break;
+        case ENUM_FILTER_KEYS.APPELLATION:
+          this.validateArrayFilter(filter.values, 25, 'appellation', errors);
+          break;
+        case ENUM_FILTER_KEYS.COUNTRY:
+          this.validateArrayFilter(filter.values, 25, 'country', errors);
+          break;
+        case ENUM_FILTER_KEYS.VINTAGE:
+          this.validateArrayFilter(filter.values, 25, 'vintage', errors);
+          break;
+        case ENUM_FILTER_KEYS.MATERIALS:
+          this.validateArrayFilter(filter.values, 25, 'materials', errors);
+          break;
         case ENUM_FILTER_KEYS.COLORS:
-          this.validateArrayFilter(filter.values, 75, 'colors', errors);
+          this.validateArrayFilter(filter.values, 25, 'colors', errors);
           break;
         // Add more cases for other filter types as needed
       }
@@ -173,6 +214,42 @@ export class CatalogHelperService {
   }
 
   /**
+   * Validates the provided fulfillment filter against the ENUM_MODALITIES.
+   * If the value does not match any value in ENUM_MODALITIES, an error message is appended to the errors array.
+   *
+   * @param {ENUM_MODALITIES[]} values - The value to be validated against the ENUM_MODALITIES.
+   * @param {string[]} errors - The array where error messages will be stored if the validation fails.
+   * @return {void} This method does not return a value.
+   */
+  private validateFulfillmentFilter(values: ENUM_MODALITIES[], errors: string[]): void {
+    if (!Array.isArray(values)) {
+      errors.push(`Fulfillment filter must be an array`);
+      return;
+    }
+
+    const validModalities = Object.values(ENUM_MODALITIES);
+
+    values.forEach((value) => {
+      if (!validModalities.includes(value)) {
+        errors.push(`Invalid fulfillment value: ${value}`);
+      }
+    });
+  }
+
+  /**
+   * Validates if the provided engraving filter value is one of the allowed enums.
+   *
+   * @param value The engraving filter value to be validated.
+   * @param errors An array that collects error messages encountered during validation.
+   * @return void
+   */
+  private validateEngravingFilter(value: ENUM_ENGRAVING, errors: string[]): void {
+    if (!Object.values(ENUM_ENGRAVING).includes(value)) {
+      errors.push(`Invalid availability value: ${value}`);
+    }
+  }
+
+  /**
    * Validates the given array filter.
    *
    * @param values - The array to be validated.
@@ -189,7 +266,12 @@ export class CatalogHelperService {
    * If the array has a length that exceeds the maxLength parameter, an error message is added to the errors
    * array indicating that the filter can have a maximum of maxLength values.
    */
-  private validateArrayFilter(values: any, maxLength: number, filterName: string, errors: string[]): void {
+  private validateArrayFilter(
+    values: any,
+    maxLength: number,
+    filterName: string,
+    errors: string[]
+  ): void {
     if (!Array.isArray(values)) {
       errors.push(`${filterName} filter must be an array`);
     } else if (values.length > maxLength) {
@@ -227,7 +309,11 @@ export class CatalogHelperService {
    * The `page` argument must be a non-negative number, and the `perPage` argument must be a positive number.
    * If either argument fails validation, an error message is pushed to the `errors` array.
    */
-  private validatePagination(page: number | undefined, perPage: number | undefined, errors: string[]): void {
+  private validatePagination(
+    page: number | undefined,
+    perPage: number | undefined,
+    errors: string[]
+  ): void {
     if (page !== undefined && (typeof page !== 'number' || page < 0)) {
       errors.push('Page must be a non-negative number');
     }

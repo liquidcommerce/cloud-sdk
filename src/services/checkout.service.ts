@@ -1,5 +1,10 @@
 import type { AuthenticatedService, CheckoutHelperService } from '../core';
-import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from '../interfaces/checkout.interface';
+import type {
+  ICheckoutCompleteParams,
+  ICheckoutCompleteResponse,
+  ICheckoutPrepareParams,
+  ICheckoutPrepareResponse,
+} from '../interfaces';
 import type { IApiResponseWithoutData } from '../types';
 
 /**
@@ -10,7 +15,7 @@ export class CheckoutService {
 
   constructor(
     private client: AuthenticatedService,
-    private checkoutHelperService: CheckoutHelperService,
+    private checkoutHelperService: CheckoutHelperService
   ) {}
 
   /**
@@ -20,10 +25,15 @@ export class CheckoutService {
    * @returns {Promise<IApiResponseWithoutData<ICheckoutPrepareResponse>>} A promise that resolves to the prepared checkout data.
    * @throws {Error} If the checkout preparation request fails.
    */
-  public async prepare(params: ICheckoutPrepareParams): Promise<IApiResponseWithoutData<ICheckoutPrepareResponse>> {
+  public async prepare(
+    params: ICheckoutPrepareParams
+  ): Promise<IApiResponseWithoutData<ICheckoutPrepareResponse>> {
     try {
       const validatedParams = this.checkoutHelperService.validateAndNormalizePrepareParams(params);
-      return await this.client.post<IApiResponseWithoutData<ICheckoutPrepareResponse>>(`${this.servicePath}/prepare`, validatedParams);
+      return await this.client.post<IApiResponseWithoutData<ICheckoutPrepareResponse>>(
+        `${this.servicePath}/prepare`,
+        validatedParams
+      );
     } catch (error) {
       console.error('Checkout prepare request failed:', error);
       throw error;
@@ -37,10 +47,15 @@ export class CheckoutService {
    * @returns A promise that resolves to the API response without data for the completed checkout.
    * @throws Throws an error if the checkout complete request fails.
    */
-  public async complete(params: ICheckoutCompleteParams): Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>> {
+  public async complete(
+    params: ICheckoutCompleteParams
+  ): Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>> {
     try {
       const validatedParams = this.checkoutHelperService.validateAndNormalizeCompleteParams(params);
-      return await this.client.post<IApiResponseWithoutData<ICheckoutCompleteResponse>>(`${this.servicePath}/complete`, validatedParams);
+      return await this.client.post<IApiResponseWithoutData<ICheckoutCompleteResponse>>(
+        `${this.servicePath}/complete`,
+        validatedParams
+      );
     } catch (error) {
       console.error('Checkout complete request failed:', error);
       throw error;

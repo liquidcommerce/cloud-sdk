@@ -1,4 +1,4 @@
-import { LIQUID_COMMERCE_ENV } from '../enums';
+import { LIQUID_COMMERCE_ENV } from '../enums/enums';
 
 export const DEFAULT_BASE_URLS = {
   [LIQUID_COMMERCE_ENV.LOC]: process.env.ENV_LOC ?? '',

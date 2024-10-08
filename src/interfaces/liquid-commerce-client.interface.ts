@@ -1,11 +1,42 @@
-import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from '../types';
-import type { IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult } from './address.interface';
+import type {
+  IApiResponseWithData,
+  IApiResponseWithoutData,
+  ILiquidCommerceConfig,
+} from '../types';
+import type {
+  IAddressAutocompleteParams,
+  IAddressAutocompleteResult,
+  IAddressDetailsParams,
+  IAddressDetailsResult,
+} from './address.interface';
 import type { ICart, ICartUpdateParams } from './cart.interface';
-import type { IAvailabilityParams, IAvailabilityResponse } from './catalog.service.interface';
-import type { ICatalog, ICatalogParams } from './catalog.service.interface';
-import type { ICheckoutCompleteParams, ICheckoutCompleteResponse, ICheckoutPrepareParams, ICheckoutPrepareResponse } from './checkout.interface';
-import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './payment.interface';
-import type { IPurgeResponse, IUser, IUserAddress, IUserAddressParams, IUserPayment, IUserPaymentAddParams, IUserPaymentUpdateParams, IUserSessionParams } from './user.interface';
+import type {
+  IAvailabilityParams,
+  IAvailabilityResponse,
+  ICatalog,
+  ICatalogParams,
+} from './catalog.interface';
+import type {
+  ICheckoutCompleteParams,
+  ICheckoutCompleteResponse,
+  ICheckoutPrepareParams,
+  ICheckoutPrepareResponse,
+} from './checkout.interface';
+import type {
+  ILiquidPaymentConfig,
+  ILiquidPaymentToken,
+  IPaymentElementEventMap,
+} from './payment.interface';
+import type {
+  IPurgeResponse,
+  IUser,
+  IUserAddress,
+  IUserAddressParams,
+  IUserPayment,
+  IUserPaymentAddParams,
+  IUserPaymentUpdateParams,
+  IUserSessionParams,
+} from './user.interface';
 
 /**
  * Interface representing the LiquidCommerce client.
@@ -61,7 +92,10 @@ export interface ILiquidCommerceClient {
  *
  * @type {new (apiKey: string, config: ILiquidCommerceConfig) => ILiquidCommerceClient} ILiquidCommerceClientConstructor
  */
-export type ILiquidCommerceClientConstructor = new (apiKey: string, config: ILiquidCommerceConfig) => ILiquidCommerceClient;
+export type ILiquidCommerceClientConstructor = new (
+  apiKey: string,
+  config: ILiquidCommerceConfig
+) => ILiquidCommerceClient;
 
 /**
  * Interface for methods related to address operations, including autocompletion and address details retrieval.
@@ -99,7 +133,9 @@ export interface IAddressMethod {
    * @see {@link IAddressAutocompleteParams} for the structure of the autocomplete request parameters.
    * @see {@link IAddressAutocompleteResult} for the structure of the autocomplete result data.
    */
-  autocomplete: (params: Omit<IAddressAutocompleteParams, 'key'>) => Promise<IApiResponseWithData<IAddressAutocompleteResult[]>>;
+  autocomplete: (
+    params: Omit<IAddressAutocompleteParams, 'key'>
+  ) => Promise<IApiResponseWithData<IAddressAutocompleteResult[]>>;
 
   /**
    * Retrieves address details based on the provided parameters.
@@ -127,7 +163,9 @@ export interface IAddressMethod {
    * @see {@link IAddressDetailsParams} for the structure of the details request parameters.
    * @see {@link IAddressDetailsResult} for the structure of the address details result data.
    */
-  details: (params: Omit<IAddressDetailsParams, 'key'>) => Promise<IApiResponseWithData<IAddressDetailsResult>>;
+  details: (
+    params: Omit<IAddressDetailsParams, 'key'>
+  ) => Promise<IApiResponseWithData<IAddressDetailsResult>>;
 }
 
 /**
@@ -171,7 +209,9 @@ export interface ICatalogMethod {
    * @see {@link IAvailabilityParams} for the structure of the availability request parameters.
    * @see {@link IAvailabilityResponse} for the structure of the availability response.
    */
-  availability: (params: IAvailabilityParams) => Promise<IApiResponseWithoutData<IAvailabilityResponse>>;
+  availability: (
+    params: IAvailabilityParams
+  ) => Promise<IApiResponseWithoutData<IAvailabilityResponse>>;
 
   /**
    * Searches the catalog based on the provided parameters.
@@ -529,7 +569,10 @@ export interface IUserMethod {
    *
    * @see {@link IPurgeResponse} for the structure of the purge response data.
    */
-  purgePayment: (customerId: string, paymentId: string) => Promise<IApiResponseWithData<IPurgeResponse>>;
+  purgePayment: (
+    customerId: string,
+    paymentId: string
+  ) => Promise<IApiResponseWithData<IPurgeResponse>>;
 }
 
 export interface IPaymentMethod {
@@ -605,7 +648,10 @@ export interface IPaymentMethod {
    *
    * @throws {Error} - Throws an error if the payment element has not been initialized.
    */
-  subscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler: (event: IPaymentElementEventMap[K]) => void): void;
+  subscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler: (event: IPaymentElementEventMap[K]) => void
+  ): void;
 
   /**
    * Unsubscribes from a specific event type on the payment element.
@@ -636,7 +682,10 @@ export interface IPaymentMethod {
    *
    * @throws {Error} - Throws an error if the payment element has not been initialized.
    */
-  unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void;
+  unsubscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler?: (event: IPaymentElementEventMap[K]) => void
+  ): void;
 
   /**
    * Collapses the payment element if it has been initialized.
@@ -761,7 +810,9 @@ export interface ICheckoutMethod {
    * @see {@link ICheckoutPrepareParams} for the structure of the prepare request parameters.
    * @see {@link ICheckoutPrepareResponse} for the structure of the prepared checkout data returned.
    */
-  prepare: (params: ICheckoutPrepareParams) => Promise<IApiResponseWithoutData<ICheckoutPrepareResponse>>;
+  prepare: (
+    params: ICheckoutPrepareParams
+  ) => Promise<IApiResponseWithoutData<ICheckoutPrepareResponse>>;
 
   /**
    * Completes a checkout process with the provided token and payment information.
@@ -788,5 +839,7 @@ export interface ICheckoutMethod {
    * @see {@link ICheckoutCompleteResponse} for the structure of the complete checkout data returned.
    *
    */
-  complete: (params: ICheckoutCompleteParams) => Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>>;
+  complete: (
+    params: ICheckoutCompleteParams
+  ) => Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>>;
 }

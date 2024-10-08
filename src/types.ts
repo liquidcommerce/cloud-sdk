@@ -1,7 +1,27 @@
-import type { ENUM_BEER, ENUM_FOOD, ENUM_MERCHANDISE, ENUM_NON_ALCOHOLIC, ENUM_READY_TO_DRINK, ENUM_SPIRITS, ENUM_WINE, LIQUID_COMMERCE_ENV } from './enums';
+import type {
+  ENUM_BEER,
+  ENUM_FOOD,
+  ENUM_MERCHANDISE,
+  ENUM_MISCELLANEOUS,
+  ENUM_NON_ALCOHOLIC,
+  ENUM_READY_TO_DRINK,
+  ENUM_SPIRITS,
+  ENUM_WINE,
+  LIQUID_COMMERCE_ENV,
+} from './enums';
 
 export interface ICoreParams {
   refresh?: boolean;
+  isLean?: boolean;
+  isLegacy?: boolean;
+}
+
+export interface IAuth {
+  token: string;
+
+  exp: number;
+
+  type: 'ACCESS_TOKEN';
 }
 
 /*
@@ -10,7 +30,7 @@ export interface ICoreParams {
  *
  * */
 export interface IAuthResponse {
-  auth?: IAuthResponse;
+  auth?: IAuth;
 }
 
 export interface IResponseMetadata {
@@ -36,13 +56,6 @@ export type IApiResponseWithoutData<T> = IApiResponseBase & {
   [K in keyof T]: T[K];
 };
 
-export type IApiResponse<T> = IApiResponseWithData<T> | IApiResponseWithoutData<T>;
-
-// Type guard to check if the response has a data property
-export function isApiResponseWithData<T>(response: IApiResponse<T>): response is IApiResponseWithData<T> {
-  return 'data' in response;
-}
-
 export interface ILiquidCommerceConfig {
   googlePlacesApiKey: string;
 
@@ -54,6 +67,14 @@ export interface ILiquidCommerceConfig {
   };
 }
 
-export type LiquidTaxonomy = ENUM_BEER | ENUM_FOOD | ENUM_MERCHANDISE | ENUM_NON_ALCOHOLIC | ENUM_READY_TO_DRINK | ENUM_SPIRITS | ENUM_WINE;
+export type LiquidTaxonomy =
+  | ENUM_BEER
+  | ENUM_FOOD
+  | ENUM_MERCHANDISE
+  | ENUM_MISCELLANEOUS
+  | ENUM_NON_ALCOHOLIC
+  | ENUM_READY_TO_DRINK
+  | ENUM_SPIRITS
+  | ENUM_WINE;
 
-export * from './interfaces/index';
+export type AddressServiceResponse<T> = IApiResponseWithData<T>;

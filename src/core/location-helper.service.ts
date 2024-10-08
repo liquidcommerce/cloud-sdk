@@ -1,5 +1,5 @@
 import { STATES_CODE, STATES_NAME } from '../enums';
-import type { ILoc } from '../interfaces/address.interface';
+import type { ILoc } from '../interfaces';
 
 /**
  * The LocationHelperService class provides methods to validate and normalize location objects.

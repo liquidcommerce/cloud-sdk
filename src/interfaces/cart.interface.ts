@@ -64,28 +64,64 @@ export interface ICartItemAttributes {
  * Interface representing a cart item.
  * @interface
  */
-export interface ICartItem extends Partial<IProduct> {
+export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
   id: string;
+
+  retailerId: string;
+
+  fulfillmentId: string;
 
   variantId: string;
 
   liquidId: string;
 
-  retailerId: string;
+  salsifyGrouping?: string;
+
+  salsifyPid?: string;
 
   partNumber: string;
 
-  fulfillmentId: string;
+  upc: string;
+
+  name: string;
+
+  brand: string;
+
+  size: string;
+
+  volume: string;
+
+  uom: string;
+
+  abv: string;
+
+  proof: string;
+
+  catPath: string;
+
+  pack: boolean;
+
+  packDesc: string;
+
+  container: string;
+
+  containerType: string;
 
   quantity: number;
-
-  customerPlacement: string;
 
   maxQuantity: number;
 
   unitPrice: number;
 
-  availableAt: string;
+  price: number;
+
+  scheduledFor: string | Date;
+
+  availableAt: string | Date;
+
+  images: string[];
+
+  mainImage: string;
 
   attributes: ICartItemAttributes;
 }
@@ -108,7 +144,7 @@ export interface ICartAttributesPromoCode {
  * Represents the attributes of a gift card in a cart.
  *
  * @interface ICartAttributesGiftCard
- * @memberof module:cart
+ *
  * @property {string} code - The code of the gift card.
  * @property {number} value - The value of the gift card in the cart.
  */
@@ -207,9 +243,9 @@ export interface ICart {
 
   deliveryFee: number;
 
-  shippingFee: number;
-
   engravingFee: number;
+
+  shippingFee: number;
 
   discounts: number;
 
@@ -219,15 +255,15 @@ export interface ICart {
 
   total: number;
 
-  createdAt: string;
+  createdAt: string | Date;
 
-  updatedAt: string;
+  updatedAt: string | Date;
 
   items: ICartItem[];
 
   loc: ILoc;
 
-  retailers: ICartRetailer[];
+  retailers: IRetailer[];
 
   attributes: ICartAttributes;
 
