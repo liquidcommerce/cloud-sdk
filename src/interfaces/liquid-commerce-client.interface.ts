@@ -73,15 +73,20 @@ export interface ILiquidCommerceClient {
   cart: ICartMethod;
 
   /**
-   * Represents a payment method for processing a payment.
-   * @type {IPaymentMethod} - The interface representing the payment method.
+   * Provides methods for managing user data and authentication.
+   * See {@link IUserMethod} for more details on the available methods.
+   */
+  user: IUserMethod;
+
+  /**
+   * Provides methods for processing payments.
+   * See {@link IPaymentMethod} for more details on the available methods.
    */
   payment: IPaymentMethod;
 
   /**
-   * Represents a method of checking out items in a shopping system.
-   *
-   * @type {ICheckoutMethod} - The interface representing the checkout method.
+   * Provides methods for managing the checkout process.
+   * See {@link ICheckoutMethod} for more details on the available methods.
    */
   checkout: ICheckoutMethod;
 }
