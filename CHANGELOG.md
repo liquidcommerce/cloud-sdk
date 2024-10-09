@@ -1,3 +1,10 @@
+# [1.3.0-beta.8](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.7...v1.3.0-beta.8) (2024-10-09)
+
+
+### Bug Fixes
+
+* **interfaces:** add user management methods to LiquidCommerceClient ([6d815d3](https://github.com/liquidcommerce/cloud-sdk/commit/6d815d376fff3e328720040565e6df419c66726f))
+
 # [1.3.0-beta.7](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.6...v1.3.0-beta.7) (2024-10-08)
 
 
