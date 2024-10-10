@@ -47,7 +47,35 @@ export class CatalogHelperService {
   public validateAndNormalizeParams(params: IAvailabilityParams): IAvailabilityParams {
     const normalizedParams = { ...params };
 
-    this.validateUPCs(normalizedParams.upcs);
+    const upcs = normalizedParams?.upcs ?? [];
+    const grouping = normalizedParams?.grouping ?? [];
+    const ids = normalizedParams?.ids ?? [];
+
+    if ([upcs, grouping, ids].every((each) => this.validateIdsExist(each))) {
+      throw new Error('Product identifiers must be a non-empty array of strings');
+    }
+
+    if (upcs.length > 0) {
+      this.validateIds(normalizedParams?.upcs ?? []);
+
+      normalizedParams.upcs = upcs;
+    }
+
+    if (grouping.length > 0) {
+      this.validateIds(normalizedParams?.grouping ?? []);
+
+      normalizedParams.grouping = grouping;
+    }
+
+    if (ids.length > 0) {
+      this.validateIds(normalizedParams?.ids ?? []);
+
+      normalizedParams.ids = ids;
+    }
+
+    this.validateIds(
+      normalizedParams?.upcs ?? normalizedParams?.grouping ?? normalizedParams?.ids ?? []
+    );
     this.locationServiceHelper.validateAndNormalizeLocation(normalizedParams.loc);
 
     return normalizedParams;
@@ -84,18 +112,21 @@ export class CatalogHelperService {
   /**
    * Validates an array of UPCs.
    *
-   * @param {string[]} upcs - The array of UPCs to validate.
+   * @param {string[]} ids - The array of ids to validate.
    * @throws {Error} If upcs is not an array or is an empty array.
    * @throws {Error} If any UPC in the array is not a non-empty string.
    */
-  private validateUPCs(upcs: string[]): void {
-    if (!Array.isArray(upcs) || upcs.length === 0) {
-      throw new Error('UPCs must be a non-empty array of strings');
+  private validateIds(ids: string[]): void {
+    if (!ids.every((id) => typeof id === 'string' && id.trim().length > 0)) {
+      throw new Error('All product identifiers must be non-empty strings');
     }
+  }
 
-    if (!upcs.every((upc) => typeof upc === 'string' && upc.trim().length > 0)) {
-      throw new Error('All UPCs must be non-empty strings');
-    }
+  /**
+   *
+   */
+  private validateIdsExist(ids: string[]): boolean {
+    return !Array.isArray(ids) || ids.length === 0;
   }
 
   /**

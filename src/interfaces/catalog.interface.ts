@@ -129,7 +129,11 @@ export interface INavigationSchema {
 }
 
 export interface IAvailabilityParams extends ILocBase {
-  upcs: string[];
+  upcs?: string[];
+
+  grouping?: string[];
+
+  ids?: string[];
 
   shouldShowOffHours?: boolean;
 }
