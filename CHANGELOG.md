@@ -1,3 +1,10 @@
+# [1.3.0-beta.9](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.8...v1.3.0-beta.9) (2024-10-10)
+
+
+### Features
+
+* **core:** enhance validation and normalization logic for location and catalog services ([6d25c08](https://github.com/liquidcommerce/cloud-sdk/commit/6d25c081cb29918981ee997d76469625e1248bf6))
+
 # [1.3.0-beta.8](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.7...v1.3.0-beta.8) (2024-10-09)
 
 
