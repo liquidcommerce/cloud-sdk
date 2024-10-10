@@ -11,17 +11,21 @@ export class LocationHelperService {
    * @throws {Error} - If the loc argument is not a valid object or if
    * it doesn't contain either coords or address.
    */
-  validateAndNormalizeLocation(loc: ILoc): void {
-    if (!loc || typeof loc !== 'object') {
+  validateAndNormalizeLocation(loc?: ILoc): void {
+    if (!loc) {
+      return;
+    }
+
+    if (typeof loc !== 'object') {
       throw new Error('Location must be a valid object');
     }
 
-    if (loc.coords) {
-      this.validateCoordinates(loc.coords);
-    } else if (loc.address) {
-      this.validateAndNormalizeAddress(loc.address);
-    } else {
-      throw new Error('Location must contain either coords or address');
+    const { coords, address } = loc;
+
+    if (coords) {
+      this.validateCoordinates(coords);
+    } else if (address) {
+      this.validateAndNormalizeAddress(address);
     }
   }
 

@@ -27,7 +27,7 @@ export interface ILoc {
 }
 
 export interface ILocBase extends ICoreParams {
-  loc: ILoc;
+  loc?: ILoc;
 }
 
 export interface IAddressAutocompleteParams extends ICoreParams {

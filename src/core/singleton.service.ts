@@ -1,10 +1,12 @@
 import type { ILiquidCommerceClientConstructor } from '../interfaces';
-import { AddressService } from '../services/address.service';
+import {
+  AddressService,
+  CatalogService,
+  CheckoutService,
+  PaymentService,
+  UserService,
+} from '../services';
 import { CartService } from '../services/cart.service';
-import { CatalogService } from '../services/catalog.service';
-import { CheckoutService } from '../services/checkout.service';
-import { PaymentService } from '../services/payment.service';
-import { UserService } from '../services/user.service';
 import type { ILiquidCommerceConfig } from '../types';
 import { AuthenticatedService } from './authenticated.service';
 import { CartHelperService } from './cart-helper.service';
