@@ -1,3 +1,10 @@
+# [1.3.0-beta.10](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.9...v1.3.0-beta.10) (2024-10-11)
+
+
+### Features
+
+* **catalog:** add support for tags filter and flavored whiskey category ([6921ba8](https://github.com/liquidcommerce/cloud-sdk/commit/6921ba8072757b732a4bb11edb151bc7542c7229))
+
 # [1.3.0-beta.9](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.8...v1.3.0-beta.9) (2024-10-10)
 
 
