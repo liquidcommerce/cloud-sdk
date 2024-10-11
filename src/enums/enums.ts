@@ -147,6 +147,7 @@ export enum ENUM_FILTER_KEYS {
   COUNTRY = 'country',
   VINTAGE = 'vintage',
   MATERIALS = 'materials',
+  TAGS = 'tags',
 }
 
 export enum ENUM_NAVIGATION_ORDER_DIRECTION_TYPE {

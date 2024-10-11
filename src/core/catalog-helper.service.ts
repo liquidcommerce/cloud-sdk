@@ -225,6 +225,9 @@ export class CatalogHelperService {
         case ENUM_FILTER_KEYS.COLORS:
           this.validateArrayFilter(filter.values, 25, 'colors', errors);
           break;
+        case ENUM_FILTER_KEYS.TAGS:
+          this.validateArrayFilter(filter.values, 25, 'tags', errors);
+          break;
         // Add more cases for other filter types as needed
       }
     });
