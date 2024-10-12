@@ -1,3 +1,10 @@
+# [1.3.0-beta.11](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.10...v1.3.0-beta.11) (2024-10-12)
+
+
+### Features
+
+* **checkout:** add detailed total amounts interfaces ([6b18212](https://github.com/liquidcommerce/cloud-sdk/commit/6b18212b9130feed4840cfdec60a22e79a0581b7))
+
 # [1.3.0-beta.10](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.9...v1.3.0-beta.10) (2024-10-11)
 
 
