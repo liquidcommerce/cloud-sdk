@@ -1,6 +1,6 @@
 import type { ICoreParams } from '../types';
 import type { ILoc } from './address.interface';
-import type { ICartAttributesAmounts, ICartItem, ICartRetailer } from './cart.interface';
+import type { ICartItem, ICartRetailer } from './cart.interface';
 
 /**
  * Represents a recipient of a checkout process.
@@ -126,6 +126,102 @@ export interface ICheckoutPrepareParams extends ICoreParams {
 }
 
 /**
+ * Interface representing the total amounts and discounts for a checkout process.
+ *
+ * @interface ICheckoutTotalAmountsDiscounts
+ *
+ * @property {number} [products] - The total amount for all products in the checkout.
+ * @property {number} [delivery] - The total amount for delivery charges.
+ * @property {number} [shipping] - The total amount for shipping charges.
+ * @property {number} [engraving] - The total amount for engraving services.
+ * @property {number} [service] - The total amount for any additional service charges.
+ */
+export interface ICheckoutTotalAmountsDiscounts {
+  products?: number;
+
+  delivery?: number;
+
+  shipping?: number;
+
+  engraving?: number;
+
+  service?: number;
+}
+
+/**
+ * Interface representing various tax-related amounts in a checkout total.
+ *
+ * @interface ICheckoutTotalAmountsTaxes
+ *
+ * @property {number} [bag] - Tax amount related to bags.
+ *
+ * @property {number} [bottleDeposits] - Tax amount for bottle deposits.
+ *
+ * @property {number} [retailDelivery] - Tax amount for retail delivery charges.
+ *
+ * @property {number} [products] - Tax amount applied to products.
+ *
+ * @property {number} [delivery] - Tax amount for delivery charges.
+ *
+ * @property {number} [shipping] - Tax amount associated with shipping.
+ */
+export interface ICheckoutTotalAmountsTaxes {
+  bag?: number;
+
+  bottleDeposits?: number;
+
+  retailDelivery?: number;
+
+  products?: number;
+
+  delivery?: number;
+
+  shipping?: number;
+}
+
+/**
+ * Interface representing the details of the total amounts in the checkout process.
+ *
+ * @property {ICheckoutTotalAmountsTaxes} [taxes] - Optional property representing taxes applied to the checkout total amounts.
+ * @property {ICheckoutTotalAmountsDiscounts} [discounts] - Optional property representing discounts applied to the checkout total amounts.
+ */
+export interface ICheckoutTotalAmountsDetails {
+  taxes?: ICheckoutTotalAmountsTaxes;
+
+  discounts?: ICheckoutTotalAmountsDiscounts;
+}
+
+/**
+ * Interface representing the total amounts in a checkout process.
+ * This includes various fees, discounts, and the final total.
+ */
+export interface ICheckoutTotalAmounts {
+  subtotal?: number;
+
+  engraving?: number;
+
+  service?: number;
+
+  shipping?: number;
+
+  delivery?: number;
+
+  platform?: number;
+
+  discounts?: number;
+
+  giftCards?: number;
+
+  tax?: number;
+
+  tip?: number;
+
+  total?: number;
+
+  details?: ICheckoutTotalAmountsDetails;
+}
+
+/**
  * Represents a response object for preparing a checkout process.
  *
  * @interface ICheckoutPrepareResponse
@@ -155,7 +251,7 @@ export interface ICheckoutPrepareResponse {
 
   items: ICartItem[];
 
-  amounts: ICartAttributesAmounts;
+  amounts: ICheckoutTotalAmounts;
 
   retailers: ICartRetailer[];
 
