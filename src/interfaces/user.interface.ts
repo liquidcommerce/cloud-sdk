@@ -9,12 +9,12 @@ export interface IUserSession {
   createdAt: Date;
 }
 
-export interface IUserAddress {
-  id: string;
+export interface IUserAddressBase {
+  placesId: string;
 
   one: string;
 
-  two?: string | null;
+  two: string;
 
   city: string;
 
@@ -23,6 +23,14 @@ export interface IUserAddress {
   zip: string;
 
   country: string;
+
+  lat: number;
+
+  long: number;
+}
+
+export interface IUserAddress extends IUserAddressBase {
+  id: string;
 
   createdAt: Date;
 
@@ -53,6 +61,8 @@ export interface IUserPayment {
   isDefault: boolean;
 
   card?: ISavedCard;
+
+  createdAt: Date;
 }
 
 export interface IUser {
@@ -83,6 +93,8 @@ export interface IUser {
   session: IUserSession;
 }
 
+export type BaseUser = Omit<IUser, 'session'>;
+
 export interface IUserSessionParams extends ICoreParams {
   id?: string;
 
@@ -110,15 +122,23 @@ export interface IPurgeResponse {
 export interface IUserAddressParams extends ICoreParams {
   customerId: string;
 
-  one: string;
+  placesId?: string;
 
-  two?: string | null;
+  one?: string;
 
-  city: string;
+  two?: string;
 
-  state: string;
+  city?: string;
 
-  zip: string;
+  state?: string;
+
+  zip?: string;
+
+  country?: string;
+
+  lat?: number;
+
+  long?: number;
 
   type: ENUM_ADDRESS_TYPE;
 

@@ -1,8 +1,4 @@
-import type {
-  IApiResponseWithData,
-  IApiResponseWithoutData,
-  ILiquidCommerceConfig,
-} from '../types';
+import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig, } from '../types';
 import type {
   IAddressAutocompleteParams,
   IAddressAutocompleteResult,
@@ -10,24 +6,16 @@ import type {
   IAddressDetailsResult,
 } from './address.interface';
 import type { ICart, ICartUpdateParams } from './cart.interface';
-import type {
-  IAvailabilityParams,
-  IAvailabilityResponse,
-  ICatalog,
-  ICatalogParams,
-} from './catalog.interface';
+import type { IAvailabilityParams, IAvailabilityResponse, ICatalog, ICatalogParams, } from './catalog.interface';
 import type {
   ICheckoutCompleteParams,
   ICheckoutCompleteResponse,
   ICheckoutPrepareParams,
   ICheckoutPrepareResponse,
 } from './checkout.interface';
+import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap, } from './payment.interface';
 import type {
-  ILiquidPaymentConfig,
-  ILiquidPaymentToken,
-  IPaymentElementEventMap,
-} from './payment.interface';
-import type {
+  BaseUser,
   IPurgeResponse,
   IUser,
   IUserAddress,
@@ -377,6 +365,29 @@ export interface IUserMethod {
    * @see {@link IUser} for the structure of the user data returned.
    */
   session: (params: IUserSessionParams) => Promise<IApiResponseWithData<IUser>>;
+
+  /**
+   * Represents a user object without creating a new session.
+   *
+   * @param {string} identifier - The parameters for fetching a user.
+   * @returns {Promise<IApiResponseWithData<BaseUser>>} A Promise that resolves to the API response with user data.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   // Fetch by user ID
+   *   const userFetched = await liquidCommerce.user.fetch('c1fbd454-a540-4f42-86e9-f87a98bf1812');
+   *   console.log('User fetch response:', userFetched?.data);
+   * } catch (error) {
+   *   console.error('Failed to fetch user data:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the sessions request fails or if authentication is unsuccessful.
+   *
+   * @see {@link BaseUser} for the structure of the user data returned.
+   */
+  fetch: (identifier: string) => Promise<IApiResponseWithData<BaseUser>>;
 
   /**
    * Purges a user's data from the system.

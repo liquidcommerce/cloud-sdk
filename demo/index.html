@@ -746,6 +746,18 @@
               <hr>
 
               <div class="user-section mt-4">
+                <h5>Fetch User by ID (without creating session)</h5>
+                <form id="fetchUserByIDForm">
+                  <div class="mb-3">
+                    <label for="userIDFetch" class="form-label">ID</label>
+                    <input type="text" class="form-control" id="userIDFetch" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Fetch User</button>
+                </form>
+                <div id="fetchUserByIDResult" class="mt-3 session-result"></div>
+              </div>
+
+              <div class="user-section mt-4">
                 <h5>Purge User</h5>
                 <form id="purgeUserForm">
                   <div class="mb-3">
@@ -785,6 +797,47 @@
                   </form>
                   <div id="updateAddressResult" class="mt-3"></div>
               </div>
+
+              <hr>
+
+              <div class="user-section mt-4">
+                <h5>Update/Create Address (w/ Coordinates)</h>
+                  <form id="updateAddressWithCoordsForm">
+                    <div class="mb-3">
+                      <label for="customerIdAddress" class="form-label">Customer ID</label>
+                      <input type="text" class="form-control" id="customerIdAddress" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="addressLat" class="form-label">Latitude</label>
+                      <input type="text" class="form-control" id="addressLat" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="addressLong" class="form-label">Longitude</label>
+                      <input type="text" class="form-control" id="addressLong" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
+                  </form>
+                  <div id="updateAddressWithCoordsResult" class="mt-3"></div>
+              </div>
+
+              <hr>
+
+              <div class="user-section mt-4">
+                <h5>Update/Create Address (w/ Google PlacesId)</h>
+                  <form id="updateAddressWithPlacesIdForm">
+                    <div class="mb-3">
+                      <label for="customerIdAddress" class="form-label">Customer ID</label>
+                      <input type="text" class="form-control" id="customerIdAddressWithPlacesId" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="addressLat" class="form-label">Places Id</label>
+                      <input type="text" class="form-control" id="addressWithPlacesId" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
+                  </form>
+                  <div id="updateAddressWithPlacesIdResult" class="mt-3"></div>
+              </div>
+
               <hr>
 
               <div class="user-section mt-4">
@@ -1674,6 +1727,67 @@
     userSessionResult.innerHTML = html;
   }
 
+  /**
+   * Handle user fetch request
+   */
+  document.getElementById('fetchUserByIDForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const id = document.getElementById('userIDFetch').value;
+    const fetchUserByIDResult = document.getElementById('fetchUserByIDResult');
+
+    console.log("id: ", id)
+
+    try {
+      const userFetchedByID = await client.user.fetch(id);
+      const { data, metadata, message, statusCode } = userFetchedByID;
+
+      const formattedCreatedAt = new Date(data.createdAt).toLocaleString();
+      const formattedUpdatedAt = new Date(data.updatedAt).toLocaleString();
+
+      let addressesHtml = data.addresses.length === 0 ? `
+        <p>
+            There are no saved addresses for this user.
+        </p>
+    ` : data.addresses.map(address => `
+        <p>
+            <strong>Address:</strong> ${address.one}, ${address.city}, ${address.state}, ${address.zip}, ${address.country}
+            <br><strong>Type:</strong> ${address.type}, <strong>Default:</strong> ${address.isDefault ? 'Yes' : 'No'}
+        </p>
+    `).join('');
+
+      let paymentsHtml = data.savedPayments.length === 0 ? `
+        <p>
+            There are no saved payments for this user.
+        </p>
+    ` : data.savedPayments.map(payment => `
+        <li>
+            <strong>Type:</strong> ${payment.type}, <strong>Default:</strong> ${payment.isDefault ? 'Yes' : 'No'}
+            <br>Card: ${payment.card.brand} ending in ${payment.card.last4}, Expires ${payment.card.expMonth}/${payment.card.expYear}
+        </li>
+    `).join('');
+
+      let html = `
+        <h4>User Fetch Details</h4>
+        <p><strong>Status:</strong> ${statusCode} - ${message}</p>
+        <p><strong>ID:</strong> ${data.id || 'N/A'}</p>
+        <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
+        <p><strong>First Name:</strong> ${data.firstName || 'N/A'}</p>
+        <p><strong>Last Name:</strong> ${data.lastName || 'N/A'}</p>
+        <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
+        <p><strong>Profile Image:</strong> ${data.profileImage ? `<img src="${data.profileImage}" alt="Profile Image" style="width:100px;">` : 'N/A'}</p>
+        <p><strong>Created At:</strong> ${formattedCreatedAt}</p>
+        <p><strong>Updated At:</strong> ${formattedUpdatedAt}</p>
+        <h5>Addresses:</h5>
+        ${addressesHtml}
+        <h5>Saved Payments:</h5>
+        <ul>${paymentsHtml}</ul>
+    `;
+
+      fetchUserByIDResult.innerHTML = html;
+    } catch (error) {
+      fetchUserByIDResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
 
   /**
    * Handle user purge request
@@ -1713,6 +1827,52 @@
         zip: NEW_YORK_ADDRESS.zip,
         type: 'SHIPPING',
         isDefault,
+      });
+      updateAddressResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
+    } catch (error) {
+      console.error('Failed to update/create address:', error);
+      updateAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle address update request with coordinates
+   */
+  document.getElementById('updateAddressWithCoordsForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('customerIdAddress').value;
+    const lat = document.getElementById('addressLat').value;
+    const long = document.getElementById('addressLong').value;
+    const updateAddressResult = document.getElementById('updateAddressWithCoordsResult');
+
+    try {
+      const addressResponse = await client.user.updateAddress({
+        customerId,
+        lat,
+        long,
+        type: 'SHIPPING',
+      });
+      updateAddressResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
+    } catch (error) {
+      console.error('Failed to update/create address:', error);
+      updateAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle address update request with placesId
+   */
+  document.getElementById('updateAddressWithPlacesIdForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('customerIdAddress').value;
+    const placesId = document.getElementById('addressWithPlacesId').value;
+    const updateAddressResult = document.getElementById('updateAddressWithCoordsResult');
+
+    try {
+      const addressResponse = await client.user.updateAddress({
+        customerId,
+        placesId,
+        type: 'SHIPPING',
       });
       updateAddressResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
     } catch (error) {
