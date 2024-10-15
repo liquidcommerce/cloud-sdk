@@ -1,5 +1,6 @@
 import type { AuthenticatedService } from '../core';
 import type {
+  BaseUser,
   IPurgeResponse,
   IUser,
   IUserAddress,
@@ -45,6 +46,28 @@ export class UserService {
   }
 
   /**
+   * Fetches user data from the API using the provided identifier.
+   *
+   * @param {string} identifier - The unique identifier for the user.
+   * @return {Promise<IApiResponseWithData<BaseUser>>} The API response containing
+   *  user data omitting the session field.
+   */
+  public async fetchUser(identifier: string): Promise<IApiResponseWithData<BaseUser>> {
+    try {
+      if (!identifier) {
+        throw new Error('Id is required');
+      }
+
+      return await this.client.get<IApiResponseWithData<BaseUser>>(
+        `${this.servicePath}/fetch/${identifier}`
+      );
+    } catch (error) {
+      console.error('User session creation/update request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Purges a user's data from the system.
    *
    * @param {string} identifier - The user's ID or email.
@@ -66,18 +89,16 @@ export class UserService {
     }
   }
 
+  /**
+   * Adds a new address for a user.
+   *
+   * @param {IUserAddressParams} params - The parameters containing the user's address details.
+   * @return {Promise<IApiResponseWithData<IUserAddress>>} - A promise that resolves with the API response containing the added user address.
+   * @throws {Error} If the addAddress request fails or if the required parameters are not provided.
+   */
   public async addAddress(params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>> {
     try {
-      if (
-        !params.customerId ||
-        !params.one ||
-        !params.city ||
-        !params.state ||
-        !params.zip ||
-        !params.type
-      ) {
-        throw new Error('Missing required parameters to add address');
-      }
+      this.validateAddressParams(params);
 
       return await this.client.post<IApiResponseWithData<IUserAddress>>(
         `${this.servicePath}/addresses/add`,
@@ -100,25 +121,102 @@ export class UserService {
     params: IUserAddressParams
   ): Promise<IApiResponseWithData<IUserAddress>> {
     try {
-      if (
-        !params.customerId ||
-        !params.one ||
-        !params.city ||
-        !params.state ||
-        !params.zip ||
-        !params.type
-      ) {
-        throw new Error('Missing required parameters for address update');
-      }
+      const validatedParams = this.validateAddressParams(params);
 
       return await this.client.post<IApiResponseWithData<IUserAddress>>(
         `${this.servicePath}/addresses/update`,
-        params
+        validatedParams
       );
     } catch (error) {
       console.error('User address update request failed:', error);
       throw error;
     }
+  }
+
+  /**
+   * Validates the parameters required for updating a user address.
+   *
+   * @param {IUserAddressParams} params - The parameters to be validated for the address update. This should include
+   * at least the user ID and one of the following: address object, latitude and longitude, or a Google places ID.
+   * @return {IUserAddressParams} Throws an error if the required parameters are not provided.
+   */
+  private validateAddressParams(params: IUserAddressParams): IUserAddressParams {
+    const hasNoUser = this.hasUser(params);
+    const hasNoAddressObj = this.hasUserAddressObj(params);
+    const hasNoAddressCoords = this.hasUserAddressCoords(params);
+    const hasNoAddressPlacesId = this.hasUserAddressPlacesId(params);
+
+    if (hasNoUser) {
+      throw new Error('Missing required parameter customerId for address update.');
+    }
+
+    if (hasNoAddressObj && hasNoAddressCoords && hasNoAddressPlacesId) {
+      throw new Error(
+        'Missing required parameters for address update, you need at least, an address object or lat and long, or a google placesId'
+      );
+    }
+
+    if (!hasNoAddressCoords) {
+      params.lat = Number(params?.lat);
+      params.long = Number(params?.long);
+    }
+
+    return params;
+  }
+
+  /**
+   * Checks if the given user address parameters contain valid customer ID and user ID.
+   *
+   * @param {IUserAddressParams} params - The user address parameters object containing customerId and userId.
+   * @return {boolean} - Returns true if the customerId or userId is missing or not a string, otherwise returns false.
+   */
+  private hasUser(params: IUserAddressParams): boolean {
+    return !params?.customerId || typeof params?.customerId !== 'string';
+  }
+
+  /**
+   * Checks if the given user address object has a valid address.
+   *
+   * @param {IUserAddressParams} params - The user address parameters object containing address details.
+   *
+   * @return {boolean} Returns true if the user address object is valid; otherwise, returns false.
+   */
+  private hasUserAddressObj(params: IUserAddressParams): boolean {
+    return (
+      !params?.one ||
+      typeof params?.one !== 'string' ||
+      !params?.city ||
+      typeof params?.city !== 'string' ||
+      !params?.state ||
+      typeof params?.state !== 'string' ||
+      !params?.zip ||
+      typeof params?.zip !== 'string' ||
+      !params?.type ||
+      typeof params?.type !== 'string'
+    );
+  }
+
+  /**
+   * Checks if the user address coordinates (latitude and longitude) are not present or not of type 'number'.
+   *
+   * @param {IUserAddressParams} params - The user address parameters containing latitude and longitude.
+   * @return {boolean} Returns true if latitude or longitude are not provided or are not numbers, otherwise returns false.
+   */
+  private hasUserAddressCoords(params: IUserAddressParams): boolean {
+    return (
+      (!params?.lat && !params?.long) ||
+      (typeof Number(params?.lat) !== 'number' && typeof Number(params?.long) !== 'number')
+    );
+  }
+
+  /**
+   * Checks whether the user address parameters contain a valid placesId.
+   *
+   * @param {IUserAddressParams} params - The user address parameters containing placesId.
+   * @return {boolean} Returns true if placesId is missing or not a string, false otherwise.
+   */
+  private hasUserAddressPlacesId(params: IUserAddressParams): boolean {
+    return !params?.placesId || typeof params?.placesId !== 'string';
   }
 
   /**

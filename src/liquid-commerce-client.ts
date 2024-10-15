@@ -3,6 +3,7 @@ import type { AuthenticatedService } from './core';
 import { SingletonManager } from './core';
 import { LIQUID_COMMERCE_ENV } from './enums';
 import type {
+  BaseUser,
   IAddressAutocompleteParams,
   IAddressAutocompleteResult,
   IAddressDetailsParams,
@@ -223,6 +224,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *
    * @property {function(params: IUserSessionParams): Promise<IApiResponseWithData<IUser>>} session -
    *    Method for creating or updating a user session.
+   * @property {function(dentifier: string): Promise<IApiResponseWithData<BaseUser>>} session -
+   *    Method for fetching user data.
    * @property {function(identifier: string): Promise<IApiResponseWithData<IPurgeResponse>>} purge -
    *    Method for purging a user's data from the system.
    * @property {function(params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>>} addAddress -
@@ -242,7 +245,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    * @see {@link IUserAddressParams} for the structure of the address add/update request parameters.
    * @see {@link IUserPaymentAddParams} for the structure of the payment add request parameters.
    * @see {@link IUserPaymentUpdateParams} for the structure of the payment update request parameters.
-   * @see {@link IUser} for the structure of the user data returned.
+   * @see {@link IUser} for the structure of the user session data returned.
+   * @see {@link BaseUser} for the structure of the user data returned.
    * @see {@link IUserAddress} for the structure of the user's address data returned.
    * @see {@link IUserPayment} for the structure of the user's payment method data returned.
    * @see {@link IPurgeResponse} for the structure of the purge response data.
@@ -251,6 +255,10 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     session: async (params: IUserSessionParams): Promise<IApiResponseWithData<IUser>> => {
       await this.ensureAuthenticated();
       return this.userService.createOrUpdateSession(params);
+    },
+    fetch: async (identifier: string): Promise<IApiResponseWithData<BaseUser>> => {
+      await this.ensureAuthenticated();
+      return this.userService.fetchUser(identifier);
     },
     purge: async (identifier: string): Promise<IApiResponseWithData<IPurgeResponse>> => {
       await this.ensureAuthenticated();
