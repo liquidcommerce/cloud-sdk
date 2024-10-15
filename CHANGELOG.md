@@ -1,3 +1,10 @@
+# [1.3.0-beta.12](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.11...v1.3.0-beta.12) (2024-10-15)
+
+
+### Features
+
+* **user:** add fetch user by ID functionality and address update options ([8b5f6a8](https://github.com/liquidcommerce/cloud-sdk/commit/8b5f6a83a4b5f509a8c36681a47198a18749f99e))
+
 # [1.3.0-beta.11](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.10...v1.3.0-beta.11) (2024-10-12)
 
 
