@@ -1,3 +1,10 @@
+# [1.3.0-beta.13](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.12...v1.3.0-beta.13) (2024-10-24)
+
+
+### Features
+
+* **checkout:** expand customer and billing interfaces, add deprecation notes ([598764f](https://github.com/liquidcommerce/cloud-sdk/commit/598764f9f9be75e7fcb1aad01ee8281ac55e6bd9))
+
 # [1.3.0-beta.12](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.11...v1.3.0-beta.12) (2024-10-15)
 
 
