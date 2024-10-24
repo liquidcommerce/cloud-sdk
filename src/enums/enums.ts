@@ -135,6 +135,7 @@ export enum ENUM_FILTER_KEYS {
   BRANDS = 'brands',
   FLAVOR = 'flavor',
   FULFILLMENT = 'fulfillment',
+  TAGS = 'tags',
   REGION = 'region',
   VARIETY = 'variety',
   ENGRAVING = 'engraving',
@@ -147,7 +148,7 @@ export enum ENUM_FILTER_KEYS {
   COUNTRY = 'country',
   VINTAGE = 'vintage',
   MATERIALS = 'materials',
-  TAGS = 'tags',
+  COLLECTION_TAGS = 'collectionTags',
 }
 
 export enum ENUM_NAVIGATION_ORDER_DIRECTION_TYPE {

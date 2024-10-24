@@ -10,36 +10,70 @@ import type { LiquidTaxonomy } from '../types';
 import type { ILocBase } from './address.interface';
 import type { IRetailer } from './retailer.interface';
 
+/**
+ * ICategoryFilter represents a filter specifically for categories.
+ */
 export interface ICategoryFilter {
   key: ENUM_FILTER_KEYS.CATEGORIES | 'categories';
 
   values: LiquidTaxonomy[];
 }
 
+/**
+ * The IPriceFilter interface is used to define a structure for filtering
+ * items based on their price range.
+ */
 export interface IPriceFilter {
   key: ENUM_FILTER_KEYS.PRICE | 'price';
 
   values: { min?: number | string; max?: number | string };
 }
 
+/**
+ * Interface representing a filter based on availability.
+ *
+ * @interface IAvailabilityFilter
+ */
 export interface IAvailabilityFilter {
   key: ENUM_FILTER_KEYS.AVAILABILITY | 'availability';
 
   values: ENUM_AVAILABILITY_VALUE | keyof typeof ENUM_AVAILABILITY_VALUE;
 }
 
+/**
+ * Interface representing a Fulfillment Filter used in search or sorting operations.
+ */
 export interface IFulfillmentFilter {
   key: ENUM_FILTER_KEYS.FULFILLMENT | 'fulfillment';
 
   values: [ENUM_MODALITIES];
 }
 
+/**
+ * Interface representing an engraving filter.
+ *
+ * This interface is used to define the properties for filtering items
+ * based on engraving criteria.
+ *
+ * Properties:
+ *
+ * - key: Indicates that the filter criteria is related to engraving.
+ *        It can either be the ENUM_FILTER_KEYS.ENGRAVING enum value or the string 'engraving'.
+ *
+ * - values: Specifies the possible engraving values to filter by.
+ *           It can either be from the ENUM_ENGRAVING enum or a key from the ENUM_ENGRAVING enum.
+ */
 export interface IEngravingFilter {
   key: ENUM_FILTER_KEYS.ENGRAVING | 'engraving';
 
   values: ENUM_ENGRAVING | keyof typeof ENUM_ENGRAVING;
 }
 
+/**
+ * Represents a filter interface for defining key-value pairs used in filtering operations.
+ *
+ * @type {IFilter} IFilter
+ */
 export interface IFilter {
   key: Omit<
     ENUM_FILTER_KEYS,
@@ -53,6 +87,9 @@ export interface IFilter {
   values: string | string[] | number | number[];
 }
 
+/**
+ * Interface representing the parameters used for catalog search and navigation.
+ */
 export interface ICatalogParams extends ILocBase {
   search?: string;
 
@@ -80,6 +117,9 @@ export interface ICatalogParams extends ILocBase {
   >;
 }
 
+/**
+ * ICatalog interface represents a structured collection of retailers, products, and navigation schema.
+ */
 export interface ICatalog {
   retailers?: IRetailer[] | Array<Record<string, any>>;
 
@@ -88,24 +128,62 @@ export interface ICatalog {
   navigation?: INavigationSchema;
 }
 
+/**
+ * IFilterValue interface represents a filterable value typically used in context
+ * with searching or sorting functionalities within an application.
+ * It is designed to hold a specific value and its associated count.
+ */
 export interface IFilterValue {
   value: LiquidTaxonomy | ENUM_AVAILABILITY_VALUE | string;
 
   count: number;
 }
 
+/**
+ * FacetFilterKeys represents the possible keys that can be used to filter items in a faceted search.
+ * It encompasses a variety of attributes that can be used to refine search results, such as brands,
+ * flavor, region, price, availability, and more.
+ * Each key corresponds to an enumerated value in ENUM_FILTER_KEYS.
+ */
+export type FacetFilterKeys =
+  | ENUM_FILTER_KEYS.BRANDS
+  | ENUM_FILTER_KEYS.FLAVOR
+  | ENUM_FILTER_KEYS.REGION
+  | ENUM_FILTER_KEYS.VARIETY
+  | ENUM_FILTER_KEYS.ENGRAVING
+  | ENUM_FILTER_KEYS.PRICE
+  | ENUM_FILTER_KEYS.AVAILABILITY
+  | ENUM_FILTER_KEYS.CATEGORIES
+  | ENUM_FILTER_KEYS.SIZES
+  | ENUM_FILTER_KEYS.COLORS
+  | ENUM_FILTER_KEYS.APPELLATION
+  | ENUM_FILTER_KEYS.COUNTRY
+  | ENUM_FILTER_KEYS.VINTAGE
+  | ENUM_FILTER_KEYS.MATERIALS
+  | ENUM_FILTER_KEYS.TAGS;
+
+/**
+ * IFilterSchema represents the structure for filtering datasets based on specific criteria.
+ */
 export interface IFilterSchema {
-  bucket: ENUM_FILTER_KEYS;
+  bucket: FacetFilterKeys;
 
   values: IFilterValue[];
 }
 
+/**
+ * ICursorSchema represents a schema interface that includes pagination tokens.
+ * This interface defines the structure for handling cursor-based pagination.
+ */
 export interface ICursorSchema {
   nextPageToken: string;
 
   previousPageToken: string;
 }
 
+/**
+ * Interface representing the schema for navigation data.
+ */
 export interface INavigationSchema {
   id: string;
 
@@ -128,6 +206,9 @@ export interface INavigationSchema {
   filters: IFilterSchema[];
 }
 
+/**
+ * Represents parameters for availability inquiries.
+ */
 export interface IAvailabilityParams extends ILocBase {
   upcs?: string[];
 
@@ -138,12 +219,18 @@ export interface IAvailabilityParams extends ILocBase {
   shouldShowOffHours?: boolean;
 }
 
+/**
+ * Interface representing the availability response.
+ */
 export interface IAvailabilityResponse {
   products: IProduct[];
 
   retailers: IRetailer[];
 }
 
+/**
+ * Interface representing attributes related to images of a product.
+ */
 export interface IAttributesImage {
   backOfBottle: string;
 
@@ -152,6 +239,9 @@ export interface IAttributesImage {
   lifestyle: string[];
 }
 
+/**
+ * The IAttributesAward interface represents the structure of an award's attributes.
+ */
 export interface IAttributesAward {
   image: string;
 
@@ -160,12 +250,18 @@ export interface IAttributesAward {
   title: string;
 }
 
+/**
+ * Interface representing attributes of a recipe ingredient.
+ */
 export interface IAttributesRecipeIngredient {
   name: string;
 
   amount: string;
 }
 
+/**
+ * Interface for defining the attributes of a recipe.
+ */
 export interface IAttributesRecipe {
   image: string;
 
@@ -176,6 +272,11 @@ export interface IAttributesRecipe {
   title: string;
 }
 
+/**
+ * Interface representing the attributes of a video.
+ *
+ * This interface includes properties for storing the video's link, image, and title.
+ */
 export interface IAttributesVideo {
   link: string;
 
@@ -184,6 +285,9 @@ export interface IAttributesVideo {
   title: string;
 }
 
+/**
+ * Interface representing the attributes of a tasting note.
+ */
 export interface IAttributesTastingNote {
   statement: string;
 
@@ -192,6 +296,9 @@ export interface IAttributesTastingNote {
   title: string;
 }
 
+/**
+ * Interface representing personalization attributes for an item.
+ */
 export interface IAttributesPersonalization {
   type: string;
 
@@ -214,6 +321,10 @@ export interface IAttributesPersonalization {
   availableTo: Date;
 }
 
+/**
+ * IAttributes interface represents the attributes of a product, including its origin,
+ * ownership type, tags, images, awards, recipes, videos, tasting notes, and personalizations.
+ */
 export interface IAttributes {
   brandOrigin: string;
 
@@ -236,12 +347,25 @@ export interface IAttributes {
   personalizations: IAttributesPersonalization[];
 }
 
+/**
+ * Interface representing the types of product fulfillment options.
+ *
+ * Properties:
+ * - shipping: A string representing the shipping fulfillment type.
+ * - onDemand: A string representing the on-demand fulfillment type.
+ */
 export interface IProductFulfillmentTypes {
   shipping: string;
 
   onDemand: string;
 }
 
+/**
+ * Represents a product variant in the system.
+ *
+ * This interface holds details about a specific variation of a product, including its
+ * part number, retailer ID, pricing information, and fulfillment options.
+ */
 export interface IProductVariant {
   partNumber: string;
 
@@ -262,6 +386,9 @@ export interface IProductVariant {
   fulfillmentTypes: IProductFulfillmentTypes;
 }
 
+/**
+ * Represents the engraving details for a product size.
+ */
 export interface IProductSizeEngraving {
   status: boolean;
 
@@ -276,10 +403,20 @@ export interface IProductSizeEngraving {
   location: string;
 }
 
+/**
+ * Interface representing attributes related to the size of a product.
+ *
+ * @property {IProductSizeEngraving} [engraving] - Optional engraving details for the product size.
+ */
 export interface IProductSizeAttributes {
   engraving?: IProductSizeEngraving;
 }
 
+/**
+ * Represents the size details of a product in an inventory system.
+ *
+ * @interface IProductSize
+ */
 export interface IProductSize {
   id: string;
 
@@ -310,6 +447,10 @@ export interface IProductSize {
   variants: IProductVariant[];
 }
 
+
+/**
+ * Represents a product with various attributes and details.
+ */
 export interface IProduct {
   id?: string;
 
