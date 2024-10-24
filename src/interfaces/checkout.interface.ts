@@ -1,6 +1,44 @@
 import type { ICoreParams } from '../types';
-import type { ILoc } from './address.interface';
+import type { IAddress } from './address.interface';
 import type { ICartItem, ICartRetailer } from './cart.interface';
+
+/**
+ * Represents a customer in a checkout process.
+ *
+ * An instance of the ICheckoutCustomer interface contains
+ * information about the customer, including their
+ * identification, contact details, personal information,
+ * and timestamps for profile management.
+ *
+ * The ICheckoutCustomer interface is intended to be used in checkout
+ * processes where the customer's information is required.
+ *
+ * @interface
+ * @public
+ */
+export interface ICheckoutCustomer {
+  id?: string;
+
+  email?: string;
+
+  firstName?: string;
+
+  lastName?: string;
+
+  company?: string;
+
+  profileImage?: string;
+
+  phone?: string;
+
+  birthDate?: string;
+
+  hasAgeVerify?: boolean;
+
+  createdAt?: Date;
+
+  updatedAt?: Date;
+}
 
 /**
  * Represents a recipient of a checkout process.
@@ -15,6 +53,8 @@ import type { ICartItem, ICartRetailer } from './cart.interface';
  *
  * @interface
  * @public
+ * @deprecated Use ICheckoutCustomer interface instead.
+ * ICheckoutRecipient will be removed in a future version.
  */
 export interface ICheckoutRecipient {
   firstName: string;
@@ -30,6 +70,13 @@ export interface ICheckoutRecipient {
   hasAgeVerify?: boolean;
 }
 
+/**
+ * Represents a traditional billing address structure.
+ *
+ * @interface
+ * @public
+ * @deprecated Use ICheckoutBillingAddress instead which provides better integration with customer data.
+ */
 export interface IBillingAddress {
   firstName: string;
 
@@ -51,6 +98,8 @@ export interface IBillingAddress {
 
   country?: string;
 }
+
+export type ICheckoutBillingAddress = IAddress & ICheckoutCustomer;
 
 /**
  * Represents the recipient information for gift options during checkout.
@@ -108,9 +157,18 @@ export interface ICheckoutDeliveryTip {
 export interface ICheckoutPrepareParams extends ICoreParams {
   cartId: string;
 
+  customer?: ICheckoutCustomer | string;
+
+  /**
+   * @deprecated Use customer property instead. Recipient will be removed in a future version.
+   */
   recipient?: ICheckoutRecipient;
 
-  billingAddress?: IBillingAddress;
+  /**
+   * Billing address information supporting both new and legacy formats.
+   * It's recommended to use ICheckoutBillingAddress format for new implementations.
+   */
+  billingAddress?: ICheckoutBillingAddress | IBillingAddress;
 
   hasSubstitutionPolicy: boolean;
 
@@ -123,6 +181,10 @@ export interface ICheckoutPrepareParams extends ICoreParams {
   marketingPreferences: ICheckoutMarketingPreferences;
 
   deliveryTips?: ICheckoutDeliveryTip[];
+
+  acceptedAccountCreation?: boolean;
+
+  scheduledDelivery?: string;
 }
 
 /**
@@ -229,11 +291,15 @@ export interface ICheckoutTotalAmounts {
 export interface ICheckoutPrepareResponse {
   token: string;
 
+  customer: ICheckoutCustomer
+
   hasAgeVerify: boolean;
 
   marketingPreferences: ICheckoutMarketingPreferences;
 
   hasSubstitutionPolicy: boolean;
+
+  acceptedAccountCreation?: boolean;
 
   isGift: boolean;
 
@@ -245,9 +311,13 @@ export interface ICheckoutPrepareResponse {
 
   giftOptions: ICheckoutGiftOptions;
 
-  shippingAddress: ILoc;
+  shippingAddress: IAddress;
 
-  billingAddress: IBillingAddress;
+  /**
+   * Billing address information supporting both new and legacy formats.
+   * It's recommended to use ICheckoutBillingAddress format for new implementations.
+   */
+  billingAddress?: ICheckoutBillingAddress | IBillingAddress;
 
   items: ICartItem[];
 
