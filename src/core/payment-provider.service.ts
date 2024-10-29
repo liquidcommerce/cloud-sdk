@@ -177,7 +177,7 @@ export class PaymentProviderService implements IPaymentProvider {
       };
     }
 
-    const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret)
+    const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret);
 
     if (!setupIntent) {
       return {
@@ -187,16 +187,16 @@ export class PaymentProviderService implements IPaymentProvider {
       };
     }
 
-    const confirmSetup = await this.confirmSession({
+    const { data } = await this.confirmSession({
       paymentMethodId: paymentMethod?.id ?? '',
-      sessionSecret: setupIntent?.id ?? ''
+      sessionSecret: setupIntent?.id ?? '',
     });
 
-    if (confirmSetup) {
+    if (!data) {
       return {
         type: 'confirm_error',
         message: "There's been an error during your session confirmation",
-        code: '7190',
+        code: '7191',
       };
     }
 
@@ -235,17 +235,16 @@ export class PaymentProviderService implements IPaymentProvider {
   public async confirmSession({
     sessionSecret,
     paymentMethodId,
-  }: IConfirmSessionParams): Promise<IApiResponseWithData<boolean>> {
+  }: IConfirmSessionParams): Promise<IApiResponseWithData<{ data: boolean }>> {
     try {
       if (!sessionSecret || !paymentMethodId) {
         throw new Error('customerId, sessionSecret, paymentMethodId are required');
       }
 
-      return await this.client.post<IApiResponseWithData<boolean>>('/users/payments/confirm', {
+      return await this.client.post<IApiResponseWithData<{ data: boolean }>>('/users/payments/confirm', {
         sessionSecret,
         paymentMethodId,
       });
-
     } catch (error) {
       console.error('User session confirmation request failed:', error);
       throw error;
