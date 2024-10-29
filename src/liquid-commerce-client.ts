@@ -93,7 +93,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.catalogService = this.singletonManager.getCatalogService(this.authenticatedClient);
     this.cartService = this.singletonManager.getCartService(this.authenticatedClient);
     this.userService = this.singletonManager.getUserService(this.authenticatedClient);
-    this.paymentService = this.singletonManager.getPaymentService();
+    this.paymentService = this.singletonManager.getPaymentService(this.authenticatedClient);
     this.checkoutService = this.singletonManager.getCheckoutService(this.authenticatedClient);
   }
 
