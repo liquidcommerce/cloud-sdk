@@ -1,3 +1,10 @@
+# [1.3.0-beta.15](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.14...v1.3.0-beta.15) (2024-10-29)
+
+
+### Bug Fixes
+
+* **payment:** correct confirmSession return type and improve error handling ([509ce11](https://github.com/liquidcommerce/cloud-sdk/commit/509ce110a4f7fddbccd88535277f8d38d60d9ffb))
+
 # [1.3.0-beta.14](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.13...v1.3.0-beta.14) (2024-10-29)
 
 
