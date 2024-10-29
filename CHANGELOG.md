@@ -1,3 +1,10 @@
+# [1.3.0-beta.14](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.13...v1.3.0-beta.14) (2024-10-29)
+
+
+### Features
+
+* **payment:** add session confirmation and update AuthenticatedService handling ([0b6896b](https://github.com/liquidcommerce/cloud-sdk/commit/0b6896b75cc594dbbaf2fab9b3ab64fa0d563863))
+
 # [1.3.0-beta.13](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.12...v1.3.0-beta.13) (2024-10-24)
 
 
