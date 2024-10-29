@@ -19,6 +19,12 @@ export interface ILiquidPaymentConfig {
   elementOptions?: ILiquidPaymentElementOptions;
 }
 
+export interface IConfirmSessionParams {
+  sessionSecret: string;
+
+  paymentMethodId: string;
+}
+
 export interface ILiquidPaymentToken {
   id?: string;
 

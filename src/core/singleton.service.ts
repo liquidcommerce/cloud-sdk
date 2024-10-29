@@ -209,24 +209,31 @@ export class SingletonManager {
 
   /**
    * Returns the instance of the `PaymentProviderService` class.
-   * This method uses the `getOrCreateService` method internally to obtain the instance.
+   * Now accepts AuthenticatedService as a parameter to properly initialize the service.
    *
+   * @param {AuthenticatedService} authenticatedClient - The authenticated client instance
    * @return {PaymentProviderService} The instance of the `PaymentProviderService` class.
    */
-  public getPaymentProviderService(): PaymentProviderService {
-    return this.getOrCreateService('PaymentProviderService', PaymentProviderService);
+  public getPaymentProviderService(authenticatedClient: AuthenticatedService): PaymentProviderService {
+    return this.getOrCreateService(
+      `PaymentProviderService_${authenticatedClient.getUniqueKey()}`,
+      PaymentProviderService,
+      authenticatedClient
+    );
   }
 
   /**
    * Retrieves the payment service by calling the getOrCreateService method.
+   * Modified to accept and pass through the AuthenticatedService.
    *
+   * @param {AuthenticatedService} authenticatedClient - The authenticated client instance
    * @return {PaymentService} The payment service object.
    */
-  public getPaymentService(): PaymentService {
+  public getPaymentService(authenticatedClient: AuthenticatedService): PaymentService {
     return this.getOrCreateService(
-      'PaymentService',
+      `PaymentService_${authenticatedClient.getUniqueKey()}`,
       PaymentService,
-      this.getPaymentProviderService()
+      this.getPaymentProviderService(authenticatedClient)
     );
   }
 

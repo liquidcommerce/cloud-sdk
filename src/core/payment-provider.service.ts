@@ -9,6 +9,7 @@ import type {
 import { loadStripe } from '@stripe/stripe-js';
 
 import type {
+  IConfirmSessionParams,
   ILiquidPaymentConfig,
   ILiquidPaymentElementOptions,
   ILiquidPaymentError,
@@ -16,6 +17,8 @@ import type {
   IPaymentElementEventMap,
   IPaymentProvider,
 } from '../interfaces';
+import type { IApiResponseWithData } from '../types';
+import type { AuthenticatedService } from './authenticated.service';
 
 type ExtendedStripeElementsOptions = StripeElementsOptionsClientSecret & {
   paymentMethodCreation?: 'manual' | 'automatic';
@@ -38,6 +41,8 @@ export class PaymentProviderService implements IPaymentProvider {
     'The only Payment Element events allowed (change, ready, loaderstart, loadererror)';
 
   private clientSecret: string | null = null;
+
+  constructor(private client: AuthenticatedService) {}
 
   /**
    * Mounts the Stripe payment element to the specified container element on the page.
@@ -163,25 +168,35 @@ export class PaymentProviderService implements IPaymentProvider {
       elements: this.elements,
     });
 
-    const confirmSetup = await this.stripe.confirmSetup({
-      elements: this.elements,
-      redirect: 'if_required',
-    });
-
-    if (confirmSetup.error) {
-      return {
-        type: 'confirm_error',
-        message: confirmSetup?.error?.message ?? '',
-        code: confirmSetup?.error?.code ?? '',
-      };
-    }
-
     if (error) {
       return {
         type: error.type === 'validation_error' ? 'validation_error' : 'api_error',
         message: error.message,
         code: error.code,
         param: error.param,
+      };
+    }
+
+    const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret)
+
+    if (!setupIntent) {
+      return {
+        type: 'confirm_error',
+        message: "There's been an error during your session confirmation",
+        code: '7190',
+      };
+    }
+
+    const confirmSetup = await this.confirmSession({
+      paymentMethodId: paymentMethod?.id ?? '',
+      sessionSecret: setupIntent?.id ?? ''
+    });
+
+    if (confirmSetup) {
+      return {
+        type: 'confirm_error',
+        message: "There's been an error during your session confirmation",
+        code: '7190',
       };
     }
 
@@ -207,6 +222,34 @@ export class PaymentProviderService implements IPaymentProvider {
       type: 'client_error',
       message: 'Failed to generate payment token',
     };
+  }
+
+  /**
+   * Confirms the user session by providing session secret and payment method ID.
+   *
+   * @param {Object} params - The parameters required for confirming the session.
+   * @param {string} params.sessionSecret - The secret key associated with the session.
+   * @param {string} params.paymentMethodId - The ID of the payment method used in the session.
+   * @return {Promise<IApiResponseWithData<boolean>>} - Returns a promise that resolves to the API response with data indicating the confirmation status.
+   */
+  public async confirmSession({
+    sessionSecret,
+    paymentMethodId,
+  }: IConfirmSessionParams): Promise<IApiResponseWithData<boolean>> {
+    try {
+      if (!sessionSecret || !paymentMethodId) {
+        throw new Error('customerId, sessionSecret, paymentMethodId are required');
+      }
+
+      return await this.client.post<IApiResponseWithData<boolean>>('/users/payments/confirm', {
+        sessionSecret,
+        paymentMethodId,
+      });
+
+    } catch (error) {
+      console.error('User session confirmation request failed:', error);
+      throw error;
+    }
   }
 
   /**
