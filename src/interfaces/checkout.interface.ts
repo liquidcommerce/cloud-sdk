@@ -57,15 +57,15 @@ export interface ICheckoutCustomer {
  * ICheckoutRecipient will be removed in a future version.
  */
 export interface ICheckoutRecipient {
-  firstName: string;
+  firstName?: string;
 
-  lastName: string;
+  lastName?: string;
 
-  email: string;
+  email?: string;
 
-  phone: string;
+  phone?: string;
 
-  birthDate: string;
+  birthDate?: string;
 
   hasAgeVerify?: boolean;
 }
@@ -78,47 +78,64 @@ export interface ICheckoutRecipient {
  * @deprecated Use ICheckoutBillingAddress instead which provides better integration with customer data.
  */
 export interface IBillingAddress {
-  firstName: string;
+  firstName?: string;
 
-  lastName: string;
+  lastName?: string;
 
-  email: string;
+  email?: string;
 
-  phone: string;
+  phone?: string;
 
-  one: string;
+  one?: string;
 
   two?: string;
 
-  city: string;
+  city?: string;
 
-  state: string;
+  state?: string;
 
-  zip: string;
+  zip?: string;
 
   country?: string;
 }
 
-export type ICheckoutBillingAddress = IAddress & ICheckoutCustomer;
+interface ICheckoutBaseAddress {
+  id?: string;
+
+  one?: string;
+
+  two?: string;
+
+  city?: string;
+
+  state?: string;
+
+  zip?: string;
+
+  country?: string;
+}
+
+
+export type ICheckoutBillingAddress = ICheckoutBaseAddress & ICheckoutCustomer;
 
 /**
  * Represents the recipient information for gift options during checkout.
  */
 export interface ICheckoutGiftOptionsRecipient {
-  name: string;
+  name?: string;
 
-  email: string;
+  email?: string;
 
-  phone: string;
+  phone?: string;
 }
 
 /**
  * Interface representing the gift options for a checkout process.
  */
 export interface ICheckoutGiftOptions {
-  message: string;
+  message?: string;
 
-  recipient: ICheckoutGiftOptionsRecipient;
+  recipient?: ICheckoutGiftOptionsRecipient;
 }
 
 /**
@@ -129,9 +146,9 @@ export interface ICheckoutGiftOptions {
  * @property {boolean} canSms - Indicates whether the user allows SMS marketing.
  */
 export interface ICheckoutMarketingPreferences {
-  canEmail: boolean;
+  canEmail?: boolean;
 
-  canSms: boolean;
+  canSms?: boolean;
 }
 
 /**
