@@ -170,15 +170,15 @@ export interface ICheckoutPrepareParams extends ICoreParams {
    */
   billingAddress?: ICheckoutBillingAddress | IBillingAddress;
 
-  hasSubstitutionPolicy: boolean;
+  hasSubstitutionPolicy?: boolean;
 
-  isGift: boolean;
+  isGift?: boolean;
 
-  billingSameAsShipping: boolean;
+  billingSameAsShipping?: boolean;
 
-  giftOptions: ICheckoutGiftOptions;
+  giftOptions?: ICheckoutGiftOptions;
 
-  marketingPreferences: ICheckoutMarketingPreferences;
+  marketingPreferences?: ICheckoutMarketingPreferences;
 
   deliveryTips?: ICheckoutDeliveryTip[];
 
