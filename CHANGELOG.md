@@ -1,3 +1,10 @@
+# [1.3.0-beta.17](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.16...v1.3.0-beta.17) (2024-10-30)
+
+
+### Features
+
+* **checkout:** make fields optional in checkout interfaces ([5d4556b](https://github.com/liquidcommerce/cloud-sdk/commit/5d4556b8a18dec621521a726e23b7dde4b0c799c))
+
 # [1.3.0-beta.16](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.15...v1.3.0-beta.16) (2024-10-30)
 
 
