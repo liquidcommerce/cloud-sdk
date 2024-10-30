@@ -181,6 +181,8 @@ export interface ICheckoutPrepareParams extends ICoreParams {
    */
   recipient?: ICheckoutRecipient;
 
+  hasAgeVerify?: boolean;
+
   /**
    * Billing address information supporting both new and legacy formats.
    * It's recommended to use ICheckoutBillingAddress format for new implementations.
