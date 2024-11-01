@@ -204,6 +204,8 @@ export interface ICheckoutPrepareParams extends ICoreParams {
   acceptedAccountCreation?: boolean;
 
   scheduledDelivery?: string;
+
+  payment?: string;
 }
 
 /**
