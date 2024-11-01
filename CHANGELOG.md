@@ -1,3 +1,10 @@
+# [1.3.0-beta.18](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.17...v1.3.0-beta.18) (2024-11-01)
+
+
+### Features
+
+* **interfaces:** add payment property to check out interface ([7cc8a58](https://github.com/liquidcommerce/cloud-sdk/commit/7cc8a5859c35d1c27baa0cb6bc336d5f258255de))
+
 # [1.3.0-beta.17](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.16...v1.3.0-beta.17) (2024-10-30)
 
 
