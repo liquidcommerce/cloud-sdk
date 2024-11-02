@@ -220,15 +220,15 @@ export interface ICheckoutPrepareParams extends ICoreParams {
  * @property {number} [service] - The total amount for any additional service charges.
  */
 export interface ICheckoutTotalAmountsDiscounts {
-  products?: number;
+  products: number;
 
-  delivery?: number;
+  delivery: number;
 
-  shipping?: number;
+  shipping: number;
 
-  engraving?: number;
+  engraving: number;
 
-  service?: number;
+  service: number;
 }
 
 /**
@@ -249,17 +249,17 @@ export interface ICheckoutTotalAmountsDiscounts {
  * @property {number} [shipping] - Tax amount associated with shipping.
  */
 export interface ICheckoutTotalAmountsTaxes {
-  bag?: number;
+  bag: number;
 
-  bottleDeposits?: number;
+  bottleDeposits: number;
 
-  retailDelivery?: number;
+  retailDelivery: number;
 
-  products?: number;
+  products: number;
 
-  delivery?: number;
+  delivery: number;
 
-  shipping?: number;
+  shipping: number;
 }
 
 /**
@@ -269,9 +269,9 @@ export interface ICheckoutTotalAmountsTaxes {
  * @property {ICheckoutTotalAmountsDiscounts} [discounts] - Optional property representing discounts applied to the checkout total amounts.
  */
 export interface ICheckoutTotalAmountsDetails {
-  taxes?: ICheckoutTotalAmountsTaxes;
+  taxes: ICheckoutTotalAmountsTaxes;
 
-  discounts?: ICheckoutTotalAmountsDiscounts;
+  discounts: ICheckoutTotalAmountsDiscounts;
 }
 
 /**
@@ -279,29 +279,29 @@ export interface ICheckoutTotalAmountsDetails {
  * This includes various fees, discounts, and the final total.
  */
 export interface ICheckoutTotalAmounts {
-  subtotal?: number;
+  subtotal: number;
 
-  engraving?: number;
+  engraving: number;
 
-  service?: number;
+  service: number;
 
-  shipping?: number;
+  shipping: number;
 
-  delivery?: number;
+  delivery: number;
 
-  platform?: number;
+  platform: number;
 
-  discounts?: number;
+  discounts: number;
 
-  giftCards?: number;
+  giftCards: number;
 
-  tax?: number;
+  tax: number;
 
-  tip?: number;
+  tip: number;
 
-  total?: number;
+  total: number;
 
-  details?: ICheckoutTotalAmountsDetails;
+  details: ICheckoutTotalAmountsDetails;
 }
 
 /**
@@ -338,7 +338,7 @@ export interface ICheckoutPrepareResponse {
    * Billing address information supporting both new and legacy formats.
    * It's recommended to use ICheckoutBillingAddress format for new implementations.
    */
-  billingAddress?: ICheckoutBillingAddress | IBillingAddress;
+  billingAddress: ICheckoutBillingAddress | IBillingAddress;
 
   items: ICartItem[];
 
