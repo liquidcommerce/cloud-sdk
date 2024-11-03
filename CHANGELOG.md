@@ -1,3 +1,10 @@
+# [1.3.0-beta.21](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.20...v1.3.0-beta.21) (2024-11-03)
+
+
+### Features
+
+* **cart:** correct retailer type in cart interface ([297811a](https://github.com/liquidcommerce/cloud-sdk/commit/297811a26c226a78ac7ffc398c3d32c29fd1f202))
+
 # [1.3.0-beta.20](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.19...v1.3.0-beta.20) (2024-11-03)
 
 
