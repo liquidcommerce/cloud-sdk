@@ -1,3 +1,10 @@
+# [1.3.0-beta.20](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.19...v1.3.0-beta.20) (2024-11-03)
+
+
+### Features
+
+* **interfaces:** streamline checkout interfaces and improve typing consistency ([e62f54e](https://github.com/liquidcommerce/cloud-sdk/commit/e62f54ea152683a37691d548c5b405de3921b47d))
+
 # [1.3.0-beta.19](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.18...v1.3.0-beta.19) (2024-11-02)
 
 
