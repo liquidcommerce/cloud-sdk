@@ -263,7 +263,7 @@ export interface ICart {
 
   loc: ILoc;
 
-  retailers: IRetailer[];
+  retailers: ICartRetailer[];
 
   attributes: ICartAttributes;
 
