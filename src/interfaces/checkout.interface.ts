@@ -472,5 +472,7 @@ export interface ICheckoutCompleteParams extends ICoreParams {
  * @interface
  */
 export interface ICheckoutCompleteResponse {
-  order: string;
+  order: {
+    number: string;
+  };
 }
