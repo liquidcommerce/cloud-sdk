@@ -1,3 +1,10 @@
+# [1.3.0-beta.22](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.21...v1.3.0-beta.22) (2024-11-04)
+
+
+### Features
+
+* **interfaces:** update ICheckoutCompleteResponse order property type ([614887d](https://github.com/liquidcommerce/cloud-sdk/commit/614887d2553746c449176d1a8e679def13279207))
+
 # [1.3.0-beta.21](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.20...v1.3.0-beta.21) (2024-11-03)
 
 
