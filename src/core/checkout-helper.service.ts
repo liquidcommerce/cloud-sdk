@@ -1,4 +1,11 @@
-import type { IAddress, ICheckoutCompleteParams, ICheckoutCustomer, ICheckoutPrepareParams, ICheckoutRecipient, } from '../interfaces';
+import type { STATES_CODE, STATES_NAME } from '../enums';
+import type {
+  ICheckoutBillingAddress,
+  ICheckoutCompleteParams,
+  ICheckoutCustomer,
+  ICheckoutPrepareParams,
+  ICheckoutRecipient,
+} from '../interfaces';
 import type { LocationHelperService } from './location-helper.service';
 
 /**
@@ -21,7 +28,7 @@ export class CheckoutHelperService {
     let normalizedParams = { ...params };
 
     // Validate cartId
-    if (!normalizedParams.cartId || typeof normalizedParams.cartId !== 'string') {
+    if (!normalizedParams?.cartId || typeof normalizedParams?.cartId !== 'string') {
       throw new Error('Invalid cartId');
     }
 
@@ -32,8 +39,8 @@ export class CheckoutHelperService {
     this.validateCustomer(normalizedParams.recipient);
 
     // Validate billingAddress if provided
-    if (normalizedParams.billingAddress) {
-      this.validateAddress(normalizedParams.billingAddress as IAddress);
+    if (normalizedParams?.billingAddress) {
+      this.validateBillingAddress(normalizedParams.billingAddress);
     }
 
     normalizedParams.hasAgeVerify = Boolean(
@@ -146,12 +153,12 @@ export class CheckoutHelperService {
     const normalizedParams = { ...params };
 
     // Validate token
-    if (!normalizedParams.token || typeof normalizedParams.token !== 'string') {
+    if (!normalizedParams.token || typeof normalizedParams?.token !== 'string') {
       throw new Error('Invalid token');
     }
 
     // Validate payment
-    if (!normalizedParams?.payment || typeof normalizedParams.payment !== 'string') {
+    if (!normalizedParams?.payment || typeof normalizedParams?.payment !== 'string') {
       throw new Error('Invalid payment token');
     }
 
@@ -193,26 +200,56 @@ export class CheckoutHelperService {
 
   /**
    * Validates the given address object.
-   * @param {IAddress} address - The address object to validate.
+   * @param {ICheckoutBillingAddress} address - The address object to validate.
    * @throws {Error} If the address is invalid or any required field is missing or not a string.
    * @returns {void}
    */
-  private validateAddress(address?: IAddress): void {
-    if (address !== undefined && typeof address !== 'object') {
+  private validateBillingAddress(address?: ICheckoutBillingAddress): ICheckoutBillingAddress {
+    // If no address provided, return empty object
+    if (!address) {
+      return {};
+    }
+
+    // Validate that address is an object if provided
+    if (typeof address !== 'object' || address === null) {
       throw new Error('Invalid address: must be an object if provided');
     }
 
-    if (address) {
-      const fields: Array<keyof IAddress> = ['id', 'one', 'two', 'city', 'state', 'zip', 'country'];
-      fields.forEach((field) => {
-        if (field in address && typeof address[field] !== 'string') {
-          throw new Error(`Invalid address ${field}: must be a string if provided`);
-        }
-      });
+    // Clone address for normalization
+    const normalizedAddress = { ...address };
 
-      // Use LocationHelperService to validate state if address is provided
-      this.locationHelperService.validateAndNormalizeLocation({ address });
+    // Validate types for any provided fields
+    const stringFields: Array<keyof ICheckoutBillingAddress> = [
+      'one',
+      'two',
+      'city',
+      'state',
+      'zip',
+      'country',
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'company',
+    ];
+
+    // Only validate fields that are present
+    stringFields.forEach((field) => {
+      if (field in normalizedAddress) {
+        if (typeof normalizedAddress[field] !== 'string') {
+          throw new Error(`Invalid billing address ${field}: must be a string if provided`);
+        }
+      }
+    });
+
+    // Normalize state if provided
+    if ('state' in normalizedAddress && normalizedAddress.state) {
+      normalizedAddress.state = this.locationHelperService.normalizeState(
+        normalizedAddress.state as STATES_CODE | STATES_NAME
+      );
     }
+
+    return normalizedAddress;
   }
 
   /**

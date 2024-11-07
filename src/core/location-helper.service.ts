@@ -62,7 +62,7 @@ export class LocationHelperService {
    * @return {void}
    */
   private validateAndNormalizeAddress(address: any): void {
-    if (!address.state || typeof address.state !== 'string') {
+    if (!address?.state || typeof address?.state !== 'string') {
       throw new Error('State is required and must be a string');
     }
 
@@ -87,7 +87,7 @@ export class LocationHelperService {
    *
    * @throws {Error} - If the state value is invalid.
    */
-  private normalizeState(state: STATES_CODE | STATES_NAME): string {
+  normalizeState(state: STATES_CODE | STATES_NAME): string {
     const upperState = state.toUpperCase() as keyof typeof STATES_CODE;
     if (STATES_CODE[upperState]) {
       return STATES_CODE[upperState];

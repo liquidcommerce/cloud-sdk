@@ -4,39 +4,6 @@ import type { ICartItemAttributes } from './cart.interface';
 import type { IRetailerExpectation } from './retailer.interface';
 
 /**
- * Represents a customer in a checkout process.
- *
- * Contains information about the customer, including identification,
- * contact details, personal information, and timestamps for profile management.
- *
- * @interface
- * @public
- */
-export interface ICheckoutCustomer {
-  id?: string;
-
-  email?: string;
-
-  firstName?: string;
-
-  lastName?: string;
-
-  company?: string;
-
-  profileImage?: string;
-
-  phone?: string;
-
-  birthDate?: string;
-
-  hasAgeVerify?: boolean;
-
-  createdAt?: Date;
-
-  updatedAt?: Date;
-}
-
-/**
  * Represents a recipient of a checkout process.
  *
  * Contains recipient's information such as name, contact details, and
@@ -91,6 +58,39 @@ export interface IBillingAddress {
 }
 
 /**
+ * Represents a customer in a checkout process.
+ *
+ * Contains information about the customer, including identification,
+ * contact details, personal information, and timestamps for profile management.
+ *
+ * @interface
+ * @public
+ */
+export interface ICheckoutCustomer {
+  id?: string;
+
+  email?: string;
+
+  firstName?: string;
+
+  lastName?: string;
+
+  company?: string;
+
+  phone?: string;
+
+  profileImage?: string;
+
+  birthDate?: string;
+
+  hasAgeVerify?: boolean;
+
+  createdAt?: Date;
+
+  updatedAt?: Date;
+}
+
+/**
  * Represents the base address information for a checkout process.
  *
  * @interface
@@ -118,7 +118,11 @@ interface ICheckoutBaseAddress {
  *
  * @type
  */
-export type ICheckoutBillingAddress = ICheckoutBaseAddress & ICheckoutCustomer;
+export type ICheckoutBillingAddress = ICheckoutBaseAddress &
+  Omit<
+    ICheckoutCustomer,
+    'birthDate' | 'id' | 'createdAt' | 'hasAgeVerify' | 'updatedAt' | 'profileImage'
+  >;
 
 /**
  * Represents the recipient information for gift options during checkout.
