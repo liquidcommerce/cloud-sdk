@@ -1,3 +1,11 @@
+# [1.3.0-beta.23](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.22...v1.3.0-beta.23) (2024-11-07)
+
+
+### Features
+
+* **checkout:** format phone numbers in validateAndNormalizePrepareParams ([f1e63ad](https://github.com/liquidcommerce/cloud-sdk/commit/f1e63ad46689e1d9e9825d34a421a41181820b6e))
+* **interfaces:** add shippingAddressTwo to check out interface ([fc033f3](https://github.com/liquidcommerce/cloud-sdk/commit/fc033f30c837a32a7aa87b963a185f709cfbc49a))
+
 # [1.3.0-beta.22](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.21...v1.3.0-beta.22) (2024-11-04)
 
 
