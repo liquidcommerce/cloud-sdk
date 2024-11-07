@@ -18,7 +18,7 @@ export class CheckoutHelperService {
    * @throws {Error} - Invalid cartId if cartId is missing or not a string.
    */
   public validateAndNormalizePrepareParams(params: ICheckoutPrepareParams): ICheckoutPrepareParams {
-    const normalizedParams = { ...params };
+    let normalizedParams = { ...params };
 
     // Validate cartId
     if (!normalizedParams.cartId || typeof normalizedParams.cartId !== 'string') {
@@ -28,7 +28,7 @@ export class CheckoutHelperService {
     // Validate Customer
     this.validateCustomer(normalizedParams.customer);
 
-    // Validate Customer
+    // Validate Recipient if provided
     this.validateCustomer(normalizedParams.recipient);
 
     // Validate billingAddress if provided
@@ -45,24 +45,85 @@ export class CheckoutHelperService {
     );
 
     // Validate boolean fields
-    normalizedParams.hasSubstitutionPolicy = Boolean(normalizedParams.hasSubstitutionPolicy);
-    normalizedParams.isGift = Boolean(normalizedParams.isGift);
-    normalizedParams.billingSameAsShipping = Boolean(normalizedParams.billingSameAsShipping);
+    normalizedParams.hasSubstitutionPolicy = Boolean(normalizedParams?.hasSubstitutionPolicy);
+    normalizedParams.acceptedAccountCreation = Boolean(normalizedParams?.acceptedAccountCreation);
+    normalizedParams.isGift = Boolean(normalizedParams?.isGift);
+    normalizedParams.billingSameAsShipping = Boolean(normalizedParams?.billingSameAsShipping);
+
+    if (
+      normalizedParams &&
+      normalizedParams?.billingAddress &&
+      normalizedParams?.billingAddress?.phone !== ''
+    ) {
+      normalizedParams = {
+        ...normalizedParams,
+        billingAddress: {
+          ...(normalizedParams?.billingAddress ?? {}),
+          phone: this.formatPhoneNumber(normalizedParams.billingAddress?.phone) ?? '',
+        },
+      };
+    }
+
+    if (
+      normalizedParams &&
+      normalizedParams?.customer &&
+      (normalizedParams?.customer as ICheckoutCustomer)?.phone !== ''
+    ) {
+      normalizedParams = {
+        ...normalizedParams,
+        customer: {
+          ...((normalizedParams?.customer as ICheckoutCustomer) ?? {}),
+          phone:
+            this.formatPhoneNumber((normalizedParams?.customer as ICheckoutCustomer)?.phone) ?? '',
+        },
+      };
+    }
+
+    if (
+      normalizedParams &&
+      normalizedParams?.recipient &&
+      normalizedParams?.recipient?.phone !== ''
+    ) {
+      normalizedParams = {
+        ...normalizedParams,
+        customer: {
+          ...(normalizedParams?.recipient ?? {}),
+          phone: this.formatPhoneNumber(normalizedParams?.recipient?.phone) ?? '',
+        },
+      };
+    }
 
     // Validate giftOptions if isGift is true
-    if (normalizedParams.isGift) {
+    if (normalizedParams?.isGift) {
       this.validateGiftOptions(normalizedParams.giftOptions);
+
+      if (
+        normalizedParams &&
+        normalizedParams?.giftOptions &&
+        normalizedParams?.giftOptions?.recipient?.phone !== ''
+      ) {
+        normalizedParams = {
+          ...normalizedParams,
+          giftOptions: {
+            ...(normalizedParams?.giftOptions ?? {}),
+            recipient: {
+              ...(normalizedParams?.giftOptions?.recipient ?? {}),
+              phone: this.formatPhoneNumber(normalizedParams.giftOptions?.recipient?.phone) ?? '',
+            },
+          },
+        };
+      }
     }
 
     // Validate marketingPreferences
     this.validateMarketingPreferences(normalizedParams.marketingPreferences);
 
     // Validate deliveryTips if provided
-    if (normalizedParams.deliveryTips) {
+    if (normalizedParams?.deliveryTips) {
       this.validateDeliveryTips(normalizedParams.deliveryTips);
     }
 
-    if (normalizedParams.refresh) {
+    if (normalizedParams?.refresh) {
       normalizedParams.refresh = Boolean(normalizedParams.refresh);
     }
 
@@ -194,6 +255,48 @@ export class CheckoutHelperService {
         }
       }
     }
+  }
+
+  /**
+   * Formats a given phone number into a standard (XXX) XXX-XXXX format for US numbers.
+   * Keeps the original format for international numbers starting with a + sign.
+   *
+   * @param {string|null|undefined} value - The phone number to format. Can be a string, null, or undefined.
+   * @return {string|null} The formatted phone number in (XXX) XXX-XXXX format, the original international
+   *  format, or null if input is null or undefined.
+   */
+  private formatPhoneNumber(value: string | null | undefined): string | null {
+    if (!value) return null;
+
+    // First, clean the number of any formatting
+    const cleaned = value.replace(/[\s().\-_]/g, ''); // Remove spaces, parentheses, dots, hyphens
+    const justDigits = cleaned.replace(/[^\d+]/g, ''); // Keep only digits and + symbol
+
+    // Handle various US formats
+    if (justDigits.startsWith('+1')) {
+      const number = justDigits.substring(2);
+      if (number.length === 10) {
+        return `(${number.substring(0, 3)}) ${number.substring(3, 6)}-${number.substring(6)}`;
+      }
+    }
+
+    // Handle 11-digit format starting with 1
+    if (justDigits.length === 11 && justDigits.startsWith('1')) {
+      const number = justDigits.substring(1);
+      return `(${number.substring(0, 3)}) ${number.substring(3, 6)}-${number.substring(6)}`;
+    }
+
+    // Handle 10-digit format
+    if (justDigits.length === 10) {
+      return `(${justDigits.substring(0, 3)}) ${justDigits.substring(3, 6)}-${justDigits.substring(6)}`;
+    }
+
+    // Handle international format (non-US)
+    if (justDigits.startsWith('+')) {
+      return justDigits;
+    }
+
+    return value;
   }
 
   /**
