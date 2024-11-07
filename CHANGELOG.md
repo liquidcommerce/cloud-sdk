@@ -1,3 +1,10 @@
+# [1.3.0-beta.24](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.23...v1.3.0-beta.24) (2024-11-07)
+
+
+### Features
+
+* **core:** improve address validation and normalization for checkout flow ([8397a74](https://github.com/liquidcommerce/cloud-sdk/commit/8397a744b15683d2c0d7167b71b7d3b0daabca47))
+
 # [1.3.0-beta.23](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.22...v1.3.0-beta.23) (2024-11-07)
 
 
