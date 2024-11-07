@@ -185,6 +185,8 @@ export interface ICheckoutPrepareParams extends ICoreParams {
 
   hasAgeVerify?: boolean;
 
+  shippingAddressTwo?: string;
+
   /**
    * Billing address information supporting both new and legacy formats.
    * Recommended to use ICheckoutBillingAddress format for new implementations.
