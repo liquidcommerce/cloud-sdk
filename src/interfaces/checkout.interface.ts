@@ -480,5 +480,7 @@ export interface ICheckoutCompleteParams extends ICoreParams {
 export interface ICheckoutCompleteResponse {
   order: {
     number: string;
+
+    referenceId: string;
   };
 }
