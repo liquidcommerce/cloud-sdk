@@ -1,3 +1,10 @@
+# [1.3.0-beta.25](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.24...v1.3.0-beta.25) (2024-11-08)
+
+
+### Features
+
+* **checkout:** add referenceId to checkout interface ([e369ef6](https://github.com/liquidcommerce/cloud-sdk/commit/e369ef656ccefd06eadc4b4aed70e27b62f0b2fa))
+
 # [1.3.0-beta.24](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.23...v1.3.0-beta.24) (2024-11-07)
 
 
