@@ -271,7 +271,7 @@ export interface ICart {
 }
 
 /**
- * Represents an item to be updated in a shopping cart.
+ * Interface representing an item to be updated in the shopping cart.
  */
 export interface ICartUpdateItem {
   id?: string;
