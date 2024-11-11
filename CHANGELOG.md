@@ -1,3 +1,10 @@
+# [1.3.0-beta.26](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.25...v1.3.0-beta.26) (2024-11-11)
+
+
+### Features
+
+* **cart:** add docs cart to checkout interface ([355752a](https://github.com/liquidcommerce/cloud-sdk/commit/355752a8f7c92a193f9ba2deb8f10a2439688908))
+
 # [1.3.0-beta.25](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.24...v1.3.0-beta.25) (2024-11-08)
 
 
