@@ -1,3 +1,10 @@
+# [1.3.0-beta.27](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.26...v1.3.0-beta.27) (2024-11-12)
+
+
+### Features
+
+* **constants:** add JSDoc comments for DEFAULT_BASE_URLS in core.constant.ts ([2333f9d](https://github.com/liquidcommerce/cloud-sdk/commit/2333f9df5bb55223b1f4a10fd281fd73eced3749))
+
 # [1.3.0-beta.26](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.25...v1.3.0-beta.26) (2024-11-11)
 
 
