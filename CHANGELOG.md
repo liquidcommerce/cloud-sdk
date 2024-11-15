@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.4.0...v1.5.0) (2024-11-15)
+
+
+### Features
+
+* **readme:** replace logo markdown with HTML for better styling ([8f910bd](https://github.com/liquidcommerce/cloud-sdk/commit/8f910bd8aae1f5090bbc0c8b7dbfc5c61d6889c8))
+
 # [1.4.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0...v1.4.0) (2024-11-15)
 
 
