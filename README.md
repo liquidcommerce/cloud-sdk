@@ -1,4 +1,10 @@
-![LiquidCommerce Logo](https://storage.googleapis.com/liquid-platform/repo_lc_dark.webp)
+<p align="start">
+  <img 
+    src="https://storage.googleapis.com/liquid-platform/repo_lc_dark.webp" 
+    alt="LiquidCommerce Logo" 
+    style="max-width: 70%; height: auto;" 
+  />
+</p>
 
 # LiquidCommerce Cloud SDK
 
