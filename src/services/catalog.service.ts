@@ -1,21 +1,11 @@
 import type { AuthenticatedService, CatalogHelperService } from '../core';
-import type { ILocBase } from '../interfaces/address.interface';
-import type { IProduct } from '../interfaces/catalog.interface';
-import type { ICatalog, ICatalogParams } from '../interfaces/catalog.service.interface';
-import type { IRetailer } from '../interfaces/retailer.interface';
+import type {
+  IAvailabilityParams,
+  IAvailabilityResponse,
+  ICatalog,
+  ICatalogParams,
+} from '../interfaces';
 import type { IApiResponseWithoutData } from '../types';
-
-export interface IAvailabilityParams extends ILocBase {
-  upcs: string[];
-
-  shouldShowOffHours?: boolean;
-}
-
-export interface IAvailabilityResponse {
-  products: IProduct[];
-
-  retailers: IRetailer[];
-}
 
 /**
  * The CatalogService class provides methods for interacting with the catalog API.
@@ -25,7 +15,7 @@ export class CatalogService {
 
   constructor(
     private client: AuthenticatedService,
-    private catalogHelperService: CatalogHelperService,
+    private catalogHelperService: CatalogHelperService
   ) {}
 
   /**
@@ -34,11 +24,16 @@ export class CatalogService {
    * @return {Promise<IApiResponseWithoutData<IAvailabilityResponse>>} - A Promise that resolves to an API response object without data, containing availability information.
    * @throws {Error} - If the availability request fails, an error is thrown.
    */
-  public async availability(params: IAvailabilityParams): Promise<IApiResponseWithoutData<IAvailabilityResponse>> {
+  public async availability(
+    params: IAvailabilityParams
+  ): Promise<IApiResponseWithoutData<IAvailabilityResponse>> {
     try {
       const validatedParams = this.catalogHelperService.validateAndNormalizeParams(params);
 
-      return await this.client.post<IApiResponseWithoutData<IAvailabilityResponse>>(`${this.servicePath}availability`, validatedParams);
+      return await this.client.post<IApiResponseWithoutData<IAvailabilityResponse>>(
+        `${this.servicePath}availability`,
+        validatedParams
+      );
     } catch (error) {
       console.error('Catalog availability request failed:', error);
       throw error;
@@ -60,7 +55,10 @@ export class CatalogService {
         throw new Error(validatedParams?.error);
       }
 
-      return await this.client.post<IApiResponseWithoutData<ICatalog>>(`${this.servicePath}search`, validatedParams);
+      return await this.client.post<IApiResponseWithoutData<ICatalog>>(
+        `${this.servicePath}search`,
+        validatedParams
+      );
     } catch (error) {
       console.error('Catalog search request failed:', error);
       throw error;

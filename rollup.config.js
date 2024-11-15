@@ -5,8 +5,8 @@ import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
-import livereload from 'rollup-plugin-livereload';
-import serve from 'rollup-plugin-serve';
+// import livereload from 'rollup-plugin-livereload';
+// import serve from 'rollup-plugin-serve';
 
 dotenv.config();
 
@@ -16,6 +16,8 @@ const pkg = require('./package.json');
 
 const env = 'production';
 const isProd = env === 'production';
+
+const sourcemap = false;
 
 const commonPlugins = [
   replace({
@@ -52,7 +54,7 @@ const commonPlugins = [
   * */
 
   // serve({
-  //   open: true,
+  //   open: false,
   //   contentBase: ['.', 'demo'], // Serve from root and demo directories
   //   host: 'localhost',
   //   port: 3000,
@@ -67,7 +69,7 @@ export default [
     output: {
       file: pkg.module,
       format: 'es',
-      sourcemap: false,
+      sourcemap,
     },
     plugins: [...commonPlugins, terser()],
     external: ['@stripe/stripe-js'],
@@ -78,7 +80,7 @@ export default [
     output: {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: false,
+      sourcemap,
       exports: 'named',
     },
     plugins: [...commonPlugins, terser()],
@@ -91,7 +93,7 @@ export default [
       file: 'umd/liquidcommerce-cloud-sdk.min.js',
       format: 'umd',
       name: 'LiquidCommerce',
-      sourcemap: false,
+      sourcemap,
       exports: 'named',
       globals: {
         '@stripe/stripe-js': 'Stripe',
@@ -127,7 +129,7 @@ export default [
     output: {
       file: 'dist/liquidcommerce-cloud-sdk.ssr.js',
       format: 'cjs',
-      sourcemap: false,
+      sourcemap,
       exports: 'named',
     },
     plugins: [

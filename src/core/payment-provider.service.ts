@@ -1,7 +1,24 @@
-import type { Stripe, StripeElements, StripeElementsOptions, StripeElementsOptionsClientSecret, StripePaymentElement, StripePaymentElementOptions } from '@stripe/stripe-js';
+import type {
+  Stripe,
+  StripeElements,
+  StripeElementsOptions,
+  StripeElementsOptionsClientSecret,
+  StripePaymentElement,
+  StripePaymentElementOptions,
+} from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import type { ILiquidPaymentConfig, ILiquidPaymentElementOptions, ILiquidPaymentError, ILiquidPaymentToken, IPaymentElementEventMap, IPaymentProvider } from '../interfaces/payment.interface';
+import type {
+  IConfirmSessionParams,
+  ILiquidPaymentConfig,
+  ILiquidPaymentElementOptions,
+  ILiquidPaymentError,
+  ILiquidPaymentToken,
+  IPaymentElementEventMap,
+  IPaymentProvider,
+} from '../interfaces';
+import type { IApiResponseWithData } from '../types';
+import type { AuthenticatedService } from './authenticated.service';
 
 type ExtendedStripeElementsOptions = StripeElementsOptionsClientSecret & {
   paymentMethodCreation?: 'manual' | 'automatic';
@@ -20,9 +37,12 @@ export class PaymentProviderService implements IPaymentProvider {
 
   private readonly events = ['ready', 'change', 'loaderror', 'loaderstart'];
 
-  private readonly eventsErrorMsg = 'The only Payment Element events allowed (change, ready, loaderstart, loadererror)';
+  private readonly eventsErrorMsg =
+    'The only Payment Element events allowed (change, ready, loaderstart, loadererror)';
 
   private clientSecret: string | null = null;
+
+  constructor(private client: AuthenticatedService) {}
 
   /**
    * Mounts the Stripe payment element to the specified container element on the page.
@@ -56,7 +76,9 @@ export class PaymentProviderService implements IPaymentProvider {
       const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret);
 
       if (setupIntent?.status === 'succeeded') {
-        throw new Error(`The client secret (${this.clientSecret}) has already been used previously. Generate a new one through a use session.`);
+        throw new Error(
+          `The client secret (${this.clientSecret}) has already been used previously. Generate a new one through a use session.`
+        );
       }
     } catch (e) {
       throw e;
@@ -70,7 +92,9 @@ export class PaymentProviderService implements IPaymentProvider {
 
     this.elements = this.stripe.elements(stripeElementsOptions);
 
-    const paymentElementOptions: StripePaymentElementOptions = this.mapElementOptions(config.elementOptions);
+    const paymentElementOptions: StripePaymentElementOptions = this.mapElementOptions(
+      config.elementOptions
+    );
     this.paymentElement = this.elements.create('payment', paymentElementOptions);
 
     this.paymentElement.mount(`#${config.elementId}`);
@@ -144,25 +168,35 @@ export class PaymentProviderService implements IPaymentProvider {
       elements: this.elements,
     });
 
-    const confirmSetup = await this.stripe.confirmSetup({
-      elements: this.elements,
-      redirect: 'if_required',
-    });
-
-    if (confirmSetup.error) {
-      return {
-        type: 'confirm_error',
-        message: confirmSetup?.error?.message ?? '',
-        code: confirmSetup?.error?.code ?? '',
-      };
-    }
-
     if (error) {
       return {
         type: error.type === 'validation_error' ? 'validation_error' : 'api_error',
         message: error.message,
         code: error.code,
         param: error.param,
+      };
+    }
+
+    const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret);
+
+    if (!setupIntent) {
+      return {
+        type: 'confirm_error',
+        message: "There's been an error during your session confirmation",
+        code: '7190',
+      };
+    }
+
+    const { data } = await this.confirmSession({
+      paymentMethodId: paymentMethod?.id ?? '',
+      sessionSecret: setupIntent?.id ?? '',
+    });
+
+    if (!data) {
+      return {
+        type: 'confirm_error',
+        message: "There's been an error during your session confirmation",
+        code: '7191',
       };
     }
 
@@ -191,6 +225,33 @@ export class PaymentProviderService implements IPaymentProvider {
   }
 
   /**
+   * Confirms the user session by providing session secret and payment method ID.
+   *
+   * @param {Object} params - The parameters required for confirming the session.
+   * @param {string} params.sessionSecret - The secret key associated with the session.
+   * @param {string} params.paymentMethodId - The ID of the payment method used in the session.
+   * @return {Promise<IApiResponseWithData<boolean>>} - Returns a promise that resolves to the API response with data indicating the confirmation status.
+   */
+  public async confirmSession({
+    sessionSecret,
+    paymentMethodId,
+  }: IConfirmSessionParams): Promise<IApiResponseWithData<{ data: boolean }>> {
+    try {
+      if (!sessionSecret || !paymentMethodId) {
+        throw new Error('customerId, sessionSecret, paymentMethodId are required');
+      }
+
+      return await this.client.post<IApiResponseWithData<{ data: boolean }>>('/users/payments/confirm', {
+        sessionSecret,
+        paymentMethodId,
+      });
+    } catch (error) {
+      console.error('User session confirmation request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Subscribes to a specific event on the payment element.
    *
    * @param eventType - The type of event to subscribe to.
@@ -198,7 +259,10 @@ export class PaymentProviderService implements IPaymentProvider {
    * @throws {Error} - If the payment element has not been initialized.
    * @return {void}
    */
-  public subscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler: (event: IPaymentElementEventMap[K]) => void): void {
+  public subscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler: (event: IPaymentElementEventMap[K]) => void
+  ): void {
     if (!this.paymentElement) {
       throw new Error('Payment Element has not been initialized');
     }
@@ -218,7 +282,10 @@ export class PaymentProviderService implements IPaymentProvider {
    * @throws {Error} - Thrown if the payment element has not been initialized.
    * @return {void}
    */
-  public unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void {
+  public unsubscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler?: (event: IPaymentElementEventMap[K]) => void
+  ): void {
     if (!this.paymentElement) {
       throw new Error('Payment Element has not been initialized');
     }
@@ -237,7 +304,9 @@ export class PaymentProviderService implements IPaymentProvider {
    * @param appearance - The appearance options from the LiquidPaymentConfig object.
    * @returns The appearance options for the StripeElementsOptions object.
    */
-  private mapAppearance(appearance?: ILiquidPaymentConfig['appearance']): StripeElementsOptions['appearance'] {
+  private mapAppearance(
+    appearance?: ILiquidPaymentConfig['appearance']
+  ): StripeElementsOptions['appearance'] {
     if (!appearance) return undefined;
 
     return {

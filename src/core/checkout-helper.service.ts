@@ -1,5 +1,11 @@
-import type { IAddress } from '../interfaces/address.interface';
-import type { ICheckoutCompleteParams, ICheckoutPrepareParams, ICheckoutRecipient } from '../interfaces/checkout.interface';
+import type { STATES_CODE, STATES_NAME } from '../enums';
+import type {
+  ICheckoutBillingAddress,
+  ICheckoutCompleteParams,
+  ICheckoutCustomer,
+  ICheckoutPrepareParams,
+  ICheckoutRecipient,
+} from '../interfaces';
 import type { LocationHelperService } from './location-helper.service';
 
 /**
@@ -19,40 +25,114 @@ export class CheckoutHelperService {
    * @throws {Error} - Invalid cartId if cartId is missing or not a string.
    */
   public validateAndNormalizePrepareParams(params: ICheckoutPrepareParams): ICheckoutPrepareParams {
-    const normalizedParams = { ...params };
+    let normalizedParams = { ...params };
 
     // Validate cartId
-    if (!normalizedParams.cartId || typeof normalizedParams.cartId !== 'string') {
+    if (!normalizedParams?.cartId || typeof normalizedParams?.cartId !== 'string') {
       throw new Error('Invalid cartId');
     }
 
-    // Validate recipient
-    this.validateRecipient(normalizedParams.recipient);
+    // Validate Customer
+    this.validateCustomer(normalizedParams.customer);
+
+    // Validate Recipient if provided
+    this.validateCustomer(normalizedParams.recipient);
 
     // Validate billingAddress if provided
-    if (normalizedParams.billingAddress) {
-      this.validateAddress(normalizedParams.billingAddress as IAddress);
+    if (normalizedParams?.billingAddress) {
+      this.validateBillingAddress(normalizedParams.billingAddress);
     }
 
+    normalizedParams.hasAgeVerify = Boolean(
+      normalizedParams?.hasAgeVerify ??
+        // @ts-expect-error - Due to recipient removal, this.validateCustomer is not used here.
+        normalizedParams?.customer?.hasAgeVerify ??
+        normalizedParams?.recipient?.hasAgeVerify ??
+        false
+    );
+
     // Validate boolean fields
-    normalizedParams.hasSubstitutionPolicy = Boolean(normalizedParams.hasSubstitutionPolicy);
-    normalizedParams.isGift = Boolean(normalizedParams.isGift);
-    normalizedParams.billingSameAsShipping = Boolean(normalizedParams.billingSameAsShipping);
+    normalizedParams.hasSubstitutionPolicy = Boolean(normalizedParams?.hasSubstitutionPolicy);
+    normalizedParams.acceptedAccountCreation = Boolean(normalizedParams?.acceptedAccountCreation);
+    normalizedParams.isGift = Boolean(normalizedParams?.isGift);
+    normalizedParams.billingSameAsShipping = Boolean(normalizedParams?.billingSameAsShipping);
+
+    if (
+      normalizedParams &&
+      normalizedParams?.billingAddress &&
+      normalizedParams?.billingAddress?.phone !== ''
+    ) {
+      normalizedParams = {
+        ...normalizedParams,
+        billingAddress: {
+          ...(normalizedParams?.billingAddress ?? {}),
+          phone: this.formatPhoneNumber(normalizedParams.billingAddress?.phone) ?? '',
+        },
+      };
+    }
+
+    if (
+      normalizedParams &&
+      normalizedParams?.customer &&
+      (normalizedParams?.customer as ICheckoutCustomer)?.phone !== ''
+    ) {
+      normalizedParams = {
+        ...normalizedParams,
+        customer: {
+          ...((normalizedParams?.customer as ICheckoutCustomer) ?? {}),
+          phone:
+            this.formatPhoneNumber((normalizedParams?.customer as ICheckoutCustomer)?.phone) ?? '',
+        },
+      };
+    }
+
+    if (
+      normalizedParams &&
+      normalizedParams?.recipient &&
+      normalizedParams?.recipient?.phone !== ''
+    ) {
+      normalizedParams = {
+        ...normalizedParams,
+        customer: {
+          ...(normalizedParams?.recipient ?? {}),
+          phone: this.formatPhoneNumber(normalizedParams?.recipient?.phone) ?? '',
+        },
+      };
+    }
 
     // Validate giftOptions if isGift is true
-    if (normalizedParams.isGift) {
+    if (normalizedParams?.isGift) {
       this.validateGiftOptions(normalizedParams.giftOptions);
+
+      if (
+        normalizedParams &&
+        normalizedParams?.giftOptions &&
+        normalizedParams?.giftOptions?.recipient?.phone !== ''
+      ) {
+        normalizedParams = {
+          ...normalizedParams,
+          giftOptions: {
+            ...(normalizedParams?.giftOptions ?? {}),
+            recipient: {
+              ...(normalizedParams?.giftOptions?.recipient ?? {}),
+              phone: this.formatPhoneNumber(normalizedParams.giftOptions?.recipient?.phone) ?? '',
+            },
+          },
+        };
+      }
     }
 
     // Validate marketingPreferences
     this.validateMarketingPreferences(normalizedParams.marketingPreferences);
 
     // Validate deliveryTips if provided
-    if (normalizedParams.deliveryTips) {
+    if (normalizedParams?.deliveryTips) {
       this.validateDeliveryTips(normalizedParams.deliveryTips);
     }
 
-    normalizedParams.refresh = Boolean(normalizedParams.refresh);
+    if (normalizedParams?.refresh) {
+      normalizedParams.refresh = Boolean(normalizedParams.refresh);
+    }
 
     return normalizedParams;
   }
@@ -67,16 +147,18 @@ export class CheckoutHelperService {
    *
    * @return {ICheckoutCompleteParams} The validated and normalized complete checkout parameters.
    */
-  public validateAndNormalizeCompleteParams(params: ICheckoutCompleteParams): ICheckoutCompleteParams {
+  public validateAndNormalizeCompleteParams(
+    params: ICheckoutCompleteParams
+  ): ICheckoutCompleteParams {
     const normalizedParams = { ...params };
 
     // Validate token
-    if (!normalizedParams.token || typeof normalizedParams.token !== 'string') {
+    if (!normalizedParams.token || typeof normalizedParams?.token !== 'string') {
       throw new Error('Invalid token');
     }
 
     // Validate payment
-    if (!normalizedParams.payment || typeof normalizedParams.payment !== 'string') {
+    if (!normalizedParams?.payment || typeof normalizedParams?.payment !== 'string') {
       throw new Error('Invalid payment token');
     }
 
@@ -89,47 +171,85 @@ export class CheckoutHelperService {
   }
 
   /**
-   * Validates the recipient object.
+   * Validates the recipient or customer information for a checkout.
    *
-   * @param {ICheckoutPrepareParams['recipient']} recipient - The recipient object to be validated.
-   * @throws {Error} If the recipient object is invalid.
-   * @returns {void}
+   * @param customer - The recipient or customer information to validate.
+   *                   Can be an object of type ICheckoutRecipient or ICheckoutCustomer,
+   *                   or a string (presumably a customer ID).
+   *
+   * @throws {Error} Throws an error if any of the customer's information (firstName, lastName, phone, email) is present but not a string.
+   *
+   * @remarks
+   * If the customer is an object, it validates the firstName, lastName, phone, and email properties.
+   * If hasAgeVerify is present, it converts it to a boolean value.
    */
-  private validateRecipient(recipient: ICheckoutPrepareParams['recipient']): void {
-    if (!recipient || typeof recipient !== 'object') {
-      throw new Error('Invalid recipient');
-    }
+  private validateCustomer(customer?: ICheckoutRecipient | ICheckoutCustomer | string): void {
+    if (customer && typeof customer === 'object') {
+      const { firstName, lastName, phone, email } = customer;
+      if (firstName && typeof firstName !== 'string')
+        throw new Error('Invalid customer first name');
+      if (lastName && typeof lastName !== 'string') throw new Error('Invalid customer last name');
+      if (phone && typeof phone !== 'string') throw new Error('Invalid customer phone');
+      if (email && typeof email !== 'string') throw new Error('Invalid customer email');
 
-    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'birthDate'];
-    requiredFields.forEach((field) => {
-      if (!recipient[field as keyof ICheckoutRecipient] || typeof recipient[field as keyof ICheckoutRecipient] !== 'string') {
-        throw new Error(`Invalid recipient ${field}`);
+      if ('hasAgeVerify' in customer) {
+        customer.hasAgeVerify = Boolean(customer.hasAgeVerify);
       }
-    });
-
-    recipient.hasAgeVerify = Boolean(recipient.hasAgeVerify);
+    }
   }
 
   /**
    * Validates the given address object.
-   * @param {IAddress} address - The address object to validate.
+   * @param {ICheckoutBillingAddress} address - The address object to validate.
    * @throws {Error} If the address is invalid or any required field is missing or not a string.
    * @returns {void}
    */
-  private validateAddress(address: IAddress): void {
-    if (!address || typeof address !== 'object') {
-      throw new Error('Invalid address');
+  private validateBillingAddress(address?: ICheckoutBillingAddress): ICheckoutBillingAddress {
+    // If no address provided, return empty object
+    if (!address) {
+      return {};
     }
 
-    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'one', 'city', 'state', 'zip'];
-    requiredFields.forEach((field) => {
-      if (!address[field as keyof IAddress] || typeof address[field as keyof IAddress] !== 'string') {
-        throw new Error(`Invalid address ${field}`);
+    // Validate that address is an object if provided
+    if (typeof address !== 'object' || address === null) {
+      throw new Error('Invalid address: must be an object if provided');
+    }
+
+    // Clone address for normalization
+    const normalizedAddress = { ...address };
+
+    // Validate types for any provided fields
+    const stringFields: Array<keyof ICheckoutBillingAddress> = [
+      'one',
+      'two',
+      'city',
+      'state',
+      'zip',
+      'country',
+      'firstName',
+      'lastName',
+      'email',
+      'phone',
+      'company',
+    ];
+
+    // Only validate fields that are present
+    stringFields.forEach((field) => {
+      if (field in normalizedAddress) {
+        if (typeof normalizedAddress[field] !== 'string') {
+          throw new Error(`Invalid billing address ${field}: must be a string if provided`);
+        }
       }
     });
 
-    // Use LocationHelperService to validate state
-    this.locationHelperService.validateAndNormalizeLocation({ address });
+    // Normalize state if provided
+    if ('state' in normalizedAddress && normalizedAddress.state) {
+      normalizedAddress.state = this.locationHelperService.normalizeState(
+        normalizedAddress.state as STATES_CODE | STATES_NAME
+      );
+    }
+
+    return normalizedAddress;
   }
 
   /**
@@ -143,21 +263,77 @@ export class CheckoutHelperService {
    *
    * @returns {void}
    */
-  private validateGiftOptions(giftOptions: ICheckoutPrepareParams['giftOptions']): void {
-    if (!giftOptions || typeof giftOptions !== 'object') {
-      throw new Error('Invalid giftOptions');
+  private validateGiftOptions(giftOptions?: ICheckoutPrepareParams['giftOptions']): void {
+    if (giftOptions !== undefined && typeof giftOptions !== 'object') {
+      throw new Error('Invalid giftOptions: must be an object if provided');
     }
 
-    if (giftOptions.message && typeof giftOptions.message !== 'string') {
-      throw new Error('Invalid gift message');
+    if (giftOptions) {
+      if ('message' in giftOptions && typeof giftOptions.message !== 'string') {
+        throw new Error('Invalid gift message: must be a string if provided');
+      }
+
+      if ('recipient' in giftOptions) {
+        if (typeof giftOptions.recipient !== 'object') {
+          throw new Error('Invalid gift recipient: must be an object if provided');
+        }
+
+        const { name, phone, email } = giftOptions.recipient;
+        if ('name' in giftOptions.recipient && typeof name !== 'string') {
+          throw new Error('Invalid gift recipient name: must be a string if provided');
+        }
+
+        if ('phone' in giftOptions.recipient && typeof phone !== 'string') {
+          throw new Error('Invalid gift recipient phone: must be a string if provided');
+        }
+
+        if ('email' in giftOptions.recipient && typeof email !== 'string') {
+          throw new Error('Invalid gift recipient email: must be a string if provided');
+        }
+      }
+    }
+  }
+
+  /**
+   * Formats a given phone number into a standard (XXX) XXX-XXXX format for US numbers.
+   * Keeps the original format for international numbers starting with a + sign.
+   *
+   * @param {string|null|undefined} value - The phone number to format. Can be a string, null, or undefined.
+   * @return {string|null} The formatted phone number in (XXX) XXX-XXXX format, the original international
+   *  format, or null if input is null or undefined.
+   */
+  private formatPhoneNumber(value: string | null | undefined): string | null {
+    if (!value) return null;
+
+    // First, clean the number of any formatting
+    const cleaned = value.replace(/[\s().\-_]/g, ''); // Remove spaces, parentheses, dots, hyphens
+    const justDigits = cleaned.replace(/[^\d+]/g, ''); // Keep only digits and + symbol
+
+    // Handle various US formats
+    if (justDigits.startsWith('+1')) {
+      const number = justDigits.substring(2);
+      if (number.length === 10) {
+        return `(${number.substring(0, 3)}) ${number.substring(3, 6)}-${number.substring(6)}`;
+      }
     }
 
-    if (giftOptions.recipient) {
-      const { name, phone, email } = giftOptions.recipient;
-      if (name && typeof name !== 'string') throw new Error('Invalid gift recipient name');
-      if (phone && typeof phone !== 'string') throw new Error('Invalid gift recipient phone');
-      if (email && typeof email !== 'string') throw new Error('Invalid gift recipient email');
+    // Handle 11-digit format starting with 1
+    if (justDigits.length === 11 && justDigits.startsWith('1')) {
+      const number = justDigits.substring(1);
+      return `(${number.substring(0, 3)}) ${number.substring(3, 6)}-${number.substring(6)}`;
     }
+
+    // Handle 10-digit format
+    if (justDigits.length === 10) {
+      return `(${justDigits.substring(0, 3)}) ${justDigits.substring(3, 6)}-${justDigits.substring(6)}`;
+    }
+
+    // Handle international format (non-US)
+    if (justDigits.startsWith('+')) {
+      return justDigits;
+    }
+
+    return value;
   }
 
   /**
@@ -167,13 +343,22 @@ export class CheckoutHelperService {
    *
    * @throws {Error} The error thrown if the marketing preferences are invalid.
    */
-  private validateMarketingPreferences(preferences: ICheckoutPrepareParams['marketingPreferences']): void {
-    if (!preferences || typeof preferences !== 'object') {
-      throw new Error('Invalid marketingPreferences');
+  private validateMarketingPreferences(
+    preferences?: ICheckoutPrepareParams['marketingPreferences']
+  ): void {
+    if (preferences !== undefined && typeof preferences !== 'object') {
+      throw new Error('Invalid marketingPreferences: must be an object if provided');
     }
 
-    preferences.canEmail = Boolean(preferences.canEmail);
-    preferences.canSms = Boolean(preferences.canSms);
+    if (preferences) {
+      if ('canEmail' in preferences) {
+        preferences.canEmail = Boolean(preferences.canEmail);
+      }
+
+      if ('canSms' in preferences) {
+        preferences.canSms = Boolean(preferences.canSms);
+      }
+    }
   }
 
   /**

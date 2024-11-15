@@ -1,5 +1,5 @@
 import { STATES_CODE, STATES_NAME } from '../enums';
-import type { ILoc } from '../interfaces/address.interface';
+import type { ILoc } from '../interfaces';
 
 /**
  * The LocationHelperService class provides methods to validate and normalize location objects.
@@ -11,17 +11,21 @@ export class LocationHelperService {
    * @throws {Error} - If the loc argument is not a valid object or if
    * it doesn't contain either coords or address.
    */
-  validateAndNormalizeLocation(loc: ILoc): void {
-    if (!loc || typeof loc !== 'object') {
+  validateAndNormalizeLocation(loc?: ILoc): void {
+    if (!loc) {
+      return;
+    }
+
+    if (typeof loc !== 'object') {
       throw new Error('Location must be a valid object');
     }
 
-    if (loc.coords) {
-      this.validateCoordinates(loc.coords);
-    } else if (loc.address) {
-      this.validateAndNormalizeAddress(loc.address);
-    } else {
-      throw new Error('Location must contain either coords or address');
+    const { coords, address } = loc;
+
+    if (coords) {
+      this.validateCoordinates(coords);
+    } else if (address) {
+      this.validateAndNormalizeAddress(address);
     }
   }
 
@@ -58,7 +62,7 @@ export class LocationHelperService {
    * @return {void}
    */
   private validateAndNormalizeAddress(address: any): void {
-    if (!address.state || typeof address.state !== 'string') {
+    if (!address?.state || typeof address?.state !== 'string') {
       throw new Error('State is required and must be a string');
     }
 
@@ -83,7 +87,7 @@ export class LocationHelperService {
    *
    * @throws {Error} - If the state value is invalid.
    */
-  private normalizeState(state: STATES_CODE | STATES_NAME): string {
+  normalizeState(state: STATES_CODE | STATES_NAME): string {
     const upperState = state.toUpperCase() as keyof typeof STATES_CODE;
     if (STATES_CODE[upperState]) {
       return STATES_CODE[upperState];
