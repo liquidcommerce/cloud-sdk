@@ -1,3 +1,10 @@
+# [1.3.0-beta.28](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.27...v1.3.0-beta.28) (2024-11-15)
+
+
+### Features
+
+* **interfaces:** update checkout and catalog interfaces ([a91f238](https://github.com/liquidcommerce/cloud-sdk/commit/a91f23811964874d34cfd4e6533ee96783b9e750))
+
 # [1.3.0-beta.27](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.26...v1.3.0-beta.27) (2024-11-12)
 
 
