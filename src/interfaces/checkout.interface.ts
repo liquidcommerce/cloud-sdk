@@ -83,6 +83,10 @@ export interface ICheckoutCustomer {
 
   birthDate?: string;
 
+  /**
+   * @deprecated - Moved to ICheckoutPrepareParams
+   * @type {ICheckoutPrepareParams}
+   */
   hasAgeVerify?: boolean;
 
   createdAt?: Date;
@@ -325,11 +329,7 @@ export interface ICheckoutRetailer extends ICheckoutTotalAmounts {
 
   name: string;
 
-  taxToken?: string;
-
   address?: IAddress;
-
-  minibarSupplierId?: number[];
 
   fulfillments: ICheckoutFulfillment[];
 }
@@ -381,6 +381,9 @@ export interface ICheckoutItem {
 
   mainImage: string;
 
+  /**
+   * @deprecated - use mainImage
+   */
   image: string;
 
   brand: string;
@@ -415,14 +418,6 @@ export interface ICheckoutPrepareResponse {
   cartId: string;
 
   customer: ICheckoutCustomer;
-
-  partnerName?: string;
-
-  partnerLogo?: string;
-
-  partnerPim?: string;
-
-  partnerBusinessId?: string;
 
   hasAgeVerify: boolean;
 
