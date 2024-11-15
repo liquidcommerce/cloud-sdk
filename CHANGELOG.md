@@ -1,3 +1,10 @@
+# [1.3.0-beta.29](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.28...v1.3.0-beta.29) (2024-11-15)
+
+
+### Features
+
+* **README:** update SDK usage examples and add new sections for config and error handling ([faddb7c](https://github.com/liquidcommerce/cloud-sdk/commit/faddb7ce50a261ee54e71f5e4facd099b0b9a1d3))
+
 # [1.3.0-beta.28](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0-beta.27...v1.3.0-beta.28) (2024-11-15)
 
 
