@@ -482,14 +482,6 @@ export interface IProduct {
 
   age: string;
 
-  pack?: boolean;
-
-  packDesc?: string;
-
-  container?: string;
-
-  containerType?: string;
-
   color: string;
 
   flavor: string;
