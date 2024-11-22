@@ -34,16 +34,11 @@ import type {
   IUserMethod,
   IUserPayment,
   IUserPaymentAddParams,
+  IUserPaymentParams,
   IUserPaymentUpdateParams,
   IUserSessionParams,
 } from './interfaces';
-import type {
-  AddressService,
-  CatalogService,
-  CheckoutService,
-  PaymentService,
-  UserService,
-} from './services';
+import type { AddressService, CatalogService, CheckoutService, PaymentService, UserService, } from './services';
 import type { CartService } from './services/cart.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from './types';
 
@@ -236,7 +231,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *    Method for purging a user's address.
    * @property {function(params: IUserPaymentAddParams): Promise<IApiResponseWithData<IUserPayment>>} addPayment -
    *    Method for adding a new payment method for a user.
-   * @property {function(params: IUserPaymentUpdateParams): Promise<IApiResponseWithData<IUserPayment>>} updatePayment -
+   * @property {function(params: IUserPaymentParams | IUserPaymentUpdateParams): Promise<IApiResponseWithData<boolean>>} updatePayment -
    *    Method for updating an existing payment method for a user.
    * @property {function(customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>>} purgePayment -
    *    Method for purging a user's payment method.
@@ -245,6 +240,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    * @see {@link IUserAddressParams} for the structure of the address add/update request parameters.
    * @see {@link IUserPaymentAddParams} for the structure of the payment add request parameters.
    * @see {@link IUserPaymentUpdateParams} for the structure of the payment update request parameters.
+   * @see {@link IUserPaymentParams} for the structure of the payment update request parameters.
    * @see {@link IUser} for the structure of the user session data returned.
    * @see {@link BaseUser} for the structure of the user data returned.
    * @see {@link IUserAddress} for the structure of the user's address data returned.
@@ -285,8 +281,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       return this.userService.addPayment(params);
     },
     updatePayment: async (
-      params: IUserPaymentUpdateParams
-    ): Promise<IApiResponseWithData<IUserPayment>> => {
+      params: IUserPaymentParams | IUserPaymentUpdateParams
+    ): Promise<IApiResponseWithData<boolean>> => {
       await this.ensureAuthenticated();
       return this.userService.updatePayment(params);
     },

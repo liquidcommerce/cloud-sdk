@@ -1,24 +1,30 @@
-# [1.5.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.4.0...v1.5.0) (2024-11-15)
+# [1.6.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.5.0...v1.6.0-beta.1) (2024-11-22)
 
 
 ### Features
 
+* **payment:** updated payment default method and corrected response type ([6c43004](https://github.com/liquidcommerce/cloud-sdk/commit/6c43004ea566350a6258c239b640d1a62a343732))
+
+# [1.5.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.4.0...v1.5.0) (2024-11-15)
+
+### Features
 * **readme:** replace logo markdown with HTML for better styling ([8f910bd](https://github.com/liquidcommerce/cloud-sdk/commit/8f910bd8aae1f5090bbc0c8b7dbfc5c61d6889c8))
+
+# [1.4.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.4.0-beta.2...v1.4.0-beta.3) (2024-11-22)
+
+### Features
+* **payment:** updated payment default method and corrected response type ([6c43004](https://github.com/liquidcommerce/cloud-sdk/commit/6c43004ea566350a6258c239b640d1a62a343732))
 
 # [1.4.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0...v1.4.0) (2024-11-15)
 
-
 ### Bug Fixes
-
 * **demo:** correct SDK script URL and environment setting for staging ([9e1e9d3](https://github.com/liquidcommerce/cloud-sdk/commit/9e1e9d3208e3cb1d1a958aea1ca1b038e7755a18))
 * exported all types and created billing address interface ([740436e](https://github.com/liquidcommerce/cloud-sdk/commit/740436e98ec17d584380d6a6988314a5db702243))
 * **interfaces:** add user management methods to LiquidCommerceClient ([6d815d3](https://github.com/liquidcommerce/cloud-sdk/commit/6d815d376fff3e328720040565e6df419c66726f))
 * **payment:** correct confirmSession return type and improve error handling ([509ce11](https://github.com/liquidcommerce/cloud-sdk/commit/509ce110a4f7fddbccd88535277f8d38d60d9ffb))
 * removed an extra div at address isDefault ([e1ecf99](https://github.com/liquidcommerce/cloud-sdk/commit/e1ecf99ff7964bb556abe3bc40959bbf913a993c))
 
-
 ### Features
-
 * added engraving at cart list item ([5bbf167](https://github.com/liquidcommerce/cloud-sdk/commit/5bbf16769b4854eaf8e2bc8c95d81dffea25e94e))
 * Added no data for addresses/payments text and is default checkbox for addresses ([70e2628](https://github.com/liquidcommerce/cloud-sdk/commit/70e26281ea3b41a519604703e86a44ed76c67dc6))
 * added retailers for each product in cart and show event message when getting cart ([c12c730](https://github.com/liquidcommerce/cloud-sdk/commit/c12c7308517f4e6a177c59c0f0c9aa6ec9c8ed4e))
@@ -44,6 +50,7 @@
 * **payment:** add session confirmation and update AuthenticatedService handling ([0b6896b](https://github.com/liquidcommerce/cloud-sdk/commit/0b6896b75cc594dbbaf2fab9b3ab64fa0d563863))
 * **README:** update SDK usage examples and add new sections for config and error handling ([faddb7c](https://github.com/liquidcommerce/cloud-sdk/commit/faddb7ce50a261ee54e71f5e4facd099b0b9a1d3))
 * **user:** add fetch user by ID functionality and address update options ([8b5f6a8](https://github.com/liquidcommerce/cloud-sdk/commit/8b5f6a83a4b5f509a8c36681a47198a18749f99e))
+
 
 # [1.4.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0...v1.4.0-beta.1) (2024-11-15)
 
