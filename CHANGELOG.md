@@ -1,16 +1,49 @@
+# [1.5.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.4.0...v1.5.0) (2024-11-15)
+
+### Features
+* **readme:** replace logo markdown with HTML for better styling ([8f910bd](https://github.com/liquidcommerce/cloud-sdk/commit/8f910bd8aae1f5090bbc0c8b7dbfc5c61d6889c8))
+
 # [1.4.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.4.0-beta.2...v1.4.0-beta.3) (2024-11-22)
 
-
 ### Features
-
 * **payment:** updated payment default method and corrected response type ([6c43004](https://github.com/liquidcommerce/cloud-sdk/commit/6c43004ea566350a6258c239b640d1a62a343732))
 
-# [1.4.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.4.0-beta.1...v1.4.0-beta.2) (2024-11-15)
+# [1.4.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0...v1.4.0) (2024-11-15)
 
+### Bug Fixes
+* **demo:** correct SDK script URL and environment setting for staging ([9e1e9d3](https://github.com/liquidcommerce/cloud-sdk/commit/9e1e9d3208e3cb1d1a958aea1ca1b038e7755a18))
+* exported all types and created billing address interface ([740436e](https://github.com/liquidcommerce/cloud-sdk/commit/740436e98ec17d584380d6a6988314a5db702243))
+* **interfaces:** add user management methods to LiquidCommerceClient ([6d815d3](https://github.com/liquidcommerce/cloud-sdk/commit/6d815d376fff3e328720040565e6df419c66726f))
+* **payment:** correct confirmSession return type and improve error handling ([509ce11](https://github.com/liquidcommerce/cloud-sdk/commit/509ce110a4f7fddbccd88535277f8d38d60d9ffb))
+* removed an extra div at address isDefault ([e1ecf99](https://github.com/liquidcommerce/cloud-sdk/commit/e1ecf99ff7964bb556abe3bc40959bbf913a993c))
 
 ### Features
+* added engraving at cart list item ([5bbf167](https://github.com/liquidcommerce/cloud-sdk/commit/5bbf16769b4854eaf8e2bc8c95d81dffea25e94e))
+* Added no data for addresses/payments text and is default checkbox for addresses ([70e2628](https://github.com/liquidcommerce/cloud-sdk/commit/70e26281ea3b41a519604703e86a44ed76c67dc6))
+* added retailers for each product in cart and show event message when getting cart ([c12c730](https://github.com/liquidcommerce/cloud-sdk/commit/c12c7308517f4e6a177c59c0f0c9aa6ec9c8ed4e))
+* **cart:** add docs cart to checkout interface ([355752a](https://github.com/liquidcommerce/cloud-sdk/commit/355752a8f7c92a193f9ba2deb8f10a2439688908))
+* **cart:** correct retailer type in cart interface ([297811a](https://github.com/liquidcommerce/cloud-sdk/commit/297811a26c226a78ac7ffc398c3d32c29fd1f202))
+* **catalog:** add support for tags filter and flavored whiskey category ([6921ba8](https://github.com/liquidcommerce/cloud-sdk/commit/6921ba8072757b732a4bb11edb151bc7542c7229))
+* **checkout:** add detailed total amounts interfaces ([6b18212](https://github.com/liquidcommerce/cloud-sdk/commit/6b18212b9130feed4840cfdec60a22e79a0581b7))
+* **checkout:** add referenceId to checkout interface ([e369ef6](https://github.com/liquidcommerce/cloud-sdk/commit/e369ef656ccefd06eadc4b4aed70e27b62f0b2fa))
+* **checkout:** expand customer and billing interfaces, add deprecation notes ([598764f](https://github.com/liquidcommerce/cloud-sdk/commit/598764f9f9be75e7fcb1aad01ee8281ac55e6bd9))
+* **checkout:** format phone numbers in validateAndNormalizePrepareParams ([f1e63ad](https://github.com/liquidcommerce/cloud-sdk/commit/f1e63ad46689e1d9e9825d34a421a41181820b6e))
+* **checkout:** make fields optional in checkout interfaces ([5d4556b](https://github.com/liquidcommerce/cloud-sdk/commit/5d4556b8a18dec621521a726e23b7dde4b0c799c))
+* **checkout:** make fields optional in checkout interfaces ([47c4773](https://github.com/liquidcommerce/cloud-sdk/commit/47c4773635785ba0eab7d9e1491bcfe99d1e85f3))
+* **constants:** add JSDoc comments for DEFAULT_BASE_URLS in core.constant.ts ([2333f9d](https://github.com/liquidcommerce/cloud-sdk/commit/2333f9df5bb55223b1f4a10fd281fd73eced3749))
+* **core:** enhance validation and normalization logic for location and catalog services ([6d25c08](https://github.com/liquidcommerce/cloud-sdk/commit/6d25c081cb29918981ee997d76469625e1248bf6))
+* **core:** improve address validation and normalization for checkout flow ([8397a74](https://github.com/liquidcommerce/cloud-sdk/commit/8397a744b15683d2c0d7167b71b7d3b0daabca47))
+* **interfaces:** add payment property to check out interface ([7cc8a58](https://github.com/liquidcommerce/cloud-sdk/commit/7cc8a5859c35d1c27baa0cb6bc336d5f258255de))
+* **interfaces:** add shippingAddressTwo to check out interface ([fc033f3](https://github.com/liquidcommerce/cloud-sdk/commit/fc033f30c837a32a7aa87b963a185f709cfbc49a))
+* **interfaces:** make checkout interface properties non-optional ([fd61ff2](https://github.com/liquidcommerce/cloud-sdk/commit/fd61ff2fce45810fb9f019a22319e6d459770be7))
+* **interfaces:** remove unused catalog service interface and update catalog search and availability ([339ea8c](https://github.com/liquidcommerce/cloud-sdk/commit/339ea8c8d6e0eaae36e9326147bbb52490ef306e))
+* **interfaces:** streamline checkout interfaces and improve typing consistency ([e62f54e](https://github.com/liquidcommerce/cloud-sdk/commit/e62f54ea152683a37691d548c5b405de3921b47d))
+* **interfaces:** update checkout and catalog interfaces ([a91f238](https://github.com/liquidcommerce/cloud-sdk/commit/a91f23811964874d34cfd4e6533ee96783b9e750))
+* **interfaces:** update ICheckoutCompleteResponse order property type ([614887d](https://github.com/liquidcommerce/cloud-sdk/commit/614887d2553746c449176d1a8e679def13279207))
+* **payment:** add session confirmation and update AuthenticatedService handling ([0b6896b](https://github.com/liquidcommerce/cloud-sdk/commit/0b6896b75cc594dbbaf2fab9b3ab64fa0d563863))
+* **README:** update SDK usage examples and add new sections for config and error handling ([faddb7c](https://github.com/liquidcommerce/cloud-sdk/commit/faddb7ce50a261ee54e71f5e4facd099b0b9a1d3))
+* **user:** add fetch user by ID functionality and address update options ([8b5f6a8](https://github.com/liquidcommerce/cloud-sdk/commit/8b5f6a83a4b5f509a8c36681a47198a18749f99e))
 
-* **readme:** replace logo markdown with HTML for better styling ([8f910bd](https://github.com/liquidcommerce/cloud-sdk/commit/8f910bd8aae1f5090bbc0c8b7dbfc5c61d6889c8))
 
 # [1.4.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.3.0...v1.4.0-beta.1) (2024-11-15)
 
