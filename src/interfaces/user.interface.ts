@@ -244,12 +244,10 @@ export interface IUserPaymentAddParams extends IUserPaymentParams {
 }
 
 /**
- * IUserPaymentUpdateParams is an interface extending IUserPaymentParams,
- * representing the parameters required to update user payment information.
  *
- * @extends IUserPaymentParams
+ * @deprecated - Use IUserPaymentParams
  *
- * @property {boolean} isDefault - Indicates whether the payment method is the default one.
+ * @interface IUserPaymentParams
  */
 export interface IUserPaymentUpdateParams extends IUserPaymentParams {
   isDefault: boolean;

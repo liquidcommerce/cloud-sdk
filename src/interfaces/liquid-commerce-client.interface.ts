@@ -21,7 +21,7 @@ import type {
   IUserAddress,
   IUserAddressParams,
   IUserPayment,
-  IUserPaymentAddParams,
+  IUserPaymentAddParams, IUserPaymentParams,
   IUserPaymentUpdateParams,
   IUserSessionParams,
 } from './user.interface';
@@ -555,10 +555,10 @@ export interface IUserMethod {
    *
    * @throws {Error} - Throws an error if the update payment request fails or if authentication is unsuccessful.
    *
-   * @see {@link IUserPaymentUpdateParams} for the structure of the update payment request parameters.
+   * @see {@link IUserPaymentParams} for the structure of the update payment request parameters.
    * @see {@link IUserPayment} for the structure of the user's payment method data returned.
    */
-  updatePayment: (params: IUserPaymentUpdateParams) => Promise<IApiResponseWithData<IUserPayment>>;
+  updatePayment: (params: IUserPaymentParams | IUserPaymentUpdateParams) => Promise<IApiResponseWithData<boolean>>;
 
   /**
    * Purges a payment method for a user.
