@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.5.0...v1.6.0) (2024-11-22)
+
+
+### Features
+
+* **payment:** updated payment default method and corrected response type ([6c43004](https://github.com/liquidcommerce/cloud-sdk/commit/6c43004ea566350a6258c239b640d1a62a343732))
+
 # [1.6.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.5.0...v1.6.0-beta.1) (2024-11-22)
 
 
