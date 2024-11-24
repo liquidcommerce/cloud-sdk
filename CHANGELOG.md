@@ -1,3 +1,10 @@
+# [1.6.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.2...v1.6.0-beta.3) (2024-11-24)
+
+
+### Features
+
+* **filters:** add presale filter and refactor engraving validation ([1be292f](https://github.com/liquidcommerce/cloud-sdk/commit/1be292f868222216d017cb323777492814c54244))
+
 # [1.6.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.1...v1.6.0-beta.2) (2024-11-24)
 
 
