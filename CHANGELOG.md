@@ -1,3 +1,10 @@
+# [1.6.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.3...v1.6.0-beta.4) (2024-11-24)
+
+
+### Bug Fixes
+
+* **core,interfaces:** improve readability with enhanced formatting and import structure ([628c87b](https://github.com/liquidcommerce/cloud-sdk/commit/628c87b2ac840d3315049945ad4dfb6b5810d7f9))
+
 # [1.6.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.2...v1.6.0-beta.3) (2024-11-24)
 
 
