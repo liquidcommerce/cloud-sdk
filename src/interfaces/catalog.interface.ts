@@ -404,12 +404,38 @@ export interface IProductSizeEngraving {
 }
 
 /**
+ * Interface representing a product presale.
+ *
+ * @interface IProductPresale
+ *
+ * @property {Date | null} availableOn - The date when the product is expected to ship.
+ *                                      If null, the availability date is not set.
+ *
+ * @property {boolean} isActive - Indicates whether the presale is currently active.
+ *
+ * @property {string} language - The language associated with the product presale.
+ */
+export interface IProductPresale {
+  availableOn: Date | null;
+
+  isActive: boolean;
+
+  language: string;
+}
+
+/**
  * Interface representing attributes related to the size of a product.
  *
  * @property {IProductSizeEngraving} [engraving] - Optional engraving details for the product size.
  */
 export interface IProductSizeAttributes {
-  engraving?: IProductSizeEngraving;
+  salsifyPid?: string;
+
+  salsifyGrouping?: string;
+
+  presale: IProductPresale;
+
+  engraving: IProductSizeEngraving;
 }
 
 /**
@@ -446,7 +472,6 @@ export interface IProductSize {
 
   variants: IProductVariant[];
 }
-
 
 /**
  * Represents a product with various attributes and details.

@@ -1,6 +1,6 @@
 import type { CART_EVENT_ENUM } from '../enums';
 import type { ILoc, ILocBase } from './address.interface';
-import type { IProduct } from './catalog.interface';
+import type { IProduct, IProductPresale } from './catalog.interface';
 import type { IRetailer } from './retailer.interface';
 
 /**
@@ -56,6 +56,8 @@ export interface ICartItemGiftCart {
  */
 export interface ICartItemAttributes {
   engraving: ICartItemEngraving;
+
+  presale: IProductPresale;
 
   giftCard: ICartItemGiftCart;
 }
