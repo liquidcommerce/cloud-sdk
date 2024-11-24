@@ -126,7 +126,17 @@ export enum STATES_NAME {
   WYOMING = 'WY',
 }
 
+/*
+*
+* @deprecated - use ENUM_BINARY_FILTER
+*
+* */
 export enum ENUM_ENGRAVING {
+  YES = 'YES',
+  NO = 'NO',
+}
+
+export enum ENUM_BINARY_FILTER {
   YES = 'YES',
   NO = 'NO',
 }
@@ -140,6 +150,7 @@ export enum ENUM_FILTER_KEYS {
   VARIETY = 'variety',
   ENGRAVING = 'engraving',
   PRICE = 'price',
+  PRESALE = 'presale',
   AVAILABILITY = 'availability',
   CATEGORIES = 'categories',
   SIZES = 'sizes',
