@@ -127,10 +127,10 @@ export enum STATES_NAME {
 }
 
 /*
-*
-* @deprecated - use ENUM_BINARY_FILTER
-*
-* */
+ *
+ * @deprecated - use ENUM_BINARY_FILTER
+ *
+ * */
 export enum ENUM_ENGRAVING {
   YES = 'YES',
   NO = 'NO',

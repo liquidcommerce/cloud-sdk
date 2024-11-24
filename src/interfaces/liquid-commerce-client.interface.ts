@@ -1,4 +1,8 @@
-import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig, } from '../types';
+import type {
+  IApiResponseWithData,
+  IApiResponseWithoutData,
+  ILiquidCommerceConfig,
+} from '../types';
 import type {
   IAddressAutocompleteParams,
   IAddressAutocompleteResult,
@@ -6,14 +10,23 @@ import type {
   IAddressDetailsResult,
 } from './address.interface';
 import type { ICart, ICartUpdateParams } from './cart.interface';
-import type { IAvailabilityParams, IAvailabilityResponse, ICatalog, ICatalogParams, } from './catalog.interface';
+import type {
+  IAvailabilityParams,
+  IAvailabilityResponse,
+  ICatalog,
+  ICatalogParams,
+} from './catalog.interface';
 import type {
   ICheckoutCompleteParams,
   ICheckoutCompleteResponse,
   ICheckoutPrepareParams,
   ICheckoutPrepareResponse,
 } from './checkout.interface';
-import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap, } from './payment.interface';
+import type {
+  ILiquidPaymentConfig,
+  ILiquidPaymentToken,
+  IPaymentElementEventMap,
+} from './payment.interface';
 import type {
   BaseUser,
   IPurgeResponse,
@@ -21,7 +34,8 @@ import type {
   IUserAddress,
   IUserAddressParams,
   IUserPayment,
-  IUserPaymentAddParams, IUserPaymentParams,
+  IUserPaymentAddParams,
+  IUserPaymentParams,
   IUserPaymentUpdateParams,
   IUserSessionParams,
 } from './user.interface';
@@ -558,7 +572,9 @@ export interface IUserMethod {
    * @see {@link IUserPaymentParams} for the structure of the update payment request parameters.
    * @see {@link IUserPayment} for the structure of the user's payment method data returned.
    */
-  updatePayment: (params: IUserPaymentParams | IUserPaymentUpdateParams) => Promise<IApiResponseWithData<boolean>>;
+  updatePayment: (
+    params: IUserPaymentParams | IUserPaymentUpdateParams
+  ) => Promise<IApiResponseWithData<boolean>>;
 
   /**
    * Purges a payment method for a user.

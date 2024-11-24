@@ -1,5 +1,3 @@
-import type {
-  ENUM_ENGRAVING} from '../enums';
 import {
   ENUM_AVAILABILITY_VALUE,
   ENUM_BEER,
