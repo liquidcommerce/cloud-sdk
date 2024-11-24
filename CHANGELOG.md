@@ -1,3 +1,10 @@
+# [1.6.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.1...v1.6.0-beta.2) (2024-11-24)
+
+
+### Features
+
+* **cart:** add presale attribute to ICartItemAttributes and IProductPresale interface ([51e1e93](https://github.com/liquidcommerce/cloud-sdk/commit/51e1e93236099725b00173dafec4f48ee98f2206))
+
 # [1.6.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.5.0...v1.6.0-beta.1) (2024-11-22)
 
 
