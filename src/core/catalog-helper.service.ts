@@ -1,7 +1,9 @@
+import type {
+  ENUM_ENGRAVING} from '../enums';
 import {
   ENUM_AVAILABILITY_VALUE,
   ENUM_BEER,
-  ENUM_ENGRAVING,
+  ENUM_BINARY_FILTER,
   ENUM_FILTER_KEYS,
   ENUM_FOOD,
   ENUM_MERCHANDISE,
@@ -190,7 +192,10 @@ export class CatalogHelperService {
           this.validateFulfillmentFilter(filter.values as ENUM_MODALITIES[], errors);
           break;
         case ENUM_FILTER_KEYS.ENGRAVING:
-          this.validateEngravingFilter(filter.values as ENUM_ENGRAVING, errors);
+          this.validateBinaryFilter(filter.values as ENUM_BINARY_FILTER, errors);
+          break;
+        case ENUM_FILTER_KEYS.PRESALE:
+          this.validateBinaryFilter(filter.values as ENUM_BINARY_FILTER, errors);
           break;
         case ENUM_FILTER_KEYS.CATEGORIES:
           this.validateCategoriesFilter(filter.values as LiquidTaxonomy[], errors);
@@ -271,14 +276,15 @@ export class CatalogHelperService {
   }
 
   /**
-   * Validates if the provided engraving filter value is one of the allowed enums.
+   * Validates the given binary filter value against the ENUM_BINARY_FILTER.
+   * If the value is not valid, it adds an appropriate error message to the errors array.
    *
-   * @param value The engraving filter value to be validated.
-   * @param errors An array that collects error messages encountered during validation.
-   * @return void
+   * @param {ENUM_BINARY_FILTER} value - The binary filter value to validate.
+   * @param {string[]} errors - The array to push error messages into if validation fails.
+   * @return {void}
    */
-  private validateEngravingFilter(value: ENUM_ENGRAVING, errors: string[]): void {
-    if (!Object.values(ENUM_ENGRAVING).includes(value)) {
+  private validateBinaryFilter(value: ENUM_BINARY_FILTER, errors: string[]): void {
+    if (!Object.values(ENUM_BINARY_FILTER).includes(value)) {
       errors.push(`Invalid availability value: ${value}`);
     }
   }
