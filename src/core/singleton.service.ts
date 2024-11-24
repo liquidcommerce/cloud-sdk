@@ -214,7 +214,9 @@ export class SingletonManager {
    * @param {AuthenticatedService} authenticatedClient - The authenticated client instance
    * @return {PaymentProviderService} The instance of the `PaymentProviderService` class.
    */
-  public getPaymentProviderService(authenticatedClient: AuthenticatedService): PaymentProviderService {
+  public getPaymentProviderService(
+    authenticatedClient: AuthenticatedService
+  ): PaymentProviderService {
     return this.getOrCreateService(
       `PaymentProviderService_${authenticatedClient.getUniqueKey()}`,
       PaymentProviderService,

@@ -38,7 +38,13 @@ import type {
   IUserPaymentUpdateParams,
   IUserSessionParams,
 } from './interfaces';
-import type { AddressService, CatalogService, CheckoutService, PaymentService, UserService, } from './services';
+import type {
+  AddressService,
+  CatalogService,
+  CheckoutService,
+  PaymentService,
+  UserService,
+} from './services';
 import type { CartService } from './services/cart.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from './types';
 
