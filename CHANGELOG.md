@@ -1,3 +1,10 @@
+# [1.6.0-beta.7](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.6...v1.6.0-beta.7) (2024-11-26)
+
+
+### Features
+
+* **search:** implement retailer filter ([ad9d4e8](https://github.com/liquidcommerce/cloud-sdk/commit/ad9d4e866d7be1442677a4e1a7f3da1f0bd23c63))
+
 # [1.6.0-beta.6](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.5...v1.6.0-beta.6) (2024-11-26)
 
 
