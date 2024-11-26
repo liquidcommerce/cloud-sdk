@@ -121,6 +121,8 @@ export interface ICatalogParams extends ILocBase {
 
   visitorId?: string;
 
+  retailers?: string[];
+
   orderBy?: ENUM_ORDER_BY;
 
   orderDirection?: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE;
