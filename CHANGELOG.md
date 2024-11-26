@@ -1,3 +1,10 @@
+# [1.6.0-beta.5](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.4...v1.6.0-beta.5) (2024-11-26)
+
+
+### Bug Fixes
+
+* **core,interfaces:** improve presale attribute ([26af1ad](https://github.com/liquidcommerce/cloud-sdk/commit/26af1adb6abc80d67c98c3ef4f6651c13fdb6922))
+
 # [1.6.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.3...v1.6.0-beta.4) (2024-11-24)
 
 
