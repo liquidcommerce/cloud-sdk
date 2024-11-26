@@ -1,3 +1,10 @@
+# [1.6.0-beta.6](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.5...v1.6.0-beta.6) (2024-11-26)
+
+
+### Bug Fixes
+
+* **interfaces:** implement retailer fulfillment shipping min ([188dacb](https://github.com/liquidcommerce/cloud-sdk/commit/188dacb83038358474a63717e141b967b0701a9c))
+
 # [1.6.0-beta.5](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.4...v1.6.0-beta.5) (2024-11-26)
 
 
