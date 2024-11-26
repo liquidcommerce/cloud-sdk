@@ -82,6 +82,43 @@ export class CatalogHelperService {
   }
 
   /**
+   * Validates if a string is a valid MongoDB ObjectId format
+   * @param {string} id - The string to validate
+   * @returns {boolean} - Whether the string is a valid ObjectId format
+   */
+  private isValidObjectId(id: string): boolean {
+    if (!id || typeof id !== 'string') return false;
+    return /^[0-9a-fA-F]{24}$/.test(id);
+  }
+
+  /**
+   * Validates the retailers array parameter
+   * @param {string[]} retailers - Array of retailer IDs to validate
+   * @param {string[]} errors - Array to collect validation errors
+   */
+  private validateRetailers(retailers: string[] | undefined, errors: string[]): void {
+    if (retailers !== undefined) {
+      if (!Array.isArray(retailers)) {
+        errors.push('Retailers must be an array');
+      } else {
+        // Check array length
+        if (retailers.length > 20) {
+          errors.push('Retailers array can have a maximum of 20 values');
+        }
+
+        // Check each retailer ID
+        retailers.forEach((retailerId, index) => {
+          if (typeof retailerId !== 'string') {
+            errors.push(`Retailer at index ${index} must be a string`);
+          } else if (!this.isValidObjectId(retailerId)) {
+            errors.push(`Retailer ID at index ${index} must be a valid ObjectId string`);
+          }
+        });
+      }
+    }
+  }
+
+  /**
    * Validates and normalizes the search parameters for catalog search.
    *
    * @param {ICatalogParams} params - The search parameters to be validated and normalized.
@@ -93,6 +130,7 @@ export class CatalogHelperService {
     const errors: string[] = [];
     const normalizedParams = { ...params };
 
+    this.validateRetailers(normalizedParams.retailers, errors);
     this.validateOrderBy(normalizedParams.orderBy, errors);
     this.validateOrderDirection(normalizedParams.orderDirection, errors);
     this.validateFilters(normalizedParams.filters, errors);
