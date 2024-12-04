@@ -205,6 +205,26 @@ export enum CART_EVENT_ENUM {
   ITEM_QTY_CHANGE = 'ItemQuantityChange',
   ITEM_ID_NOT_FOUND = 'ItemIdNotFound',
   ITEMS_REMOVED = 'ItemsRemoved',
+
+  // Mapped ENUM_DISCOUNT_VALIDATION_ERROR values
+  COUPON_PROCESSING_ERROR = 'CouponProcessingError',
+  COUPON_NOT_FOUND = 'CouponNotFound',
+  COUPON_EXPIRED = 'CouponExpired',
+  COUPON_NOT_STARTED = 'CouponNotStarted',
+  MINIMUM_ORDER_VALUE_NOT_MET = 'MinimumOrderValueNotMet',
+  MINIMUM_ORDER_UNITS_NOT_MET = 'MinimumOrderUnitsNotMet',
+  MINIMUM_DISTINCT_ITEMS_NOT_MET = 'MinimumDistinctItemsNotMet',
+  QUOTA_EXCEEDED = 'QuotaExceeded',
+  USER_LIMIT_EXCEEDED = 'UserLimitExceeded',
+  NOT_FIRST_PURCHASE = 'NotFirstPurchase',
+  INVALID_COUPON = 'InvalidCoupon',
+  INVALID_MEMBERSHIP = 'InvalidMembership',
+  INVALID_DOMAIN = 'InvalidDomain',
+  INVALID_REQUIREMENTS = 'InvalidRequirements',
+  INVALID_ORGANIZATION = 'InvalidOrganization',
+  PRESALE_ITEMS_NOT_ALLOWED = 'PresaleItemsNotAllowed',
+  PRODUCT_NOT_ELIGIBLE = 'ProductNotEligible',
+  NOT_ENOUGH_PREVIOUS_ORDERS = 'NotEnoughPreviousOrders',
 }
 
 export enum ENUM_ADDRESS_TYPE {
