@@ -1,3 +1,10 @@
+# [1.6.0-beta.8](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.7...v1.6.0-beta.8) (2024-12-04)
+
+
+### Features
+
+* **enums:** add new error codes for coupon validation ([0a753d4](https://github.com/liquidcommerce/cloud-sdk/commit/0a753d49c7140fef856920da069520d49e2bc291))
+
 # [1.6.0-beta.7](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.6...v1.6.0-beta.7) (2024-11-26)
 
 
