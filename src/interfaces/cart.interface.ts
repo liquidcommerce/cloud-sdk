@@ -143,20 +143,6 @@ export interface ICartAttributesPromoCode {
 }
 
 /**
- * Represents the attributes of a gift card in a cart.
- *
- * @interface ICartAttributesGiftCard
- *
- * @property {string} code - The code of the gift card.
- * @property {number} value - The value of the gift card in the cart.
- */
-export interface ICartAttributesGiftCard {
-  code: string;
-
-  value: number;
-}
-
-/**
  * Represents the attributes, amounts, and fees associated with a cart.
  */
 export interface ICartAttributesAmountsFees {
@@ -196,8 +182,6 @@ export interface ICartAttributesAmounts {
  */
 export interface ICartAttributes {
   promoCode: ICartAttributesPromoCode;
-
-  giftCards: ICartAttributesGiftCard[];
 
   amounts: ICartAttributesAmounts;
 }
@@ -301,6 +285,4 @@ export interface ICartUpdateParams extends ILocBase {
   items: ICartUpdateItem[];
 
   promoCode?: string;
-
-  giftCards?: string[];
 }

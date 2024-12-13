@@ -206,10 +206,11 @@ export enum CART_EVENT_ENUM {
   ITEM_ID_NOT_FOUND = 'ItemIdNotFound',
   ITEMS_REMOVED = 'ItemsRemoved',
 
-  // Mapped ENUM_DISCOUNT_VALIDATION_ERROR values
+  // Coupon validation events
   COUPON_PROCESSING_ERROR = 'CouponProcessingError',
   COUPON_NOT_FOUND = 'CouponNotFound',
   COUPON_EXPIRED = 'CouponExpired',
+  NO_APPLICABLE_DISCOUNT = 'NoApplicableDiscount',
   COUPON_NOT_STARTED = 'CouponNotStarted',
   MINIMUM_ORDER_VALUE_NOT_MET = 'MinimumOrderValueNotMet',
   MINIMUM_ORDER_UNITS_NOT_MET = 'MinimumOrderUnitsNotMet',
@@ -282,4 +283,14 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_CART_UPDATED_ERROR = 'The cart requested was updated during your checkout.',
   REQUEST_ADDRESS_DEFAULT_ERROR = "There's been an error with your address configurations in cart and/or billing address, check and try again.",
   REQUEST_TIPS_ERROR = "There's been an error applying your tips to the checkout.",
+}
+
+export enum CHECKOUT_EVENT_ENUM {
+  ERROR_PROCESSING_GIFT_CARDS = 'ErrorProcessingGiftCards',
+  INVALID_GIFT_CARD_CODE = 'InvalidGiftCardCodes',
+  INVALID_GIFT_CARD_PARTNER = 'InvalidGiftCardPartner',
+  INACTIVE_GIFT_CARD = 'InactiveGiftCard',
+  GIFT_CARD_ALREADY_IN_USE = 'GiftCardAlreadyInUse',
+  GIFT_CARD_EXPIRED = 'GiftCardExpired',
+  GIFT_CARD_BALANCE_DEPLETED = 'GiftCardBalanceDepleted',
 }

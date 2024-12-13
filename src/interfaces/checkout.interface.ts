@@ -1,3 +1,4 @@
+import type { CHECKOUT_EVENT_ENUM } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
 import type { ICartItemAttributes } from './cart.interface';
@@ -218,6 +219,10 @@ export interface ICheckoutPrepareParams extends ICoreParams {
   scheduledDelivery?: string;
 
   payment?: string;
+
+  promoCode?: string;
+
+  giftCards?: string[];
 }
 
 /**
@@ -408,6 +413,41 @@ export interface ICheckoutItem {
 }
 
 /**
+ * Interface representing a gift card utilized during checkout.
+ *
+ * This interface defines the structure for a gift card,
+ * including its code, the amount applied during the transaction,
+ * and any remaining balance on the card.
+ *
+ * Properties:
+ * - `code`: The unique code of the gift card used for identification.
+ * - `applied`: The amount deducted from the gift card during the current transaction.
+ * - `balance`: The remaining balance on the gift card after the applied amount is deducted.
+ */
+export interface ICheckoutGiftCard {
+  code: string;
+
+  applied: number;
+
+  balance: number;
+}
+
+/**
+ * Interface representing events related to the checkout process.
+ * This interface defines the structure for any event emitted or handled
+ * during the checkout workflow, including the type of event and its corresponding message.
+ *
+ * @interface ICheckoutEvents
+ * @property {CHECKOUT_EVENT_ENUM} type - The type of the checkout event.
+ * @property {string} message - A message providing additional context or details about the event.
+ */
+export interface ICheckoutEvents {
+  type: CHECKOUT_EVENT_ENUM;
+
+  message: string;
+}
+
+/**
  * Represents a response object for preparing a checkout process.
  *
  * @interface
@@ -452,6 +492,12 @@ export interface ICheckoutPrepareResponse {
   retailers: ICheckoutRetailer[];
 
   payment?: string;
+
+  giftCards: ICheckoutGiftCard[];
+
+  events: ICheckoutEvents[];
+
+  promoCode: string;
 }
 
 /**
