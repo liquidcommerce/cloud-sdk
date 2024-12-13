@@ -191,7 +191,6 @@ const updatedCart = await client.cart.update({
     }
   },
   promoCode: 'DISCOUNT10', // Optional
-  giftCards: ['GC123456'] // Optional
 });
 ```
 
@@ -383,7 +382,7 @@ The payment element automatically adapts to:
 
 When testing payments in staging environment, use these test cards:
 
-```typescript
+```
 // Test Visa Card
 Card Number: 4242 4242 4242 4242
 Expiry: Any future date
@@ -469,7 +468,9 @@ const preparedCheckout = await client.checkout.prepare({
     }
   ],
   acceptedAccountCreation: true,
-  scheduledDelivery: "2024-12-25T14:00:00Z"
+  scheduledDelivery: "2024-12-25T14:00:00Z",
+  promoCode: 'DISCOUNT10', // Optional
+  giftCards: ['GC123456'] // Optional
 });
 
 // Complete checkout
@@ -477,7 +478,7 @@ const completedCheckout = await client.checkout.complete({
   token: preparedCheckout.token,
   payment: "payment_token"
 });
-```_
+```
 
 #### Checkout Payment
 
