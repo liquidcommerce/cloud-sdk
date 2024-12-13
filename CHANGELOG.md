@@ -1,3 +1,10 @@
+# [1.6.0-beta.9](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.8...v1.6.0-beta.9) (2024-12-13)
+
+
+### Features
+
+* **checkout:** add gift card validation and update related interfaces ([fbf6722](https://github.com/liquidcommerce/cloud-sdk/commit/fbf6722297f6cc090d261ddfe1548df7b5e2dbcf))
+
 # [1.6.0-beta.8](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.7...v1.6.0-beta.8) (2024-12-04)
 
 
