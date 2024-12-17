@@ -105,6 +105,6 @@ export class CartHelperService {
     }
 
     const parts = partNumber.split('_');
-    return parts.length === 2 && parts[0].length === 14 && parts[1].length > 0;
+    return parts.length === 2 && parts[0].length > 0 && parts[1].length > 0;
   }
 }
