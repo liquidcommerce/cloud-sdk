@@ -1,3 +1,10 @@
+# [1.6.0-beta.10](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.9...v1.6.0-beta.10) (2024-12-17)
+
+
+### Features
+
+* **cart-helper:** adjust part number validation logic ([7ee8a8b](https://github.com/liquidcommerce/cloud-sdk/commit/7ee8a8b150bf6ebb15a41eaa48f75fdde7282059))
+
 # [1.6.0-beta.9](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.8...v1.6.0-beta.9) (2024-12-13)
 
 
