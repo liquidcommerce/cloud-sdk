@@ -1116,6 +1116,7 @@
     const searchQuery = document.getElementById('searchQuery').value;
     const category = document.getElementById('category').value;
     const engraving = document.getElementById('engraving').value;
+    const priceRange = document.getElementById('priceRange').value;
     const fulfillmentSelect = document.getElementById('fulfillment');
     const fulfillment = Array.from(fulfillmentSelect.selectedOptions).map(option => option.value);
     const catalogResults = document.getElementById('catalogResults');
@@ -1135,7 +1136,6 @@
         });
       }
 
-      console.log("engraving: ", engraving)
       if (engraving) {
         filters.push({
           key: "engraving",
@@ -1148,6 +1148,39 @@
           key: "fulfillment",
           values: fulfillment
         });
+      }
+
+      if (priceRange) {
+        let minPrice, maxPrice;
+        
+        switch(priceRange) {
+          case '0-50':
+            minPrice = '0';
+            maxPrice = '50';
+            break;
+          case '50-100':
+            minPrice = '50';
+            maxPrice = '100';
+            break;
+          case '100-200':
+            minPrice = '100';
+            maxPrice = '200';
+            break;
+          case '200+':
+            minPrice = '200';
+            maxPrice = '999999';
+            break;
+        }
+
+        if (minPrice && maxPrice) {
+          filters.push({
+            key: "price",
+            values: {
+              min: minPrice,
+              max: maxPrice
+            }
+          });
+        }
       }
 
       const response = await client.catalog.search({
