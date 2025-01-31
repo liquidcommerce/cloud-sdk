@@ -849,73 +849,173 @@
               <h2 class="section-title">User Methods</h2>
 
               <div class="user-section">
-                <h5>Create/Update User Session</h5>
-                <form id="userSessionForm">
-                  <div class="mb-3">
-                    <label for="userEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="userEmail" required>
+              
+                  <div class="alert alert-info mb-3">
+                    <p>Create or update a user session. Only email is required.</p>
                   </div>
-                  <div class="mb-3">
-                    <label for="userFirstName" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="userFirstName">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Create/Update Session</button>
-                </form>
-                <div id="userSessionResult" class="session-result"></div>
+
+                      <h5 class="mb-3">Create/Update User Session</h5>
+
+                      <form id="userSessionForm">
+                        <div class="mb-3">
+                          <label for="userEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                          <input type="email" 
+                                  class="form-control" 
+                                  id="userEmail"
+                                  placeholder="Enter email address" 
+                                  required>
+                          <div class="form-text">Required to identify the user session</div>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="userFirstName" class="form-label">First Name</label>
+                          <input type="text" 
+                                  class="form-control" 
+                                  id="userFirstName"
+                                  placeholder="Enter first name (optional)">
+                          <div class="form-text">Optional user identification</div>
+                        </div>
+
+                        <div id="sessionMessage" class="alert alert-danger d-none mb-3"></div>
+
+                        <button type="submit" class="btn btn-primary w-100">Create/Update Session</button>
+                      </form>
+
+                      <div id="userSessionResult" class="session-result mt-3"></div>
+
               </div>
               <hr>
 
               <div class="user-section mt-4">
-                <h5>Fetch User by ID (without creating session)</h5>
-                <form id="fetchUserByIDForm">
-                  <div class="mb-3">
-                    <label for="userIDFetch" class="form-label">ID</label>
-                    <input type="text" class="form-control" id="userIDFetch" required>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Fetch User</button>
-                </form>
-                <div id="fetchUserByIDResult" class="mt-3 session-result"></div>
-              </div>
+                
+                    <h5 class="mb-3">Fetch User by ID</h5>
+                     <div class="alert alert-info mb-3">
+                        <p>Look up an existing user's details using their ID without creating a new session.</p>
+                     </div>
+                    
+                    <form id="fetchUserByIDForm">
+                      <div class="mb-3">
+                        <label for="userIDFetch" class="form-label">User ID <span class="text-danger">*</span></label>
+                        <input type="text" 
+                                class="form-control" 
+                                id="userIDFetch"
+                                placeholder="Enter user ID" 
+                                required>
+                        <div class="form-text">Enter the unique identifier of the user you want to look up</div>
+                      </div>
 
-              <div class="user-section mt-4">
-                <h5>Purge User</h5>
-                <form id="purgeUserForm">
-                  <div class="mb-3">
-                    <label for="purgeUserId" class="form-label">User ID or Email</label>
-                    <input type="text" class="form-control" id="purgeUserId" required>
-                  </div>
-                  <button type="submit" class="btn btn-danger">Purge User</button>
-                </form>
-                <div id="purgeUserResult" class="mt-3"></div>
+                      <div id="fetchMessage" class="alert alert-danger d-none mb-3"></div>
+
+                      <button type="submit" class="btn btn-primary w-100">Fetch User</button>
+                    </form>
+
+                    <div id="fetchUserByIDResult" class="session-result mt-3"></div>
               </div>
               <hr>
 
               <div class="user-section mt-4">
-                <h5>Update/Create Address</h>
-                  <form id="updateAddressForm">
+                
+                <h5 class="mb-3">Purge User</h5>
+                
+                <div class="alert alert-warning mb-3">
+                  <p>Warning: This will permanently delete all user data. This action cannot be undone.</p>
+                </div>
+
+                  <form id="purgeUserForm">
                     <div class="mb-3">
-                      <label for="customerId" class="form-label">Customer ID</label>
-                      <input type="text" class="form-control" id="customerId" required>
+                      <label for="purgeUserId" class="form-label">User ID or Email <span class="text-danger">*</span></label>
+                      <input type="text" 
+                              class="form-control" 
+                              id="purgeUserId"
+                              placeholder="Enter user ID or email address" 
+                              required>
+                      <div class="form-text">Enter either the user's ID or email address to delete their data</div>
                     </div>
-                    <div class="mb-3">
-                      <label for="addressOne" class="form-label">Address Line 1</label>
-                      <input type="text" class="form-control" id="addressOne" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressCity" class="form-label">City</label>
-                      <input type="text" class="form-control" id="addressCity" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressState" class="form-label">State</label>
-                      <input type="text" class="form-control" id="addressState" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="isDefaultAddress" class="form-label">Set as Default?</label>
-                      <input type="checkbox" id="isDefaultAddress">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
+
+                    <!-- Purge Message -->
+                    <div id="purgeMessage" class="alert alert-danger d-none mb-3"></div>
+
+                    <button type="submit" class="btn btn-danger w-100">Purge User Data</button>
                   </form>
-                  <div id="updateAddressResult" class="mt-3"></div>
+
+                  <div id="purgeUserResult" class="session-result mt-3"></div>
+              </div>
+              <hr>
+
+              <div class="user-section mt-4">
+                
+                <h5 class="mb-3">Update/Create Address</h5>
+               
+                <div class="alert alert-info mb-3">
+                  <p>Add or update a delivery address for a user. All fields except Default setting are required.</p>
+                </div>
+                
+                <form id="updateAddressForm">
+                  <div class="mb-3">
+                    <label for="customerId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="customerId"
+                            placeholder="Enter customer ID" 
+                            required>
+                    <div class="form-text">The ID of the customer to update/create address for</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="addressOne" class="form-label">Address Line 1 <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="addressOne"
+                            placeholder="e.g., 100 Madison Ave" 
+                            required>
+                    <div class="form-text">Street address, P.O. box, company name</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="addressCity" class="form-label">City <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="addressCity"
+                            placeholder="e.g., New York" 
+                            required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="addressState" class="form-label">State <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="addressState"
+                            placeholder="e.g., NY" 
+                            required>
+                    <div class="form-text">2-letter state code or full state name</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="addressZip" class="form-label">ZIP Code <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="addressZip"
+                          placeholder="e.g., 10016" 
+                          required>
+                    <div class="form-text">5-digit ZIP code</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <div class="form-check">
+                      <input type="checkbox" 
+                              class="form-check-input" 
+                              id="isDefaultAddress">
+                      <label class="form-check-label" for="isDefaultAddress">Set as Default Address</label>
+                    </div>
+                  </div>
+
+                  <!-- Update Message -->
+                  <div id="addressMessage" class="alert alert-danger d-none mb-3"></div>
+
+                  <button type="submit" class="btn btn-primary w-100">Update/Create Address</button>
+                </form>
+
+                <div id="updateAddressResult" class="session-result mt-3"></div>
               </div>
 
               <hr>
@@ -1992,16 +2092,17 @@ async function checkAvailability(event) {
     const one = document.getElementById('addressOne').value;
     const city = document.getElementById('addressCity').value;
     const state = document.getElementById('addressState').value;
+    const zip = document.getElementById('addressZip').value;
     const isDefault = document.getElementById('isDefaultAddress').checked;
     const updateAddressResult = document.getElementById('updateAddressResult');
 
     try {
       const addressResponse = await client.user.updateAddress({
         customerId,
-        one: NEW_YORK_ADDRESS.one,
-        city: NEW_YORK_ADDRESS.city,
-        state: NEW_YORK_ADDRESS.state,
-        zip: NEW_YORK_ADDRESS.zip,
+        one,         
+        city,      
+        state,       
+        zip,  
         type: 'SHIPPING',
         isDefault,
       });
