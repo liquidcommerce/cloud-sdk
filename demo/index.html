@@ -491,6 +491,32 @@
     .show {
       display: block;
     }
+
+    .alert {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+    .alert-info {
+      background-color: #cfe2ff;
+      border: 1px solid #b6d4fe;
+      color: #084298;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      border: 1px solid #f5c2c7;
+      color: #842029;
+    }
+
+    .mb-3 {
+      margin-bottom: 1rem;
+    }
+
+    .text-danger {
+      color: #dc3545;
+    }
   </style>
 </head>
 <body>
@@ -595,12 +621,27 @@
           <!-- ADDRESS SEARCH & DETAILS EXAMPLE -->
           <div class="tab-pane fade show active" id="address" role="tabpanel" aria-labelledby="address-tab">
             <div class="section-container">
-              <h2 class="section-title mb-3">Search Addresses</h3>
-                <input type="text" id="addressInput" class="form-control" placeholder="Enter address (min 3 characters)">
-                <ul id="autocompleteResults"></ul>
-                <div id="results"></div>
+              <h2 class="section-title">Search Addresses</h2>
+              <div class="alert alert-info mb-3">
+                <p>Start typing an address to see suggestions. Select one to view complete details.</p>
+              </div>
+              <div class="address-search mb-3">
+                <label for="addressInput" class="form-label">Address Search</label>
+                <input 
+                  type="text" 
+                  id="addressInput" 
+                  class="form-control" 
+                  placeholder="e.g., 100 Madison Ave, New York"
+                >
+                <div class="form-text">Type at least 3 characters to see suggestions</div>
+              </div>
+              <!-- Autocomplete Results -->
+              <ul id="autocompleteResults" class="list-group"></ul>
+              <!-- Selected Address Details -->
+              <div id="results"></div>
             </div>
           </div>
+
 
           <!-- CATALOG AVAILABILITY EXAMPLE -->
           <div id="catalog" class="tab-pane fade" role="tabpanel" aria-labelledby="catalog-tab">
@@ -608,34 +649,67 @@
               <div class="catalog-section">
                 <div id="catalogAvailabilityForm" class="catalog-form">
                   <h2 class="section-title">Check Product Availability</h2>
+                   <div class="alert alert-info mb-3">
+                      <p>Please provide at least one of the following identifiers: UPCs, Grouping, or IDs.</p>
+                  </div>
                   <form id="availabilityForm">
-                    <div class="mb-3">
-                      <label for="upcs" class="form-label">UPCs (comma-separated)</label>
-                      <input type="text" class="form-control" id="upcs" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="zipCode" class="form-label">Zip Code</label>
-                      <input type="text" class="form-control" id="zipCode" required>
-                    </div>
+                    <form id="availabilityForm">
+                  <div class="mb-3">
+                    <label for="upcs" class="form-label">UPCs (comma-separated)</label>
+                    <input type="text" class="form-control" id="upcs" 
+                          placeholder="e.g., 00619947000020, 00812066021598">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="grouping" class="form-label">Grouping (comma-separated)</label>
+                    <input type="text" class="form-control" id="grouping" 
+                          placeholder="e.g., GROUPING-113027, GROUPING-39553">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="ids" class="form-label">IDs (comma-separated)</label>
+                    <input type="text" class="form-control" id="ids" 
+                          placeholder="e.g., 1985115, 926">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="zipCode" class="form-label">Zip Code <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="zipCode" required 
+                          pattern="[0-9]{5}" placeholder="e.g., 10016">
+                  </div>
+
+                  <div id="validationMessage" class="alert alert-danger d-none mb-3">
+                    Please provide at least one identifier (UPCs, Grouping, or IDs)
+                  </div>
                     <button type="submit" class="btn btn-primary">Check Availability</button>
                   </form>
                 </div>
                 <div id="availabilityResults"></div>
               </div>
               <hr>
-
-              <div class="catalog-section">
+             <div class="catalog-section">
                 <div id="catalogSearchForm" class="catalog-form">
                   <h2 class="section-title">Search Products</h2>
+                  
+                 
+                  <!-- Info Alert -->
+                    <div class="alert alert-info mb-3">
+                      <p>Search our catalog. For local pricing and availability, you can include your zip code.</p>
+                    </div>
+
                   <form id="searchForm">
                     <div class="mb-3">
                       <label for="searchQuery" class="form-label">Search Query</label>
-                      <input type="text" class="form-control" id="searchQuery">
+                      <input type="text" class="form-control" id="searchQuery" 
+                            placeholder="e.g., Tito's Vodka, Whiskey, etc.">
                     </div>
-                    <div class="mb-3">
+
+                     <div class="mb-3">
                       <label for="searchZipCode" class="form-label">Zip Code</label>
-                      <input type="text" class="form-control" id="searchZipCode">
+                      <input type="text" class="form-control" id="searchZipCode" 
+                            pattern="[0-9]{5}" placeholder="e.g., 10016">
                     </div>
+
                     <div class="mb-3">
                       <label for="priceRange" class="form-label">Price Range</label>
                       <select class="form-select" id="priceRange">
@@ -646,39 +720,48 @@
                         <option value="200+">$200+</option>
                       </select>
                     </div>
+
                     <div class="mb-3">
                       <label for="category" class="form-label">Category</label>
                       <select class="form-select" id="category">
                         <option value="">All Categories</option>
-                        <option value="SPIRITS > TEQUILA">TEQUILA</option>
-                        <option value="SPIRITS > GIN">GIN</option>
-                        <option value="SPIRITS > WHISKEY">WHISKEY</option>
-                        <option value="WINE > CHAMPAGNE & SPARKLING">CHAMPAGNE & SPARKLING</option>
-                        <option value="WINE > RED WINE">RED WINE</option>
-                        <option value="WINE > WHITE WINE">WHITE WINE</option>
-                        <option value="BEER">BEER</option>
+                        <option value="SPIRITS > TEQUILA">Tequila</option>
+                        <option value="SPIRITS > GIN">Gin</option>
+                        <option value="SPIRITS > WHISKEY">Whiskey</option>
+                        <option value="WINE > CHAMPAGNE & SPARKLING">Champagne & Sparkling</option>
+                        <option value="WINE > RED WINE">Red Wine</option>
+                        <option value="WINE > WHITE WINE">White Wine</option>
+                        <option value="BEER">Beer</option>
                       </select>
                     </div>
+
                     <div class="mb-3">
                       <label for="engraving" class="form-label">Engraving</label>
                       <select class="form-select" id="engraving">
-                        <option value="">All</option>
-                        <option value="YES">Yes</option>
-                        <option value="NO">No</option>
+                        <option value="">All Products</option>
+                        <option value="YES">Engravable Only</option>
+                        <option value="NO">Non-Engravable Only</option>
                       </select>
                     </div>
+
                     <div class="mb-3">
-                      <label for="fulfillment" class="form-label">Fulfillment</label>
+                      <label for="fulfillment" class="form-label">Fulfillment Method</label>
                       <select class="form-select" id="fulfillment" multiple>
                         <option value="shipping">Shipping</option>
                         <option value="onDemand">On Demand</option>
                       </select>
+                      <div class="form-text">Hold Ctrl/Cmd to select multiple options</div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
+
+                    <!-- Validation Message -->
+                    <div id="searchValidationMessage" class="alert alert-danger d-none mb-3"></div>
+
+                    <button type="submit" class="btn btn-primary w-100">Search Products</button>
                   </form>
                 </div>
                 <div id="catalogResults"></div>
-              </div>
+          </div>
+           
             </div>
           </div>
 
@@ -687,38 +770,75 @@
             <div class="section-container">
               <h2 class="section-title">Cart</h2>
               <div class="cart-section">
-                <div id="cartForm" class="cart-form mb-4">
+               <div id="cartForm" class="cart-form mb-4">
+                  <!-- Info Alert -->
+                  <div class="alert alert-info mb-3">
+                    <p>Enter a Cart ID to view its contents and details.</p>
+                  </div>
+
                   <div class="mb-3">
                     <label for="cartIdGet" class="form-label">Cart ID</label>
-                    <input type="text" class="form-control" id="cartIdGet">
+                    <input type="text" 
+                          class="form-control" 
+                          id="cartIdGet"
+                          placeholder="Enter cart ID">
+                    <div class="form-text">Leave empty to create a new cart</div>
                   </div>
-                  <button type="button" class="btn btn-primary" id="getCart">Get Cart</button>
-                  <span id="cartEventMessage"></span>
+                  
+                  <button type="button" class="btn btn-primary w-100" id="getCart">Get Cart</button>
+                  <div id="cartEventMessage" class="alert alert-danger mt-3 d-none"></div>
                 </div>
-                <div id="cartResults"></div>
+
+                <div id="cartResults" class="mb-4"></div>
                 <div id="engravingModalContainer"></div>
                 <hr>
 
                 <div id="updateCartForm" class="cart-form mt-4">
+                  <!-- Info Alert -->
+                  
                   <h5>Update Cart</h5>
+                  <div class="alert alert-info mb-3">
+                    <p>Update an existing cart by adding items or modifying quantities.</p>
+                  </div>
                   <div class="mb-3">
                     <label for="cartIdUpdate" class="form-label">Cart ID</label>
-                    <input type="text" class="form-control" id="cartIdUpdate">
+                    <input type="text" 
+                          class="form-control" 
+                          id="cartIdUpdate"
+                          placeholder="Enter cart ID to update">
                   </div>
+
                   <div class="mb-3">
                     <label for="partNumber" class="form-label">Part Number</label>
-                    <input type="text" class="form-control" id="partNumber">
+                    <input type="text" 
+                          class="form-control" 
+                          id="partNumber"
+                          placeholder="e.g., 00619947000020_6565f4e8700628ce191059d9">
                   </div>
+
                   <div class="mb-3">
                     <label for="quantity" class="form-label">Quantity</label>
-                    <input type="number" class="form-control" id="quantity" min="1">
+                    <input type="number" 
+                          class="form-control" 
+                          id="quantity" 
+                          min="1"
+                          value="1">
                   </div>
+
                   <div class="mb-3">
                     <label for="fulfillmentId" class="form-label">Fulfillment ID</label>
-                    <input type="text" class="form-control" id="fulfillmentId">
+                    <input type="text" 
+                          class="form-control" 
+                          id="fulfillmentId"
+                          placeholder="Enter fulfillment ID">
                   </div>
-                  <button type="button" class="btn btn-primary" id="updateCart">Update Cart</button>
+
+                  <button type="button" class="btn btn-primary w-100" id="updateCart">Update Cart</button>
                 </div>
+
+
+
+
               </div>
             </div>
           </div>
@@ -1295,33 +1415,57 @@
    * Check availability of products
    * @param {Event} event - The form submission event
    */
-  async function checkAvailability( event ) {
-    event.preventDefault();
-    const upcs = document.getElementById('upcs').value.split(',').map(upc => upc.trim());
-    const zipCode = document.getElementById('zipCode').value;
-    const availabilityResults = document.getElementById('availabilityResults');
 
-    if (!client) {
-      availabilityResults.innerHTML = '<p>SDK not initialized. Please try again.</p>';
-      return;
-    }
+async function checkAvailability(event) {
+  event.preventDefault();
+  const availabilityResults = document.getElementById('availabilityResults');
+  const validationMessage = document.getElementById('validationMessage');
 
-    try {
-      const response = await client.catalog.availability({
-        upcs: upcs,
-        loc: {
-          address: NEW_YORK_ADDRESS,
-        },
-        isLegacy: true,
-        isLean: false,
-      });
-      displayAvailabilityResults(response);
-    } catch (error) {
-      console.error('Error checking availability:', error);
-      availabilityResults.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
-    }
+  const upcs = document.getElementById('upcs').value.split(',').map(upc => upc.trim()).filter(Boolean);
+  const grouping = document.getElementById('grouping').value.split(',').map(grouping => grouping.trim()).filter(Boolean);
+  const ids = document.getElementById('ids').value.split(',').map(id => id.trim()).filter(Boolean);
+
+  const zipCode = document.getElementById('zipCode').value;
+
+  if (upcs.length === 0 && grouping.length === 0 && ids.length === 0) {
+    validationMessage.classList.remove('d-none');
+    return;
   }
 
+  if (!client) {
+    availabilityResults.innerHTML = '<p class="text-danger">SDK not initialized. Please try again.</p>';
+    return;
+  }
+
+  validationMessage.classList.add('d-none');
+  
+  availabilityResults.innerHTML = '<p>Checking availability...</p>';
+
+  try {
+    const requestParams = {
+      loc: {
+        address: NEW_YORK_ADDRESS,
+      },
+      isLegacy: true,
+      isLean: false
+    };
+
+ 
+    if (upcs.length > 0) requestParams.upcs = upcs;
+    if (grouping.length > 0) requestParams.grouping = grouping;
+    if (ids.length > 0) requestParams.ids = ids;
+
+    const response = await client.catalog.availability(requestParams);
+    displayAvailabilityResults(response);
+  } catch (error) {
+    console.error('Error checking availability:', error);
+    availabilityResults.innerHTML = `
+      <div class="alert alert-danger">
+        <strong>Error:</strong> ${error.message}
+      </div>
+    `;
+  }
+}
   /**
    * Display availability results
    * @param {Object} response - The availability check response
@@ -1343,7 +1487,7 @@
               <p>UPC: ${product.sizes[0].upc}</p>
               <p>Size: ${product.sizes[0].size}</p>
               <p>Availability: ${availability}</p>
-              <p>Price: $${product.sizes[0].variants[0].price.toFixed(2)}</p>
+              <p>Price: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.sizes[0].variants[0].price / 100)}</p>
             </div>
           </div>
         </li>
