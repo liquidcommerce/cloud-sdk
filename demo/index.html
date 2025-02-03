@@ -847,14 +847,14 @@
           <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
             <div class="section-container">
               <h2 class="section-title">User Methods</h2>
-
+              <!-- User Session -->
               <div class="user-section">
-              
+                <h5 class="mb-3">Create/Update User Session</h5>
+                
                   <div class="alert alert-info mb-3">
                     <p>Create or update a user session. Only email is required.</p>
                   </div>
 
-                      <h5 class="mb-3">Create/Update User Session</h5>
 
                       <form id="userSessionForm">
                         <div class="mb-3">
@@ -876,8 +876,6 @@
                           <div class="form-text">Optional user identification</div>
                         </div>
 
-                        <div id="sessionMessage" class="alert alert-danger d-none mb-3"></div>
-
                         <button type="submit" class="btn btn-primary w-100">Create/Update Session</button>
                       </form>
 
@@ -886,8 +884,8 @@
               </div>
               <hr>
 
+              <!-- Fetch User by ID -->
               <div class="user-section mt-4">
-                
                     <h5 class="mb-3">Fetch User by ID</h5>
                      <div class="alert alert-info mb-3">
                         <p>Look up an existing user's details using their ID without creating a new session.</p>
@@ -913,6 +911,7 @@
               </div>
               <hr>
 
+              <!-- Purge User -->
               <div class="user-section mt-4">
                 
                 <h5 class="mb-3">Purge User</h5>
@@ -932,9 +931,6 @@
                       <div class="form-text">Enter either the user's ID or email address to delete their data</div>
                     </div>
 
-                    <!-- Purge Message -->
-                    <div id="purgeMessage" class="alert alert-danger d-none mb-3"></div>
-
                     <button type="submit" class="btn btn-danger w-100">Purge User Data</button>
                   </form>
 
@@ -942,6 +938,7 @@
               </div>
               <hr>
 
+              <!-- Update/Create Address -->
               <div class="user-section mt-4">
                 
                 <h5 class="mb-3">Update/Create Address</h5>
@@ -1009,127 +1006,239 @@
                     </div>
                   </div>
 
-                  <!-- Update Message -->
-                  <div id="addressMessage" class="alert alert-danger d-none mb-3"></div>
-
                   <button type="submit" class="btn btn-primary w-100">Update/Create Address</button>
                 </form>
 
                 <div id="updateAddressResult" class="session-result mt-3"></div>
               </div>
-
               <hr>
 
+              <!-- Update/Create Addres With Coordinates-->
               <div class="user-section mt-4">
-                <h5>Update/Create Address (w/ Coordinates)</h>
+                
+                <h5 class="mb-3">Update/Create Address</h5>
+                
+                <div class="alert alert-info mb-3">
+                    <p>Create or update a user's address with geographical coordinates.</p>
+                </div>
+
                   <form id="updateAddressWithCoordsForm">
-                    <div class="mb-3">
-                      <label for="customerIdAddress" class="form-label">Customer ID</label>
-                      <input type="text" class="form-control" id="customerIdAddress" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressLat" class="form-label">Latitude</label>
-                      <input type="text" class="form-control" id="addressLat" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressLong" class="form-label">Longitude</label>
-                      <input type="text" class="form-control" id="addressLong" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
-                  </form>
-                  <div id="updateAddressWithCoordsResult" class="mt-3"></div>
-              </div>
+                      <div class="mb-3">
+                          <label for="customerIdAddress" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="customerIdAddress" 
+                                placeholder="Enter customer ID"
+                                required>
+                          <div class="form-text">Required to identify the customer</div>
+                      </div>
 
+                      <div class="mb-3">
+                          <label for="addressLat" class="form-label">Latitude <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="addressLat" 
+                                placeholder="Enter latitude coordinate"
+                                required>
+                          <div class="form-text">Geographic coordinate (e.g., 40.7128)</div>
+                      </div>
+
+                      <div class="mb-3">
+                          <label for="addressLong" class="form-label">Longitude <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="addressLong" 
+                                placeholder="Enter longitude coordinate"
+                                required>
+                          <div class="form-text">Geographic coordinate (e.g., -74.0060)</div>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary w-100">Update/Create Address</button>
+                  </form>
+
+                  <div id="updateAddressWithCoordsResult" class="session-result mt-3"></div>
+              </div>
               <hr>
 
+              <!-- Update/Create Address with Places ID -->
               <div class="user-section mt-4">
-                <h5>Update/Create Address (w/ Google PlacesId)</h>
+                
+                <h5 class="mb-3">Update/Create Address with Places ID</h5>
+
+                <div class="alert alert-info mb-3">
+                    <p>Create or update a user's address using a Google Places ID.</p>
+                </div>
+
                   <form id="updateAddressWithPlacesIdForm">
-                    <div class="mb-3">
-                      <label for="customerIdAddress" class="form-label">Customer ID</label>
-                      <input type="text" class="form-control" id="customerIdAddressWithPlacesId" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressLat" class="form-label">Places Id</label>
-                      <input type="text" class="form-control" id="addressWithPlacesId" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
-                  </form>
-                  <div id="updateAddressWithPlacesIdResult" class="mt-3"></div>
-              </div>
+                      <div class="mb-3">
+                          <label for="customerIdAddressWithPlacesId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="customerIdAddressWithPlacesId" 
+                                placeholder="Enter customer ID"
+                                required>
+                          <div class="form-text">Required to identify the customer</div>
+                      </div>
 
+                      <div class="mb-3">
+                          <label for="addressWithPlacesId" class="form-label">Places ID <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="addressWithPlacesId" 
+                                placeholder="Enter Google Places ID"
+                                required>
+                          <div class="form-text">Unique identifier from Google Places API</div>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary w-100">Update/Create Address</button>
+                  </form>
+
+                  <div id="updateAddressWithPlacesIdResult" class="session-result mt-3"></div>
+              </div>
               <hr>
 
+              <!-- Purge Address -->
               <div class="user-section mt-4">
-                <h5>Purge Address</h5>
+                <h5 class="mb-3">Purge Address</h5>
+                
+                <div class="alert alert-warning mb-3">
+                  <p>Warning: This will permanently delete the selected address. This action cannot be undone.</p>
+                </div>
+
                 <form id="purgeAddressForm">
                   <div class="mb-3">
-                    <label for="purgeAddressId" class="form-label">Address ID</label>
-                    <input type="text" class="form-control" id="purgeAddressId" required>
+                    <label for="purgeAddressId" class="form-label">Address ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="purgeAddressId"
+                          placeholder="Enter address ID" 
+                          required>
+                    <div class="form-text">Enter the unique identifier of the address to delete</div>
                   </div>
-                  <button type="submit" class="btn btn-danger">Purge Address</button>
+
+                  <button type="submit" class="btn btn-danger w-100">Purge Address</button>
                 </form>
-                <div id="purgeAddressResult" class="mt-3"></div>
+
+                <div id="purgeAddressResult" class="session-result mt-3"></div>
               </div>
               <hr>
 
+              <!-- Add Payment Method -->
               <div class="user-section mt-4">
-                <h5>Add Payment Method</h>
-                  <form id="addPaymentMethodForm">
-                    <div class="mb-3">
-                      <label for="customerId" class="form-label">Customer ID</label>
-                      <input type="text" class="form-control" id="addPaymentCustomerId" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="paymentMethodId" class="form-label">Payment Method ID</label>
-                      <input type="text" class="form-control" id="paymentMethodId" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="isDefault" class="form-label">Set as Default?</label>
-                      <input type="checkbox" id="isDefault">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Payment Method</button>
-                  </form>
-                  <div id="addPaymentMethodResult" class="mt-3"></div>
-              </div>
-              <hr>
+                <h5 class="mb-3">Add Payment Method</h5>
 
-              <div class="user-section mt-4">
-                <h5>Update Payment Method</h5>
-                <form id="updatePaymentMethodForm">
+                <div class="alert alert-info mb-3">
+                  <p>Add a new payment method to a user's account. The payment method ID can be obtained from the payment element.</p>
+                </div>
+
+                <form id="addPaymentMethodForm">
                   <div class="mb-3">
-                    <label for="updatePaymentCustomerId" class="form-label">Customer ID</label>
-                    <input type="text" class="form-control" id="updatePaymentCustomerId" required>
+                    <label for="addPaymentCustomerId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="addPaymentCustomerId"
+                          placeholder="Enter customer ID" 
+                          required>
+                    <div class="form-text">The unique identifier of the customer</div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="updatePaymentMethodId" class="form-label">Payment Method ID</label>
-                    <input type="text" class="form-control" id="updatePaymentMethodId" required>
+                    <label for="paymentMethodId" class="form-label">Payment Method ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="paymentMethodId"
+                          placeholder="Enter payment method ID" 
+                          required>
+                    <div class="form-text">The payment method token from your payment provider</div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="updateIsDefault" class="form-label">Set as Default?</label>
-                    <input type="checkbox" id="updateIsDefault">
+                    <div class="form-check">
+                      <input type="checkbox" 
+                            class="form-check-input" 
+                            id="isDefault">
+                      <label class="form-check-label" for="isDefault">Set as Default?</label>
+                    </div>
                   </div>
-                  <button type="submit" class="btn btn-primary">Update Payment Method</button>
+
+                  <button type="submit" class="btn btn-primary w-100">Add Payment Method</button>
                 </form>
-                <div id="updatePaymentMethodResult" class="mt-3"></div>
+
+                <div id="addPaymentMethodResult" class="session-result mt-3"></div>
               </div>
               <hr>
 
+              <!-- Update Default Payment Method -->
               <div class="user-section mt-4">
-                <h5>Purge Payment Method</h5>
+                <h5 class="mb-3">Update Default Payment Method</h5>
+                
+                <div class="alert alert-info mb-3">
+                  <p>Set an existing payment method as the default payment method.</p>
+                </div>
+
+                <form id="updateDefaultPaymentForm">
+                  <div class="mb-3">
+                    <label for="updatePaymentCustomerId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="updatePaymentCustomerId"
+                          placeholder="Enter customer ID" 
+                          required>
+                    <div class="form-text">The unique identifier of the customer</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="updatePaymentMethodId" class="form-label">Payment ID<span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="updatePaymentMethodId"
+                          placeholder="Enter payment method ID" 
+                          required>
+                    <div class="form-text">The ID of the payment method to update</div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-100">Update Payment Method</button>
+                </form>
+
+                <div id="updateDefaultPaymentResult" class="session-result mt-3"></div>
+              </div>
+              <hr>
+
+              <!-- Purge Payment Method -->
+              <div class="user-section mt-4">
+                <h5 class="mb-3">Purge Payment Method</h5>
+
+                <div class="alert alert-warning mb-3">
+                  <p>Warning: This will permanently delete the selected payment method. This action cannot be undone.</p>
+                </div>
+
                 <form id="purgePaymentMethodForm">
                   <div class="mb-3">
-                    <label for="purgeCustomerId" class="form-label">Customer ID</label>
-                    <input type="text" class="form-control" id="purgeCustomerId" required>
+                    <label for="purgeCustomerId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="purgeCustomerId"
+                            placeholder="Enter customer ID" 
+                            required>
+                    <div class="form-text">The unique identifier of the customer</div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="purgePaymentId" class="form-label">Payment Method ID</label>
-                    <input type="text" class="form-control" id="purgePaymentId" required>
+                    <label for="purgePaymentId" class="form-label">Payment Method ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="purgePaymentId"
+                            placeholder="Enter payment method ID" 
+                            required>
+                    <div class="form-text">The ID of the payment method to delete</div>
                   </div>
-                  <button type="submit" class="btn btn-danger">Purge Payment Method</button>
+
+                  <button type="submit" class="btn btn-danger w-100">Purge Payment Method</button>
                 </form>
-                <div id="purgePaymentMethodResult" class="mt-3"></div>
+
+                <div id="purgePaymentMethodResult" class="session-result mt-3"></div>
               </div>
+
             </div>
           </div>
 
@@ -2211,33 +2320,27 @@ async function checkAvailability(event) {
   });
 
   /**
-   * Update Payment Method Event Listener
+   * Update Default Payment Method Event Listener
    */
-  document.getElementById('updatePaymentMethodForm').addEventListener('submit', async ( event ) => {
+  document.getElementById('updateDefaultPaymentForm').addEventListener('submit', async ( event ) => {
     event.preventDefault();
     const customerId = document.getElementById('updatePaymentCustomerId').value;
     const paymentMethodId = document.getElementById('updatePaymentMethodId').value;
-    const isDefault = document.getElementById('updateIsDefault').checked;
-    const updatePaymentMethodResult = document.getElementById('updatePaymentMethodResult');
+    const updateDefaultPaymentResult = document.getElementById('updateDefaultPaymentResult');
 
     try {
       const response = await client.user.updatePayment({
         customerId,
         paymentMethodId,
-        // comment out to test multiple scenarios
-        isDefault,
+        isDefault:true,
       });
 
-      updatePaymentMethodResult.innerHTML = `
-          <p>Payment method updated successfully:</p>
-          <ul>
-            <li>Payment Method ID: ${response.data.id}</li>
-            <li>Default: ${response.data.isDefault ? 'Yes' : 'No'}</li>
-          </ul>
+      updateDefaultPaymentResult.innerHTML = `
+          <p>Default payment updated successfully.</p>
         `;
     } catch (error) {
       console.error('Failed to update payment method:', error);
-      updatePaymentMethodResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+      updateDefaultPaymentResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
     }
   });
 
