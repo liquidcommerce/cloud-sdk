@@ -1244,58 +1244,118 @@
 
           <!-- PAYMENT EXAMPLE -->
           <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
-            <div class="section-container">
-              <h2 class="section-title">Payment Method</h2>
-              <form id="paymentForm" class="payment-form">
-                <div class="form-group">
-                  <label for="sessionKey" class="form-label">Session Key</label>
-                  <input type="text" id="sessionKey" class="form-input" required>
-                </div>
-                <div class="form-group">
-                  <label for="sessionSecret" class="form-label">Session Secret</label>
-                  <input type="text" id="sessionSecret" class="form-input" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Mount Payment Element</button>
-              </form>
-              <div id="payment-element-container" class="payment-element-container"></div>
-              <div id="paymentTokenResult" class="payment-token-result"></div>
-              <div class="button-group">
-                <button id="generateTokenButton" class="btn btn-secondary">Generate Payment Token</button>
-                <button id="collapsePaymentButton" class="btn btn-secondary">Collapse Payment Element</button>
-                <button id="unmountPaymentButton" class="btn btn-warning">Unmount Payment Element</button>
-                <button id="destroyPaymentButton" class="btn btn-danger">Destroy Payment Element</button>
-              </div>
+          <div class="section-container">
+            <h2 class="section-title mb-4">Payment Method</h2>
+
+            <div class="alert alert-info mb-4">
+              <p>Mount a payment element to securely collect payment details. The session key and secret are required to initialize the payment element.</p>
             </div>
+
+            <form id="paymentForm" class="mb-4">
+              <div class="mb-3">
+                <label for="sessionKey" class="form-label">Session Key <span class="text-danger">*</span></label>
+                <input type="text" 
+                        id="sessionKey" 
+                        class="form-control"
+                        placeholder="Enter session key"
+                        required>
+                <div class="form-text">The session key from your user session</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="sessionSecret" class="form-label">Session Secret <span class="text-danger">*</span></label>
+                <input type="text" 
+                        id="sessionSecret" 
+                        class="form-control"
+                        placeholder="Enter session secret"
+                        required>
+                <div class="form-text">The session secret from your user session</div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">Mount Payment Element</button>
+            </form>
+
+            <!-- Payment Element Container -->
+            <div id="payment-element-container" class="mb-4 p-3 border rounded"></div>
+            
+            <!-- Payment Token Result -->
+            <div id="paymentTokenResult" class="session-result mb-4"></div>
+
+            <!-- Control Buttons -->
+            <div class="d-grid gap-2">
+              <button id="generateTokenButton" class="btn btn-secondary">
+                Generate Payment Token
+              </button>
+              <button id="collapsePaymentButton" class="btn btn-secondary">
+                Collapse Payment Element
+              </button>
+              <button id="unmountPaymentButton" class="btn btn-warning">
+                Unmount Payment Element
+              </button>
+              <button id="destroyPaymentButton" class="btn btn-danger">
+                Destroy Payment Element
+              </button>
+            </div>
+
+          </div>
           </div>
 
           <!-- CHECKOUT EXAMPLE -->
           <div class="tab-pane fade" id="checkout" role="tabpanel" aria-labelledby="checkout-tab">
             <div class="section-container">
               <h2 class="section-title">Checkout</h2>
-              <form id="checkoutForm">
-                <div class="mb-3">
-                  <label for="checkoutCartId" class="form-label">Checkout Cart ID</label>
-                  <input type="text" class="form-control" id="checkoutCartId" required>
+              <h5 class="mb-3">Prepare Checkout</h5>
+               <div class="alert alert-info mb-4">
+                  <p>Prepare a checkout session for a cart. You'll need a valid cart ID to initiate the checkout process.</p>
                 </div>
-                <button type="submit" class="btn btn-primary">Prepare Checkout</button>
-              </form>
+
+                <form id="checkoutForm">
+                  <div class="mb-3">
+                    <label for="checkoutCartId" class="form-label">Cart ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="checkoutCartId"
+                            placeholder="Enter cart ID"
+                            required>
+                    <div class="form-text">The ID of the cart to process for checkout</div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-100">Prepare Checkout</button>
+                </form>
 
               <div id="checkoutResults" class="mt-3"></div>
 
               <hr>
 
               <!-- Complete Checkout Form -->
-              <h2 class="section-title">Complete Checkout</h2>
+              <h5 class="mb-3">Complete Checkout</h5>
+
+              <div class="alert alert-info mb-4">
+                <p>Complete a prepared checkout by providing the checkout token and payment method ID.</p>
+              </div>
+
               <form id="completeCheckoutForm">
                 <div class="mb-3">
-                  <label for="checkoutToken" class="form-label">Checkout Token</label>
-                  <input type="text" class="form-control" id="checkoutToken" required>
+                  <label for="checkoutToken" class="form-label">Checkout Token <span class="text-danger">*</span></label>
+                  <input type="text" 
+                          class="form-control" 
+                          id="checkoutToken"
+                          placeholder="Enter checkout token" 
+                          required>
+                  <div class="form-text">The token received from the prepare checkout step</div>
                 </div>
+
                 <div class="mb-3">
-                  <label for="paymentId" class="form-label">Payment ID</label>
-                  <input type="text" class="form-control" id="paymentId" required>
+                  <label for="paymentId" class="form-label">Payment ID <span class="text-danger">*</span></label>
+                  <input type="text" 
+                          class="form-control" 
+                          id="paymentId"
+                          placeholder="Enter payment ID" 
+                          required>
+                  <div class="form-text">The ID of the payment method to use for this checkout</div>
                 </div>
-                <button type="submit" class="btn btn-success">Complete Checkout</button>
+
+                <button type="submit" class="btn btn-success w-100">Complete Checkout</button>
               </form>
 
               <div id="completeCheckoutResults" class="mt-3"></div>
@@ -2121,8 +2181,6 @@ async function checkAvailability(event) {
     const id = document.getElementById('userIDFetch').value;
     const fetchUserByIDResult = document.getElementById('fetchUserByIDResult');
 
-    console.log("id: ", id)
-
     try {
       const userFetchedByID = await client.user.fetch(id);
       const { data, metadata, message, statusCode } = userFetchedByID;
@@ -2491,28 +2549,28 @@ async function checkAvailability(event) {
     // Build the checkout object
     const checkoutData = {
       cartId,
-      'recipient': {
-        'firstName': 'dioriJoe',
+      'customer': {
+        'firstName': 'Joe',
         'lastName': 'John',
-        'email': 'john.diori.joe@gmail.com',
+        'email': 'john.joe@gmail.com',
         'phone': '9732119920',
         'birthDate': '11-22-1998',
         'hasAgeVerify': true,
       },
-      'billingAddress': {
-        'firstName': 'NewJoe',
-        'lastName': 'NewJohn',
-        'email': 'joe.new.john@gmail.com',
-        'phone': '1234324987',
-        'one': '22 Washington Ave',
-        'two': '',
-        'city': 'Cliffside Park',
-        'state': 'NJ',
-        'zip': '07010',
-      },
+      // 'billingAddress': {
+      //   'firstName': 'NewJoe',
+      //   'lastName': 'NewJohn',
+      //   'email': 'joe.new.john@gmail.com',
+      //   'phone': '1234324987',
+      //   'one': '22 Washington Ave',
+      //   'two': '',
+      //   'city': 'Cliffside Park',
+      //   'state': 'NJ',
+      //   'zip': '07010',
+      // },
+      'billingSameAsShipping': true, // Set to false to provide a separate billing address
       'hasSubstitutionPolicy': true,
       'isGift': false,
-      'billingSameAsShipping': true,
       'giftOptions': {
         'message': '',
         'recipient': {
@@ -2566,10 +2624,13 @@ async function checkAvailability(event) {
 
     const completeCheckoutResults = document.getElementById('completeCheckoutResults');
 
+    const token = document.getElementById('checkoutToken').value;
+    const payment = document.getElementById('paymentId').value;
+
     // Build the complete checkout request object
     const completeCheckoutData = {
-      token: document.getElementById('checkoutToken').value,
-      payment: document.getElementById('paymentId').value,
+      token,
+      payment
     };
 
     try {
