@@ -436,10 +436,6 @@ export interface IProductSizeEngraving {
  * @property {Date | null | string} estimatedShipBy - The date when the product is expected to ship.
  *                                      If null, the estimatedShipBy date is not set.
  *
- * @property {number} presaleLimit - The maximum number of items that can be purchased during the presale.
- *
- * @property {number} price - The price of the product during the presale.
- *
  * @property {boolean} isActive - Indicates whether the presale is currently active.
  *
  * @property {string} language - The language associated with the product presale.
@@ -448,10 +444,6 @@ export interface IProductPresale {
   canPurchaseOn: Date | null | string;
 
   estimatedShipBy: Date | null | string;
-
-  presaleLimit?: number;
-
-  price?: number;
 
   isActive: boolean;
 
