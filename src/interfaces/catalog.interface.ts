@@ -338,9 +338,9 @@ export interface IAttributesPersonalization {
 
   fee: number;
 
-  availableFrom: Date;
+  availableFrom: string | null;
 
-  availableTo: Date;
+  availableTo: string | null;
 }
 
 /**
