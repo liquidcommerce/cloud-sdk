@@ -430,20 +430,28 @@ export interface IProductSizeEngraving {
  *
  * @interface IProductPresale
  *
- * @property {Date | null} canPurchaseOn - The date when the product can be added to the cart.
+ * @property {Date | null | string} canPurchaseOn - The date when the product can be added to the cart.
  *                                      If null, the canPurchaseOn date is not set.
  *
- * @property {Date | null} estimatedShipBy - The date when the product is expected to ship.
+ * @property {Date | null | string} estimatedShipBy - The date when the product is expected to ship.
  *                                      If null, the estimatedShipBy date is not set.
+ *
+ * @property {number} presaleLimit - The maximum number of items that can be purchased during the presale.
+ *
+ * @property {number} price - The price of the product during the presale.
  *
  * @property {boolean} isActive - Indicates whether the presale is currently active.
  *
  * @property {string} language - The language associated with the product presale.
  */
 export interface IProductPresale {
-  canPurchaseOn: Date | null;
+  canPurchaseOn: Date | null | string;
 
-  estimatedShipBy: Date | null;
+  estimatedShipBy: Date | null | string;
+
+  presaleLimit?: number;
+
+  price?: number;
 
   isActive: boolean;
 

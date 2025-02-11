@@ -241,6 +241,10 @@ export interface ICart {
 
   total: number;
 
+  isPresaleLocked: boolean;
+
+  presaleExpiresAt: string | null;
+
   createdAt: string | Date;
 
   updatedAt: string | Date;

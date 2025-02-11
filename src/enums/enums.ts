@@ -223,9 +223,15 @@ export enum CART_EVENT_ENUM {
   INVALID_DOMAIN = 'InvalidDomain',
   INVALID_REQUIREMENTS = 'InvalidRequirements',
   INVALID_ORGANIZATION = 'InvalidOrganization',
-  PRESALE_ITEMS_NOT_ALLOWED = 'PresaleItemsNotAllowed',
   PRODUCT_NOT_ELIGIBLE = 'ProductNotEligible',
   NOT_ENOUGH_PREVIOUS_ORDERS = 'NotEnoughPreviousOrders',
+
+  //Presale validation events
+  PRESALE_ITEMS_NOT_ALLOWED = 'PresaleItemsNotAllowed',
+  PRESALE_LIMIT_EXCEEDED = 'PresaleLimitExceeded',
+  PRESALE_NOT_STARTED = 'PresaleNotStarted',
+  PRESALE_EXPIRED = 'PresaleExpired',
+  PRESALE_MIXED_CART = 'PresaleMixedCart',
 }
 
 export enum ENUM_ADDRESS_TYPE {
