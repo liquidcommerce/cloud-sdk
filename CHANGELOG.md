@@ -1,3 +1,12 @@
+# [1.6.0-beta.11](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.10...v1.6.0-beta.11) (2025-02-11)
+
+
+### Bug Fixes
+
+* **interfaces, enums:** updated interfaces and enums related to presale ([a53c12b](https://github.com/liquidcommerce/cloud-sdk/commit/a53c12b36801d12e5aa495d2cfcc6d4cf8b5268b))
+* **presale:** removed internally used types ([dd21ebb](https://github.com/liquidcommerce/cloud-sdk/commit/dd21ebb54ac95e76e856fe0852ae1917806c1e0b))
+* **presale:** updated date type ([c1cc4f8](https://github.com/liquidcommerce/cloud-sdk/commit/c1cc4f8e63f1a7dfe8ad38f65b9341565eaee6e9))
+
 # [1.6.0-beta.10](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.9...v1.6.0-beta.10) (2024-12-17)
 
 
