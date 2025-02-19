@@ -501,6 +501,21 @@ export interface IProductSize {
 }
 
 /**
+ * Represents product price information.
+ *
+ * @interface IProductPriceInfo
+ */
+export interface IProductPriceInfo {
+  currency: string;
+
+  minimum: number;
+
+  average: number;
+
+  maximum: number;
+}
+
+/**
  * Represents a product with various attributes and details.
  */
 export interface IProduct {
@@ -555,4 +570,6 @@ export interface IProduct {
   sizes: IProductSize[];
 
   attributes?: Partial<IAttributes>;
+
+  priceInfo: IProductPriceInfo | null;
 }
