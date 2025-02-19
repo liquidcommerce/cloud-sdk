@@ -1,3 +1,10 @@
+# [1.6.0-beta.12](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.11...v1.6.0-beta.12) (2025-02-19)
+
+
+### Features
+
+* **interface:** product price information ([672ffb1](https://github.com/liquidcommerce/cloud-sdk/commit/672ffb1d340e91d0281786abccc2181f66a21faa))
+
 # [1.6.0-beta.11](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.10...v1.6.0-beta.11) (2025-02-11)
 
 
