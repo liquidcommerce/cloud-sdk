@@ -469,6 +469,10 @@ export interface ICheckoutPrepareResponse {
 
   updatedAt: string | null;
 
+  isPresaleLocked: boolean;
+
+  presaleExpiresAt: string | null;
+
   billingSameAsShipping: boolean;
 
   acceptedAccountCreation?: boolean;

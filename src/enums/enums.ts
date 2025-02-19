@@ -276,7 +276,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_VALIDATION_ERROR = "There's been an error with your request parameters, check and try again.",
   REQUEST_TAX_ERROR = 'There was an error calculating tax for your order.',
   REQUEST_COMPLETE_TOKEN = 'The checkout token provided is invalid, check and try again.',
-  REQUEST_DEFAULT_COMPLETE_ERROR = 'There was an error completing your checkout, confirm through the (prepare) method and try again.',
+  REQUEST_DEFAULT_COMPLETE_ERROR = 'There was an error completing your checkout, please try again later.',
   REQUEST_CHECKOUT_COMPLETE_UPDATE_ERROR = 'Unable to update your checkout status.',
   REQUEST_CHECKOUT_COMPLETE_SAVE_ERROR = 'Unable to save your completed checkout.',
   REQUEST_CHECKOUT_HAS_COMPLETE_ERROR = 'This checkout has already been processed, create a new cart to process a new checkout.',
