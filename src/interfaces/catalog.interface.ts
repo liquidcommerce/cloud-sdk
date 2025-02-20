@@ -500,6 +500,11 @@ export interface IProductSize {
   variants: IProductVariant[];
 }
 
+/**
+ * Represents product price information.
+ *
+ * @interface IProductPriceInfo
+ */
 export interface IProductPriceInfo {
   currency: string;
 
