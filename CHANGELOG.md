@@ -1,3 +1,10 @@
+# [1.6.0-beta.13](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.12...v1.6.0-beta.13) (2025-03-06)
+
+
+### Bug Fixes
+
+* add arizona state ([9fc2310](https://github.com/liquidcommerce/cloud-sdk/commit/9fc2310faa372ee496d8158f5c548c28a73608da))
+
 # [1.6.0-beta.12](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.11...v1.6.0-beta.12) (2025-02-19)
 
 
