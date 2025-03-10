@@ -103,6 +103,14 @@ const detailsResponse = await client.address.details({
 //     lat: number;
 //     long: number;
 //   }
+//   addressComponents: {
+//     one: string,
+//     two: string,
+//     city": string,
+//     state: string,
+//     zip: string,
+//     country: "US"
+//   }
 // }
 ```
 

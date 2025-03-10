@@ -114,6 +114,7 @@ export interface IAddressDetailsParams extends ICoreParams {
  *
  * @property {string} formattedAddress - The formatted address as a string.
  * @property {ICoords} coords - The coordinates associated with the address.
+ * @property {Omit<IAddress, 'id'>} addressComponents - The address components.
  */
 export interface IAddressDetailsResult {
   formattedAddress: string;
