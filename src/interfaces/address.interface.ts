@@ -119,4 +119,6 @@ export interface IAddressDetailsResult {
   formattedAddress: string;
 
   coords: ICoords;
+
+  addressComponents: Omit<IAddress, 'id'>;
 }
