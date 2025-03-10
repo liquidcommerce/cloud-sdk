@@ -121,5 +121,5 @@ export interface IAddressDetailsResult {
 
   coords: ICoords;
 
-  addressComponents: Omit<IAddress, 'id'>;
+  address: Omit<IAddress, 'id'>;
 }
