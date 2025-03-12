@@ -14,8 +14,7 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
 
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Usage](#usage)
-- [Services](#services)
+- [Services & Usage](#services-and-usage)
   - [Address](#address)
   - [Catalog](#catalog)
   - [Cart](#cart)
@@ -73,7 +72,7 @@ interface ApiResponse<T> {
 }
 ```
 
-## Services
+## Services and Usage
 
 ### Address
 
@@ -138,6 +137,8 @@ const availabilityResponse = await client.catalog.availability({
 // Search catalog with filters
 const searchResponse = await client.catalog.search({
   search: 'whiskey',
+  pageToken: "",
+  entity: "",
   page: 1,
   perPage: 20,
   orderBy: ENUM_ORDER_BY.PRICE,
@@ -199,6 +200,7 @@ const updatedCart = await client.cart.update({
     },
   },
   promoCode: 'DISCOUNT10', // Optional
+  giftCards: ['GC123456'], // Optional
 });
 ```
 
@@ -216,6 +218,7 @@ const userSession = await client.user.session({
   company: 'Company Inc',
   profileImage: 'https://...',
   birthDate: '1990-01-01',
+  id:'user_id', // Existing user identifier (for updates only), email becomes optional
 });
 
 // Fetch user by ID or email
@@ -223,7 +226,7 @@ const userData = await client.user.fetch('user_id_or_email');
 
 // Address management
 const newAddress = await client.user.addAddress({
-  customerId: 'customer_id',
+  userId: 'user_id',
   placesId: 'google_places_id', // Optional if providing address details
   one: '100 Madison St',
   two: 'Apt 4B',
@@ -490,7 +493,7 @@ const preparedCheckout = await client.checkout.prepare({
 // Complete checkout
 const completedCheckout = await client.checkout.complete({
   token: preparedCheckout.token,
-  payment: 'payment_token',
+  payment: 'payment_id',
 });
 ```
 
