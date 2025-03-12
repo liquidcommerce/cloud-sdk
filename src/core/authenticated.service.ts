@@ -276,31 +276,51 @@ export class AuthenticatedService {
    * @throws {Error} If the response is not successful (status is not ok).
    */
   private async request<T>(path: string, options: IRequestOptions): Promise<T> {
-    if (!this.accessToken || this.isTokenExpired()) {
-      await this.authenticate();
+    try {
+      if (!this.accessToken || this.isTokenExpired()) {
+        await this.authenticate();
+      }
+
+      const url = new URL(`api${path}`, this.baseURL);
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'X-LIQUID-API-KEY': this.apiKey,
+        Authorization: `Bearer ${this.accessToken}`,
+        ...options.headers,
+      };
+
+      const fetchOptions: IHttpClientOptions = {
+        method: options.method,
+        headers,
+        body: options.body ? JSON.stringify(options.body) : undefined,
+      };
+
+      const response = await this.httpClient(url.toString(), fetchOptions);
+
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch (error) {
+        // If JSON parsing fails, try to get the text
+        const text = await response.text().catch(() => `HTTP error! status: ${response.status}`);
+        responseData = { message: text || error };
+      }
+
+      if (!response.ok) {
+        // For error responses, create a structured error object
+        const errorObj = {
+          ...responseData,
+          status: response.status,
+          message: responseData?.message || `HTTP error! status: ${response.status}`,
+        };
+
+        throw errorObj;
+      }
+
+      return responseData;
+    } catch (error) {
+      throw error;
     }
-
-    const url = new URL(`api${path}`, this.baseURL);
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'X-LIQUID-API-KEY': this.apiKey,
-      Authorization: `Bearer ${this.accessToken}`,
-      ...options.headers,
-    };
-
-    const fetchOptions: IHttpClientOptions = {
-      method: options.method,
-      headers,
-      body: options.body ? JSON.stringify(options.body) : undefined,
-    };
-
-    const response = await this.httpClient(url.toString(), fetchOptions);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return response.json();
   }
 
   /**
