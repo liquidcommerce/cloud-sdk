@@ -1,3 +1,11 @@
+# [1.6.0-beta.14](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.13...v1.6.0-beta.14) (2025-03-13)
+
+
+### Bug Fixes
+
+* added some comments ([e2d6675](https://github.com/liquidcommerce/cloud-sdk/commit/e2d66752cab5fb32229821171758fbef8db157f0))
+* **interface:** addressComponent response name ([d04990e](https://github.com/liquidcommerce/cloud-sdk/commit/d04990e7221e366958ad29faaa6a631165f63b89))
+
 # [1.6.0-beta.13](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.12...v1.6.0-beta.13) (2025-03-06)
 
 
