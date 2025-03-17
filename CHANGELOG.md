@@ -1,3 +1,10 @@
+# [1.6.0-beta.15](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.14...v1.6.0-beta.15) (2025-03-17)
+
+
+### Bug Fixes
+
+* **auth-service:** error response object ([69963a5](https://github.com/liquidcommerce/cloud-sdk/commit/69963a55844906d56b775c880cb354ce5f7aa733))
+
 # [1.6.0-beta.14](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.13...v1.6.0-beta.14) (2025-03-13)
 
 
