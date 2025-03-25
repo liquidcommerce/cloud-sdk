@@ -21,6 +21,7 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
   - [User](#user)
   - [Payment](#payment)
   - [Checkout](#checkout)
+  - [Order](#order)
 - [Response Types](#response-types)
 - [Error Handling](#error-handling)
 - [Documentation](#documentation)
@@ -536,6 +537,97 @@ if (!('error' in tokenResult)) {
 // 6. Clean up
 client.payment.unmount();
 client.payment.destroy();
+```
+
+### Order
+
+Order retrieval services:
+
+```typescript
+// Fetch order details by ID or number
+const orderResponse = await client.order.fetch('order_id_or_order_number');
+
+// Response includes comprehensive order details:
+// - Customer information
+// - Shipping and billing addresses
+// - Order items with product details
+// - Retailer information
+// - Fulfillment and package tracking
+// - Complete pricing breakdown
+
+// {
+//   referenceId: string;
+//   legacyOrderNumber: string;
+//   isHybrid: boolean;
+//   createdAt: string; // ISO date string
+//   updatedAt: string; // ISO date string
+//   customer: {
+//     id: string;
+//     firstName: string;
+//     lastName: string;
+//     email: string;
+//     // ...other customer fields
+//   },
+//   addresses: {
+//     shipping: {
+//       one: string;
+//       two: string;
+//       city: string;
+//       state: string;
+//       zip: string;
+//       country: string;
+//     },
+//     billing: {
+//       firstName: string;
+//       lastName: string;
+//       email: string;
+//       phone: string;
+//       // ...other address fields
+//     }
+//   },
+//   options: {
+//     isGift: boolean;
+//     giftMessage: string;
+//     hasVerifiedAge: boolean;
+//     // ...other options
+//   },
+//   amounts: {
+//     subtotal: number; // in cents
+//     shipping: number; // in cents
+//     tax: number; // in cents
+//     total: number; // in cents
+//     // ...other amount fields
+//   },
+//   retailers: [
+//     {
+//       id: string;
+//       name: string;
+//       system: string;
+//       address: object;
+//       amounts: object;
+//       fulfillments: array;
+//     }
+//   ],
+//   items: [
+//     {
+//       id: string;
+//       retailerId: string;
+//       fulfillmentId: string;
+//       product: {
+//         name: string;
+//         brand: string;
+//         upc: string;
+//         // ...other product details
+//       },
+//       pricing: {
+//         price: number; // in cents
+//         quantity: number;
+//         // ...other pricing fields
+//       },
+//       // ...other item fields
+//     }
+//   ]
+// }
 ```
 
 ## Error Handling

@@ -25,6 +25,7 @@ import type {
   ILiquidCommerceClient,
   ILiquidPaymentConfig,
   ILiquidPaymentToken,
+  IOrder,
   IPaymentElementEventMap,
   IPaymentMethod,
   IPurgeResponse,
@@ -40,12 +41,13 @@ import type {
 } from './interfaces';
 import type {
   AddressService,
+  CartService,
   CatalogService,
   CheckoutService,
+  OrderService,
   PaymentService,
   UserService,
 } from './services';
-import type { CartService } from './services/cart.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from './types';
 
 /**
@@ -74,6 +76,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
 
   private checkoutService: CheckoutService;
 
+  private orderService: OrderService;
+
   private config: ILiquidCommerceConfig;
 
   private singletonManager: SingletonManager;
@@ -96,6 +100,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.userService = this.singletonManager.getUserService(this.authenticatedClient);
     this.paymentService = this.singletonManager.getPaymentService(this.authenticatedClient);
     this.checkoutService = this.singletonManager.getCheckoutService(this.authenticatedClient);
+    this.orderService = this.singletonManager.getOrderService(this.authenticatedClient);
   }
 
   /**
@@ -393,6 +398,13 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     ): Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>> => {
       await this.ensureAuthenticated();
       return this.checkoutService.complete(params);
+    },
+  };
+
+  public order: any = {
+    fetch: async (identifier: string): Promise<IApiResponseWithData<IOrder>> => {
+      await this.ensureAuthenticated();
+      return this.orderService.fetchOrder(identifier);
     },
   };
 }

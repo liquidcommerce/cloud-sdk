@@ -1,12 +1,13 @@
 import type { ILiquidCommerceClientConstructor } from '../interfaces';
 import {
   AddressService,
+  CartService,
   CatalogService,
   CheckoutService,
+  OrderService,
   PaymentService,
   UserService,
 } from '../services';
-import { CartService } from '../services/cart.service';
 import type { ILiquidCommerceConfig } from '../types';
 import { AuthenticatedService } from './authenticated.service';
 import { CartHelperService } from './cart-helper.service';
@@ -264,6 +265,14 @@ export class SingletonManager {
       CheckoutService,
       authenticatedClient,
       this.getCheckoutHelperService()
+    );
+  }
+
+  public getOrderService(authenticatedClient: AuthenticatedService): OrderService {
+    return this.getOrCreateService(
+      `OrderService_${authenticatedClient.getUniqueKey()}`,
+      OrderService,
+      authenticatedClient
     );
   }
 }
