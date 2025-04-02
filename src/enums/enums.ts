@@ -303,7 +303,7 @@ export enum CHECKOUT_EVENT_ENUM {
   GIFT_CARD_BALANCE_DEPLETED = 'GiftCardBalanceDepleted',
 }
 
-export enum ENUM_PARTNER_ORDER_STATUS {
+export enum ENUM_ORDER_STATUS {
   SCHEDULED = 'scheduled',
   ON_HOLD = 'onHold',
   PENDING = 'pending',
@@ -313,7 +313,7 @@ export enum ENUM_PARTNER_ORDER_STATUS {
   CANCELED = 'canceled',
 }
 
-export enum ENUM_PARTNER_ORDER_PACKAGE_STATUS {
+export enum ENUM_ORDER_PACKAGE_STATUS {
   PENDING = 'pending',
   SHIPPED = 'shipped',
   DELIVERED = 'delivered',
@@ -321,14 +321,14 @@ export enum ENUM_PARTNER_ORDER_PACKAGE_STATUS {
   RETURNED = 'returned',
 }
 
-export enum ENUM_PARTNER_ORDER_FULFILLMENT_TYPE {
+export enum ENUM_ORDER_FULFILLMENT_TYPE {
   SHIPPING = 'shipping',
   ON_DEMAND = 'onDemand',
   DIGITAL = 'digital',
   BOPIS = 'bopis',
 }
 
-export enum ENUM_PARTNER_CUSTOMER_PLACEMENT {
+export enum ENUM_CUSTOMER_PLACEMENT {
   STANDARD = 'standard',
   PRE_SALE = 'pre_sale',
   BACK_ORDER = 'back_order',

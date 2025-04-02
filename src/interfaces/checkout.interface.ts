@@ -520,7 +520,12 @@ export interface ICheckoutCompleteParams extends ICoreParams {
  */
 export interface ICheckoutCompleteResponse {
   order: {
+    /**
+     * @deprecated - use legacyOrderNumber
+     */
     number: string;
+
+    legacyOrderNumber: string;
 
     referenceId: string;
   };

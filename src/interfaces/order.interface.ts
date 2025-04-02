@@ -1,9 +1,14 @@
 import type {
-  ENUM_PARTNER_CUSTOMER_PLACEMENT,
-  ENUM_PARTNER_ORDER_FULFILLMENT_TYPE,
-  ENUM_PARTNER_ORDER_PACKAGE_STATUS,
-  ENUM_PARTNER_ORDER_STATUS,
+  ENUM_CUSTOMER_PLACEMENT,
+  ENUM_ORDER_FULFILLMENT_TYPE,
+  ENUM_ORDER_PACKAGE_STATUS,
+  ENUM_ORDER_STATUS,
 } from 'enums';
+
+export interface IAddressCoordinates {
+  latitude: number | null;
+  longitude: number | null;
+}
 
 export interface IOrderAddress {
   one: string;
@@ -14,7 +19,7 @@ export interface IOrderAddress {
   country: string;
 }
 
-export interface IOrderBillingAddress extends IOrderAddress {
+export interface IOrderFullAddress extends IOrderAddress {
   firstName: string | null;
   lastName: string | null;
   email: string;
@@ -22,17 +27,12 @@ export interface IOrderBillingAddress extends IOrderAddress {
   company: string | null;
 }
 
-export interface IOrderCoordinates {
-  latitude: number | null;
-  longitude: number | null;
-}
-
 // new / legacy
-export type IOrderSystem = 'LiquidCommerce OMS' | 'ReserveBar OMS';
+export type IOrderRetailerSystem = 'LiquidCommerce OMS' | 'ReserveBar OMS';
 
-export interface IOrderPackageTimeline {
-  status: ENUM_PARTNER_ORDER_PACKAGE_STATUS;
-  timestamp: string;
+export interface IOrderFulfillmentTimeline {
+  status: ENUM_ORDER_STATUS;
+  timestamp: string; // new Date().toISOString()
 }
 
 export interface IOrderFulfillmentPackage {
@@ -40,36 +40,83 @@ export interface IOrderFulfillmentPackage {
   carrier: string | null;
   trackingNumber: string | null;
   trackingUrl: string | null;
-  status: ENUM_PARTNER_ORDER_PACKAGE_STATUS;
+  status: ENUM_ORDER_PACKAGE_STATUS;
   dateShipped: string | null; // new Date().toISOString()
-  timeline: IOrderPackageTimeline[];
 }
 
 export interface IOrderFulfillment {
   id: string;
-  type: ENUM_PARTNER_ORDER_FULFILLMENT_TYPE;
-  status: ENUM_PARTNER_ORDER_STATUS;
+  type: ENUM_ORDER_FULFILLMENT_TYPE;
+  status: ENUM_ORDER_STATUS;
   scheduledFor: string | null; // new Date().toISOString()
   updatedAt: string; // new Date().toISOString()
   itemIds: string[];
   packages: IOrderFulfillmentPackage[];
+  timeline: IOrderFulfillmentTimeline[];
+}
+
+export interface IOrderRetailerAddress extends IOrderAddress {
+  coordinates: IAddressCoordinates;
 }
 
 export interface IOrderRetailer {
   id: string | number;
   legacyId: string | number | null;
-
   name: string;
-
-  system: IOrderSystem;
-
-  address: IOrderAddress & {
-    coordinates: IOrderCoordinates;
-  };
-
+  system: IOrderRetailerSystem;
+  timezone: string;
+  address: IOrderRetailerAddress;
   amounts: IOrderAmounts;
-
   fulfillments: IOrderFulfillment[];
+}
+
+export interface IOrderItemProductAttributes {
+  pack: boolean;
+  packDescription: string | null;
+  abv: string | null;
+  container: string | null;
+  containerType: string | null;
+}
+
+export interface IOrderItemProduct {
+  name: string;
+  brand: string;
+  upc: string;
+  sku: string;
+  mskus: string[];
+  category: string | null;
+  size: string | null;
+  volume: string | null;
+  uom: string | null;
+  proof: string | null;
+  attributes: IOrderItemProductAttributes;
+}
+
+export interface IOrderItemPricing {
+  price: number;
+  unitPrice: number;
+  quantity: number;
+  tax: number;
+  bottleDeposits: number;
+}
+
+export interface IOrderItemEngraving {
+  hasEngraving: boolean;
+  fee: number;
+  location: string | null;
+  lines: string[];
+}
+
+export interface IOrderItemGiftCard {
+  sender: string | null;
+  message: string | null;
+  recipients: string[];
+  sendDate: string | null; // new Date().toISOString()
+}
+
+export interface IOrderItemAttributes {
+  engraving: IOrderItemEngraving;
+  giftCard: IOrderItemGiftCard;
 }
 
 export interface IOrderItem {
@@ -80,51 +127,11 @@ export interface IOrderItem {
   liquidId: string | null;
   legacyGrouping: string | null;
   legacyPid: string | null;
-
-  customerPlacement: ENUM_PARTNER_CUSTOMER_PLACEMENT;
-
-  product: {
-    name: string;
-    brand: string;
-    upc: string;
-    category: string;
-    size: string;
-    volume: string;
-    uom: string;
-    attributes: {
-      pack: boolean;
-      packDescription: string;
-      abv: string;
-      container: string;
-      containerType: string;
-    };
-  };
-
+  customerPlacement: ENUM_CUSTOMER_PLACEMENT;
+  product: IOrderItemProduct;
   image: string | null;
-
-  pricing: {
-    price: number;
-    unitPrice: number;
-    quantity: number;
-    tax: number;
-    bottleDeposits: number;
-  };
-
-  attributes: {
-    engraving: {
-      hasEngraving: boolean;
-      fee: number;
-      location: string;
-      lines: string[];
-    };
-    giftCard: {
-      sender: string;
-      message: string;
-      recipients: string[];
-      sendDate: string; // new Date().toISOString()
-    };
-  };
-
+  pricing: IOrderItemPricing;
+  attributes: IOrderItemAttributes;
   isPresale: boolean;
   estimatedShipBy: string | null;
 }
@@ -138,27 +145,43 @@ export interface IOrderCustomer {
   birthdate: string | null; // YYYY-MM-DD
 }
 
+export interface IOrderGiftRecipient {
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+}
+
+export interface IOrderMarketingPreferences {
+  email: boolean;
+  sms: boolean;
+}
+
 export interface IOrderOptions {
   isGift: boolean;
   giftMessage: string | null;
-  giftRecipient: {
-    name: string | null;
-    email: string | null;
-    phone: string | null;
-  };
-
+  giftRecipient: IOrderGiftRecipient;
   hasVerifiedAge: boolean;
-
   allowsSubstitution: boolean;
-
   billingSameAsShipping: boolean;
-
   deliveryInstructions: string | null;
+  marketingPreferences: IOrderMarketingPreferences;
+}
 
-  marketingPreferences: {
-    email: boolean;
-    sms: boolean;
-  };
+export interface IOrderTaxDetails {
+  products: number;
+  shipping: number;
+  delivery: number;
+  bag: number;
+  bottleDeposits: number;
+  retailDelivery: number;
+}
+
+export interface IOrderDiscountDetails {
+  products: number;
+  shipping: number;
+  delivery: number;
+  engraving: number;
+  service: number;
 }
 
 export interface IOrderAmounts {
@@ -173,21 +196,8 @@ export interface IOrderAmounts {
   giftCards: number;
   tip: number;
   total: number;
-  taxDetails: {
-    products: number;
-    shipping: number;
-    delivery: number;
-    bag: number;
-    bottleDeposits: number;
-    retailDelivery: number;
-  };
-  discountDetails: {
-    products: number;
-    shipping: number;
-    delivery: number;
-    engraving: number;
-    service: number;
-  };
+  taxDetails: IOrderTaxDetails;
+  discountDetails: IOrderDiscountDetails;
 }
 
 export interface IOrderPartner {
@@ -195,29 +205,31 @@ export interface IOrderPartner {
   legacyId: string | number | null;
 }
 
+export interface IOrderAddresses {
+  shipping: IOrderFullAddress;
+  billing: IOrderFullAddress;
+}
+
+export interface IOrderPaymentMethod {
+  type: string | null;
+  card: string | null;
+  lastDigits: string | null;
+  holder: string | null;
+  code: string | null;
+}
+
 export interface IOrder {
   referenceId: string | null;
   legacyOrderNumber: string | null;
-
   isHybrid: boolean;
-
   partner: IOrderPartner;
-
   createdAt: string; // new Date().toISOString()
   updatedAt: string; // new Date().toISOString()
-
   customer: IOrderCustomer;
-
-  addresses: {
-    shipping: IOrderAddress;
-    billing: IOrderBillingAddress;
-  };
-
+  addresses: IOrderAddresses;
   options: IOrderOptions;
-
   amounts: IOrderAmounts;
-
+  paymentMethods: IOrderPaymentMethod[];
   retailers: IOrderRetailer[];
-
   items: IOrderItem[];
 }

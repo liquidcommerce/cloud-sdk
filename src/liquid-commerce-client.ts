@@ -26,6 +26,7 @@ import type {
   ILiquidPaymentConfig,
   ILiquidPaymentToken,
   IOrder,
+  IOrderMethod,
   IPaymentElementEventMap,
   IPaymentMethod,
   IPurgeResponse,
@@ -401,7 +402,18 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     },
   };
 
-  public order: any = {
+  /**
+   * Order object that provides methods for order-related operations.
+   *
+   * @interface IOrderMethod order
+   *
+   * @property {function(identifier: string): Promise<IApiResponseWithData<IOrder>>} fetch -
+   *    Method to fetch an order by its identifier.
+   *
+   * @see {@link IApiResponseWithData} for the structure of the promise returned by the fetch method.
+   * @see {@link IOrder} for the structure of the order data returned.
+   */
+  public order: IOrderMethod = {
     fetch: async (identifier: string): Promise<IApiResponseWithData<IOrder>> => {
       await this.ensureAuthenticated();
       return this.orderService.fetchOrder(identifier);
