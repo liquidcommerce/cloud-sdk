@@ -397,6 +397,10 @@ export interface ICheckoutItem {
 
   upc: string;
 
+  sku: string;
+
+  mskus: string[];
+
   price: number;
 
   unitPrice: number;
