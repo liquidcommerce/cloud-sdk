@@ -903,23 +903,21 @@ export interface IOrderMethod {
 
 export interface IWebhookMethod {
   /**
-   * Retrieves whether the test succeded or not.
+   * Retrieves whether the webhook test succeeded or not.
    *
-   * @param {string} identifier - The ID of the order to retrieve.
-   * @returns {Promise<boolean>} A promise that resolves whether the test succeded or not.
+   * @returns {Promise<boolean>} A promise that resolves whether the test succeeded or not.
    *
    * @example
    * const liquidCommerce = await LiquidCommerce(apiKey, config);
    *
    * try {
-   *   const webhookTest = await liquidCommerce.webhook.test();
-   *   console.log('Webhook statusCode:', webhookTest.statusCode);
+   *   const testSucceeded = await liquidCommerce.webhook.test();
+   *   console.log('Webhook test succeeded:', testSucceeded);
    * } catch (error) {
    *   console.error('Failed to test Webhook:', error);
    * }
    *
    * @throws {Error} Throws an error if the webhook test request fails or if authentication is unsuccessful.
-   *
    */
   test: () => Promise<boolean>;
 }

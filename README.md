@@ -22,6 +22,7 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
   - [Payment](#payment)
   - [Checkout](#checkout)
   - [Order](#order)
+  - [Webhook](#webhook)
 - [Response Types](#response-types)
 - [Error Handling](#error-handling)
 - [Documentation](#documentation)

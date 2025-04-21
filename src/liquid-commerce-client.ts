@@ -49,8 +49,8 @@ import type {
   OrderService,
   PaymentService,
   UserService,
+  WebhookService,
 } from './services';
-import type { WebhookService } from './services/webhook.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from './types';
 
 /**
@@ -430,9 +430,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *
    * @interface IWebhookMethod webhook
    *
-   * @property {function(): Promise<boolean>} test -
-   *    Method to test the webhook functionality.
-   *
+   * @property {function(): Promise<boolean>} test - Method to test the webhook functionality.
    */
   public webhook: IWebhookMethod = {
     test: async (): Promise<boolean> => {
