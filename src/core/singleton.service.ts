@@ -1,3 +1,5 @@
+import { WebhookService } from 'services/webhook.service';
+
 import type { ILiquidCommerceClientConstructor } from '../interfaces';
 import {
   AddressService,
@@ -268,10 +270,30 @@ export class SingletonManager {
     );
   }
 
+  /**
+   * Retrieves the OrderService instance for the provided authenticated client.
+   *
+   * @param authenticatedClient - The authenticated client object.
+   * @return The OrderService instance.
+   */
   public getOrderService(authenticatedClient: AuthenticatedService): OrderService {
     return this.getOrCreateService(
       `OrderService_${authenticatedClient.getUniqueKey()}`,
       OrderService,
+      authenticatedClient
+    );
+  }
+
+  /**
+   * Retrieves the WebhookService instance for the provided authenticated client.
+   *
+   * @param authenticatedClient - The authenticated client object.
+   * @return The WebhookService instance.
+   */
+  public getWebhookService(authenticatedClient: AuthenticatedService): WebhookService {
+    return this.getOrCreateService(
+      `WebhookService_${authenticatedClient.getUniqueKey()}`,
+      WebhookService,
       authenticatedClient
     );
   }

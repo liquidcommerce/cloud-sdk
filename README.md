@@ -138,8 +138,8 @@ const availabilityResponse = await client.catalog.availability({
 // Search catalog with filters
 const searchResponse = await client.catalog.search({
   search: 'whiskey',
-  pageToken: "",
-  entity: "",
+  pageToken: '',
+  entity: '',
   page: 1,
   perPage: 20,
   orderBy: ENUM_ORDER_BY.PRICE,
@@ -219,7 +219,7 @@ const userSession = await client.user.session({
   company: 'Company Inc',
   profileImage: 'https://...',
   birthDate: '1990-01-01',
-  id:'user_id', // Existing user identifier (for updates only), email becomes optional
+  id: 'user_id', // Existing user identifier (for updates only), email becomes optional
 });
 
 // Fetch user by ID or email
@@ -559,75 +559,246 @@ const orderResponse = await client.order.fetch('order_id_or_order_number');
 //   referenceId: string;
 //   legacyOrderNumber: string;
 //   isHybrid: boolean;
+//   partner: {
+//     id: string | number | null;
+//     legacyId: string | number | null;
+//   },
 //   createdAt: string; // ISO date string
 //   updatedAt: string; // ISO date string
 //   customer: {
-//     id: string;
-//     firstName: string;
-//     lastName: string;
+//     id: string | number;
+//     firstName: string | null;
+//     lastName: string | null;
 //     email: string;
-//     // ...other customer fields
+//     phone: string | null;
+//     birthdate: string | null; // YYYY-MM-DD
 //   },
 //   addresses: {
 //     shipping: {
+//       firstName: string | null;
+//       lastName: string | null;
+//       email: string;
+//       phone: string | null;
+//       company: string | null;
 //       one: string;
-//       two: string;
+//       two: string | null;
 //       city: string;
 //       state: string;
 //       zip: string;
 //       country: string;
 //     },
 //     billing: {
-//       firstName: string;
-//       lastName: string;
+//       firstName: string | null;
+//       lastName: string | null;
 //       email: string;
-//       phone: string;
-//       // ...other address fields
+//       phone: string | null;
+//       company: string | null;
+//       one: string;
+//       two: string | null;
+//       city: string;
+//       state: string;
+//       zip: string;
+//       country: string;
 //     }
 //   },
 //   options: {
 //     isGift: boolean;
-//     giftMessage: string;
+//     giftMessage: string | null;
+//     giftRecipient: {
+//       name: string | null;
+//       email: string | null;
+//       phone: string | null;
+//     },
 //     hasVerifiedAge: boolean;
-//     // ...other options
+//     allowsSubstitution: boolean;
+//     billingSameAsShipping: boolean;
+//     deliveryInstructions: string | null;
+//     marketingPreferences: {
+//       email: boolean;
+//       sms: boolean;
+//     }
 //   },
 //   amounts: {
-//     subtotal: number; // in cents
-//     shipping: number; // in cents
-//     tax: number; // in cents
-//     total: number; // in cents
-//     // ...other amount fields
+//     subtotal: number;
+//     shipping: number;
+//     platform: number;
+//     tax: number;
+//     engraving: number;
+//     service: number;
+//     delivery: number;
+//     discounts: number;
+//     giftCards: number;
+//     tip: number;
+//     total: number;
+//     taxDetails: {
+//       products: number;
+//       shipping: number;
+//       delivery: number;
+//       bag: number;
+//       bottleDeposits: number;
+//       retailDelivery: number;
+//     },
+//     discountDetails: {
+//       products: number;
+//       shipping: number;
+//       delivery: number;
+//       engraving: number;
+//       service: number;
+//     }
 //   },
+//   paymentMethods: [
+//     {
+//       type: string | null;
+//       card: string | null;
+//       lastDigits: string | null;
+//       holder: string | null;
+//       code: string | null;
+//     }
+//   ],
 //   retailers: [
 //     {
-//       id: string;
+//       id: string | number;
+//       legacyId: string | number | null;
 //       name: string;
-//       system: string;
-//       address: object;
-//       amounts: object;
-//       fulfillments: array;
+//       system: 'LiquidCommerce OMS' | 'ReserveBar OMS';
+//       timezone: string;
+//       address: {
+//         one: string;
+//         two: string | null;
+//         city: string;
+//         state: string;
+//         zip: string;
+//         country: string;
+//         coordinates: {
+//           latitude: number | null;
+//           longitude: number | null;
+//         }
+//       },
+//       amounts: {
+//         subtotal: number;
+//         shipping: number;
+//         platform: number;
+//         tax: number;
+//         engraving: number;
+//         service: number;
+//         delivery: number;
+//         discounts: number;
+//         giftCards: number;
+//         tip: number;
+//         total: number;
+//         taxDetails: {
+//           products: number;
+//           shipping: number;
+//           delivery: number;
+//           bag: number;
+//           bottleDeposits: number;
+//           retailDelivery: number;
+//         },
+//         discountDetails: {
+//           products: number;
+//           shipping: number;
+//           delivery: number;
+//           engraving: number;
+//           service: number;
+//         }
+//       },
+//       fulfillments: [
+//         {
+//           id: string;
+//           type: ENUM_ORDER_FULFILLMENT_TYPE;
+//           status: ENUM_ORDER_STATUS;
+//           scheduledFor: string | null; // ISO date string
+//           updatedAt: string; // ISO date string
+//           itemIds: string[];
+//           packages: [
+//             {
+//               id: string | number;
+//               carrier: string | null;
+//               trackingNumber: string | null;
+//               trackingUrl: string | null;
+//               status: ENUM_ORDER_PACKAGE_STATUS;
+//               dateShipped: string | null; // ISO date string
+//             }
+//           ],
+//           timeline: [
+//             {
+//               status: ENUM_ORDER_STATUS;
+//               timestamp: string; // ISO date string
+//             }
+//           ]
+//         }
+//       ]
 //     }
 //   ],
 //   items: [
 //     {
-//       id: string;
-//       retailerId: string;
-//       fulfillmentId: string;
+//       id: string | number;
+//       fulfillmentId: string | null;
+//       retailerId: string | number;
+//       variantId: string | number;
+//       liquidId: string | null;
+//       legacyGrouping: string | null;
+//       legacyPid: string | null;
+//       customerPlacement: ENUM_CUSTOMER_PLACEMENT;
 //       product: {
 //         name: string;
 //         brand: string;
 //         upc: string;
-//         // ...other product details
+//         sku: string;
+//         mskus: string[];
+//         category: string | null;
+//         size: string | null;
+//         volume: string | null;
+//         uom: string | null;
+//         proof: string | null;
+//         attributes: {
+//           pack: boolean;
+//           packDescription: string | null;
+//           abv: string | null;
+//           container: string | null;
+//           containerType: string | null;
+//         }
 //       },
+//       image: string | null;
 //       pricing: {
-//         price: number; // in cents
+//         price: number;
+//         unitPrice: number;
 //         quantity: number;
-//         // ...other pricing fields
+//         tax: number;
+//         bottleDeposits: number;
 //       },
-//       // ...other item fields
+//       attributes: {
+//         engraving: {
+//           hasEngraving: boolean;
+//           fee: number;
+//           location: string | null;
+//           lines: string[];
+//         },
+//         giftCard: {
+//           sender: string | null;
+//           message: string | null;
+//           recipients: string[];
+//           sendDate: string | null; // ISO date string
+//         }
+//       },
+//       isPresale: boolean;
+//       estimatedShipBy: string | null;
 //     }
 //   ]
 // }
+```
+
+### Webhook
+
+Webhook test services:
+
+```typescript
+// Test webhook endpoint
+const webhookTestResult = await client.webhook.test();
+
+// Response is a simple boolean indicating success or failure
+// true = webhook test was successful
+// false = webhook test failed
 ```
 
 ## Error Handling

@@ -40,6 +40,7 @@ import type {
   IUserPaymentUpdateParams,
   IUserSessionParams,
 } from './interfaces';
+import type { IWebhookMethod } from './interfaces';
 import type {
   AddressService,
   CartService,
@@ -49,6 +50,7 @@ import type {
   PaymentService,
   UserService,
 } from './services';
+import type { WebhookService } from './services/webhook.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from './types';
 
 /**
@@ -79,6 +81,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
 
   private orderService: OrderService;
 
+  private webhookService: WebhookService;
+
   private config: ILiquidCommerceConfig;
 
   private singletonManager: SingletonManager;
@@ -102,6 +106,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.paymentService = this.singletonManager.getPaymentService(this.authenticatedClient);
     this.checkoutService = this.singletonManager.getCheckoutService(this.authenticatedClient);
     this.orderService = this.singletonManager.getOrderService(this.authenticatedClient);
+    this.webhookService = this.singletonManager.getWebhookService(this.authenticatedClient);
   }
 
   /**
@@ -417,6 +422,22 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     fetch: async (identifier: string): Promise<IApiResponseWithData<IOrder>> => {
       await this.ensureAuthenticated();
       return this.orderService.fetchOrder(identifier);
+    },
+  };
+
+  /**
+   * Webhook object that provides methods for testing webhook functionality.
+   *
+   * @interface IWebhookMethod webhook
+   *
+   * @property {function(): Promise<boolean>} test -
+   *    Method to test the webhook functionality.
+   *
+   */
+  public webhook: IWebhookMethod = {
+    test: async (): Promise<boolean> => {
+      await this.ensureAuthenticated();
+      return this.webhookService.test();
     },
   };
 }
