@@ -1069,9 +1069,9 @@
    * and checkout flow.
    */
 
-    // API Keys and Constants
-  const API_KEY = 'e71df2ac1edf89c83095dcfd100115aa6a1ad1efd922e4e70e919a12';
-  const GOOGLE_PLACES_API_KEY = 'AIzaSyD_LT-4RhPTrURUZjrrDtB3zIor0WFO6hE'
+  // API Keys and Constants
+  const API_KEY = 'YOUR_LIQUIDCOMMERCE_API_KEY';
+  const GOOGLE_PLACES_API_KEY = 'PUT_YOUR_KEY_HERE';
   const NEW_YORK_ADDRESS = {
     one: '100 madison ave',
     two: 'apt 1707',
@@ -1108,7 +1108,7 @@
     try {
       return await window.LiquidCommerce(API_KEY, {
         googlePlacesApiKey: GOOGLE_PLACES_API_KEY,
-        env: 'loc',
+        env: 'dev',
       });
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
