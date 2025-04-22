@@ -1015,8 +1015,19 @@
             <div class="section-container">
               <h2 class="section-title">Webhook Test</h2>
               <div class="row justify-content-center mt-4">
-                <div class="col-md-6 text-center">
-                  <p>Click the button below to send a test webhook event.</p>
+                <div class="col-md-8 text-center">
+                  <p>Send a test webhook event to verify your webhook configuration.</p>
+
+                  <div class="mb-4">
+                    <div class="form-group">
+                      <label for="webhookEndpoint" class="form-label text-start d-block mb-2">Custom Endpoint (Optional)</label>
+                      <input type="text" id="webhookEndpoint" class="form-control" placeholder="https://your-webhook-endpoint.com/webhook">
+                      <small class="form-text text-muted text-start d-block mt-2">
+                        If left empty, the system will use the default webhook endpoint configured in your account settings.
+                      </small>
+                    </div>
+                  </div>
+
                   <button type="button" class="btn btn-primary" id="testWebhookButton">Trigger Test Event</button>
                   <div id="webhookTestResult" class="mt-3"></div>
                 </div>
@@ -1059,8 +1070,8 @@
    */
 
     // API Keys and Constants
-  const API_KEY = 'YOUR_LIQUIDCOMMERCE_API_KEY';
-  const GOOGLE_PLACES_API_KEY = 'PUT_YOUR_KEY_HERE'
+  const API_KEY = 'e71df2ac1edf89c83095dcfd100115aa6a1ad1efd922e4e70e919a12';
+  const GOOGLE_PLACES_API_KEY = 'AIzaSyD_LT-4RhPTrURUZjrrDtB3zIor0WFO6hE'
   const NEW_YORK_ADDRESS = {
     one: '100 madison ave',
     two: 'apt 1707',
@@ -2761,20 +2772,27 @@
   }
 
   document.getElementById('testWebhookButton').addEventListener('click', async () => {
+    const webhookEndpoint = document.getElementById('webhookEndpoint').value.trim();
     const webhookTestResult = document.getElementById('webhookTestResult');
+
     webhookTestResult.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
 
     try {
-      const testResponse = await client.webhook.test();
-      console.log({ testResponse });
+      const testResponse = await client.webhook.test(webhookEndpoint);
+
       if (testResponse) {
-        webhookTestResult.innerHTML = '<div class="alert alert-success">Webhook test request was sent successfully!</div>';
+        webhookTestResult.innerHTML = '<div class="alert alert-success">' +
+          '<strong>Success!</strong> Webhook test request was sent successfully!' +
+          (webhookEndpoint ? ' to: ' + webhookEndpoint : ' to your default endpoint.') +
+          '</div>';
       } else {
-        webhookTestResult.innerHTML = '<div class="alert alert-warning">Webhook test request failed. Please check your configuration.</div>';
+        webhookTestResult.innerHTML = '<div class="alert alert-warning">' +
+          '<strong>Warning!</strong> Webhook test request failed. Please check your configuration.' +
+          '</div>';
       }
     } catch (error) {
       console.error('Error testing webhook:', error);
-      webhookTestResult.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+      webhookTestResult.innerHTML = `<div class="alert alert-danger"><strong>Error!</strong> ${error.message}</div>`;
     }
   });
 

@@ -430,12 +430,14 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *
    * @interface IWebhookMethod webhook
    *
-   * @property {function(): Promise<boolean>} test - Method to test the webhook functionality.
+   * @property {function(endpoint?: string): Promise<boolean>} test -
+   *   Method to test the webhook functionality by sending a test request to the specified endpoint.
+   *   Or if no endpoint is provided, it will use the default endpoint configured in the system.
    */
   public webhook: IWebhookMethod = {
-    test: async (): Promise<boolean> => {
+    test: async (endpoint?: string): Promise<boolean> => {
       await this.ensureAuthenticated();
-      return this.webhookService.test();
+      return this.webhookService.test(endpoint);
     },
   };
 }

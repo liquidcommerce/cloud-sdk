@@ -304,13 +304,11 @@ export enum CHECKOUT_EVENT_ENUM {
 }
 
 export enum ENUM_ORDER_STATUS {
-  SCHEDULED = 'scheduled',
-  ON_HOLD = 'onHold',
-  PENDING = 'pending',
+  CREATED = 'created',
   PROCESSING = 'processing',
-  IN_TRANSIT = 'inTransit',
-  DELIVERED = 'delivered',
   CANCELED = 'canceled',
+  DELIVERED = 'delivered',
+  TEST = 'test',
 }
 
 export enum ENUM_ORDER_PACKAGE_STATUS {

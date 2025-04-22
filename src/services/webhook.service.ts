@@ -9,14 +9,18 @@ export class WebhookService {
   }
 
   /**
-   * Test the webhook.
+   * This method sends a test request to the webhook endpoint to verify if it is working correctly.
+   *
+   * @param {string} [endpoint] - The webhook endpoint to test. If not provided it will use the default endpoint configured in the system.
    *
    * @returns {Promise<boolean>} A promise that resolves whether the test succeeded or not.
    * @throws {Error} If the test request fails.
    */
-  public async test(): Promise<boolean> {
+  public async test(endpoint?: string): Promise<boolean> {
     try {
-      const response = await this.client.get<IApiResponseBase>(`/webhook/test`);
+      const response = await this.client.post<IApiResponseBase>(`/webhook/test`, {
+        endpoint,
+      });
 
       return response.statusCode === 200;
     } catch (error) {
