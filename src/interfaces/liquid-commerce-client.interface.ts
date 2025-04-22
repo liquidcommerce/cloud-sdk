@@ -905,6 +905,7 @@ export interface IWebhookMethod {
   /**
    * Retrieves whether the webhook test succeeded or not.
    *
+   * @param {string} [endpoint] - The endpoint to test. If not provided, the default endpoint will be used.
    * @returns {Promise<boolean>} A promise that resolves whether the test succeeded or not.
    *
    * @example
@@ -919,5 +920,5 @@ export interface IWebhookMethod {
    *
    * @throws {Error} Throws an error if the webhook test request fails or if authentication is unsuccessful.
    */
-  test: () => Promise<boolean>;
+  test: (endpoint?: string) => Promise<boolean>;
 }
