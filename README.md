@@ -14,6 +14,9 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
 
 - [Installation](#installation)
 - [Configuration](#configuration)
+- [Authentication](#authentication)
+  - [API Key Authentication](#api-key-authentication)
+  - [Order API Authentication](#order-api-authentication)
 - [Services & Usage](#services-and-usage)
   - [Address](#address)
   - [Catalog](#catalog)
@@ -53,6 +56,51 @@ const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
 
 await client.init();
 ```
+
+## Authentication
+
+### API Key Authentication
+
+The LiquidCommerce API Key Authentication provides a secure method to obtain an access token for all other API calls to LiquidCommerce Services.
+
+Getting and Using Access Tokens
+
+```typescript
+// The SDK automatically handles authentication
+const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
+  googlePlacesApiKey: 'YOUR_GOOGLE_PLACES_API_KEY', // Required for address services
+  env: LIQUID_COMMERCE_ENV.STAGE, // or PROD
+});
+
+// Manual authentication (for reference)
+// Headers: X-LIQUID-API-KEY: YOUR_API_KEY
+// Endpoint: GET /authentication
+```
+
+After obtaining a token, include it in API requests:
+
+```typescript
+Authorization: Bearer<ACCESS_TOKEN>;
+```
+
+### Order API Authentication
+
+LiquidCommerce provides Basic Authentication for Order API endpoints.
+
+Example using fetch with Basic Authentication
+
+```typescript
+const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
+  googlePlacesApiKey: 'YOUR_GOOGLE_PLACES_API_KEY', // Required for address services
+  env: LIQUID_COMMERCE_ENV.STAGE, // or PROD
+  orderAuth: {
+    userID: 'YOUR_USER_ID',
+    password: 'YOUR_PASSWORD',
+  },
+});
+```
+
+Note: Order authentication credentials are required to access Order API. The SDK will return appropriate authentication errors if these credentials are missing or invalid.
 
 ## Response Types
 
