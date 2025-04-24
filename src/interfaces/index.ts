@@ -3,6 +3,7 @@ export * from './cart.interface';
 export * from './catalog.interface';
 export * from './checkout.interface';
 export * from './liquid-commerce-client.interface';
+export * from './liquid-commerce-order-client.interface';
 export * from './order.interface';
 export * from './payment.interface';
 export * from './retailer.interface';

@@ -25,8 +25,6 @@ import type {
   ILiquidCommerceClient,
   ILiquidPaymentConfig,
   ILiquidPaymentToken,
-  IOrder,
-  IOrderMethod,
   IPaymentElementEventMap,
   IPaymentMethod,
   IPurgeResponse,
@@ -39,14 +37,13 @@ import type {
   IUserPaymentParams,
   IUserPaymentUpdateParams,
   IUserSessionParams,
+  IWebhookMethod,
 } from './interfaces';
-import type { IWebhookMethod } from './interfaces';
 import type {
   AddressService,
   CartService,
   CatalogService,
   CheckoutService,
-  OrderService,
   PaymentService,
   UserService,
   WebhookService,
@@ -79,8 +76,6 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
 
   private checkoutService: CheckoutService;
 
-  private orderService: OrderService;
-
   private webhookService: WebhookService;
 
   private config: ILiquidCommerceConfig;
@@ -98,14 +93,15 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.config = config;
     this.singletonManager = SingletonManager.getInstance();
     const baseURL = this.determineBaseURL(config);
+
     this.authenticatedClient = this.singletonManager.getAuthenticatedClient({ apiKey, baseURL });
+
     this.addressService = this.singletonManager.getAddressService(this.authenticatedClient);
     this.catalogService = this.singletonManager.getCatalogService(this.authenticatedClient);
     this.cartService = this.singletonManager.getCartService(this.authenticatedClient);
     this.userService = this.singletonManager.getUserService(this.authenticatedClient);
     this.paymentService = this.singletonManager.getPaymentService(this.authenticatedClient);
     this.checkoutService = this.singletonManager.getCheckoutService(this.authenticatedClient);
-    this.orderService = this.singletonManager.getOrderService(this.authenticatedClient);
     this.webhookService = this.singletonManager.getWebhookService(this.authenticatedClient);
   }
 
@@ -404,24 +400,6 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     ): Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>> => {
       await this.ensureAuthenticated();
       return this.checkoutService.complete(params);
-    },
-  };
-
-  /**
-   * Order object that provides methods for order-related operations.
-   *
-   * @interface IOrderMethod order
-   *
-   * @property {function(identifier: string): Promise<IApiResponseWithData<IOrder>>} fetch -
-   *    Method to fetch an order by its identifier.
-   *
-   * @see {@link IApiResponseWithData} for the structure of the promise returned by the fetch method.
-   * @see {@link IOrder} for the structure of the order data returned.
-   */
-  public order: IOrderMethod = {
-    fetch: async (identifier: string): Promise<IApiResponseWithData<IOrder>> => {
-      await this.ensureAuthenticated();
-      return this.orderService.fetchOrder(identifier);
     },
   };
 

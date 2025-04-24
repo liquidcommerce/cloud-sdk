@@ -1,14 +1,12 @@
-import { WebhookService } from 'services/webhook.service';
-
 import type { ILiquidCommerceClientConstructor } from '../interfaces';
 import {
   AddressService,
   CartService,
   CatalogService,
   CheckoutService,
-  OrderService,
   PaymentService,
   UserService,
+  WebhookService,
 } from '../services';
 import type { ILiquidCommerceConfig } from '../types';
 import { AuthenticatedService } from './authenticated.service';
@@ -267,20 +265,6 @@ export class SingletonManager {
       CheckoutService,
       authenticatedClient,
       this.getCheckoutHelperService()
-    );
-  }
-
-  /**
-   * Retrieves the OrderService instance for the provided authenticated client.
-   *
-   * @param authenticatedClient - The authenticated client object.
-   * @return The OrderService instance.
-   */
-  public getOrderService(authenticatedClient: AuthenticatedService): OrderService {
-    return this.getOrCreateService(
-      `OrderService_${authenticatedClient.getUniqueKey()}`,
-      OrderService,
-      authenticatedClient
     );
   }
 

@@ -1070,8 +1070,10 @@
    */
 
   // API Keys and Constants
-  const API_KEY = 'YOUR_LIQUIDCOMMERCE_API_KEY';
-  const GOOGLE_PLACES_API_KEY = 'PUT_YOUR_KEY_HERE';
+  const API_KEY = 'YOUR_API_KEY';
+  const ORDER_API_USER = 'YOUR_ORDER_API_USER';
+  const ORDER_API_PASSWORD = 'YOUR_ORDER_API_PASSWORD';
+  const GOOGLE_PLACES_API_KEY = 'YOUR_GOOGLE_PLACES_KEY';
   const NEW_YORK_ADDRESS = {
     one: '100 madison ave',
     two: 'apt 1707',
@@ -1081,6 +1083,8 @@
   };
 
   let client;
+
+  let orderClient;
 
   /**
    * Debounce function to limit the rate at which a function can fire.
@@ -1108,11 +1112,28 @@
     try {
       return await window.LiquidCommerce(API_KEY, {
         googlePlacesApiKey: GOOGLE_PLACES_API_KEY,
-        env: 'dev',
+        env: 'loc',
       });
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
       document.getElementById('results').innerHTML = `<p>Error initializing SDK: ${error.message}</p>`;
+    }
+  }
+
+  /**
+   * Initialize the Liquid Commerce SDK
+   * @returns {Promise<Object>} The initialized SDK order client
+   */
+  async function initOrderSDK() {
+    try {
+      return await window.OrderLiquidCommerce({
+        userID: ORDER_API_USER,
+        password: ORDER_API_PASSWORD,
+        env: 'loc',
+      });
+    } catch (error) {
+      console.error('Failed to initialize order SDK:', error);
+      document.getElementById('results').innerHTML += `<p>Error initializing order SDK: ${error.message}</p>`;
     }
   }
 
@@ -1390,6 +1411,8 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     client = await initSDK();
+    orderClient = await initOrderSDK();
+
     const addressInput = document.getElementById('addressInput');
     const autocompleteResults = document.getElementById('autocompleteResults');
     const availabilityForm = document.getElementById('availabilityForm');
@@ -2281,13 +2304,13 @@
    * @param {string} identifier - Order ID or number
    */
   async function fetchOrderDetails(identifier) {
-    if (!client) {
-      document.getElementById('orderResults').innerHTML = '<p class="alert alert-danger">SDK not initialized. Please try again.</p>';
+    if (!orderClient) {
+      document.getElementById('orderResults').innerHTML = '<p class="alert alert-danger">Order SDK not initialized. Please try again.</p>';
       return;
     }
 
     try {
-      const response = await client.order.fetch(identifier);
+      const response = await orderClient.order.fetch(identifier);
 
       if(response.data) {
         displayOrderDetails(response.data);

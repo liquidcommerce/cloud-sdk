@@ -26,6 +26,8 @@ const commonPlugins = [
       'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.GOOGLE_PLACES_API_KEY': JSON.stringify(process.env.GOOGLE_PLACES_API_KEY),
+      'process.env.ORDER_API_USER': JSON.stringify(process.env.ORDER_API_USER),
+      'process.env.ORDER_API_PASSWORD': JSON.stringify(process.env.ORDER_API_PASSWORD),
       'process.env.ENV_LOC': JSON.stringify(process.env.ENV_LOC),
       'process.env.ENV_DEV': JSON.stringify(process.env.ENV_DEV),
       'process.env.ENV_STAGE': JSON.stringify(process.env.ENV_STAGE),
@@ -115,7 +117,7 @@ export default [
           properties: {
             regex: /^_/,
           },
-          reserved: ['LiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
+          reserved: ['LiquidCommerce', 'OrderLiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
         },
         output: {
           comments: false,
@@ -148,7 +150,7 @@ export default [
           properties: {
             regex: /^_/,
           },
-          reserved: ['LiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
+          reserved: ['LiquidCommerce', 'OrderLiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
         },
         output: {
           comments: false,
