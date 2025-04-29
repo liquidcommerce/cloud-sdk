@@ -14,7 +14,6 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
 
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Authentication](#authentication)
   - [API Key Authentication](#api-key-authentication)
   - [Order API Authentication](#order-api-authentication)
 - [Services & Usage](#services-and-usage)
@@ -44,26 +43,11 @@ pnpm add @liquidcommerce/cloud-sdk
 
 ## Configuration
 
-The SDK requires configuration during initialization:
-
-```typescript
-import { LiquidCommerce, LIQUID_COMMERCE_ENV } from '@liquidcommerce/cloud-sdk';
-
-const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
-  googlePlacesApiKey: 'YOUR_GOOGLE_PLACES_API_KEY', // Required for address services
-  env: LIQUID_COMMERCE_ENV.STAGE, // STAGE or PROD
-});
-
-await client.init();
-```
-
-## Authentication
-
 ### API Key Authentication
 
 The LiquidCommerce API Key Authentication provides a secure method to obtain an access token for all other API calls to LiquidCommerce Services.
 
-Getting and Using Access Tokens
+Example using LiquidCommerce client:
 
 ```typescript
 // The SDK automatically handles authentication
@@ -71,34 +55,25 @@ const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
   googlePlacesApiKey: 'YOUR_GOOGLE_PLACES_API_KEY', // Required for address services
   env: LIQUID_COMMERCE_ENV.STAGE, // or PROD
 });
-
-// Manual authentication (for reference)
-// Headers: X-LIQUID-API-KEY: YOUR_API_KEY
-// Endpoint: GET /authentication
 ```
 
-After obtaining a token, include it in API requests:
-
-```typescript
-Authorization: Bearer<ACCESS_TOKEN>;
-```
+[Click Here For Manual Authentication](https://docs.liquidcommerce.cloud/authentication-api-integration/get-access-token)
 
 ### Order API Authentication
 
-LiquidCommerce provides Basic Authentication for Order API endpoints.
+LiquidCommerce provides a separate authentication mechanism for Order API endpoints. The Order client uses Basic Authentication with a username and password.
 
-Example using fetch with Basic Authentication
+Example using OrderLiquidCommerce client:
 
 ```typescript
-const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
-  googlePlacesApiKey: 'YOUR_GOOGLE_PLACES_API_KEY', // Required for address services
+const orderClient = await OrderLiquidCommerce({
+  userID: 'YOUR_ORDER_API_USER_ID',
+  password: 'YOUR_ORDER_API_PASSWORD',
   env: LIQUID_COMMERCE_ENV.STAGE, // or PROD
-  orderAuth: {
-    userID: 'YOUR_USER_ID',
-    password: 'YOUR_PASSWORD',
-  },
 });
 ```
+
+[Click Here For Manual Authentication](https://docs.liquidcommerce.cloud/services/orders-api/authentication)
 
 Note: Order authentication credentials are required to access Order API. The SDK will return appropriate authentication errors if these credentials are missing or invalid.
 
