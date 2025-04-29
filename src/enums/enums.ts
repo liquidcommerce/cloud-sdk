@@ -311,6 +311,11 @@ export enum ENUM_ORDER_STATUS {
   TEST = 'test',
 }
 
+export enum ENUM_ORDER_SYSTEM {
+  LIQUIDCOMMERCE = 'LiquidCommerce OMS',
+  RESERVEBAR = 'ReserveBar OMS',
+}
+
 export enum ENUM_ORDER_PACKAGE_STATUS {
   PENDING = 'pending',
   SHIPPED = 'shipped',

@@ -3,6 +3,7 @@ import type {
   ENUM_ORDER_FULFILLMENT_TYPE,
   ENUM_ORDER_PACKAGE_STATUS,
   ENUM_ORDER_STATUS,
+  ENUM_ORDER_SYSTEM,
 } from 'enums';
 
 export interface IAddressCoordinates {
@@ -27,16 +28,13 @@ export interface IOrderFullAddress extends IOrderAddress {
   company: string | null;
 }
 
-// new / legacy
-export type IOrderRetailerSystem = 'LiquidCommerce OMS' | 'ReserveBar OMS';
-
 export interface IOrderFulfillmentTimeline {
   status: ENUM_ORDER_STATUS;
   timestamp: string; // new Date().toISOString()
 }
 
 export interface IOrderFulfillmentPackage {
-  id: string | number;
+  id: string;
   carrier: string | null;
   trackingNumber: string | null;
   trackingUrl: string | null;
@@ -60,10 +58,10 @@ export interface IOrderRetailerAddress extends IOrderAddress {
 }
 
 export interface IOrderRetailer {
-  id: string | number;
-  legacyId: string | number | null;
+  id: string;
+  legacyId: string | null;
   name: string;
-  system: IOrderRetailerSystem;
+  system: ENUM_ORDER_SYSTEM;
   timezone: string;
   address: IOrderRetailerAddress;
   amounts: IOrderAmounts;
@@ -120,10 +118,10 @@ export interface IOrderItemAttributes {
 }
 
 export interface IOrderItem {
-  id: string | number;
+  id: string;
   fulfillmentId: string | null;
-  retailerId: string | number;
-  variantId: string | number;
+  retailerId: string;
+  variantId: string;
   liquidId: string | null;
   legacyGrouping: string | null;
   legacyPid: string | null;
@@ -137,7 +135,7 @@ export interface IOrderItem {
 }
 
 export interface IOrderCustomer {
-  id: string | number;
+  id: string;
   firstName: string | null;
   lastName: string | null;
   email: string;
@@ -200,11 +198,6 @@ export interface IOrderAmounts {
   discountDetails: IOrderDiscountDetails;
 }
 
-export interface IOrderPartner {
-  id: string | number | null;
-  legacyId: string | number | null;
-}
-
 export interface IOrderAddresses {
   shipping: IOrderFullAddress;
   billing: IOrderFullAddress;
@@ -213,7 +206,7 @@ export interface IOrderAddresses {
 export interface IOrderPaymentMethod {
   type: string | null;
   card: string | null;
-  lastDigits: string | null;
+  last4: string | null;
   holder: string | null;
   code: string | null;
 }
@@ -222,7 +215,7 @@ export interface IOrder {
   referenceId: string | null;
   legacyOrderNumber: string | null;
   isHybrid: boolean;
-  partner: IOrderPartner;
+  partnerId: string;
   createdAt: string; // new Date().toISOString()
   updatedAt: string; // new Date().toISOString()
   customer: IOrderCustomer;
