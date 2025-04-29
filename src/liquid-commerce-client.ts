@@ -23,10 +23,6 @@ import type {
   ICheckoutPrepareParams,
   ICheckoutPrepareResponse,
   ILiquidCommerceClient,
-  ILiquidPaymentConfig,
-  ILiquidPaymentToken,
-  IPaymentElementEventMap,
-  IPaymentMethod,
   IPurgeResponse,
   IUser,
   IUserAddress,
@@ -44,7 +40,6 @@ import type {
   CartService,
   CatalogService,
   CheckoutService,
-  PaymentService,
   UserService,
   WebhookService,
 } from './services';
@@ -72,8 +67,6 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
 
   private userService: UserService;
 
-  private paymentService: PaymentService;
-
   private checkoutService: CheckoutService;
 
   private webhookService: WebhookService;
@@ -100,7 +93,6 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.catalogService = this.singletonManager.getCatalogService(this.authenticatedClient);
     this.cartService = this.singletonManager.getCartService(this.authenticatedClient);
     this.userService = this.singletonManager.getUserService(this.authenticatedClient);
-    this.paymentService = this.singletonManager.getPaymentService(this.authenticatedClient);
     this.checkoutService = this.singletonManager.getCheckoutService(this.authenticatedClient);
     this.webhookService = this.singletonManager.getWebhookService(this.authenticatedClient);
   }
@@ -305,70 +297,6 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     ): Promise<IApiResponseWithData<IPurgeResponse>> => {
       await this.ensureAuthenticated();
       return this.userService.purgePayment(customerId, paymentId);
-    },
-  };
-
-  /**
-   * Payment object that provides methods for payment-related operations.
-   *
-   * @interface IPaymentMethod payment
-   *
-   * @property {function(config: ILiquidPaymentConfig): Promise<void>} mount -
-   *    Method for mounting the payment element into the DOM.
-   *
-   * @property {function(): Promise<ILiquidPaymentToken>} generateToken -
-   *    Method for generating a payment token for the current payment information.
-   *
-   * @property {function(eventType: K, handler: function): void} subscribe -
-   *    Method for subscribing to payment element events.
-   *
-   * @property {function(eventType: K, handler?: function): void} unsubscribe -
-   *    Method for unsubscribing from payment element events.
-   *
-   * @property {function(): void} collapse -
-   *    Method for collapsing the payment element if it's expanded.
-   *
-   * @property {function(): void} unmount -
-   *    Method for removing the payment element from the DOM.
-   *
-   * @property {function(): void} destroy -
-   *    Method for completely removing the payment element and cleaning up associated resources.
-   *
-   * @see {@link ILiquidPaymentConfig} Represents the configuration for Liquid payment.
-   * @see {@link ILiquidPaymentToken} Represents a payment token for liquid payments.
-   * @see {@link ILiquidPaymentError} Represents an error that occurs during a liquid payment.
-   * @see {@link ILiquidPaymentElementOptions} The options for the payment element.
-   * @see {@link IPaymentElementEventMap} The map of payment element event types to their corresponding event objects.
-   */
-  public payment: IPaymentMethod = {
-    mount: async (config: ILiquidPaymentConfig): Promise<void> => {
-      await this.ensureAuthenticated();
-      return this.paymentService.mount(config);
-    },
-    generateToken: async (): Promise<ILiquidPaymentToken> => {
-      await this.ensureAuthenticated();
-      return this.paymentService.generateToken();
-    },
-    subscribe: <K extends keyof IPaymentElementEventMap>(
-      eventType: K,
-      handler: (event: IPaymentElementEventMap[K]) => void
-    ): void => {
-      this.paymentService.subscribe(eventType, handler);
-    },
-    unsubscribe: <K extends keyof IPaymentElementEventMap>(
-      eventType: K,
-      handler?: (event: IPaymentElementEventMap[K]) => void
-    ): void => {
-      this.paymentService.unsubscribe(eventType, handler);
-    },
-    collapse: (): void => {
-      this.paymentService.collapse();
-    },
-    unmount: (): void => {
-      this.paymentService.unmount();
-    },
-    destroy: (): void => {
-      this.paymentService.destroy();
     },
   };
 

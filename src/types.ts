@@ -67,6 +67,15 @@ export interface ILiquidCommerceConfig {
   };
 }
 
+export interface ILiquidCommercePaymentConfig {
+  env: LIQUID_COMMERCE_ENV;
+
+  baseUrl?: {
+    stage?: string;
+    // prod?: string;
+  };
+}
+
 export interface ILiquidCommerceOrderConfig {
   userID: string;
 

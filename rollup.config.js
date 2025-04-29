@@ -117,7 +117,7 @@ export default [
           properties: {
             regex: /^_/,
           },
-          reserved: ['LiquidCommerce', 'OrderLiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
+          reserved: ['LiquidCommerce', 'OrderLiquidCommerce', 'PaymentLiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
         },
         output: {
           comments: false,
@@ -150,7 +150,7 @@ export default [
           properties: {
             regex: /^_/,
           },
-          reserved: ['LiquidCommerce', 'OrderLiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
+          reserved: ['LiquidCommerce', 'OrderLiquidCommerce', 'PaymentLiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
         },
         output: {
           comments: false,
