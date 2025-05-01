@@ -11,7 +11,7 @@ export class WebhookService {
   /**
    * This method sends a test request to the webhook endpoint to verify if it is working correctly.
    *
-   * @param {string} [endpoint] - The webhook endpoint to test. If not provided it will use the default endpoint configured in the system.
+   * @param {string} endpoint - The webhook endpoint to test. If not provided, it will use the default endpoint configured in the system.
    *
    * @returns {Promise<boolean>} A promise that resolves whether the test succeeded or not.
    * @throws {Error} If the test request fails.

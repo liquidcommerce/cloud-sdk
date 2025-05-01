@@ -149,6 +149,7 @@ export class AuthenticatedService {
       const url = new URL(`api${path}`, this.baseURL);
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
+        'X-LIQUID-API-KEY': this.apiKey,
         Authorization: `Bearer ${this.accessToken}`,
         ...options.headers,
       };

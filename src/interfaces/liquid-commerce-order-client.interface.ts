@@ -29,7 +29,7 @@ export interface ILiquidCommerceOrderClient {
  * Type for the LiquidCommerceOrderClient constructor.
  * Used to define the expected constructor signature.
  *
- * @type {new (onfig: ILiquidCommerceOrderConfig) => ILiquidCommerceOrderClient} ILiquidCommerceOrderClientConstructor
+ * @type {new (config: ILiquidCommerceOrderConfig) => ILiquidCommerceOrderClient} ILiquidCommerceOrderClientConstructor
  */
 export type ILiquidCommerceOrderClientConstructor = new (
   config: ILiquidCommerceOrderConfig
