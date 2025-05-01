@@ -87,8 +87,6 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
 
   sku: string;
 
-  mskus: string[];
-
   name: string;
 
   brand: string;
