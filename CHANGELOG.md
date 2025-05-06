@@ -1,3 +1,28 @@
+# [1.6.0-beta.16](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.15...v1.6.0-beta.16) (2025-05-06)
+
+
+### Bug Fixes
+
+* **interface:** checkoutItem and cartItem interface update ([feead55](https://github.com/liquidcommerce/cloud-sdk/commit/feead55e535b7c534a6ac24cf9d378a3c76a33df))
+* **readme:** authentication readme docs ([7967b59](https://github.com/liquidcommerce/cloud-sdk/commit/7967b59c8df5602fbc53637a1bab917fcb11db2b))
+* **README:** update readme file ([60899a5](https://github.com/liquidcommerce/cloud-sdk/commit/60899a555584c799affc5f33419476004394aa00))
+* **webhook-test:** webhook test and refactor ([3620f49](https://github.com/liquidcommerce/cloud-sdk/commit/3620f4958c0e79c0129977d503186621d985029b))
+
+
+### Features
+
+* add API key to headers in authenticated service and update webhook method parameter description ([57ca571](https://github.com/liquidcommerce/cloud-sdk/commit/57ca571f5efca870a6c403f84b0ce1dea6666214))
+* add ENUM_ORDER_SYSTEM and update order interfaces for consistency ([dafc2bb](https://github.com/liquidcommerce/cloud-sdk/commit/dafc2bb935dd429ecd7b96240e595d8cd1a3ad7c))
+* add webhook service and update documentation ([f5cc68c](https://github.com/liquidcommerce/cloud-sdk/commit/f5cc68c3098fed54cac78cb2a6f9ced6cabb2ca7))
+* add webhook tab and test functionality ([7e0cfb7](https://github.com/liquidcommerce/cloud-sdk/commit/7e0cfb7ceb58e4250024ee8219565a14324ba948))
+* enhance webhook testing functionality and update documentation ([81ad69a](https://github.com/liquidcommerce/cloud-sdk/commit/81ad69ae64038ca68ad1d17e0a8c60919e684513))
+* implement order authentication service and related client functionality ([79cfb4d](https://github.com/liquidcommerce/cloud-sdk/commit/79cfb4df21c02ad74f891037f139f2a6f7c2c2fe))
+* order api ([23725a7](https://github.com/liquidcommerce/cloud-sdk/commit/23725a7948bb0884a11ff378ca620beddb50a454))
+* remove mskus ([8344246](https://github.com/liquidcommerce/cloud-sdk/commit/8344246acb25c89ae24a6104206ecba74287586e))
+* update API keys to placeholders and change environment to dev ([b12eccb](https://github.com/liquidcommerce/cloud-sdk/commit/b12eccbc1b902603db99487c129aebb28f85c2a4))
+* update interfaces & add comments ([3dbf323](https://github.com/liquidcommerce/cloud-sdk/commit/3dbf3234e2c15ed886d69321f5fc6b9e76552402))
+* update webhook test method to accept an optional endpoint parameter ([a9a767d](https://github.com/liquidcommerce/cloud-sdk/commit/a9a767d621e43241911787835aa2672dea8bbb13))
+
 # [1.6.0-beta.15](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.14...v1.6.0-beta.15) (2025-03-17)
 
 
