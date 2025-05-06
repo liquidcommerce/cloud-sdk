@@ -397,6 +397,8 @@ export interface ICheckoutItem {
 
   upc: string;
 
+  sku: string;
+
   price: number;
 
   unitPrice: number;
@@ -520,7 +522,12 @@ export interface ICheckoutCompleteParams extends ICoreParams {
  */
 export interface ICheckoutCompleteResponse {
   order: {
+    /**
+     * @deprecated - use legacyOrderNumber
+     */
     number: string;
+
+    legacyOrderNumber: string;
 
     referenceId: string;
   };

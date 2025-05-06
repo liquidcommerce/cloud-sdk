@@ -274,7 +274,7 @@ export class CheckoutHelperService {
       throw new Error('Invalid gift cards: must be a string array if provided');
     }
 
-    const normalizedGiftCards = [ ...giftCards ];
+    const normalizedGiftCards = [...giftCards];
 
     // Only validate fields that are present
     normalizedGiftCards.forEach((gc) => {

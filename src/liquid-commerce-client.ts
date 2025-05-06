@@ -37,15 +37,17 @@ import type {
   IUserPaymentParams,
   IUserPaymentUpdateParams,
   IUserSessionParams,
+  IWebhookMethod,
 } from './interfaces';
 import type {
   AddressService,
+  CartService,
   CatalogService,
   CheckoutService,
   PaymentService,
   UserService,
+  WebhookService,
 } from './services';
-import type { CartService } from './services/cart.service';
 import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from './types';
 
 /**
@@ -74,6 +76,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
 
   private checkoutService: CheckoutService;
 
+  private webhookService: WebhookService;
+
   private config: ILiquidCommerceConfig;
 
   private singletonManager: SingletonManager;
@@ -89,13 +93,16 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.config = config;
     this.singletonManager = SingletonManager.getInstance();
     const baseURL = this.determineBaseURL(config);
+
     this.authenticatedClient = this.singletonManager.getAuthenticatedClient({ apiKey, baseURL });
+
     this.addressService = this.singletonManager.getAddressService(this.authenticatedClient);
     this.catalogService = this.singletonManager.getCatalogService(this.authenticatedClient);
     this.cartService = this.singletonManager.getCartService(this.authenticatedClient);
     this.userService = this.singletonManager.getUserService(this.authenticatedClient);
     this.paymentService = this.singletonManager.getPaymentService(this.authenticatedClient);
     this.checkoutService = this.singletonManager.getCheckoutService(this.authenticatedClient);
+    this.webhookService = this.singletonManager.getWebhookService(this.authenticatedClient);
   }
 
   /**
@@ -393,6 +400,22 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     ): Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>> => {
       await this.ensureAuthenticated();
       return this.checkoutService.complete(params);
+    },
+  };
+
+  /**
+   * Webhook object that provides methods for testing webhook functionality.
+   *
+   * @interface IWebhookMethod webhook
+   *
+   * @property {function(endpoint?: string): Promise<boolean>} test -
+   *   Method to test the webhook functionality by sending a test request to the specified endpoint.
+   *   Or if no endpoint is provided, it will use the default endpoint configured in the system.
+   */
+  public webhook: IWebhookMethod = {
+    test: async (endpoint?: string): Promise<boolean> => {
+      await this.ensureAuthenticated();
+      return this.webhookService.test(endpoint);
     },
   };
 }

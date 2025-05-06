@@ -875,3 +875,25 @@ export interface ICheckoutMethod {
     params: ICheckoutCompleteParams
   ) => Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>>;
 }
+
+export interface IWebhookMethod {
+  /**
+   * Retrieves whether the webhook test succeeded or not.
+   *
+   * @param {string} [endpoint] - The endpoint to test. If not provided, the default endpoint will be used.
+   * @returns {Promise<boolean>} A promise that resolves whether the test succeeded or not.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const testSucceeded = await liquidCommerce.webhook.test();
+   *   console.log('Webhook test succeeded:', testSucceeded);
+   * } catch (error) {
+   *   console.error('Failed to test Webhook:', error);
+   * }
+   *
+   * @throws {Error} Throws an error if the webhook test request fails or if authentication is unsuccessful.
+   */
+  test: (endpoint?: string) => Promise<boolean>;
+}

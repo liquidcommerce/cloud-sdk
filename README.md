@@ -14,6 +14,8 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
 
 - [Installation](#installation)
 - [Configuration](#configuration)
+  - [API Key Authentication](#api-key-authentication)
+  - [Order API Authentication](#order-api-authentication)
 - [Services & Usage](#services-and-usage)
   - [Address](#address)
   - [Catalog](#catalog)
@@ -21,6 +23,8 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
   - [User](#user)
   - [Payment](#payment)
   - [Checkout](#checkout)
+  - [Order](#order)
+  - [Webhook](#webhook)
 - [Response Types](#response-types)
 - [Error Handling](#error-handling)
 - [Documentation](#documentation)
@@ -39,18 +43,39 @@ pnpm add @liquidcommerce/cloud-sdk
 
 ## Configuration
 
-The SDK requires configuration during initialization:
+### API Key Authentication
+
+The LiquidCommerce API Key Authentication provides a secure method to obtain an access token for all other API calls to LiquidCommerce Services.
+
+Example using LiquidCommerce client:
 
 ```typescript
-import { LiquidCommerce, LIQUID_COMMERCE_ENV } from '@liquidcommerce/cloud-sdk';
-
+// The SDK automatically handles authentication
 const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
   googlePlacesApiKey: 'YOUR_GOOGLE_PLACES_API_KEY', // Required for address services
-  env: LIQUID_COMMERCE_ENV.STAGE, // STAGE or PROD
+  env: LIQUID_COMMERCE_ENV.STAGE, // or PROD
 });
-
-await client.init();
 ```
+
+[Click Here For Manual Authentication](https://docs.liquidcommerce.cloud/authentication-api-integration/get-access-token)
+
+### Order API Authentication
+
+LiquidCommerce provides a separate authentication mechanism for Order API endpoints. The Order client uses Basic Authentication with a username and password.
+
+Example using OrderLiquidCommerce client:
+
+```typescript
+const orderClient = await OrderLiquidCommerce({
+  userID: 'YOUR_ORDER_API_USER_ID',
+  password: 'YOUR_ORDER_API_PASSWORD',
+  env: LIQUID_COMMERCE_ENV.STAGE, // or PROD
+});
+```
+
+[Click Here For Manual Authentication](https://docs.liquidcommerce.cloud/services/orders-api/authentication)
+
+Note: Order authentication credentials are required to access Order API. The SDK will return appropriate authentication errors if these credentials are missing or invalid.
 
 ## Response Types
 
@@ -137,8 +162,8 @@ const availabilityResponse = await client.catalog.availability({
 // Search catalog with filters
 const searchResponse = await client.catalog.search({
   search: 'whiskey',
-  pageToken: "",
-  entity: "",
+  pageToken: '',
+  entity: '',
   page: 1,
   perPage: 20,
   orderBy: ENUM_ORDER_BY.PRICE,
@@ -218,7 +243,7 @@ const userSession = await client.user.session({
   company: 'Company Inc',
   profileImage: 'https://...',
   birthDate: '1990-01-01',
-  id:'user_id', // Existing user identifier (for updates only), email becomes optional
+  id: 'user_id', // Existing user identifier (for updates only), email becomes optional
 });
 
 // Fetch user by ID or email
@@ -536,6 +561,30 @@ if (!('error' in tokenResult)) {
 // 6. Clean up
 client.payment.unmount();
 client.payment.destroy();
+```
+
+### Order
+
+Order retrieval services:
+
+```typescript
+// Fetch order details by ID or number
+const orderResponse = await client.order.fetch(/* reference id or order number */);
+```
+
+[Click here to access the docs for the order response structure](https://docs.liquidcommerce.cloud/types/order)
+
+### Webhook
+
+Webhook test services:
+
+```typescript
+// Test webhook endpoint
+const webhookTestResult = await client.webhook.test(/* endpoint */);
+
+// Response is a simple boolean indicating success or failure
+// true = webhook test was successful
+// false = webhook test failed
 ```
 
 ## Error Handling
