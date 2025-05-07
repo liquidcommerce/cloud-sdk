@@ -119,9 +119,9 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
 
   price: number;
 
-  scheduledFor: string | Date;
+  scheduledFor: string | null;
 
-  availableAt: string | Date;
+  availableAt: string | null;
 
   images: string[];
 
@@ -247,9 +247,9 @@ export interface ICart {
 
   presaleExpiresAt: string | null;
 
-  createdAt: string | Date;
+  createdAt: string | null;
 
-  updatedAt: string | Date;
+  updatedAt: string | null;
 
   items: ICartItem[];
 
@@ -278,7 +278,7 @@ export interface ICartUpdateItem {
 
   engravingLines?: string[];
 
-  scheduledFor?: string | Date;
+  scheduledFor?: string | null;
 }
 
 /**

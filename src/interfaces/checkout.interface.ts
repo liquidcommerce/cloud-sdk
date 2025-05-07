@@ -90,9 +90,9 @@ export interface ICheckoutCustomer {
    */
   hasAgeVerify?: boolean;
 
-  createdAt?: Date;
+  createdAt?: string | null;
 
-  updatedAt?: Date;
+  updatedAt?: string | null;
 }
 
 /**
@@ -313,7 +313,7 @@ export interface ICheckoutTotalAmounts {
 export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
   id: string;
 
-  scheduledFor?: string | Date;
+  scheduledFor?: string | null;
 
   type: 'shipping' | 'onDemand';
 
@@ -467,9 +467,13 @@ export interface ICheckoutPrepareResponse {
 
   isGift: boolean;
 
-  createdAt: string;
+  createdAt: string | null;
 
-  updatedAt: string;
+  updatedAt: string | null;
+
+  isPresaleLocked: boolean;
+
+  presaleExpiresAt: string | null;
 
   billingSameAsShipping: boolean;
 

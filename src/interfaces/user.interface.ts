@@ -9,7 +9,7 @@ export interface IUserSession {
 
   secret: string | null;
 
-  createdAt: Date;
+  createdAt: string | null;
 }
 
 /**
@@ -50,22 +50,22 @@ export interface IUserAddressBase {
 /**
  * IUserAddress interface represents a user's address details.
  * It extends the IUserAddressBase interface, adding additional properties for
- * unique identification, timestamps, and default status.
+ * unique identification, creation/update dates, and default status.
  *
  * @interface IUserAddress
  * @extends {IUserAddressBase}
  *
  * @property {string} id - Unique identifier for the user's address.
- * @property {Date} createdAt - Timestamp indicating when the address was created.
- * @property {Date} updatedAt - Timestamp indicating the last update to the address.
+ * @property {string | null} createdAt - Date when the address was first added
+ * @property {string | null} updatedAt - Date when the address was last modified
  * @property {boolean} [isDefault] - Optional flag indicating if this is the default address.
  */
 export interface IUserAddress extends IUserAddressBase {
   id: string;
 
-  createdAt: Date;
+  createdAt: string | null;
 
-  updatedAt: Date;
+  updatedAt: string | null;
 
   isDefault?: boolean;
 }
@@ -97,7 +97,7 @@ export interface ISavedCard {
  * @property {string} type - The type of the payment method (e.g., credit card, PayPal).
  * @property {boolean} isDefault - Indicates whether this payment method is the default one.
  * @property {ISavedCard} [card] - The saved card details if the payment method is a card.
- * @property {Date} createdAt - The date when the payment method was added.
+ * @property {string | null} createdAt - The date when the payment method was added.
  */
 export interface IUserPayment {
   id: string;
@@ -108,7 +108,7 @@ export interface IUserPayment {
 
   card?: ISavedCard;
 
-  createdAt: Date;
+  createdAt: string | null;
 }
 
 /**
@@ -131,9 +131,9 @@ export interface IUser {
 
   birthDate: string | null;
 
-  createdAt: Date;
+  createdAt: string | null;
 
-  updatedAt: Date;
+  updatedAt: string | null;
 
   addresses: IUserAddress[];
 
