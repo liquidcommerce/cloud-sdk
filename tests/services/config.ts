@@ -22,6 +22,8 @@ const config = {
     },
     users: {
       createUser: `${baseURL}api/users/session`,
+      getUserById: (id:string) =>  `${baseURL}users/fetch/${id}`,
+      deleteUserById: (id:string) =>  `${baseURL}users/purge/${id}`,
     },
   },
 };

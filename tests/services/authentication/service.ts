@@ -11,7 +11,6 @@ class AuthService {
       headers: config.authHeaders(),
       ...opts,
     };
-    console.log(JSON.stringify(options));
     return sendRequest(options);
   }
 }

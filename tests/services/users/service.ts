@@ -12,7 +12,26 @@ class UsersService {
       body: requestData.createUser(),
       ...opts,
     };
-    console.log(JSON.stringify(options));
+    return sendRequest(options);
+  }
+
+  async getUserById(userId:string, opts?: IRequestOptions) {
+    const options = {
+      method: "get",
+      endpoint: config.endpoints.users.getUserById(userId),
+      headers: config.defaultHeaders(),
+      ...opts,
+    };
+    return sendRequest(options);
+  }
+
+  async deleteUserById(userId:string, opts?: IRequestOptions) {
+    const options = {
+      method: "delete",
+      endpoint: config.endpoints.users.deleteUserById(userId),
+      headers: config.defaultHeaders(),
+      ...opts,
+    };
     return sendRequest(options);
   }
 }
