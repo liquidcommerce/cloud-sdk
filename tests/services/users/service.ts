@@ -34,6 +34,27 @@ class UsersService {
     };
     return sendRequest(options);
   }
+
+  async addAddress(userId:string, opts?: IRequestOptions) {
+    const options = {
+      method: "post",
+      endpoint: config.endpoints.users.addAddress,
+      headers: config.defaultHeaders(),
+      body: requestData.addAddress(userId),
+      ...opts,
+    };
+    return sendRequest(options);
+  }
+
+  async deleteAddressById(addressId:string, opts?: IRequestOptions) {
+    const options = {
+      method: "delete",
+      endpoint: config.endpoints.users.deleteAddressById(addressId),
+      headers: config.defaultHeaders(),
+      ...opts,
+    };
+    return sendRequest(options);
+  }
 }
 const usersService = new UsersService();
 export default usersService;

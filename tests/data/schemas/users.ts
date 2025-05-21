@@ -199,8 +199,153 @@ const deleteUserSchema = {
   "required": ["statusCode", "message", "metadata", "data"]
 }
 
+const addressesSchema = {
+  "type": "object",
+  "properties": {
+    "statusCode": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "integer"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": ["languages", "timestamp", "timezone", "requestId", "path", "version"]
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+        },
+        "type": {
+          "type": "string"
+        },
+        "one": {
+          "type": "string"
+        },
+        "two": {
+          "type": ["string", "null"]
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number"
+        },
+        "long": {
+          "type": "number"
+        },
+        "placesId": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "object"
+        },
+        "updatedAt": {
+          "type": "object"
+        },
+        "isDefault": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id", "type", "one", "two", "city", "state", "zip",
+        "lat", "long", "placesId", "country", "createdAt", "updatedAt", "isDefault"
+      ]
+    }
+  },
+  "required": ["statusCode", "message", "metadata", "data"]
+}
+
+const deleteAddressSchema = {
+  "type": "object",
+  "properties": {
+    "statusCode": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "integer"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": ["languages", "timestamp", "timezone", "requestId", "path", "version"]
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "deleted": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": ["deleted", "message"]
+    }
+  },
+  "required": ["statusCode", "message", "metadata", "data"]
+}
+
 export const userSchemas = {
   createUserSchema,
   getUserSchema,
-  deleteUserSchema
+  deleteUserSchema,
+  addressesSchema,
+  deleteAddressSchema
 };

@@ -6,6 +6,7 @@ import Ajv from 'ajv';
 test.describe.serial('Users tests', () => {
   const ajv = new Ajv();
   let userId: string;
+  let addressId: string;
 
   test('Create user', async ({ request }) => {
     const userResponse = await usersService.createUser();
@@ -21,6 +22,21 @@ test.describe.serial('Users tests', () => {
     ajv.validate(userSchemas.getUserSchema, userResponse.body);
     expect(ajv.errorsText()).toBe('No errors');
     expect(userId).toBe(userResponse.body.data.id);
+  });
+
+  test('Add address', async ({ request }) => {
+    const addressResponse = await usersService.addAddress(userId);
+    addressId = addressResponse.body.data.id;
+    expect(addressResponse.status).toBe(201);
+    ajv.validate(userSchemas.addressesSchema, addressResponse.body);
+    expect(ajv.errorsText()).toBe('No errors');
+  });
+
+  test('Delete address', async ({ request }) => {
+    const addressResponse = await usersService.deleteAddressById(addressId);
+    expect(addressResponse.status).toBe(200);
+    ajv.validate(userSchemas.deleteAddressSchema, addressResponse.body);
+    expect(ajv.errorsText()).toBe('No errors');
   });
 
   test('Delete user', async ({ request }) => {

@@ -21,9 +21,11 @@ const config = {
       accessToken: `${baseURL}api/authentication`,
     },
     users: {
-      createUser: `${baseURL}api/users/session`,
+      createUser: `${baseURL}/users/session`,
       getUserById: (id:string) =>  `${baseURL}users/fetch/${id}`,
       deleteUserById: (id:string) =>  `${baseURL}users/purge/${id}`,
+      addAddress: `${baseURL}users/addresses/add`,
+      deleteAddressById: (id:string) =>  `${baseURL}/users/addresses/purge/${id}`,
     },
   },
 };
