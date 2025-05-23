@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import usersService from '../../services/users/service';
 import { userSchemas } from '../../data/schemas/users';
 import Ajv from 'ajv';
@@ -8,7 +8,7 @@ test.describe.serial('Users tests', () => {
   let userId: string;
   let addressId: string;
 
-  test('Create user', async ({ request }) => {
+  test('Create user', async () => {
     const userResponse = await usersService.createUser();
     expect(userResponse.status).toBe(201);
     userId = userResponse.body.data.id;
@@ -16,7 +16,7 @@ test.describe.serial('Users tests', () => {
     expect(ajv.errorsText()).toBe('No errors');
   });
 
-  test('Get user', async ({ request }) => {
+  test('Get user', async () => {
     const userResponse = await usersService.getUserById(userId);
     expect(userResponse.status).toBe(200);
     ajv.validate(userSchemas.getUserSchema, userResponse.body);
@@ -24,7 +24,7 @@ test.describe.serial('Users tests', () => {
     expect(userId).toBe(userResponse.body.data.id);
   });
 
-  test('Add address', async ({ request }) => {
+  test('Add address', async () => {
     const addressResponse = await usersService.addAddress(userId);
     addressId = addressResponse.body.data.id;
     expect(addressResponse.status).toBe(201);
@@ -32,14 +32,14 @@ test.describe.serial('Users tests', () => {
     expect(ajv.errorsText()).toBe('No errors');
   });
 
-  test('Delete address', async ({ request }) => {
+  test('Delete address', async () => {
     const addressResponse = await usersService.deleteAddressById(addressId);
     expect(addressResponse.status).toBe(200);
     ajv.validate(userSchemas.deleteAddressSchema, addressResponse.body);
     expect(ajv.errorsText()).toBe('No errors');
   });
 
-  test('Delete user', async ({ request }) => {
+  test('Delete user', async () => {
     const userResponse = await usersService.deleteUserById(userId);
     expect(userResponse.status).toBe(200);
     ajv.validate(userSchemas.deleteUserSchema, userResponse.body);

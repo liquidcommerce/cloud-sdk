@@ -27,6 +27,10 @@ const config = {
       addAddress: `${baseURL}users/addresses/add`,
       deleteAddressById: (id:string) =>  `${baseURL}/users/addresses/purge/${id}`,
     },
+    address: {
+      autocomplete: `${baseURL}/address/autocomplete`,
+      getAddressDetails: `${baseURL}/address/details`,
+    }
   },
 };
 
