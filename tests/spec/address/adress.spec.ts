@@ -3,7 +3,7 @@ import addressService from '../../services/address/service';
 import { addressSchemas } from '../../data/schemas/address';
 import Ajv from 'ajv';
 
-test.describe.serial('Users tests', () => {
+test.describe.serial('Address tests', () => {
   const ajv = new Ajv();
 
   test('Autocomplete address', async () => {

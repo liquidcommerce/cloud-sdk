@@ -30,6 +30,10 @@ const config = {
     address: {
       autocomplete: `${baseURL}/address/autocomplete`,
       getAddressDetails: `${baseURL}/address/details`,
+    },
+    catalog: {
+      search: `${baseURL}/catalog/search`,
+      availability: `${baseURL}/catalog/availability`,
     }
   },
 };
