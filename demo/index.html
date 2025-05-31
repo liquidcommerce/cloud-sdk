@@ -538,6 +538,16 @@
                   aria-controls="checkout" aria-selected="false">Checkout
           </button>
         </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="order-tab" data-bs-toggle="tab" data-bs-target="#order" type="button" role="tab"
+                  aria-controls="order" aria-selected="false">Order
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="webhook-tab" data-bs-toggle="tab" data-bs-target="#webhook" type="button" role="tab"
+                  aria-controls="webhook" aria-selected="false">Webhook
+          </button>
+        </li>
       </ul>
     </div>
   </div>
@@ -578,6 +588,16 @@
         <li class="nav-item">
           <button class="nav-link" id="checkout-tab-mobile" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab"
                   aria-controls="checkout" aria-selected="false">Checkout
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="order-tab-mobile" data-bs-toggle="tab" data-bs-target="#order" type="button" role="tab"
+                  aria-controls="order" aria-selected="false">Order
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="webhook-tab-mobile" data-bs-toggle="tab" data-bs-target="#webhook" type="button" role="tab"
+                  aria-controls="webhook" aria-selected="false">Webhook
           </button>
         </li>
       </ul>
@@ -973,6 +993,48 @@
             </div>
           </div>
 
+          <!-- ORDER EXAMPLE -->
+          <div class="tab-pane fade" id="order" role="tabpanel" aria-labelledby="order-tab">
+            <div class="section-container">
+              <h2 class="section-title">Order Details</h2>
+              <div class="order-section">
+                <div id="orderForm" class="order-form mb-4">
+                  <div class="mb-3">
+                    <label for="orderId" class="form-label">Order ID or Number</label>
+                    <input type="text" class="form-control" id="orderId" placeholder="Enter order ID or number (e.g. 187231231)">
+                  </div>
+                  <button type="button" class="btn btn-primary" id="getOrder">Fetch Order</button>
+                </div>
+                <div id="orderResults"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Webhook Tab Content -->
+          <div class="tab-pane fade" id="webhook" role="tabpanel" aria-labelledby="webhook-tab">
+            <div class="section-container">
+              <h2 class="section-title">Webhook Test</h2>
+              <div class="row justify-content-center mt-4">
+                <div class="col-md-8 text-center">
+                  <p>Send a test webhook event to verify your webhook configuration.</p>
+
+                  <div class="mb-4">
+                    <div class="form-group">
+                      <label for="webhookEndpoint" class="form-label text-start d-block mb-2">Custom Endpoint (Optional)</label>
+                      <input type="text" id="webhookEndpoint" class="form-control" placeholder="https://your-webhook-endpoint.com/webhook">
+                      <small class="form-text text-muted text-start d-block mt-2">
+                        If left empty, the system will use the default webhook endpoint configured in your account settings.
+                      </small>
+                    </div>
+                  </div>
+
+                  <button type="button" class="btn btn-primary" id="testWebhookButton">Trigger Test Event</button>
+                  <div id="webhookTestResult" class="mt-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -995,8 +1057,8 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-<script src="https://assets.liquidcommerce.co/sdk/cloud/stage/liquidcommerce-cloud-sdk.min.js"></script>
-<!-- <script src="../umd/liquidcommerce-cloud-sdk.min.js"></script> -->
+<!--<script src="https://assets.liquidcommerce.co/sdk/cloud/stage/liquidcommerce-cloud-sdk.min.js"></script>-->
+ <script src="../umd/liquidcommerce-cloud-sdk.min.js"></script>
 <script>
   /**
    * Liquid Commerce SDK Integration Script
@@ -1007,9 +1069,11 @@
    * and checkout flow.
    */
 
-    // API Keys and Constants
-  const API_KEY = 'YOUR_LIQUIDCOMMERCE_API_KEY';
-  const GOOGLE_PLACES_API_KEY = 'PUT_YOUR_KEY_HERE'
+  // API Keys and Constants
+  const API_KEY = 'YOUR_API_KEY';
+  const ORDER_API_USER = 'YOUR_ORDER_API_USER';
+  const ORDER_API_PASSWORD = 'YOUR_ORDER_API_PASSWORD';
+  const GOOGLE_PLACES_API_KEY = 'YOUR_GOOGLE_PLACES_KEY';
   const NEW_YORK_ADDRESS = {
     one: '100 madison ave',
     two: 'apt 1707',
@@ -1019,6 +1083,8 @@
   };
 
   let client;
+
+  let orderClient;
 
   /**
    * Debounce function to limit the rate at which a function can fire.
@@ -1046,11 +1112,28 @@
     try {
       return await window.LiquidCommerce(API_KEY, {
         googlePlacesApiKey: GOOGLE_PLACES_API_KEY,
-        env: 'dev',
+        env: 'loc',
       });
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
       document.getElementById('results').innerHTML = `<p>Error initializing SDK: ${error.message}</p>`;
+    }
+  }
+
+  /**
+   * Initialize the Liquid Commerce SDK
+   * @returns {Promise<Object>} The initialized SDK order client
+   */
+  async function initOrderSDK() {
+    try {
+      return await window.OrderLiquidCommerce({
+        userID: ORDER_API_USER,
+        password: ORDER_API_PASSWORD,
+        env: 'loc',
+      });
+    } catch (error) {
+      console.error('Failed to initialize order SDK:', error);
+      document.getElementById('results').innerHTML += `<p>Error initializing order SDK: ${error.message}</p>`;
     }
   }
 
@@ -1328,6 +1411,8 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     client = await initSDK();
+    orderClient = await initOrderSDK();
+
     const addressInput = document.getElementById('addressInput');
     const autocompleteResults = document.getElementById('autocompleteResults');
     const availabilityForm = document.getElementById('availabilityForm');
@@ -2213,6 +2298,527 @@
       console.error('Error completing checkout:', error);
     }
   });
+
+  /**
+   * Fetch order details based on order ID or number
+   * @param {string} identifier - Order ID or number
+   */
+  async function fetchOrderDetails(identifier) {
+    if (!orderClient) {
+      document.getElementById('orderResults').innerHTML = '<p class="alert alert-danger">Order SDK not initialized. Please try again.</p>';
+      return;
+    }
+
+    try {
+      const response = await orderClient.order.fetch(identifier);
+
+      if(response.data) {
+        displayOrderDetails(response.data);
+      } else {
+        document.getElementById('orderResults').innerHTML = `
+        <div class="alert alert-danger">
+          <h5>Order Not Found</h5>
+        </div>
+      `;
+      }
+
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+      document.getElementById('orderResults').innerHTML = `
+      <div class="alert alert-danger">
+        <h5>Error Fetching Order</h5>
+        <p>${error.message || 'Unknown error occurred'}</p>
+      </div>
+    `;
+    }
+  }
+
+  /**
+   * Display detailed order information
+   * @param {IOrder} order - Order object
+   */
+  function displayOrderDetails(order) {
+    const orderResults = document.getElementById('orderResults');
+
+    // Format dates for display
+    const createdDate = new Date(order.createdAt).toLocaleString();
+    const updatedDate = new Date(order.updatedAt).toLocaleString();
+
+    // Create HTML content for order details
+    let html = `
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Order Details</h4>
+      </div>
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5>Order Information</h5>
+            <p><strong>Reference ID:</strong> ${order.referenceId || 'N/A'}</p>
+            <p><strong>Order Number:</strong> ${order.legacyOrderNumber || 'N/A'}</p>
+            <p><strong>Created:</strong> ${createdDate}</p>
+            <p><strong>Updated:</strong> ${updatedDate}</p>
+            <p><strong>Order Type:</strong> ${order.isHybrid ? 'Hybrid' : 'Standard'}</p>
+            ${order.partner && order.partner.id ?
+      `<p><strong>Partner ID:</strong> ${order.partner.id}</p>
+               <p><strong>Partner Legacy ID:</strong> ${order.partner.legacyId || 'N/A'}</p>` :
+      ''}
+          </div>
+          <div class="col-md-6">
+            <h5>Customer Information</h5>
+            <p><strong>Name:</strong> ${order.customer.firstName || ''} ${order.customer.lastName || ''}</p>
+            <p><strong>Email:</strong> ${order.customer.email}</p>
+            <p><strong>Phone:</strong> ${order.customer.phone || 'N/A'}</p>
+            <p><strong>Customer ID:</strong> ${order.customer.id}</p>
+            ${order.customer.birthdate ? `<p><strong>Birthdate:</strong> ${order.customer.birthdate}</p>` : ''}
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5>Shipping Address</h5>
+            ${order.addresses.shipping.firstName || order.addresses.shipping.lastName ?
+      `<p>${order.addresses.shipping.firstName || ''} ${order.addresses.shipping.lastName || ''}</p>` : ''}
+            ${order.addresses.shipping.company ? `<p>${order.addresses.shipping.company}</p>` : ''}
+            <p>${order.addresses.shipping.one}</p>
+            ${order.addresses.shipping.two ? `<p>${order.addresses.shipping.two}</p>` : ''}
+            <p>${order.addresses.shipping.city}, ${order.addresses.shipping.state} ${order.addresses.shipping.zip}</p>
+            <p>${order.addresses.shipping.country}</p>
+            <p><strong>Email:</strong> ${order.addresses.shipping.email}</p>
+            ${order.addresses.shipping.phone ? `<p><strong>Phone:</strong> ${order.addresses.shipping.phone}</p>` : ''}
+          </div>
+          <div class="col-md-6">
+            <h5>Billing Address</h5>
+            ${order.addresses.billing.firstName || order.addresses.billing.lastName ?
+      `<p>${order.addresses.billing.firstName || ''} ${order.addresses.billing.lastName || ''}</p>` : ''}
+            ${order.addresses.billing.company ? `<p>${order.addresses.billing.company}</p>` : ''}
+            <p>${order.addresses.billing.one}</p>
+            ${order.addresses.billing.two ? `<p>${order.addresses.billing.two}</p>` : ''}
+            <p>${order.addresses.billing.city}, ${order.addresses.billing.state} ${order.addresses.billing.zip}</p>
+            <p>${order.addresses.billing.country}</p>
+            <p><strong>Email:</strong> ${order.addresses.billing.email}</p>
+            ${order.addresses.billing.phone ? `<p><strong>Phone:</strong> ${order.addresses.billing.phone}</p>` : ''}
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5>Order Options</h5>
+            <p><strong>Gift Order:</strong> ${order.options.isGift ? 'Yes' : 'No'}</p>
+            ${order.options.isGift && order.options.giftMessage ?
+      `<p><strong>Gift Message:</strong> ${order.options.giftMessage}</p>` : ''}
+
+            ${order.options.giftRecipient && (order.options.giftRecipient.name || order.options.giftRecipient.email || order.options.giftRecipient.phone) ?
+      `<div class="mt-2 mb-2">
+                <h6>Gift Recipient</h6>
+                ${order.options.giftRecipient.name ? `<p><strong>Name:</strong> ${order.options.giftRecipient.name}</p>` : ''}
+                ${order.options.giftRecipient.email ? `<p><strong>Email:</strong> ${order.options.giftRecipient.email}</p>` : ''}
+                ${order.options.giftRecipient.phone ? `<p><strong>Phone:</strong> ${order.options.giftRecipient.phone}</p>` : ''}
+              </div>` : ''}
+
+            <p><strong>Age Verified:</strong> ${order.options.hasVerifiedAge ? 'Yes' : 'No'}</p>
+            <p><strong>Allows Substitution:</strong> ${order.options.allowsSubstitution ? 'Yes' : 'No'}</p>
+            <p><strong>Billing Same As Shipping:</strong> ${order.options.billingSameAsShipping ? 'Yes' : 'No'}</p>
+            ${order.options.deliveryInstructions ?
+      `<p><strong>Delivery Instructions:</strong> ${order.options.deliveryInstructions}</p>` : ''}
+
+            ${order.options.marketingPreferences ?
+      `<div class="mt-2">
+                <h6>Marketing Preferences</h6>
+                <p><strong>Email:</strong> ${order.options.marketingPreferences.email ? 'Opted in' : 'Opted out'}</p>
+                <p><strong>SMS:</strong> ${order.options.marketingPreferences.sms ? 'Opted in' : 'Opted out'}</p>
+              </div>` : ''}
+          </div>
+          <div class="col-md-6">
+            <h5>Order Totals</h5>
+            <p><strong>Subtotal:</strong> $${(order.amounts.subtotal / 100).toFixed(2)}</p>
+            <p><strong>Shipping:</strong> $${(order.amounts.shipping / 100).toFixed(2)}</p>
+            <p><strong>Platform Fee:</strong> $${(order.amounts.platform / 100).toFixed(2)}</p>
+            <p><strong>Tax:</strong> $${(order.amounts.tax / 100).toFixed(2)}</p>
+            <p><strong>Engraving Fee:</strong> $${(order.amounts.engraving / 100).toFixed(2)}</p>
+            <p><strong>Service Fee:</strong> $${(order.amounts.service / 100).toFixed(2)}</p>
+            <p><strong>Delivery Fee:</strong> $${(order.amounts.delivery / 100).toFixed(2)}</p>
+            <p><strong>Discounts:</strong> $${(order.amounts.discounts / 100).toFixed(2)}</p>
+            <p><strong>Gift Cards:</strong> $${(order.amounts.giftCards / 100).toFixed(2)}</p>
+            <p><strong>Tip:</strong> $${(order.amounts.tip / 100).toFixed(2)}</p>
+            <p><strong>Total:</strong> <span class="text-primary fw-bold">$${(order.amounts.total / 100).toFixed(2)}</span></p>
+
+            ${order.amounts.taxDetails ?
+      `<div class="mt-3">
+                <h6>Tax Details</h6>
+                <p><strong>Products Tax:</strong> $${(order.amounts.taxDetails.products / 100).toFixed(2)}</p>
+                <p><strong>Shipping Tax:</strong> $${(order.amounts.taxDetails.shipping / 100).toFixed(2)}</p>
+                <p><strong>Delivery Tax:</strong> $${(order.amounts.taxDetails.delivery / 100).toFixed(2)}</p>
+                <p><strong>Bag Tax:</strong> $${(order.amounts.taxDetails.bag / 100).toFixed(2)}</p>
+                <p><strong>Bottle Deposits:</strong> $${(order.amounts.taxDetails.bottleDeposits / 100).toFixed(2)}</p>
+                <p><strong>Retail Delivery:</strong> $${(order.amounts.taxDetails.retailDelivery / 100).toFixed(2)}</p>
+              </div>` : ''}
+
+            ${order.amounts.discountDetails ?
+      `<div class="mt-3">
+                <h6>Discount Details</h6>
+                <p><strong>Products Discount:</strong> $${(order.amounts.discountDetails.products / 100).toFixed(2)}</p>
+                <p><strong>Shipping Discount:</strong> $${(order.amounts.discountDetails.shipping / 100).toFixed(2)}</p>
+                <p><strong>Delivery Discount:</strong> $${(order.amounts.discountDetails.delivery / 100).toFixed(2)}</p>
+                <p><strong>Engraving Discount:</strong> $${(order.amounts.discountDetails.engraving / 100).toFixed(2)}</p>
+                <p><strong>Service Discount:</strong> $${(order.amounts.discountDetails.service / 100).toFixed(2)}</p>
+              </div>` : ''}
+          </div>
+        </div>
+
+        ${order.paymentMethods && order.paymentMethods.length > 0 ?
+      `<div class="row mb-4">
+            <div class="col-12">
+              <h5>Payment Methods</h5>
+              <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Type</th>
+                      <th>Card</th>
+                      <th>Last Digits</th>
+                      <th>Holder</th>
+                      <th>Code</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${order.paymentMethods.map(payment => `
+                      <tr>
+                        <td>${payment.type || 'N/A'}</td>
+                        <td>${payment.card || 'N/A'}</td>
+                        <td>${payment.lastDigits || 'N/A'}</td>
+                        <td>${payment.holder || 'N/A'}</td>
+                        <td>${payment.code || 'N/A'}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>` : ''}
+
+        <h5 class="mb-3">Order Items</h5>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th>Product</th>
+                <th>Retailer</th>
+                <th>Size/Details</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${order.items.map(item => {
+      // Find retailer for this item
+      const retailer = order.retailers.find(r => r.id.toString() === item.retailerId.toString());
+      // Find fulfillment for this item
+      const fulfillment = item.fulfillmentId ?
+        retailer?.fulfillments.find(f => f.id === item.fulfillmentId) : null;
+
+      return `
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        ${item.image ? `<img src="${item.image}" alt="${item.product.name}" class="me-2" style="width: 50px; height: 50px; object-fit: cover;">` : ''}
+                        <div>
+                          <div class="fw-bold">${item.product.name}</div>
+                          <div class="small">${item.product.brand}</div>
+                          <div class="small">UPC: ${item.product.upc}</div>
+                          <div class="small">SKU: ${item.product.sku}</div>
+                          ${item.liquidId ? `<div class="small">Liquid ID: ${item.liquidId}</div>` : ''}
+                          ${item.legacyPid ? `<div class="small">Legacy PID: ${item.legacyPid}</div>` : ''}
+                        </div>
+                      </div>
+                    </td>
+                    <td>${retailer?.name || 'Unknown'}</td>
+                    <td>
+                      <div>
+                        <p class="mb-1">${item.product.size || 'N/A'}</p>
+                        ${item.product.volume ? `<p class="mb-1">Volume: ${item.product.volume}</p>` : ''}
+                        ${item.product.uom ? `<p class="mb-1">UOM: ${item.product.uom}</p>` : ''}
+                        ${item.product.proof ? `<p class="mb-1">Proof: ${item.product.proof}</p>` : ''}
+                        ${item.product.category ? `<p class="mb-1">Category: ${item.product.category}</p>` : ''}
+                        ${item.product.attributes.abv ? `<p class="mb-1">ABV: ${item.product.attributes.abv}</p>` : ''}
+                        ${item.product.attributes.container ? `<p class="mb-1">Container: ${item.product.attributes.container}</p>` : ''}
+                        ${item.product.attributes.containerType ? `<p class="mb-1">Container Type: ${item.product.attributes.containerType}</p>` : ''}
+                        ${item.product.attributes.pack ? `<p class="mb-1">Pack: Yes</p>` : ''}
+                        ${item.product.attributes.packDescription ? `<p class="mb-1">Pack Description: ${item.product.attributes.packDescription}</p>` : ''}
+                        ${item.isPresale ? `<p class="mb-1 text-warning">Pre-sale Item</p>` : ''}
+                        ${item.estimatedShipBy ? `<p class="mb-1">Est. Ship By: ${new Date(item.estimatedShipBy).toLocaleDateString()}</p>` : ''}
+                        <p class="mb-1">Placement: ${item.customerPlacement}</p>
+                      </div>
+                    </td>
+                    <td>
+                      <p class="mb-1">${item.pricing.quantity}</p>
+                      ${item.pricing.bottleDeposits > 0 ? `<p class="mb-1">Bottle Deposits: $${(item.pricing.bottleDeposits / 100).toFixed(2)}</p>` : ''}
+                    </td>
+                    <td>
+                      <p class="mb-1">Unit: $${(item.pricing.unitPrice / 100).toFixed(2)}</p>
+                      <p class="mb-1">Total: $${(item.pricing.price / 100).toFixed(2)}</p>
+                      <p class="mb-1">Tax: $${(item.pricing.tax / 100).toFixed(2)}</p>
+                    </td>
+                    <td>${fulfillment ? fulfillment.status : 'Processing'}</td>
+                  </tr>
+
+                  ${(item.attributes.engraving && item.attributes.engraving.hasEngraving) ||
+      (item.attributes.giftCard && (item.attributes.giftCard.sender || item.attributes.giftCard.message || item.attributes.giftCard.recipients.length > 0)) ?
+        `<tr>
+                    <td colspan="6" class="bg-light">
+                      <div class="row">
+                        ${item.attributes.engraving && item.attributes.engraving.hasEngraving ?
+          `<div class="col-md-6">
+                            <h6>Engraving Details</h6>
+                            <p><strong>Fee:</strong> $${(item.attributes.engraving.fee / 100).toFixed(2)}</p>
+                            ${item.attributes.engraving.location ? `<p><strong>Location:</strong> ${item.attributes.engraving.location}</p>` : ''}
+                            ${item.attributes.engraving.lines && item.attributes.engraving.lines.length > 0 ?
+            `<p><strong>Lines:</strong></p>
+                              <ul>
+                                ${item.attributes.engraving.lines.map(line => `<li>${line}</li>`).join('')}
+                              </ul>` : ''}
+                          </div>` : ''}
+
+                        ${item.attributes.giftCard && (item.attributes.giftCard.sender || item.attributes.giftCard.message || item.attributes.giftCard.recipients.length > 0) ?
+          `<div class="col-md-6">
+                            <h6>Gift Card Details</h6>
+                            ${item.attributes.giftCard.sender ? `<p><strong>Sender:</strong> ${item.attributes.giftCard.sender}</p>` : ''}
+                            ${item.attributes.giftCard.message ? `<p><strong>Message:</strong> ${item.attributes.giftCard.message}</p>` : ''}
+                            ${item.attributes.giftCard.sendDate ? `<p><strong>Send Date:</strong> ${new Date(item.attributes.giftCard.sendDate).toLocaleDateString()}</p>` : ''}
+                            ${item.attributes.giftCard.recipients && item.attributes.giftCard.recipients.length > 0 ?
+            `<p><strong>Recipients:</strong></p>
+                              <ul>
+                                ${item.attributes.giftCard.recipients.map(recipient => `<li>${recipient}</li>`).join('')}
+                              </ul>` : ''}
+                          </div>` : ''}
+                      </div>
+                    </td>
+                  </tr>` : ''}
+                `;
+    }).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        ${order.retailers.length > 0 ? `
+          <h5 class="mt-4 mb-3">Retailer & Fulfillment Details</h5>
+          <div class="accordion" id="retailerAccordion">
+            ${order.retailers.map((retailer, index) => `
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="heading${index}">
+                  <button class="accordion-button ${index > 0 ? 'collapsed' : ''}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="${index === 0 ? 'true' : 'false'}" aria-controls="collapse${index}">
+                    <span class="fw-bold">${retailer.name}</span> - ${retailer.system}
+                  </button>
+                </h2>
+                <div id="collapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" aria-labelledby="heading${index}" data-bs-parent="#retailerAccordion">
+                  <div class="accordion-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h6>Retailer Information</h6>
+                        <p><strong>ID:</strong> ${retailer.id}</p>
+                        ${retailer.legacyId ? `<p><strong>Legacy ID:</strong> ${retailer.legacyId}</p>` : ''}
+                        <p><strong>System:</strong> ${retailer.system}</p>
+                        <p><strong>Timezone:</strong> ${retailer.timezone}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <h6>Retailer Address</h6>
+                        <p>${retailer.address.one}</p>
+                        ${retailer.address.two ? `<p>${retailer.address.two}</p>` : ''}
+                        <p>${retailer.address.city}, ${retailer.address.state} ${retailer.address.zip}</p>
+                        <p>${retailer.address.country}</p>
+                        ${retailer.address.coordinates.latitude && retailer.address.coordinates.longitude ?
+      `<p><small>Coordinates: ${retailer.address.coordinates.latitude}, ${retailer.address.coordinates.longitude}</small></p>` :
+      ''}
+                      </div>
+                    </div>
+
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <h6>Retailer Amounts</h6>
+                        <p><strong>Subtotal:</strong> $${(retailer.amounts.subtotal / 100).toFixed(2)}</p>
+                        <p><strong>Shipping:</strong> $${(retailer.amounts.shipping / 100).toFixed(2)}</p>
+                        <p><strong>Platform Fee:</strong> $${(retailer.amounts.platform / 100).toFixed(2)}</p>
+                        <p><strong>Tax:</strong> $${(retailer.amounts.tax / 100).toFixed(2)}</p>
+                        <p><strong>Engraving Fee:</strong> $${(retailer.amounts.engraving / 100).toFixed(2)}</p>
+                        <p><strong>Service Fee:</strong> $${(retailer.amounts.service / 100).toFixed(2)}</p>
+                        <p><strong>Delivery Fee:</strong> $${(retailer.amounts.delivery / 100).toFixed(2)}</p>
+                        <p><strong>Discounts:</strong> $${(retailer.amounts.discounts / 100).toFixed(2)}</p>
+                        <p><strong>Gift Cards:</strong> $${(retailer.amounts.giftCards / 100).toFixed(2)}</p>
+                        <p><strong>Tip:</strong> $${(retailer.amounts.tip / 100).toFixed(2)}</p>
+                        <p><strong>Total:</strong> <span class="text-primary fw-bold">$${(retailer.amounts.total / 100).toFixed(2)}</span></p>
+                      </div>
+                    </div>
+
+                    ${retailer.fulfillments.length > 0 ? `
+                      <h6 class="mt-3">Fulfillments</h6>
+                      <div class="list-group">
+                        ${retailer.fulfillments.map(fulfillment => {
+      // Get item names for this fulfillment
+      const fulfillmentItems = order.items.filter(item =>
+        fulfillment.itemIds.includes(item.id.toString()));
+
+      return `
+                            <div class="list-group-item">
+                              <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Fulfillment ID: ${fulfillment.id}</h6>
+                                <span class="badge bg-${getStatusBadgeColor(fulfillment.status)}">${fulfillment.status}</span>
+                              </div>
+                              <p class="mb-1"><strong>Type:</strong> ${fulfillment.type}</p>
+                              <p class="mb-1"><strong>Updated:</strong> ${new Date(fulfillment.updatedAt).toLocaleString()}</p>
+                              ${fulfillment.scheduledFor ? `<p class="mb-1"><strong>Scheduled For:</strong> ${new Date(fulfillment.scheduledFor).toLocaleString()}</p>` : ''}
+
+                              <p class="mb-1"><strong>Items:</strong> ${fulfillmentItems.map(item => item.product.name).join(', ')}</p>
+
+                              ${fulfillment.timeline && fulfillment.timeline.length > 0 ? `
+                                <h6 class="mt-2 mb-1">Fulfillment Timeline</h6>
+                                <ul class="list-unstyled">
+                                  ${fulfillment.timeline.map(event => `
+                                    <li><small>${new Date(event.timestamp).toLocaleString()} - ${event.status}</small></li>
+                                  `).join('')}
+                                </ul>
+                              ` : ''}
+
+                              ${fulfillment.packages.length > 0 ? `
+                                <h6 class="mt-3 mb-2">Packages</h6>
+                                <div class="list-group">
+                                  ${fulfillment.packages.map(pkg => `
+                                    <div class="list-group-item list-group-item-light">
+                                      <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Package ID: ${pkg.id}</h6>
+                                        <span class="badge bg-${getPackageStatusBadgeColor(pkg.status)}">${pkg.status}</span>
+                                      </div>
+                                      ${pkg.carrier ? `<p class="mb-1"><strong>Carrier:</strong> ${pkg.carrier}</p>` : ''}
+                                      ${pkg.trackingNumber ? `
+                                        <p class="mb-1">
+                                          <strong>Tracking:</strong> ${pkg.trackingNumber}
+                                          ${pkg.trackingUrl ? `<a href="${pkg.trackingUrl}" target="_blank" class="ms-2">Track Package</a>` : ''}
+                                        </p>
+                                      ` : ''}
+                                      ${pkg.dateShipped ? `<p class="mb-1"><strong>Shipped:</strong> ${new Date(pkg.dateShipped).toLocaleString()}</p>` : ''}
+
+                                      ${pkg.timeline && pkg.timeline.length > 0 ? `
+                                        <h6 class="mt-2 mb-1">Package Timeline</h6>
+                                        <ul class="list-unstyled">
+                                          ${pkg.timeline.map(event => `
+                                            <li><small>${new Date(event.timestamp).toLocaleString()} - ${event.status}</small></li>
+                                          `).join('')}
+                                        </ul>
+                                      ` : ''}
+                                    </div>
+                                  `).join('')}
+                                </div>
+                              ` : '<p>No packages available.</p>'}
+                            </div>
+                          `;
+    }).join('')}
+                      </div>
+                    ` : '<p>No fulfillments available.</p>'}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+
+    orderResults.innerHTML = html;
+  }
+
+  /**
+   * Get Bootstrap badge color class based on order status
+   * @param {string} status - Order status
+   * @returns {string} Bootstrap color class
+   */
+  function getStatusBadgeColor(status) {
+    switch (status) {
+      case 'COMPLETED':
+        return 'success';
+      case 'PROCESSING':
+        return 'primary';
+      case 'SHIPPED':
+        return 'info';
+      case 'DELIVERED':
+        return 'success';
+      case 'CANCELLED':
+        return 'danger';
+      case 'RETURNED':
+        return 'warning';
+      case 'REFUNDED':
+        return 'secondary';
+      default:
+        return 'secondary';
+    }
+  }
+
+  /**
+   * Get Bootstrap badge color class based on package status
+   * @param {string} status - Package status
+   * @returns {string} Bootstrap color class
+   */
+  function getPackageStatusBadgeColor(status) {
+    switch (status) {
+      case 'DELIVERED':
+        return 'success';
+      case 'IN_TRANSIT':
+        return 'info';
+      case 'SHIPPED':
+        return 'primary';
+      case 'LABEL_CREATED':
+        return 'secondary';
+      case 'EXCEPTION':
+        return 'warning';
+      case 'CANCELLED':
+        return 'danger';
+      default:
+        return 'secondary';
+    }
+  }
+
+  const getOrderButton = document.getElementById('getOrder');
+
+  if (getOrderButton) {
+    getOrderButton.addEventListener('click', () => {
+      const orderId = document.getElementById('orderId').value.trim();
+      if (orderId) {
+        fetchOrderDetails(orderId);
+      } else {
+        document.getElementById('orderResults').innerHTML = `
+        <div class="alert alert-warning">
+          <p>Please enter an Order ID or Order Number.</p>
+        </div>
+      `;
+      }
+    });
+  }
+
+  document.getElementById('testWebhookButton').addEventListener('click', async () => {
+    const webhookEndpoint = document.getElementById('webhookEndpoint').value.trim();
+    const webhookTestResult = document.getElementById('webhookTestResult');
+
+    webhookTestResult.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+
+    try {
+      const testResponse = await client.webhook.test(webhookEndpoint);
+
+      if (testResponse) {
+        webhookTestResult.innerHTML = '<div class="alert alert-success">' +
+          '<strong>Success!</strong> Webhook test request was sent successfully!' +
+          (webhookEndpoint ? ' to: ' + webhookEndpoint : ' to your default endpoint.') +
+          '</div>';
+      } else {
+        webhookTestResult.innerHTML = '<div class="alert alert-warning">' +
+          '<strong>Warning!</strong> Webhook test request failed. Please check your configuration.' +
+          '</div>';
+      }
+    } catch (error) {
+      console.error('Error testing webhook:', error);
+      webhookTestResult.innerHTML = `<div class="alert alert-danger"><strong>Error!</strong> ${error.message}</div>`;
+    }
+  });
+
 </script>
 </body>
 </html>

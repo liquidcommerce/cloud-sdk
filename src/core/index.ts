@@ -3,5 +3,7 @@ export * from './cart-helper.service';
 export * from './catalog-helper.service';
 export * from './checkout-helper.service';
 export * from './location-helper.service';
+export * from './order-authenticated.service';
+export * from './order-singleton.service';
 export * from './payment-provider.service';
 export * from './singleton.service';

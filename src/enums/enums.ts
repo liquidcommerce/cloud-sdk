@@ -24,6 +24,7 @@ export enum STATES_CODE {
   AL = 'AL',
   AK = 'AK',
   AR = 'AR',
+  AZ = 'AZ',
   CA = 'CA',
   CO = 'CO',
   CT = 'CT',
@@ -77,6 +78,7 @@ export enum STATES_NAME {
   ALABAMA = 'AL',
   ALASKA = 'AK',
   ARKANSAS = 'AR',
+  ARIZONA = 'AZ',
   CALIFORNIA = 'CA',
   COLORADO = 'CO',
   CONNECTICUT = 'CT',
@@ -126,7 +128,17 @@ export enum STATES_NAME {
   WYOMING = 'WY',
 }
 
+/*
+ *
+ * @deprecated - use ENUM_BINARY_FILTER
+ *
+ * */
 export enum ENUM_ENGRAVING {
+  YES = 'YES',
+  NO = 'NO',
+}
+
+export enum ENUM_BINARY_FILTER {
   YES = 'YES',
   NO = 'NO',
 }
@@ -140,6 +152,7 @@ export enum ENUM_FILTER_KEYS {
   VARIETY = 'variety',
   ENGRAVING = 'engraving',
   PRICE = 'price',
+  PRESALE = 'presale',
   AVAILABILITY = 'availability',
   CATEGORIES = 'categories',
   SIZES = 'sizes',
@@ -194,6 +207,34 @@ export enum CART_EVENT_ENUM {
   ITEM_QTY_CHANGE = 'ItemQuantityChange',
   ITEM_ID_NOT_FOUND = 'ItemIdNotFound',
   ITEMS_REMOVED = 'ItemsRemoved',
+  RETAILER_FULFILLMENT_INVALID = 'RetailerFulfillmentInvalid',
+
+  // Coupon validation events
+  COUPON_PROCESSING_ERROR = 'CouponProcessingError',
+  COUPON_NOT_FOUND = 'CouponNotFound',
+  COUPON_EXPIRED = 'CouponExpired',
+  NO_APPLICABLE_DISCOUNT = 'NoApplicableDiscount',
+  COUPON_NOT_STARTED = 'CouponNotStarted',
+  MINIMUM_ORDER_VALUE_NOT_MET = 'MinimumOrderValueNotMet',
+  MINIMUM_ORDER_UNITS_NOT_MET = 'MinimumOrderUnitsNotMet',
+  MINIMUM_DISTINCT_ITEMS_NOT_MET = 'MinimumDistinctItemsNotMet',
+  QUOTA_EXCEEDED = 'QuotaExceeded',
+  USER_LIMIT_EXCEEDED = 'UserLimitExceeded',
+  NOT_FIRST_PURCHASE = 'NotFirstPurchase',
+  INVALID_COUPON = 'InvalidCoupon',
+  INVALID_MEMBERSHIP = 'InvalidMembership',
+  INVALID_DOMAIN = 'InvalidDomain',
+  INVALID_REQUIREMENTS = 'InvalidRequirements',
+  INVALID_ORGANIZATION = 'InvalidOrganization',
+  PRODUCT_NOT_ELIGIBLE = 'ProductNotEligible',
+  NOT_ENOUGH_PREVIOUS_ORDERS = 'NotEnoughPreviousOrders',
+
+  //Presale validation events
+  PRESALE_ITEMS_NOT_ALLOWED = 'PresaleItemsNotAllowed',
+  PRESALE_LIMIT_EXCEEDED = 'PresaleLimitExceeded',
+  PRESALE_NOT_STARTED = 'PresaleNotStarted',
+  PRESALE_EXPIRED = 'PresaleExpired',
+  PRESALE_MIXED_CART = 'PresaleMixedCart',
 }
 
 export enum ENUM_ADDRESS_TYPE {
@@ -251,4 +292,48 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_CART_UPDATED_ERROR = 'The cart requested was updated during your checkout.',
   REQUEST_ADDRESS_DEFAULT_ERROR = "There's been an error with your address configurations in cart and/or billing address, check and try again.",
   REQUEST_TIPS_ERROR = "There's been an error applying your tips to the checkout.",
+}
+
+export enum CHECKOUT_EVENT_ENUM {
+  ERROR_PROCESSING_GIFT_CARDS = 'ErrorProcessingGiftCards',
+  INVALID_GIFT_CARD_CODE = 'InvalidGiftCardCodes',
+  INVALID_GIFT_CARD_PARTNER = 'InvalidGiftCardPartner',
+  INACTIVE_GIFT_CARD = 'InactiveGiftCard',
+  GIFT_CARD_ALREADY_IN_USE = 'GiftCardAlreadyInUse',
+  GIFT_CARD_EXPIRED = 'GiftCardExpired',
+  GIFT_CARD_BALANCE_DEPLETED = 'GiftCardBalanceDepleted',
+}
+
+export enum ENUM_ORDER_STATUS {
+  CREATED = 'created',
+  PROCESSING = 'processing',
+  CANCELED = 'canceled',
+  DELIVERED = 'delivered',
+  TEST = 'test',
+}
+
+export enum ENUM_ORDER_SYSTEM {
+  LIQUIDCOMMERCE = 'LiquidCommerce OMS',
+  RESERVEBAR = 'ReserveBar OMS',
+}
+
+export enum ENUM_ORDER_PACKAGE_STATUS {
+  PENDING = 'pending',
+  SHIPPED = 'shipped',
+  DELIVERED = 'delivered',
+  CANCELED = 'canceled',
+  RETURNED = 'returned',
+}
+
+export enum ENUM_ORDER_FULFILLMENT_TYPE {
+  SHIPPING = 'shipping',
+  ON_DEMAND = 'onDemand',
+  DIGITAL = 'digital',
+  BOPIS = 'bopis',
+}
+
+export enum ENUM_CUSTOMER_PLACEMENT {
+  STANDARD = 'standard',
+  PRE_SALE = 'pre_sale',
+  BACK_ORDER = 'back_order',
 }

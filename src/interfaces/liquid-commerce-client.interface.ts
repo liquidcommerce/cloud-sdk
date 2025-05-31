@@ -1,4 +1,8 @@
-import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig, } from '../types';
+import type {
+  IApiResponseWithData,
+  IApiResponseWithoutData,
+  ILiquidCommerceConfig,
+} from '../types';
 import type {
   IAddressAutocompleteParams,
   IAddressAutocompleteResult,
@@ -6,14 +10,23 @@ import type {
   IAddressDetailsResult,
 } from './address.interface';
 import type { ICart, ICartUpdateParams } from './cart.interface';
-import type { IAvailabilityParams, IAvailabilityResponse, ICatalog, ICatalogParams, } from './catalog.interface';
+import type {
+  IAvailabilityParams,
+  IAvailabilityResponse,
+  ICatalog,
+  ICatalogParams,
+} from './catalog.interface';
 import type {
   ICheckoutCompleteParams,
   ICheckoutCompleteResponse,
   ICheckoutPrepareParams,
   ICheckoutPrepareResponse,
 } from './checkout.interface';
-import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap, } from './payment.interface';
+import type {
+  ILiquidPaymentConfig,
+  ILiquidPaymentToken,
+  IPaymentElementEventMap,
+} from './payment.interface';
 import type {
   BaseUser,
   IPurgeResponse,
@@ -21,7 +34,8 @@ import type {
   IUserAddress,
   IUserAddressParams,
   IUserPayment,
-  IUserPaymentAddParams, IUserPaymentParams,
+  IUserPaymentAddParams,
+  IUserPaymentParams,
   IUserPaymentUpdateParams,
   IUserSessionParams,
 } from './user.interface';
@@ -558,7 +572,9 @@ export interface IUserMethod {
    * @see {@link IUserPaymentParams} for the structure of the update payment request parameters.
    * @see {@link IUserPayment} for the structure of the user's payment method data returned.
    */
-  updatePayment: (params: IUserPaymentParams | IUserPaymentUpdateParams) => Promise<IApiResponseWithData<boolean>>;
+  updatePayment: (
+    params: IUserPaymentParams | IUserPaymentUpdateParams
+  ) => Promise<IApiResponseWithData<boolean>>;
 
   /**
    * Purges a payment method for a user.
@@ -858,4 +874,26 @@ export interface ICheckoutMethod {
   complete: (
     params: ICheckoutCompleteParams
   ) => Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>>;
+}
+
+export interface IWebhookMethod {
+  /**
+   * Retrieves whether the webhook test succeeded or not.
+   *
+   * @param {string} [endpoint] - The endpoint to test. If not provided, the default endpoint will be used.
+   * @returns {Promise<boolean>} A promise that resolves whether the test succeeded or not.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const testSucceeded = await liquidCommerce.webhook.test();
+   *   console.log('Webhook test succeeded:', testSucceeded);
+   * } catch (error) {
+   *   console.error('Failed to test Webhook:', error);
+   * }
+   *
+   * @throws {Error} Throws an error if the webhook test request fails or if authentication is unsuccessful.
+   */
+  test: (endpoint?: string) => Promise<boolean>;
 }

@@ -1,6 +1,6 @@
 import type { CART_EVENT_ENUM } from '../enums';
 import type { ILoc, ILocBase } from './address.interface';
-import type { IProduct } from './catalog.interface';
+import type { IProduct, IProductPresale } from './catalog.interface';
 import type { IRetailer } from './retailer.interface';
 
 /**
@@ -57,6 +57,8 @@ export interface ICartItemGiftCart {
 export interface ICartItemAttributes {
   engraving: ICartItemEngraving;
 
+  presale: IProductPresale;
+
   giftCard: ICartItemGiftCart;
 }
 
@@ -82,6 +84,8 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
   partNumber: string;
 
   upc: string;
+
+  sku: string;
 
   name: string;
 
@@ -141,20 +145,6 @@ export interface ICartAttributesPromoCode {
 }
 
 /**
- * Represents the attributes of a gift card in a cart.
- *
- * @interface ICartAttributesGiftCard
- *
- * @property {string} code - The code of the gift card.
- * @property {number} value - The value of the gift card in the cart.
- */
-export interface ICartAttributesGiftCard {
-  code: string;
-
-  value: number;
-}
-
-/**
  * Represents the attributes, amounts, and fees associated with a cart.
  */
 export interface ICartAttributesAmountsFees {
@@ -194,8 +184,6 @@ export interface ICartAttributesAmounts {
  */
 export interface ICartAttributes {
   promoCode: ICartAttributesPromoCode;
-
-  giftCards: ICartAttributesGiftCard[];
 
   amounts: ICartAttributesAmounts;
 }
@@ -255,6 +243,10 @@ export interface ICart {
 
   total: number;
 
+  isPresaleLocked: boolean;
+
+  presaleExpiresAt: string | null;
+
   createdAt: string | Date;
 
   updatedAt: string | Date;
@@ -299,6 +291,4 @@ export interface ICartUpdateParams extends ILocBase {
   items: ICartUpdateItem[];
 
   promoCode?: string;
-
-  giftCards?: string[];
 }

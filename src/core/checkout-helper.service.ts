@@ -123,7 +123,12 @@ export class CheckoutHelperService {
     }
 
     // Validate marketingPreferences
-    this.validateMarketingPreferences(normalizedParams.marketingPreferences);
+    this.validateMarketingPreferences(normalizedParams?.marketingPreferences);
+
+    // Validate giftCards if provided
+    if (normalizedParams?.giftCards) {
+      normalizedParams.giftCards = this.validateGiftCards(normalizedParams?.giftCards ?? []);
+    }
 
     // Validate deliveryTips if provided
     if (normalizedParams?.deliveryTips) {
@@ -250,6 +255,35 @@ export class CheckoutHelperService {
     }
 
     return normalizedAddress;
+  }
+
+  /**
+   * Validates and normalizes an array of gift cards. Ensures the provided input is an array of strings.
+   * Throws an error if the input is invalid.
+   *
+   * @param {string[]} [giftCards] - Optional array of gift card strings to validate.
+   * @return {string[]} A normalized array of gift card strings.
+   */
+  private validateGiftCards(giftCards?: string[]): string[] {
+    if (!giftCards || giftCards.length === 0) {
+      return [];
+    }
+
+    // Validate that address is an object if provided
+    if (!Array.isArray(giftCards)) {
+      throw new Error('Invalid gift cards: must be a string array if provided');
+    }
+
+    const normalizedGiftCards = [...giftCards];
+
+    // Only validate fields that are present
+    normalizedGiftCards.forEach((gc) => {
+      if (typeof gc !== 'string') {
+        throw new Error(`Invalid gift cards: must be a string array if provided`);
+      }
+    });
+
+    return normalizedGiftCards;
   }
 
   /**

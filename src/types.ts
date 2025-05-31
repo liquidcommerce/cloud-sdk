@@ -67,6 +67,19 @@ export interface ILiquidCommerceConfig {
   };
 }
 
+export interface ILiquidCommerceOrderConfig {
+  userID: string;
+
+  password: string;
+
+  env: LIQUID_COMMERCE_ENV;
+
+  baseUrl?: {
+    stage?: string;
+    // prod?: string;
+  };
+}
+
 export type LiquidTaxonomy =
   | ENUM_BEER
   | ENUM_FOOD

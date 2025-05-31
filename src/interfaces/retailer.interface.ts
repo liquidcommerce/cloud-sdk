@@ -75,12 +75,15 @@ export interface IRetailerFreeDelivery {
  *
  * @property {number} maxQuantity - The maximum quantity of items eligible for the shipping fee.
  * @property {number} fee - The fee amount for shipping.
+ * @property {number} min - The min item total required to checkout.
  * @property {boolean} active - Indicates whether the fee-based shipping configuration is active.
  */
 export interface IFeeShippingConfig {
   maxQuantity: number;
 
   fee: number;
+
+  min: number;
 
   active: boolean;
 }

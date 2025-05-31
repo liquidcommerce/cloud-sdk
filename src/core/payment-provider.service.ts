@@ -241,10 +241,13 @@ export class PaymentProviderService implements IPaymentProvider {
         throw new Error('customerId, sessionSecret, paymentMethodId are required');
       }
 
-      return await this.client.post<IApiResponseWithData<{ data: boolean }>>('/users/payments/confirm', {
-        sessionSecret,
-        paymentMethodId,
-      });
+      return await this.client.post<IApiResponseWithData<{ data: boolean }>>(
+        '/users/payments/confirm',
+        {
+          sessionSecret,
+          paymentMethodId,
+        }
+      );
     } catch (error) {
       console.error('User session confirmation request failed:', error);
       throw error;
