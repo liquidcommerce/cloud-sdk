@@ -1,4 +1,10 @@
-import type { ILiquidCommerceClientConstructor } from '../interfaces';
+import type { LIQUID_COMMERCE_ENV } from '../enums';
+import type {
+  ILiquidCommerceClientConstructor,
+  ILiquidCommercePaymentElement,
+  IPaymentElementConfig,
+  PaymentElementImplConstructor,
+} from '../interfaces';
 import {
   AddressService,
   CartService,
@@ -15,6 +21,7 @@ import { CatalogHelperService } from './catalog-helper.service';
 import { CheckoutHelperService } from './checkout-helper.service';
 import { LocationHelperService } from './location-helper.service';
 import { PaymentProviderService } from './payment-provider.service';
+import { PaymentSessionHelperService } from './payment-session-helper.service';
 
 type ServiceFactory<T> =
   | {
@@ -33,6 +40,8 @@ export class SingletonManager {
 
   private liquidCommerceClientConstructor: ILiquidCommerceClientConstructor | null = null;
 
+  private paymentElementConstructor: PaymentElementImplConstructor | null = null;
+
   public static getInstance(): SingletonManager {
     if (!SingletonManager.instance) {
       SingletonManager.instance = new SingletonManager();
@@ -50,6 +59,10 @@ export class SingletonManager {
    */
   public setLiquidCommerceClientConstructor(constructor: ILiquidCommerceClientConstructor): void {
     this.liquidCommerceClientConstructor = constructor;
+  }
+
+  public setPaymentElementConstructor(constructor: PaymentElementImplConstructor): void {
+    this.paymentElementConstructor = constructor;
   }
 
   /**
@@ -73,6 +86,27 @@ export class SingletonManager {
     }
 
     return this.services.get(key) as T;
+  }
+
+  /**
+   * Retrieves or creates an instance of the LiquidCommercePaymentElement.
+   *
+   * @param {IPaymentElementConfig} options - The configuration options for the payment element.
+   * @returns {ILiquidCommercePaymentElement} - An instance of ILiquidCommercePaymentElement.
+   * @throws {Error} - If the PaymentElement constructor is not set.
+   */
+  public getPaymentElement(options: IPaymentElementConfig): ILiquidCommercePaymentElement {
+    const key = `PaymentElement_${options.session?.key}_${options?.session?.secret}`;
+    if (!this.services.has(key)) {
+      if (!this.paymentElementConstructor) {
+        throw new Error('PaymentElement constructor not set');
+      }
+
+      const element = new this.paymentElementConstructor(options);
+      this.services.set(key, element);
+    }
+
+    return this.services.get(key) as ILiquidCommercePaymentElement;
   }
 
   /**
@@ -105,7 +139,11 @@ export class SingletonManager {
    *
    * @return The authenticated service object.
    */
-  public getAuthenticatedClient(config: { apiKey: string; baseURL: string }): AuthenticatedService {
+  public getAuthenticatedClient(config: {
+    apiKey: string;
+    baseURL: string;
+    env: LIQUID_COMMERCE_ENV;
+  }): AuthenticatedService {
     return this.getOrCreateService(
       `AuthenticatedClient_${JSON.stringify(config)}`,
       AuthenticatedService,
@@ -179,6 +217,10 @@ export class SingletonManager {
     );
   }
 
+  public getPaymentSessionHelperService(): PaymentSessionHelperService {
+    return this.getOrCreateService('PaymentSessionHelperService', PaymentSessionHelperService);
+  }
+
   /**
    * Retrieves the CartService instance associated with the given authenticated client.
    *
@@ -204,7 +246,8 @@ export class SingletonManager {
     return this.getOrCreateService(
       `UserService_${authenticatedClient.getUniqueKey()}`,
       UserService,
-      authenticatedClient
+      authenticatedClient,
+      this.getPaymentSessionHelperService()
     );
   }
 

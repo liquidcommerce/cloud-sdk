@@ -5,8 +5,8 @@ import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
-// import livereload from 'rollup-plugin-livereload';
-// import serve from 'rollup-plugin-serve';
+import livereload from 'rollup-plugin-livereload';
+import serve from 'rollup-plugin-serve';
 
 dotenv.config();
 
@@ -55,13 +55,13 @@ const commonPlugins = [
   *
   * */
 
-  // serve({
-  //   open: false,
-  //   contentBase: ['.', 'demo'], // Serve from root and demo directories
-  //   host: 'localhost',
-  //   port: 3000,
-  // }),
-  // livereload({ watch: ['dist', 'demo'] }),
+  serve({
+    open: false,
+    contentBase: ['.', 'demo'], // Serve from root and demo directories
+    host: 'localhost',
+    port: 3000,
+  }),
+  livereload({ watch: ['dist', 'demo'] }),
 ];
 
 export default [

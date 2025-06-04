@@ -100,7 +100,7 @@
     .nav-tabs {
       border-bottom: none;
       margin-left: auto;
-      display: flex;
+      display: none !important; /* Always hide the nav-tabs forcefully */
       justify-content: flex-end;
       align-items: center;
     }
@@ -199,6 +199,7 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 0.25rem;
       transition: box-shadow 0.15s ease-in-out;
+      display: block !important; /* Ensure navbar-toggler is always visible */
     }
 
     .navbar-toggler-icon {
@@ -423,17 +424,12 @@
     }
 
     @media (max-width: 992px) {
-      .nav-tabs {
-        display: none;
-      }
-
       .section-title {
         font-size: 1.6rem;
       }
-
-      .navbar-toggler {
+      /* .navbar-toggler {
         display: block;
-      }
+      } */ /* This is now handled globally */
     }
 
     @media (max-width: 768px) {
@@ -461,11 +457,11 @@
 
     }
 
-    @media (min-width: 992px) {
+    /* @media (min-width: 992px) {
       #offcanvasTabs {
         display: none !important;
       }
-    }
+    } */ /* Comment out or remove this block to ensure offcanvas is always available */
 
     .modal {
       display: none;
@@ -501,13 +497,13 @@
       <a href="index.html" class="navbar-brand">
         <img src="https://assets.liquidcommerce.co/development/cloud-sdk-logo.svg" style="max-width: 250px;" alt="Logo">
       </a>
-      <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTabs"
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTabs"
               aria-controls="offcanvasTabs" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <!-- Original Tabs (visible on larger screens) -->
-      <ul class="nav nav-tabs d-none d-lg-flex" id="sdkTabs" role="tablist">
+      <ul class="nav nav-tabs" id="sdkTabs" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab"
                   aria-controls="address" aria-selected="true">Address
@@ -529,6 +525,11 @@
           </button>
         </li>
         <li class="nav-item" role="presentation">
+          <button class="nav-link" id="payment-session-tab" data-bs-toggle="tab" data-bs-target="#payment-session" type="button" role="tab"
+                  aria-controls="payment-session" aria-selected="false">Payment Session
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
           <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
                   aria-controls="payment" aria-selected="false">Payment
           </button>
@@ -546,6 +547,16 @@
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="webhook-tab" data-bs-toggle="tab" data-bs-target="#webhook" type="button" role="tab"
                   aria-controls="webhook" aria-selected="false">Webhook
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="auth-tab" data-bs-toggle="tab" data-bs-target="#auth" type="button" role="tab"
+                  aria-controls="auth" aria-selected="false">Auth
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="payment-element-v2-tab" data-bs-toggle="tab" data-bs-target="#payment-element-v2" type="button" role="tab"
+                  aria-controls="payment-element-v2" aria-selected="false">Payment Element V2
           </button>
         </li>
       </ul>
@@ -580,6 +591,11 @@
                   aria-controls="user" aria-selected="false">User
           </button>
         </li>
+         <li class="nav-item">
+          <button class="nav-link" id="payment-session-tab-mobile" data-bs-toggle="tab" data-bs-target="#payment-session" type="button" role="tab"
+                  aria-controls="payment-session" aria-selected="false">Payment Session
+          </button>
+        </li>
         <li class="nav-item">
           <button class="nav-link" id="payment-tab-mobile" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab"
                   aria-controls="payment" aria-selected="false">Payment
@@ -598,6 +614,16 @@
         <li class="nav-item">
           <button class="nav-link" id="webhook-tab-mobile" data-bs-toggle="tab" data-bs-target="#webhook" type="button" role="tab"
                   aria-controls="webhook" aria-selected="false">Webhook
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="auth-tab-mobile" data-bs-toggle="tab" data-bs-target="#auth" type="button" role="tab"
+                  aria-controls="auth" aria-selected="false">Auth
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="payment-element-v2-tab-mobile" data-bs-toggle="tab" data-bs-target="#payment-element-v2" type="button" role="tab"
+                  aria-controls="payment-element-v2" aria-selected="false">Payment Element V2
           </button>
         </li>
       </ul>
@@ -933,6 +959,33 @@
             </div>
           </div>
 
+          <!-- PAYMENT SESSION EXAMPLE -->
+          <div class="tab-pane fade" id="payment-session" role="tabpanel" aria-labelledby="payment-session-tab">
+            <div class="section-container">
+              <h2 class="section-title">Create Payment Session</h2>
+              <form id="createPaymentSessionForm" class="payment-form">
+                <div class="form-group">
+                  <label for="paymentSessionCartId" class="form-label">Cart ID (Optional)</label>
+                  <input type="text" id="paymentSessionCartId" class="form-input">
+                </div>
+                <div class="form-group">
+                  <label for="paymentSessionCheckoutToken" class="form-label">Checkout Token (Optional)</label>
+                  <input type="text" id="paymentSessionCheckoutToken" class="form-input">
+                </div>
+                <div class="form-group">
+                  <label for="paymentSessionCustomerId" class="form-label">Customer ID (Optional)</label>
+                  <input type="text" id="paymentSessionCustomerId" class="form-input">
+                </div>
+                <div class="form-group">
+                  <label for="paymentSessionCustomerEmail" class="form-label">Customer Email (Optional)</label>
+                  <input type="email" id="paymentSessionCustomerEmail" class="form-input">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Create Payment Session</button>
+              </form>
+              <div id="paymentSessionResult" class="session-result mt-3"></div>
+            </div>
+          </div>
+
           <!-- PAYMENT EXAMPLE -->
           <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
             <div class="section-container">
@@ -1035,6 +1088,128 @@
             </div>
           </div>
 
+          <!-- AUTH EXAMPLE -->
+          <div class="tab-pane fade" id="auth" role="tabpanel" aria-labelledby="auth-tab">
+            <div class="section-container">
+              <h2 class="section-title">Authentication Details</h2>
+                <button type="button" class="btn btn-primary" id="getAuthDetails">Get Auth Details</button>
+              <div id="authResult" class="session-result mt-3"></div>
+            </div>
+          </div>
+
+          <!-- PAYMENT ELEMENT V2 EXAMPLE -->
+          <div class="tab-pane fade" id="payment-element-v2" role="tabpanel" aria-labelledby="payment-element-v2-tab">
+            <div class="section-container">
+              <h2 class="section-title">Payment Element V2</h2>
+
+              <!-- Step 1: Create Payment Session -->
+              <div class="mb-4 p-3 border rounded shadow-sm">
+                <h5>Step 1: Create Payment Session</h5>
+                <form id="peV2CreatePaymentSessionForm" class="payment-form">
+                  <div class="form-group">
+                    <label for="peV2PaymentSessionCartId" class="form-label">Cart ID (Optional)</label>
+                    <input type="text" id="peV2PaymentSessionCartId" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label for="peV2PaymentSessionCheckoutToken" class="form-label">Checkout Token (Optional)</label>
+                    <input type="text" id="peV2PaymentSessionCheckoutToken" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label for="peV2PaymentSessionCustomerId" class="form-label">Customer ID (Optional)</label>
+                    <input type="text" id="peV2PaymentSessionCustomerId" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label for="peV2PaymentSessionCustomerEmail" class="form-label">Customer Email (Optional)</label>
+                    <input type="email" id="peV2PaymentSessionCustomerEmail" class="form-input">
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-3">Create Session for Element</button>
+                </form>
+                <div id="peV2PaymentSessionResult" class="session-result mt-3" style="display:none;">
+                  <h6>Payment Session Created:</h6>
+                  <div class="session-detail"><strong>Key:</strong> <span id="peV2SessionKey"></span></div>
+                  <div class="session-detail"><strong>Secret:</strong> <span id="peV2SessionSecret"></span></div>
+                  <p><strong>Created At:</strong> <span id="peV2SessionCreatedAt"></span></p>
+                </div>
+              </div>
+
+              <!-- Step 2: Configure and Mount Payment Element -->
+              <div class="mb-4 p-3 border rounded shadow-sm">
+                <h5>Step 2: Mount Payment Element</h5>
+                <div class="form-group">
+                  <label for="peV2ElementId" class="form-label">Target Element ID for Mounting</label>
+                  <input type="text" id="peV2ElementId" class="form-input" value="liquid-payment-element-v2-container">
+                </div>
+                <div id="liquid-payment-element-v2-container" class="payment-element-container my-3">
+                  <!-- Payment Element will be mounted here -->
+                </div>
+                 <div class="form-group">
+                    <label for="peV2AppearanceTheme" class="form-label">Appearance Theme (Optional)</label>
+                    <select id="peV2AppearanceTheme" class="form-select">
+                        <option value="default" selected>Default</option>
+                        <option value="night">Night</option>
+                        <option value="flat">Flat</option>
+                    </select>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="peV2Layout" class="form-label">Layout (Optional)</label>
+                    <select id="peV2Layout" class="form-select">
+                        <option value="tabs" selected>Tabs</option>
+                        <option value="accordion">Accordion</option>
+                        <option value="auto">Auto</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-success mt-3" id="mountPeV2Button" disabled>Mount Element</button>
+              </div>
+
+              <!-- Step 3: Interact with Payment Element -->
+              <div class="mb-4 p-3 border rounded shadow-sm">
+                <h5>Step 3: Interact with Element</h5>
+                <div class="button-group my-3">
+                  <button type="button" class="btn btn-primary" id="createPeV2ConfirmationTokenButton" disabled>Create Confirmation Token</button>
+                  <button type="button" class="btn btn-info" id="collapsePeV2Button" disabled>Collapse Element</button>
+                </div>
+                <div class="button-group my-1">
+                  <button type="button" class="btn btn-warning" id="unmountPeV2Button" disabled>Unmount Element</button>
+                  <button type="button" class="btn btn-danger" id="destroyPeV2Button" disabled>Destroy Element</button>
+                </div>
+                <div id="peV2InteractionResult" class="session-result mt-3"></div>
+              </div>
+
+              <!-- Step 4: Event Subscription -->
+              <div class="p-3 border rounded shadow-sm">
+                <h5>Step 4: Event Handling</h5>
+                <div class="form-check form-switch my-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="subscribeToPeV2ReadyEvent">
+                  <label class="form-check-label" for="subscribeToPeV2ReadyEvent">Subscribe to 'ready'</label>
+                </div>
+                <div class="form-check form-switch my-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="subscribeToPeV2ChangeEvent">
+                  <label class="form-check-label" for="subscribeToPeV2ChangeEvent">Subscribe to 'change'</label>
+                </div>
+                <div class="form-check form-switch my-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="subscribeToPeV2FocusEvent">
+                  <label class="form-check-label" for="subscribeToPeV2FocusEvent">Subscribe to 'focus'</label>
+                </div>
+                 <div class="form-check form-switch my-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="subscribeToPeV2BlurEvent">
+                  <label class="form-check-label" for="subscribeToPeV2BlurEvent">Subscribe to 'blur'</label>
+                </div>
+                <div class="form-check form-switch my-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="subscribeToPeV2LoadErrorEvent">
+                  <label class="form-check-label" for="subscribeToPeV2LoadErrorEvent">Subscribe to 'loaderror'</label>
+                </div>
+                 <div class="form-check form-switch my-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="subscribeToPeV2LoaderStartEvent">
+                  <label class="form-check-label" for="subscribeToPeV2LoaderStartEvent">Subscribe to 'loaderstart'</label>
+                </div>
+                <div id="peV2EventLog" class="mt-3 p-2" style="max-height: 200px; overflow-y: auto; background-color: #e9ecef; border-radius: 4px;">
+                  <small><em>Event logs will appear here...</em></small>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -1070,10 +1245,10 @@
    */
 
   // API Keys and Constants
-  const API_KEY = 'YOUR_API_KEY';
+  const API_KEY = 'e71df2ac1edf89c83095dcfd100115aa6a1ad1efd922e4e70e919a12';
   const ORDER_API_USER = 'YOUR_ORDER_API_USER';
   const ORDER_API_PASSWORD = 'YOUR_ORDER_API_PASSWORD';
-  const GOOGLE_PLACES_API_KEY = 'YOUR_GOOGLE_PLACES_KEY';
+  const GOOGLE_PLACES_API_KEY = 'AIzaSyD_LT-4RhPTrURUZjrrDtB3zIor0WFO6hE';
   const NEW_YORK_ADDRESS = {
     one: '100 madison ave',
     two: 'apt 1707',
@@ -1085,6 +1260,8 @@
   let client;
 
   let orderClient;
+  let paymentElementV2; // Variable to hold the Payment Element V2 instance
+  let peV2SessionData = null; // To store session key and secret
 
   /**
    * Debounce function to limit the rate at which a function can fire.
@@ -1126,7 +1303,7 @@
    */
   async function initOrderSDK() {
     try {
-      return await window.OrderLiquidCommerce({
+      return await window.LiquidCommerceOrders({
         userID: ORDER_API_USER,
         password: ORDER_API_PASSWORD,
         env: 'loc',
@@ -1411,7 +1588,7 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     client = await initSDK();
-    orderClient = await initOrderSDK();
+    // orderClient = await initOrderSDK();
 
     const addressInput = document.getElementById('addressInput');
     const autocompleteResults = document.getElementById('autocompleteResults');
@@ -1741,7 +1918,6 @@
 
 
   // User Session Management
-
   document.getElementById('userSessionForm').addEventListener('submit', async ( event ) => {
     event.preventDefault();
     const email = document.getElementById('userEmail').value;
@@ -2816,6 +2992,768 @@
     } catch (error) {
       console.error('Error testing webhook:', error);
       webhookTestResult.innerHTML = `<div class="alert alert-danger"><strong>Error!</strong> ${error.message}</div>`;
+    }
+  });
+
+  /**
+   * Create Payment Session
+   */
+  document.getElementById('createPaymentSessionForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const cartId = document.getElementById('paymentSessionCartId').value;
+    const checkoutToken = document.getElementById('paymentSessionCheckoutToken').value;
+    const customerId = document.getElementById('paymentSessionCustomerId').value;
+    const customerEmail = document.getElementById('paymentSessionCustomerEmail').value;
+    const paymentSessionResult = document.getElementById('paymentSessionResult');
+
+    const params = {};
+    if (cartId) params.cartId = cartId;
+    if (checkoutToken) params.checkoutToken = checkoutToken;
+    if (customerId) params.customerId = customerId;
+    if (customerEmail) params.customerEmail = customerEmail;
+
+    try {
+      const response = await client.user.paymentSession(params);
+      let html = '<h4>Payment Session Created</h4>';
+      html += `<div class="session-detail"><strong>Key:</strong> ${response.data.key}</div>`;
+      html += `<div class="session-detail"><strong>Secret:</strong> ${response.data.secret}</div>`;
+      html += `<p><strong>Created At:</strong> ${new Date(response.data.createdAt).toLocaleString()}</p>`;
+      if (response.metadata) {
+        html += '<h5>Metadata:</h5>';
+        html += `<p>Request ID: ${response.metadata.requestId}</p>`;
+        html += `<p>Timestamp: ${new Date(response.metadata.timestamp).toLocaleString()}</p>`;
+      }
+      paymentSessionResult.innerHTML = html;
+    } catch (error) {
+      console.error('Failed to create payment session:', error);
+      paymentSessionResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle user purge request
+   */
+  document.getElementById('purgeUserForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const userIdOrEmail = document.getElementById('purgeUserId').value;
+    const purgeUserResult = document.getElementById('purgeUserResult');
+
+    try {
+      const purgeResponse = await client.user.purge(userIdOrEmail);
+      purgeUserResult.innerHTML = `<p>User purged successfully: ${purgeResponse.data.message}</p>`;
+    } catch (error) {
+      console.error('Failed to purge user:', error);
+      purgeUserResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle address update request
+   */
+  document.getElementById('updateAddressForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('customerId').value;
+    const one = document.getElementById('addressOne').value;
+    const city = document.getElementById('addressCity').value;
+    const state = document.getElementById('addressState').value;
+    const isDefault = document.getElementById('isDefaultAddress').checked;
+    const updateAddressResult = document.getElementById('updateAddressResult');
+
+    try {
+      const addressResponse = await client.user.updateAddress({
+        customerId,
+        one: NEW_YORK_ADDRESS.one,
+        city: NEW_YORK_ADDRESS.city,
+        state: NEW_YORK_ADDRESS.state,
+        zip: NEW_YORK_ADDRESS.zip,
+        type: 'SHIPPING',
+        isDefault,
+      });
+      updateAddressResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
+    } catch (error) {
+      console.error('Failed to update/create address:', error);
+      updateAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle address update request with coordinates
+   */
+  document.getElementById('updateAddressWithCoordsForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('customerIdAddress').value;
+    const lat = document.getElementById('addressLat').value;
+    const long = document.getElementById('addressLong').value;
+    const updateAddressResult = document.getElementById('updateAddressWithCoordsResult');
+
+    try {
+      const addressResponse = await client.user.updateAddress({
+        customerId,
+        lat,
+        long,
+        type: 'SHIPPING',
+      });
+      updateAddressResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
+    } catch (error) {
+      console.error('Failed to update/create address:', error);
+      updateAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle address update request with placesId
+   */
+  document.getElementById('updateAddressWithPlacesIdForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('customerIdAddress').value;
+    const placesId = document.getElementById('addressWithPlacesId').value;
+    const updateAddressResult = document.getElementById('updateAddressWithCoordsResult');
+
+    try {
+      const addressResponse = await client.user.updateAddress({
+        customerId,
+        placesId,
+        type: 'SHIPPING',
+      });
+      updateAddressResult.innerHTML = `<p>Address updated/created successfully: ${addressResponse.data.id}</p>`;
+    } catch (error) {
+      console.error('Failed to update/create address:', error);
+      updateAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle address purge request
+   */
+  document.getElementById('purgeAddressForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const addressId = document.getElementById('purgeAddressId').value;
+    const purgeAddressResult = document.getElementById('purgeAddressResult');
+
+    try {
+      const purgeResponse = await client.user.purgeAddress(addressId);
+      purgeAddressResult.innerHTML = `<p>Address purged successfully: ${purgeResponse.data.message}</p>`;
+    } catch (error) {
+      console.error('Failed to purge address:', error);
+      purgeAddressResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  // Payment Method Management
+
+  /**
+   * Handle add payment method request
+   */
+  document.getElementById('addPaymentMethodForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+
+    const customerId = document.getElementById('addPaymentCustomerId').value;
+    const paymentMethodId = document.getElementById('paymentMethodId').value;
+    const isDefault = document.getElementById('isDefault').checked;
+    const addPaymentMethodResult = document.getElementById('addPaymentMethodResult');
+
+    try {
+      const response = await client.user.addPayment({
+        customerId,
+        paymentMethodId,
+        // comment out to test multiple scenarios
+        isDefault,
+      });
+
+      addPaymentMethodResult.innerHTML = `
+    <p>Payment method added successfully:</p>
+    <ul>
+      <li>Payment Method ID: ${response.data.id}</li>
+      <li>Default: ${response.data.isDefault ? 'Yes' : 'No'}</li>
+    </ul>
+  `;
+    } catch (error) {
+      console.error('Failed to add payment method:', error);
+      addPaymentMethodResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Update Payment Method Event Listener
+   */
+  document.getElementById('updatePaymentMethodForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+    const customerId = document.getElementById('updatePaymentCustomerId').value;
+    const paymentMethodId = document.getElementById('updatePaymentMethodId').value;
+    const isDefault = document.getElementById('updateIsDefault').checked;
+    const updatePaymentMethodResult = document.getElementById('updatePaymentMethodResult');
+
+    try {
+      const response = await client.user.updatePayment({
+        customerId,
+        paymentMethodId,
+        // comment out to test multiple scenarios
+        isDefault,
+      });
+
+      updatePaymentMethodResult.innerHTML = `
+          <p>Payment method updated successfully:</p>
+          <ul>
+            <li>Payment Method ID: ${response.data.id}</li>
+            <li>Default: ${response.data.isDefault ? 'Yes' : 'No'}</li>
+          </ul>
+        `;
+    } catch (error) {
+      console.error('Failed to update payment method:', error);
+      updatePaymentMethodResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle purge payment method request
+   */
+  document.getElementById('purgePaymentMethodForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+
+    const customerId = document.getElementById('purgeCustomerId').value;
+    const paymentMethodId = document.getElementById('purgePaymentId').value;
+    const purgePaymentMethodResult = document.getElementById('purgePaymentMethodResult');
+
+    try {
+      const response = await client.user.purgePayment(customerId, paymentMethodId);
+
+      purgePaymentMethodResult.innerHTML = `
+    <p>Payment method purged successfully.</p>
+    <ul>
+      <li>Deleted: ${response.data.deleted ? 'Yes' : 'No'}</li>
+      <li>Message: ${response.data.message}</li>
+    </ul>
+  `;
+    } catch (error) {
+      console.error('Failed to purge payment method:', error);
+      purgePaymentMethodResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  // Payment Processing
+
+  /**
+   * Handle payment form submission
+   */
+  document.getElementById('paymentForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+
+    client = await initSDK();
+
+    const clientSecret = document.getElementById('sessionSecret').value;
+    const key = document.getElementById('sessionKey').value;
+
+    // Mount the payment element into the DOM
+    try {
+      await client.payment.mount({
+        clientSecret,
+        key,
+        elementId: 'payment-element-container',
+        appearance: { theme: 'default' },
+        elementOptions: { layout: 'tabs' },
+      });
+      console.log('Payment element mounted');
+
+      client.payment.subscribe('change', ( event ) => {
+        console.log('Payment element changed:', event);
+      });
+
+      client.payment.subscribe('ready', ( event ) => {
+        console.log('Payment element is ready:', event);
+      });
+
+    } catch (error) {
+      console.error('Failed to mount payment element:', error);
+      document.getElementById('paymentTokenResult').innerHTML = `<p class="text-danger">Error mounting payment element: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle generate payment token request
+   */
+  document.getElementById('generateTokenButton').addEventListener('click', async () => {
+    const paymentTokenResult = document.getElementById('paymentTokenResult');
+
+    try {
+      const token = await client.payment.generateToken();
+      if (token?.error) {
+        paymentTokenResult.innerHTML = `<p class="text-danger">Failed to generate payment token: ${token.error.message}</p>`;
+        console.error('Failed to generate payment token:', token.error.message);
+      } else {
+        paymentTokenResult.innerHTML = `
+        <ul>
+          <li>Token ID: ${token.id}</li>
+          <li>Card Brand: ${token.card?.brand}</li>
+          <li>Card Last 4: ${token.card?.last4}</li>
+          <li>Expiry: ${token.card?.expMonth}/${token.card?.expYear}</li>
+        </ul>
+      `;
+        console.log('Generated payment token:', token);
+      }
+    } catch (error) {
+      console.error('An unexpected error occurred:', error);
+      paymentTokenResult.innerHTML = `<p class="text-danger">Unexpected error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle collapse payment element request
+   */
+  document.getElementById('collapsePaymentButton').addEventListener('click', () => {
+    try {
+      client.payment.collapse();
+      console.log('Payment element collapsed');
+    } catch (error) {
+      console.error('Failed to collapse payment element:', error);
+      document.getElementById('paymentTokenResult').innerHTML = `<p class="text-danger">Error collapsing payment element: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle unmount payment element request
+   */
+  document.getElementById('unmountPaymentButton').addEventListener('click', () => {
+    try {
+      client.payment.unmount();
+      console.log('Payment element unmounted');
+      document.getElementById('payment-element-container').innerHTML = '';
+    } catch (error) {
+      console.error('Failed to unmount payment element:', error);
+      document.getElementById('paymentTokenResult').innerHTML = `<p class="text-danger">Error unmounting payment element: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle destroy payment element request
+   */
+  document.getElementById('destroyPaymentButton').addEventListener('click', () => {
+    try {
+      client.payment.destroy();
+      console.log('Payment element destroyed');
+      document.getElementById('payment-element-container').innerHTML = '';
+    } catch (error) {
+      console.error('Failed to destroy payment element:', error);
+      document.getElementById('paymentTokenResult').innerHTML = `<p class="text-danger">Error destroying payment element: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle Auth Details Request
+   */
+  document.getElementById('getAuthDetails').addEventListener('click', async () => {
+    const authResult = document.getElementById('authResult');
+    try {
+      const authResponse = await client.auth();
+
+      let html = '<h4>Auth Details</h4>';
+      // Corrected property names based on the API response
+      html += `<div class="session-detail"><strong>Access Token:</strong> ${authResponse.token}</div>`;
+      html += `<p><strong>Expires In (Timestamp):</strong> ${authResponse.exp}</p>`;
+      html += `<p><strong>Token Type:</strong> ${authResponse.type}</p>`;
+      authResult.innerHTML = html;
+    } catch (error) {
+      console.error('Failed to get auth details:', error);
+      authResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  /**
+   * Handle checkout form submission
+   */
+  document.getElementById('checkoutForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+
+    const cartId = document.getElementById('checkoutCartId').value;
+    const checkoutResults = document.getElementById('checkoutResults');
+
+    // Build the checkout object
+    const checkoutData = {
+      cartId,
+      'recipient': {
+        'firstName': 'dioriJoe',
+        'lastName': 'John',
+        'email': 'john.diori.joe@gmail.com',
+        'phone': '9732119920',
+        'birthDate': '11-22-1998',
+        'hasAgeVerify': true,
+      },
+      'billingAddress': {
+        'firstName': 'NewJoe',
+        'lastName': 'NewJohn',
+        'email': 'joe.new.john@gmail.com',
+        'phone': '1234324987',
+        'one': '22 Washington Ave',
+        'two': '',
+        'city': 'Cliffside Park',
+        'state': 'NJ',
+        'zip': '07010',
+      },
+      'hasSubstitutionPolicy': true,
+      'isGift': false,
+      'billingSameAsShipping': true,
+      'giftOptions': {
+        'message': '',
+        'recipient': {
+          'name': '',
+          'phone': '',
+          'email': '',
+        },
+      },
+      'marketingPreferences': {
+        'canEmail': true,
+        'canSms': true,
+      },
+      'deliveryTips': [
+        {
+          'fulfillmentId': '6570c3ec700628ce1910c105',
+          'tip': 2500,
+        },
+      ],
+    };
+
+    try {
+      const prepareResponse = await client.checkout.prepare(checkoutData);
+      checkoutResults.innerHTML = `
+      <h4>Checkout Prepared Successfully</h4>
+      <p><strong>Token:</strong> ${prepareResponse.checkout.token}</p>
+      <p><strong>Total Amount:</strong> $${(prepareResponse.checkout.amounts.total / 100).toFixed(2)}</p>
+      <p><strong>Shipping Address:</strong> ${prepareResponse.checkout.shippingAddress.one}, ${prepareResponse.checkout.shippingAddress.city}, ${prepareResponse.checkout.shippingAddress.state}, ${prepareResponse.checkout.shippingAddress.zip}, ${prepareResponse.checkout.shippingAddress.country}</p>
+      <p><strong>Billing Address:</strong> ${prepareResponse.checkout.billingAddress.one}, ${prepareResponse.checkout.billingAddress.city}, ${prepareResponse.checkout.billingAddress.state}, ${prepareResponse.checkout.billingAddress.zip}, ${prepareResponse.checkout.billingAddress.country}</p>
+      <h5>Items:</h5>
+      <ul>
+        ${prepareResponse.checkout.items.map(item => `
+          <li>
+            <strong>${item.name}</strong> (${item.size}) - $${(item.price / 100).toFixed(2)} x ${item.quantity}
+            <br>Fulfillment ID: ${item.fulfillmentId}
+            <br>Retailer: ${item.retailerId}
+          </li>
+        `).join('')}
+      </ul>
+    `;
+    } catch (error) {
+      console.error('Failed to prepare checkout:', error);
+      checkoutResults.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  // --- Payment Element V2 Logic ---
+  const peV2CreatePaymentSessionForm = document.getElementById('peV2CreatePaymentSessionForm');
+  const peV2PaymentSessionResultDiv = document.getElementById('peV2PaymentSessionResult');
+  const peV2SessionKeySpan = document.getElementById('peV2SessionKey');
+  const peV2SessionSecretSpan = document.getElementById('peV2SessionSecret');
+  const peV2SessionCreatedAtSpan = document.getElementById('peV2SessionCreatedAt');
+  const mountPeV2Button = document.getElementById('mountPeV2Button');
+  const peV2ElementIdInput = document.getElementById('peV2ElementId');
+  const peV2AppearanceThemeSelect = document.getElementById('peV2AppearanceTheme');
+  const peV2LayoutSelect = document.getElementById('peV2Layout');
+  const peV2InteractionResultDiv = document.getElementById('peV2InteractionResult');
+  const createPeV2ConfirmationTokenButton = document.getElementById('createPeV2ConfirmationTokenButton');
+  const collapsePeV2Button = document.getElementById('collapsePeV2Button');
+  const unmountPeV2Button = document.getElementById('unmountPeV2Button');
+  const destroyPeV2Button = document.getElementById('destroyPeV2Button');
+  const peV2EventLogDiv = document.getElementById('peV2EventLog');
+
+  const peV2EventSwitches = {
+    ready: document.getElementById('subscribeToPeV2ReadyEvent'),
+    change: document.getElementById('subscribeToPeV2ChangeEvent'),
+    focus: document.getElementById('subscribeToPeV2FocusEvent'),
+    blur: document.getElementById('subscribeToPeV2BlurEvent'),
+    loaderror: document.getElementById('subscribeToPeV2LoadErrorEvent'),
+    loaderstart: document.getElementById('subscribeToPeV2LoaderStartEvent'),
+  };
+
+  function logPeV2Event(eventName, eventData) {
+    const timestamp = new Date().toLocaleTimeString();
+    const logEntry = document.createElement('div');
+    logEntry.innerHTML = `<small><strong>[${timestamp}] ${eventName}:</strong> ${JSON.stringify(eventData, null, 2)}</small>`;
+    if (peV2EventLogDiv.firstChild && peV2EventLogDiv.firstChild.textContent === 'Event logs will appear here...') {
+        peV2EventLogDiv.innerHTML = ''; // Clear initial message
+    }
+    peV2EventLogDiv.appendChild(logEntry);
+    peV2EventLogDiv.scrollTop = peV2EventLogDiv.scrollHeight; // Scroll to bottom
+  }
+
+  const peV2EventHandlers = {
+    ready: (event) => logPeV2Event('ready', event),
+    change: (event) => logPeV2Event('change', event),
+    focus: (event) => logPeV2Event('focus', event),
+    blur: (event) => logPeV2Event('blur', event),
+    loaderror: (event) => logPeV2Event('loaderror', event),
+    loaderstart: (event) => logPeV2Event('loaderstart', event),
+  };
+
+  peV2CreatePaymentSessionForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const cartId = document.getElementById('peV2PaymentSessionCartId').value;
+    const checkoutToken = document.getElementById('peV2PaymentSessionCheckoutToken').value;
+    const customerId = document.getElementById('peV2PaymentSessionCustomerId').value;
+    const customerEmail = document.getElementById('peV2PaymentSessionCustomerEmail').value;
+
+    const params = {};
+    if (cartId) params.cartId = cartId;
+    if (checkoutToken) params.checkoutToken = checkoutToken;
+    if (customerId) params.customerId = customerId;
+    if (customerEmail) params.customerEmail = customerEmail;
+
+    try {
+      const response = await client.user.paymentSession(params);
+      peV2SessionData = response.data; // Store key, secret, createdAt
+      peV2SessionKeySpan.textContent = peV2SessionData.key;
+      peV2SessionSecretSpan.textContent = peV2SessionData.secret;
+      peV2SessionCreatedAtSpan.textContent = new Date(peV2SessionData.createdAt).toLocaleString();
+      peV2PaymentSessionResultDiv.style.display = 'block';
+      mountPeV2Button.disabled = false;
+      peV2InteractionResultDiv.innerHTML = '<small><em>Session created. Ready to mount element.</em></small>';
+    } catch (error) {
+      console.error('Failed to create payment session for V2 element:', error);
+      peV2InteractionResultDiv.innerHTML = `<p class="text-danger">Error creating session: ${error.message}</p>`;
+      mountPeV2Button.disabled = true;
+    }
+  });
+
+  mountPeV2Button.addEventListener('click', async () => {
+    if (!peV2SessionData || !peV2SessionData.key || !peV2SessionData.secret) {
+      peV2InteractionResultDiv.innerHTML = '<p class="text-danger">Payment session data is missing. Create a session first.</p>';
+      return;
+    }
+    const elementId = peV2ElementIdInput.value.trim();
+    if (!elementId) {
+      peV2InteractionResultDiv.innerHTML = '<p class="text-danger">Target Element ID is required.</p>';
+      return;
+    }
+     // Ensure the container is empty before mounting
+    document.getElementById(elementId).innerHTML = '';
+
+
+    const appearanceTheme = peV2AppearanceThemeSelect.value;
+    const layout = peV2LayoutSelect.value;
+
+    try {
+      // Instantiate the Payment Element V2
+      // The factory function `LiquidCommercePaymentElement` takes the full config for constructor
+      // but the `mount` method itself also takes a config.
+      // Based on `cloud-sdk/src/liquid-commerce-payment-element.ts`, the constructor needs session.
+      // The `mount` method then also needs elementId, appearance, elementOptions.
+
+      const elementConfigForConstructor = {
+        session: { // This is IUserSession: { key, secret, createdAt }
+          key: peV2SessionData.key,
+          secret: peV2SessionData.secret,
+          createdAt: new Date(peV2SessionData.createdAt) // Ensure it's a Date object
+        },
+        // elementId is NOT part of constructor config based on IPaymentElementConfig in payment-element.interface.ts for the constructor
+        // but seems to be for the mount method.
+      };
+       // The factory function initializes with a config, let's align with what IPaymentElementConfig suggests for constructor.
+      // It seems the `options` in `LiquidCommercePaymentElement(options: IPaymentElementConfig)` is the full config.
+      // Let's try passing the full mount config directly to the factory.
+       const fullMountConfig = {
+        session: {
+          key: peV2SessionData.key,
+          secret: peV2SessionData.secret,
+          createdAt: new Date(peV2SessionData.createdAt)
+        },
+        elementId: elementId,
+        appearance: { theme: appearanceTheme },
+        elementOptions: { layout: layout }
+      };
+
+      paymentElementV2 = LiquidCommercePaymentElement(fullMountConfig);
+
+
+      // Now call mount with the same config or a subset as needed.
+      // The ILiquidCommercePaymentElement interface's mount method takes IPaymentElementConfig.
+      await paymentElementV2.mount(fullMountConfig);
+
+      peV2InteractionResultDiv.innerHTML = '<p class="text-success">Payment Element V2 mounted successfully!</p>';
+      // Enable interaction buttons
+      createPeV2ConfirmationTokenButton.disabled = false;
+      collapsePeV2Button.disabled = false;
+      unmountPeV2Button.disabled = false;
+      destroyPeV2Button.disabled = false;
+      mountPeV2Button.textContent = 'Re-Mount Element'; // Change button text
+
+      // Handle subscriptions based on switches
+      Object.keys(peV2EventSwitches).forEach(key => {
+        if (peV2EventSwitches[key].checked) {
+          paymentElementV2.subscribe(key, peV2EventHandlers[key]);
+        }
+        peV2EventSwitches[key].onchange = (e) => {
+          if (paymentElementV2) { // Check if element is initialized
+            if (e.target.checked) {
+              paymentElementV2.subscribe(key, peV2EventHandlers[key]);
+              logPeV2Event(key, { subscribed: true });
+            } else {
+              paymentElementV2.unsubscribe(key, peV2EventHandlers[key]);
+              logPeV2Event(key, { unsubscribed: true });
+            }
+          }
+        };
+      });
+
+    } catch (error) {
+      console.error('Failed to mount Payment Element V2:', error);
+      peV2InteractionResultDiv.innerHTML = `<p class="text-danger">Error mounting element: ${error.message}</p>`;
+    }
+  });
+
+  createPeV2ConfirmationTokenButton.addEventListener('click', async () => {
+    if (!paymentElementV2) {
+      peV2InteractionResultDiv.innerHTML = '<p class="text-danger">Element not mounted.</p>';
+      return;
+    }
+    try {
+      // Example: provide a return_url if needed for your payment flow.
+      // const params = { returnUrl: window.location.href };
+      const tokenResponse = await paymentElementV2.createConfirmationToken(/* params */);
+      if (tokenResponse.id) {
+        peV2InteractionResultDiv.innerHTML = `<p class="text-success">Confirmation Token: ${tokenResponse.id}</p>`;
+      } else { // ILiquidPaymentError
+        peV2InteractionResultDiv.innerHTML = `<p class="text-danger">Error creating token: ${tokenResponse.message} (Code: ${tokenResponse.code})</p>`;
+      }
+    } catch (error) {
+      console.error('Error creating confirmation token:', error);
+      peV2InteractionResultDiv.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  collapsePeV2Button.addEventListener('click', () => {
+    if (!paymentElementV2) {
+      peV2InteractionResultDiv.innerHTML = '<p class="text-danger">Element not mounted.</p>';
+      return;
+    }
+    try {
+      paymentElementV2.collapse();
+      peV2InteractionResultDiv.innerHTML = '<p class="text-info">Collapse called. (Note: Actual collapse depends on provider and element state)</p>';
+    } catch (error) {
+      console.error('Error collapsing element:', error);
+      peV2InteractionResultDiv.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  unmountPeV2Button.addEventListener('click', () => {
+    if (!paymentElementV2) {
+      peV2InteractionResultDiv.innerHTML = '<p class="text-danger">Element not mounted or already unmounted.</p>';
+      return;
+    }
+    try {
+      paymentElementV2.unmount();
+      peV2InteractionResultDiv.innerHTML = '<p class="text-warning">Payment Element V2 unmounted.</p>';
+      // Disable most interaction buttons, allow re-mount or destroy
+      createPeV2ConfirmationTokenButton.disabled = true;
+      collapsePeV2Button.disabled = true;
+      unmountPeV2Button.disabled = true;
+      // Keep mountPeV2Button enabled for re-mounting
+      // Keep destroyPeV2Button enabled
+    } catch (error) {
+      console.error('Error unmounting element:', error);
+      peV2InteractionResultDiv.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+  destroyPeV2Button.addEventListener('click', () => {
+    if (!paymentElementV2) {
+      peV2InteractionResultDiv.innerHTML = '<p class="text-danger">Element not available to destroy.</p>';
+      return;
+    }
+    try {
+      paymentElementV2.destroy();
+      peV2InteractionResultDiv.innerHTML = '<p class="text-danger">Payment Element V2 destroyed.</p>';
+      // Disable all interaction buttons
+      mountPeV2Button.disabled = false; // Allow creating a new session and mounting again.
+      mountPeV2Button.textContent = 'Mount Element';
+      createPeV2ConfirmationTokenButton.disabled = true;
+      collapsePeV2Button.disabled = true;
+      unmountPeV2Button.disabled = true;
+      destroyPeV2Button.disabled = true;
+      paymentElementV2 = null; // Clear the instance
+      peV2SessionData = null; // Clear session data as well
+      peV2PaymentSessionResultDiv.style.display = 'none';
+
+
+    } catch (error) {
+      console.error('Error destroying element:', error);
+      peV2InteractionResultDiv.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
+
+
+  /**
+   * Handle checkout form submission
+   */
+  document.getElementById('checkoutForm').addEventListener('submit', async ( event ) => {
+    event.preventDefault();
+
+    const cartId = document.getElementById('checkoutCartId').value;
+    const checkoutResults = document.getElementById('checkoutResults');
+
+    // Build the checkout object
+    const checkoutData = {
+      cartId,
+      'recipient': {
+        'firstName': 'dioriJoe',
+        'lastName': 'John',
+        'email': 'john.diori.joe@gmail.com',
+        'phone': '9732119920',
+        'birthDate': '11-22-1998',
+        'hasAgeVerify': true,
+      },
+      'billingAddress': {
+        'firstName': 'NewJoe',
+        'lastName': 'NewJohn',
+        'email': 'joe.new.john@gmail.com',
+        'phone': '1234324987',
+        'one': '22 Washington Ave',
+        'two': '',
+        'city': 'Cliffside Park',
+        'state': 'NJ',
+        'zip': '07010',
+      },
+      'hasSubstitutionPolicy': true,
+      'isGift': false,
+      'billingSameAsShipping': true,
+      'giftOptions': {
+        'message': '',
+        'recipient': {
+          'name': '',
+          'phone': '',
+          'email': '',
+        },
+      },
+      'marketingPreferences': {
+        'canEmail': true,
+        'canSms': true,
+      },
+      'deliveryTips': [
+        {
+          'fulfillmentId': '6570c3ec700628ce1910c105',
+          'tip': 2500,
+        },
+      ],
+    };
+
+    try {
+      const prepareResponse = await client.checkout.prepare(checkoutData);
+      checkoutResults.innerHTML = `
+      <h4>Checkout Prepared Successfully</h4>
+      <p><strong>Token:</strong> ${prepareResponse.checkout.token}</p>
+      <p><strong>Total Amount:</strong> $${(prepareResponse.checkout.amounts.total / 100).toFixed(2)}</p>
+      <p><strong>Shipping Address:</strong> ${prepareResponse.checkout.shippingAddress.one}, ${prepareResponse.checkout.shippingAddress.city}, ${prepareResponse.checkout.shippingAddress.state}, ${prepareResponse.checkout.shippingAddress.zip}, ${prepareResponse.checkout.shippingAddress.country}</p>
+      <p><strong>Billing Address:</strong> ${prepareResponse.checkout.billingAddress.one}, ${prepareResponse.checkout.billingAddress.city}, ${prepareResponse.checkout.billingAddress.state}, ${prepareResponse.checkout.billingAddress.zip}, ${prepareResponse.checkout.billingAddress.country}</p>
+      <h5>Items:</h5>
+      <ul>
+        ${prepareResponse.checkout.items.map(item => `
+          <li>
+            <strong>${item.name}</strong> (${item.size}) - $${(item.price / 100).toFixed(2)} x ${item.quantity}
+            <br>Fulfillment ID: ${item.fulfillmentId}
+            <br>Retailer: ${item.retailerId}
+          </li>
+        `).join('')}
+      </ul>
+    `;
+    } catch (error) {
+      console.error('Failed to prepare checkout:', error);
+      checkoutResults.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
     }
   });
 

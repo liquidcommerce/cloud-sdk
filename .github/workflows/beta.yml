@@ -1,10 +1,9 @@
-name: Deploy SDK
+name: Deploy Beta SDK
 
 on:
   push:
     branches:
       - beta
-      - main
 
 permissions:
   contents: write

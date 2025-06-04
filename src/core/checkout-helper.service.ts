@@ -4,7 +4,6 @@ import type {
   ICheckoutCompleteParams,
   ICheckoutCustomer,
   ICheckoutPrepareParams,
-  ICheckoutRecipient,
 } from '../interfaces';
 import type { LocationHelperService } from './location-helper.service';
 
@@ -35,9 +34,6 @@ export class CheckoutHelperService {
     // Validate Customer
     this.validateCustomer(normalizedParams.customer);
 
-    // Validate Recipient if provided
-    this.validateCustomer(normalizedParams.recipient);
-
     // Validate billingAddress if provided
     if (normalizedParams?.billingAddress) {
       this.validateBillingAddress(normalizedParams.billingAddress);
@@ -47,7 +43,6 @@ export class CheckoutHelperService {
       normalizedParams?.hasAgeVerify ??
         // @ts-expect-error - Due to recipient removal, this.validateCustomer is not used here.
         normalizedParams?.customer?.hasAgeVerify ??
-        normalizedParams?.recipient?.hasAgeVerify ??
         false
     );
 
@@ -82,20 +77,6 @@ export class CheckoutHelperService {
           ...((normalizedParams?.customer as ICheckoutCustomer) ?? {}),
           phone:
             this.formatPhoneNumber((normalizedParams?.customer as ICheckoutCustomer)?.phone) ?? '',
-        },
-      };
-    }
-
-    if (
-      normalizedParams &&
-      normalizedParams?.recipient &&
-      normalizedParams?.recipient?.phone !== ''
-    ) {
-      normalizedParams = {
-        ...normalizedParams,
-        customer: {
-          ...(normalizedParams?.recipient ?? {}),
-          phone: this.formatPhoneNumber(normalizedParams?.recipient?.phone) ?? '',
         },
       };
     }
@@ -179,7 +160,7 @@ export class CheckoutHelperService {
    * Validates the recipient or customer information for a checkout.
    *
    * @param customer - The recipient or customer information to validate.
-   *                   Can be an object of type ICheckoutRecipient or ICheckoutCustomer,
+   *                   Can be an object of type ICheckoutCustomer,
    *                   or a string (presumably a customer ID).
    *
    * @throws {Error} Throws an error if any of the customer's information (firstName, lastName, phone, email) is present but not a string.
@@ -188,7 +169,7 @@ export class CheckoutHelperService {
    * If the customer is an object, it validates the firstName, lastName, phone, and email properties.
    * If hasAgeVerify is present, it converts it to a boolean value.
    */
-  private validateCustomer(customer?: ICheckoutRecipient | ICheckoutCustomer | string): void {
+  private validateCustomer(customer?: ICheckoutCustomer | string): void {
     if (customer && typeof customer === 'object') {
       const { firstName, lastName, phone, email } = customer;
       if (firstName && typeof firstName !== 'string')

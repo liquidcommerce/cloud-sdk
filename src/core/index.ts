@@ -6,4 +6,5 @@ export * from './location-helper.service';
 export * from './order-authenticated.service';
 export * from './order-singleton.service';
 export * from './payment-provider.service';
+export * from './payment-session-helper.service';
 export * from './singleton.service';

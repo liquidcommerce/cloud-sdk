@@ -54,9 +54,6 @@
  ],
  "author": "ReserveBar Tech",
  "license": "",
- "dependencies": {
-  "@stripe/stripe-js": "^4.4.0"
- },
  "devDependencies": {
   "@eslint/eslintrc": "^3.1.0",
   "@eslint/js": "^9.9.1",
@@ -104,5 +101,8 @@
   "peerDependencyRules": {
    "ignoreMissing": []
   }
+ },
+ "dependencies": {
+  "@stripe/stripe-js": "^7.3.1"
  }
 }

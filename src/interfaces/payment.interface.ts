@@ -45,6 +45,8 @@ export interface ILiquidPaymentConfig {
   elementOptions?: ILiquidPaymentElementOptions;
 }
 
+
+
 /**
  * Interface representing the parameters required to confirm a session.
  *
@@ -141,6 +143,13 @@ export interface IPaymentElementEventMap {
   loaderror: { elementType: 'payment'; error: StripeError };
 
   loaderstart: { elementType: 'payment' };
+}
+
+/**
+ * Parameters for creating a Stripe Confirmation Token using the UI helper.
+ */
+export interface IConfirmationTokenClientParams {
+  returnUrl?: string;
 }
 
 /**

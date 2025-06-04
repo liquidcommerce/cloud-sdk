@@ -315,6 +315,7 @@ export default [
         'error',
         {
           allow: [
+            'log',
             'info',
             'dirxml',
             'warn',

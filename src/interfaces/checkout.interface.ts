@@ -5,60 +5,6 @@ import type { ICartItemAttributes } from './cart.interface';
 import type { IRetailerExpectation } from './retailer.interface';
 
 /**
- * Represents a recipient of a checkout process.
- *
- * Contains recipient's information such as name, contact details, and
- * an optional flag for age verification.
- *
- * @interface
- * @public
- * @deprecated Use ICheckoutCustomer interface instead.
- * ICheckoutRecipient will be removed in a future version.
- */
-export interface ICheckoutRecipient {
-  firstName?: string;
-
-  lastName?: string;
-
-  email?: string;
-
-  phone?: string;
-
-  birthDate?: string;
-
-  hasAgeVerify?: boolean;
-}
-
-/**
- * Represents a traditional billing address structure.
- *
- * @interface
- * @public
- * @deprecated Use ICheckoutBillingAddress instead for better integration with customer data.
- */
-export interface IBillingAddress {
-  firstName?: string;
-
-  lastName?: string;
-
-  email?: string;
-
-  phone?: string;
-
-  one?: string;
-
-  two?: string;
-
-  city?: string;
-
-  state?: string;
-
-  zip?: string;
-
-  country?: string;
-}
-
-/**
  * Represents a customer in a checkout process.
  *
  * Contains information about the customer, including identification,
@@ -83,12 +29,6 @@ export interface ICheckoutCustomer {
   profileImage?: string;
 
   birthDate?: string;
-
-  /**
-   * @deprecated - Moved to ICheckoutPrepareParams
-   * @type {ICheckoutPrepareParams}
-   */
-  hasAgeVerify?: boolean;
 
   createdAt?: Date;
 
@@ -187,20 +127,14 @@ export interface ICheckoutPrepareParams extends ICoreParams {
 
   customer?: ICheckoutCustomer | string;
 
-  /**
-   * @deprecated Use customer property instead. Recipient will be removed in a future version.
-   */
-  recipient?: ICheckoutRecipient;
-
   hasAgeVerify?: boolean;
 
   shippingAddressTwo?: string;
 
   /**
    * Billing address information supporting both new and legacy formats.
-   * Recommended to use ICheckoutBillingAddress format for new implementations.
    */
-  billingAddress?: ICheckoutBillingAddress | IBillingAddress;
+  billingAddress?: ICheckoutBillingAddress;
 
   hasSubstitutionPolicy?: boolean;
 
@@ -386,11 +320,6 @@ export interface ICheckoutItem {
 
   mainImage: string;
 
-  /**
-   * @deprecated - use mainImage
-   */
-  image: string;
-
   brand: string;
 
   partNumber: string;
@@ -483,9 +412,8 @@ export interface ICheckoutPrepareResponse {
 
   /**
    * Billing address information supporting both new and legacy formats.
-   * Recommended to use ICheckoutBillingAddress format for new implementations.
    */
-  billingAddress: ICheckoutBillingAddress | IBillingAddress;
+  billingAddress: ICheckoutBillingAddress;
 
   amounts: ICheckoutTotalAmounts;
 
@@ -522,11 +450,6 @@ export interface ICheckoutCompleteParams extends ICoreParams {
  */
 export interface ICheckoutCompleteResponse {
   order: {
-    /**
-     * @deprecated - use legacyOrderNumber
-     */
-    number: string;
-
     legacyOrderNumber: string;
 
     referenceId: string;
