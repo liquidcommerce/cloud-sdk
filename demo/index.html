@@ -1289,7 +1289,7 @@
     try {
       return await window.LiquidCommerce(API_KEY, {
         googlePlacesApiKey: GOOGLE_PLACES_API_KEY,
-        env: 'loc',
+        env: 'stage',
       });
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
