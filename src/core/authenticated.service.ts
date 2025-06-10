@@ -15,8 +15,6 @@ interface IAuthConfig {
  * Represents an authenticated service for making HTTP requests.
  */
 export class AuthenticatedService {
-  private static instance: AuthenticatedService | null = null;
-
   private readonly apiKey: string;
 
   readonly env: LIQUID_COMMERCE_ENV;
@@ -31,26 +29,11 @@ export class AuthenticatedService {
 
   private readonly httpClient: HttpClient;
 
-  private constructor(config: IAuthConfig) {
+  public constructor(config: IAuthConfig) {
     this.apiKey = config.apiKey;
     this.env = config.env;
     this.baseURL = config.baseURL;
     this.httpClient = getFetchImplementation();
-  }
-
-  /**
-   * Returns an instance of AuthenticatedClient. This method follows the singleton pattern,
-   * meaning that it ensures only one instance of AuthenticatedClient is created.
-   *
-   * @param {IAuthConfig} config - The configuration object used to initialize the AuthenticatedClient instance.
-   * @return {AuthenticatedService} An instance of AuthenticatedClient.
-   */
-  public static getInstance(config: IAuthConfig): AuthenticatedService {
-    if (!AuthenticatedService.instance) {
-      AuthenticatedService.instance = new AuthenticatedService(config);
-    }
-
-    return AuthenticatedService.instance;
   }
 
   /**
