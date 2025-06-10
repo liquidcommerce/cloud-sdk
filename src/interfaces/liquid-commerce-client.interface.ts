@@ -14,7 +14,7 @@ import type {
   ICheckoutPrepareResponse,
 } from './checkout.interface';
 import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './payment.interface';
-import {
+import type {
   BaseUser,
   IPurgeResponse,
   IUser,
@@ -596,9 +596,7 @@ export interface IUserMethod {
    * @see {@link IUserPaymentParams} for the structure of the update payment request parameters.
    * @see {@link IUserPayment} for the structure of the user's payment method data returned.
    */
-  updatePayment: (
-    params: IUserPaymentParams
-  ) => Promise<IApiResponseWithData<boolean>>;
+  updatePayment: (params: IUserPaymentParams) => Promise<IApiResponseWithData<boolean>>;
 
   /**
    * Purges a payment method for a user.
