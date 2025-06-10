@@ -52,6 +52,8 @@ export type IApiResponseWithData<T> = IApiResponseBase & {
   data: T;
 };
 
+export type AuthServiceResponse = IApiResponseWithData<IAuth>;
+
 export type IApiResponseWithoutData<T> = IApiResponseBase & {
   [K in keyof T]: T[K];
 };

@@ -1,4 +1,5 @@
-import type { IApiResponseWithData, IAuth } from '../types';
+import type { LIQUID_COMMERCE_ENV } from '../enums';
+import type { AuthServiceResponse, IAuth } from '../types';
 import type { HttpClient, IHttpClientOptions, IRequestOptions } from './utils';
 import { getFetchImplementation } from './utils';
 
@@ -6,6 +7,8 @@ interface IAuthConfig {
   apiKey: string;
 
   baseURL: string;
+
+  env: LIQUID_COMMERCE_ENV;
 }
 
 /**
@@ -15,6 +18,8 @@ export class AuthenticatedService {
   private static instance: AuthenticatedService | null = null;
 
   private readonly apiKey: string;
+
+  readonly env: LIQUID_COMMERCE_ENV;
 
   private readonly baseURL: string;
 
@@ -28,6 +33,7 @@ export class AuthenticatedService {
 
   private constructor(config: IAuthConfig) {
     this.apiKey = config.apiKey;
+    this.env = config.env;
     this.baseURL = config.baseURL;
     this.httpClient = getFetchImplementation();
   }
@@ -86,12 +92,11 @@ export class AuthenticatedService {
 
     this.isAuthenticating = true;
     try {
-      const response = await this.requestWithoutAuth<IApiResponseWithData<IAuth>>(
-        '/authentication',
-        { method: 'GET' }
-      );
+      const response = await this.requestWithoutAuth<AuthServiceResponse>('/authentication', {
+        method: 'GET',
+      });
       this.accessToken = response?.data?.token;
-      this.tokenExpiration = Date.now() + response?.data?.exp * 1000;
+      this.tokenExpiration = response?.data?.exp;
     } catch (error) {
       console.error('Authentication failed:', error);
       throw new Error('Failed to authenticate with LiquidCommerce API');
@@ -100,11 +105,20 @@ export class AuthenticatedService {
     }
   }
 
+  async getAuth(): Promise<IAuth> {
+    const response = await this.requestWithoutAuth<AuthServiceResponse>('/authentication', {
+      method: 'GET',
+    });
+
+    return response?.data;
+  }
+
   private async requestWithoutAuth<T>(path: string, options: IRequestOptions): Promise<T> {
     const url = new URL(`api${path}`, this.baseURL);
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'X-LIQUID-API-KEY': this.apiKey,
+      'X-LIQUID-API-OBF': 'true',
       ...options.headers,
     };
 
@@ -150,6 +164,7 @@ export class AuthenticatedService {
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'X-LIQUID-API-KEY': this.apiKey,
+        'X-LIQUID-API-OBF': 'true',
         Authorization: `Bearer ${this.accessToken}`,
         ...options.headers,
       };

@@ -1,6 +1,6 @@
 {
- "name": "@liquidcommerceteam/cloud-sdk",
- "version": "1.6.0-beta.16",
+ "name": "@liquidcommerce/cloud-sdk",
+ "version": "1.6.0",
  "description": "LiquidCommerce Cloud SDK",
  "main": "./dist/index.cjs",
  "module": "./dist/index.esm.js",
@@ -54,9 +54,6 @@
  ],
  "author": "ReserveBar Tech",
  "license": "",
- "dependencies": {
-  "@stripe/stripe-js": "^4.4.0"
- },
  "devDependencies": {
   "@eslint/eslintrc": "^3.1.0",
   "@eslint/js": "^9.9.1",
@@ -104,5 +101,8 @@
   "peerDependencyRules": {
    "ignoreMissing": []
   }
+ },
+ "dependencies": {
+  "@stripe/stripe-js": "^7.3.1"
  }
 }

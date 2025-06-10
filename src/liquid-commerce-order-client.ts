@@ -115,7 +115,7 @@ class LiquidCommerceOrderClient implements ILiquidCommerceOrderClient {
  *
  * @example
  * // Example usage:
- * const orderLiquidClient = await OrderLiquidCommerce({
+ * const orderLiquidClient = await LiquidCommerceOrders({
  *   userID: 'yourUserID',
  *   password: 'yourPassword',
  *   env: LIQUID_COMMERCE_ENV.STAGE,
@@ -123,7 +123,7 @@ class LiquidCommerceOrderClient implements ILiquidCommerceOrderClient {
  *
  * @throws {Error} - Throws an error if the client initialization fails.
  */
-export async function OrderLiquidCommerce(
+export async function LiquidCommerceOrders(
   config: ILiquidCommerceOrderConfig
 ): Promise<ILiquidCommerceOrderClient> {
   const singletonManager = OrderSingletonManager.getInstance();
