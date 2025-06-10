@@ -1,3 +1,10 @@
+# [1.7.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0-beta.1...v1.7.0-beta.2) (2025-06-10)
+
+
+### Bug Fixes
+
+* **auth:** remove static singleton pattern from AuthenticatedService ([0f8983b](https://github.com/liquidcommerce/cloud-sdk/commit/0f8983bf5b4d9089985ffd99b1a1af2db2253ace))
+
 # [1.7.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0...v1.7.0-beta.1) (2025-06-10)
 
 
