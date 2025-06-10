@@ -1,3 +1,49 @@
+# [1.7.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0...v1.7.0-beta.1) (2025-06-10)
+
+
+### Bug Fixes
+
+* add arizona state ([9fc2310](https://github.com/liquidcommerce/cloud-sdk/commit/9fc2310faa372ee496d8158f5c548c28a73608da))
+* added some comments ([e2d6675](https://github.com/liquidcommerce/cloud-sdk/commit/e2d66752cab5fb32229821171758fbef8db157f0))
+* **auth-service:** error response object ([69963a5](https://github.com/liquidcommerce/cloud-sdk/commit/69963a55844906d56b775c880cb354ce5f7aa733))
+* **core,interfaces:** improve presale attribute ([26af1ad](https://github.com/liquidcommerce/cloud-sdk/commit/26af1adb6abc80d67c98c3ef4f6651c13fdb6922))
+* **core,interfaces:** improve readability with enhanced formatting and import structure ([628c87b](https://github.com/liquidcommerce/cloud-sdk/commit/628c87b2ac840d3315049945ad4dfb6b5810d7f9))
+* **demo:** replace hardcoded API keys with placeholders ([253d4d8](https://github.com/liquidcommerce/cloud-sdk/commit/253d4d8eea9182b9be154bf7419c7f702a906380))
+* **demo:** update environment to stage for SDK initialization ([7080a58](https://github.com/liquidcommerce/cloud-sdk/commit/7080a58741c916a1e74215473b63e4a923cfe889))
+* **interface:** addressComponent response name ([d04990e](https://github.com/liquidcommerce/cloud-sdk/commit/d04990e7221e366958ad29faaa6a631165f63b89))
+* **interface:** checkoutItem and cartItem interface update ([feead55](https://github.com/liquidcommerce/cloud-sdk/commit/feead55e535b7c534a6ac24cf9d378a3c76a33df))
+* **interfaces, enums:** updated interfaces and enums related to presale ([a53c12b](https://github.com/liquidcommerce/cloud-sdk/commit/a53c12b36801d12e5aa495d2cfcc6d4cf8b5268b))
+* **interfaces:** implement retailer fulfillment shipping min ([188dacb](https://github.com/liquidcommerce/cloud-sdk/commit/188dacb83038358474a63717e141b967b0701a9c))
+* **presale:** removed internally used types ([dd21ebb](https://github.com/liquidcommerce/cloud-sdk/commit/dd21ebb54ac95e76e856fe0852ae1917806c1e0b))
+* **presale:** updated date type ([c1cc4f8](https://github.com/liquidcommerce/cloud-sdk/commit/c1cc4f8e63f1a7dfe8ad38f65b9341565eaee6e9))
+* **readme:** authentication readme docs ([7967b59](https://github.com/liquidcommerce/cloud-sdk/commit/7967b59c8df5602fbc53637a1bab917fcb11db2b))
+* **README:** update readme file ([60899a5](https://github.com/liquidcommerce/cloud-sdk/commit/60899a555584c799affc5f33419476004394aa00))
+* **webhook-test:** webhook test and refactor ([3620f49](https://github.com/liquidcommerce/cloud-sdk/commit/3620f4958c0e79c0129977d503186621d985029b))
+
+
+### Features
+
+* add API key to headers in authenticated service and update webhook method parameter description ([57ca571](https://github.com/liquidcommerce/cloud-sdk/commit/57ca571f5efca870a6c403f84b0ce1dea6666214))
+* add ENUM_ORDER_SYSTEM and update order interfaces for consistency ([dafc2bb](https://github.com/liquidcommerce/cloud-sdk/commit/dafc2bb935dd429ecd7b96240e595d8cd1a3ad7c))
+* add webhook service and update documentation ([f5cc68c](https://github.com/liquidcommerce/cloud-sdk/commit/f5cc68c3098fed54cac78cb2a6f9ced6cabb2ca7))
+* add webhook tab and test functionality ([7e0cfb7](https://github.com/liquidcommerce/cloud-sdk/commit/7e0cfb7ceb58e4250024ee8219565a14324ba948))
+* **cart-helper:** adjust part number validation logic ([7ee8a8b](https://github.com/liquidcommerce/cloud-sdk/commit/7ee8a8b150bf6ebb15a41eaa48f75fdde7282059))
+* **cart:** add presale attribute to ICartItemAttributes and IProductPresale interface ([51e1e93](https://github.com/liquidcommerce/cloud-sdk/commit/51e1e93236099725b00173dafec4f48ee98f2206))
+* **checkout:** add gift card validation and update related interfaces ([fbf6722](https://github.com/liquidcommerce/cloud-sdk/commit/fbf6722297f6cc090d261ddfe1548df7b5e2dbcf))
+* **client:** add payment session handling and enhance auth functionality ([5707f4b](https://github.com/liquidcommerce/cloud-sdk/commit/5707f4b1e14dd279a5e1bc041aa2719ab976505d))
+* enhance webhook testing functionality and update documentation ([81ad69a](https://github.com/liquidcommerce/cloud-sdk/commit/81ad69ae64038ca68ad1d17e0a8c60919e684513))
+* **enums:** add new error codes for coupon validation ([0a753d4](https://github.com/liquidcommerce/cloud-sdk/commit/0a753d49c7140fef856920da069520d49e2bc291))
+* **filters:** add presale filter and refactor engraving validation ([1be292f](https://github.com/liquidcommerce/cloud-sdk/commit/1be292f868222216d017cb323777492814c54244))
+* implement order authentication service and related client functionality ([79cfb4d](https://github.com/liquidcommerce/cloud-sdk/commit/79cfb4df21c02ad74f891037f139f2a6f7c2c2fe))
+* **interface:** product price information ([672ffb1](https://github.com/liquidcommerce/cloud-sdk/commit/672ffb1d340e91d0281786abccc2181f66a21faa))
+* order api ([23725a7](https://github.com/liquidcommerce/cloud-sdk/commit/23725a7948bb0884a11ff378ca620beddb50a454))
+* remove mskus ([8344246](https://github.com/liquidcommerce/cloud-sdk/commit/8344246acb25c89ae24a6104206ecba74287586e))
+* **rollup:** enhance build config with environment-based plugins and sourcemaps in dev mode ([28af620](https://github.com/liquidcommerce/cloud-sdk/commit/28af620d445679fabe1cde5e16add5509b93edd3))
+* **search:** implement retailer filter ([ad9d4e8](https://github.com/liquidcommerce/cloud-sdk/commit/ad9d4e866d7be1442677a4e1a7f3da1f0bd23c63))
+* update API keys to placeholders and change environment to dev ([b12eccb](https://github.com/liquidcommerce/cloud-sdk/commit/b12eccbc1b902603db99487c129aebb28f85c2a4))
+* update interfaces & add comments ([3dbf323](https://github.com/liquidcommerce/cloud-sdk/commit/3dbf3234e2c15ed886d69321f5fc6b9e76552402))
+* update webhook test method to accept an optional endpoint parameter ([a9a767d](https://github.com/liquidcommerce/cloud-sdk/commit/a9a767d621e43241911787835aa2672dea8bbb13))
+
 # [1.6.0-beta.16](https://github.com/liquidcommerce/cloud-sdk/compare/v1.6.0-beta.15...v1.6.0-beta.16) (2025-05-06)
 
 
