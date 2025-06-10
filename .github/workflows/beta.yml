@@ -1,9 +1,10 @@
-name: Deploy Beta SDK
+name: Deploy SDK
 
 on:
   push:
     branches:
       - beta
+      - main
 
 permissions:
   contents: write
@@ -18,14 +19,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.ref }}
           clean: true
 
       - name: Set up Node.js and pnpm
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org/'
