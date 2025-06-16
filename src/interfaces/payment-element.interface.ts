@@ -1,7 +1,7 @@
 import type {
   IConfirmationTokenClientParams,
+  IConfirmationTokenResponse,
   ILiquidPaymentElementOptions,
-  ILiquidPaymentError,
   IPaymentElementEventMap,
 } from './payment.interface';
 import type { IUserSession } from './user.interface';
@@ -43,13 +43,13 @@ export interface ILiquidCommercePaymentElement {
    *
    * @param {IConfirmationTokenClientParams} [params] - Optional parameters for token creation,
    * such as the return URL for redirect-based payment methods.
-   * @returns {Promise<{ id: string } | ILiquidPaymentError>} A promise that resolves with
+   * @returns {Promise<IConfirmationTokenResponse>} A promise that resolves with
    * an object containing the confirmation token ID on success, or an error object describing
    * the failure reason (validation errors, network issues, etc.).
    */
   createConfirmationToken(
     params?: IConfirmationTokenClientParams
-  ): Promise<{ id: string } | ILiquidPaymentError>;
+  ): Promise<IConfirmationTokenResponse>;
 
   /**
    * Subscribes to events emitted by the payment UI component for real-time updates

@@ -2,6 +2,7 @@ import type { AuthenticatedService, PaymentSessionHelperService } from '../core'
 import type { LIQUID_COMMERCE_ENV } from '../enums';
 import type {
   BaseUser,
+  ILiquidPaymentToken,
   IPurgeResponse,
   IUser,
   IUserAddress,
@@ -72,6 +73,37 @@ export class UserService {
       );
 
       const data = this.paymentSessionHelperService.rcd(response?.data, this.env);
+
+      return {
+        ...response,
+        data,
+      };
+    } catch (error) {
+      console.error('User session creation/update request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Confirms and finalizes a payment session using the provided token.
+   *
+   * @param {string} token - The token representing the payment session to finalize.
+   * @return {Promise<IApiResponseWithData<ILiquidPaymentToken>>} A promise that resolves with the API
+   * response containing data about the finalized payment session.
+   */
+  public async finalizePaymentSession(
+    token: string
+  ): Promise<IApiResponseWithData<ILiquidPaymentToken>> {
+    try {
+      if (!token) {
+        throw new Error('Token is required');
+      }
+
+      const response = await this.client.get<IApiResponseWithData<ILiquidPaymentToken>>(
+        `${this.servicePath}/finalize-payment-session/${token}`
+      );
+
+      const data = this.paymentSessionHelperService.dd<ILiquidPaymentToken>(response?.data, token);
 
       return {
         ...response,

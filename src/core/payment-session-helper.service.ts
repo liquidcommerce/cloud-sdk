@@ -20,6 +20,7 @@ enum D {
   Q = 'pk_test_',
   R = 'seti_',
   S = '_secret_',
+  T_C = 'ctoken_',
   U = 'production',
 }
 
@@ -72,5 +73,53 @@ export class PaymentSessionHelperService {
 
   private b(i: string, t: string): string {
     return !i || !t ? '' : `${D.R}${i}${D.S}${t}`;
+  }
+
+  public ocd(ct: string, si: string): string {
+    const p = this.gsi(si).replace(D.R, '');
+    const c = ct.replace(D.T_C, '');
+    const d = JSON.stringify([c, p]);
+
+    return typeof btoa === 'function' ? btoa(d) : Buffer.from(d).toString('base64');
+  }
+
+  public gsi(s: string): string {
+    return s.split(D.S)[0];
+  }
+
+  public gdk(t: string): string {
+    try {
+      const d = typeof atob === 'function' ? atob(t) : Buffer.from(t, 'base64').toString('ascii');
+      const [c, p] = JSON.parse(d);
+      const cti = `${D.T_C}${c}`;
+      const sii = `${D.R}${p}`;
+      return `${cti}${sii}`;
+    } catch (e: any) {
+      throw new Error(`Failed to reconstruct the response data: ${e.message}`);
+    }
+  }
+
+  public dd<T>(d: any, t: string): T {
+    const k = this.gdk(t);
+    if (d && k) {
+      try {
+        const c =
+          typeof atob === 'function'
+            ? atob(d)
+            : Buffer.from(d, 'base64').toString('binary');
+
+        let p = '';
+        for (let i = 0; i < c.length; i++) {
+          // eslint-disable-next-line no-bitwise
+          p += String.fromCharCode(c?.charCodeAt?.(i) ^ k?.charCodeAt?.(i % k.length));
+        }
+
+        return JSON.parse(p);
+      } catch (e: any) {
+        throw new Error(`Failed to reconstruct the response data: ${e.message}`);
+      }
+    }
+
+    return d as T;
   }
 }

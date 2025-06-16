@@ -250,6 +250,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *    Method for creating or updating a user session.
    * @property {function(params: IUserPaymentSession): Promise<IApiResponseWithData<IUserSession>>} paymentSession -
    *    Method for creating a user payment session.
+   * @property {function(token: string): Promise<IApiResponseWithData<ILiquidPaymentToken>>} confirmPaymentSession -
+   *    Method for confirming a user payment session.
    * @property {function(dentifier: string): Promise<IApiResponseWithData<BaseUser>>} fetch -
    *    Method for fetching user data.
    * @property {function(identifier: string): Promise<IApiResponseWithData<IPurgeResponse>>} purge -
@@ -287,6 +289,12 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     ): Promise<IApiResponseWithData<IUserSession>> => {
       await this.ensureAuthenticated();
       return this.userService.createPaymentSession(params);
+    },
+    confirmPaymentSession: async (
+      token: string
+    ): Promise<IApiResponseWithData<ILiquidPaymentToken>> => {
+      await this.ensureAuthenticated();
+      return this.userService.finalizePaymentSession(token);
     },
     fetch: async (identifier: string): Promise<IApiResponseWithData<BaseUser>> => {
       await this.ensureAuthenticated();

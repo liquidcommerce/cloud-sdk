@@ -9,11 +9,10 @@ import type {
 } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import { SingletonManager } from './core';
+import { PaymentSessionHelperService, SingletonManager } from './core';
 import type {
-  IConfirmationTokenClientParams,
+  IConfirmationTokenClientParams, IConfirmationTokenResponse,
   ILiquidCommercePaymentElement,
-  ILiquidPaymentError,
   IPaymentElementConfig,
   IPaymentElementEventMap,
   PaymentElementImplConstructor,
@@ -34,6 +33,8 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
   private componentSet: StripeElements | null = null;
 
   private uiComponent: StripePaymentElement | null = null;
+
+  private readonly paymentSessionHelperService: PaymentSessionHelperService;
 
   private k: string;
 
@@ -59,6 +60,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
 
     this.k = options.session.key;
     this.s = options.session?.secret;
+    this.paymentSessionHelperService = new PaymentSessionHelperService();
   }
 
   /**
@@ -125,6 +127,35 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
       const uiOptions: StripePaymentElementOptions = {
         layout: config.elementOptions?.layout || 'tabs',
         ...(config.elementOptions || {}),
+        defaultValues: {
+          billingDetails: {
+            name: 'Guest',
+            address: {
+              country: 'US',
+            },
+          },
+        },
+        fields: {
+          billingDetails: {
+            address: {
+              postalCode: 'auto',
+              country: 'never',
+            },
+          },
+        },
+        terms: {
+          applePay: 'never',
+          auBecsDebit: 'never',
+          bancontact: 'never',
+          card: 'never',
+          cashapp: 'never',
+          googlePay: 'never',
+          ideal: 'never',
+          paypal: 'never',
+          sepaDebit: 'never',
+          sofort: 'never',
+          usBankAccount: 'never',
+        },
       };
       this.uiComponent = this.componentSet.create('payment', uiOptions);
       this.uiComponent.mount(container);
@@ -138,8 +169,8 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
    * Generates a secure token for payment confirmation.
    */
   async createConfirmationToken(
-    params?: IConfirmationTokenClientParams
-  ): Promise<{ id: string } | ILiquidPaymentError> {
+    params?: IConfirmationTokenClientParams,
+  ): Promise<IConfirmationTokenResponse> {
     if (!this.provider || !this.componentSet || !this.uiComponent) {
       return {
         type: 'client_error',
@@ -159,7 +190,29 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
 
       const tokenParams: CreateConfirmationToken = {
         elements: this.componentSet,
-        params: { return_url: params?.returnUrl ?? window.location.href },
+        params: {
+          return_url: params?.returnUrl ?? window.location.href,
+          payment_method_data: {
+            allow_redisplay: 'always',
+            billing_details: {
+              name: 'Guest',
+              address: {
+                country: 'US',
+              },
+            },
+          },
+          shipping: {
+            name: 'Guest',
+            address: {
+              country: 'US',
+              city: null,
+              line1: null,
+              line2: null,
+              postal_code: null,
+              state: null,
+            },
+          },
+        },
       };
 
       const { error, confirmationToken } = await this.provider.createConfirmationToken(tokenParams);
@@ -179,7 +232,9 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
         };
       }
 
-      return { id: confirmationToken.id };
+      const token = this.paymentSessionHelperService.ocd(confirmationToken.id, this.s);
+
+      return { token };
     } catch (error: any) {
       this.logger.error('Token generation error:', error);
       return {
@@ -206,7 +261,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
    */
   subscribe<K extends keyof IPaymentElementEventMap>(
     eventType: K,
-    handler: (event: IPaymentElementEventMap[K]) => void
+    handler: (event: IPaymentElementEventMap[K]) => void,
   ): void {
     if (!this.uiComponent) {
       this.logger.error('Cannot subscribe: Component not initialized.');
@@ -215,7 +270,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
 
     if (!this.allowedEvents.includes(eventType)) {
       this.logger.error(
-        `Event "${eventType}" not supported. Available: ${this.allowedEvents.join(', ')}`
+        `Event "${eventType}" not supported. Available: ${this.allowedEvents.join(', ')}`,
       );
       return;
     }
@@ -233,7 +288,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
    */
   unsubscribe<K extends keyof IPaymentElementEventMap>(
     eventType: K,
-    handler?: (event: IPaymentElementEventMap[K]) => void
+    handler?: (event: IPaymentElementEventMap[K]) => void,
   ): void {
     if (!this.uiComponent) {
       this.logger.error('Cannot unsubscribe: Component not initialized.');
@@ -281,7 +336,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
       this.uiComponent.collapse();
     } else {
       this.logger.error(
-        'Cannot collapse: Component not initialized or action not supported.'
+        'Cannot collapse: Component not initialized or action not supported.',
       );
     }
   }
@@ -296,7 +351,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
  * @throws {Error} If singleton manager is not properly configured.
  */
 export function LiquidCommercePaymentElement(
-  options: IPaymentElementConfig
+  options: IPaymentElementConfig,
 ): ILiquidCommercePaymentElement {
   const manager = SingletonManager.getInstance() as any;
 
@@ -306,7 +361,7 @@ export function LiquidCommercePaymentElement(
   ) {
     console.error(
       'SingletonManager missing required payment element methods. ' +
-      'Falling back to direct instantiation.'
+      'Falling back to direct instantiation.',
     );
     if (!manager.__paymentElementInstance) {
       manager.__paymentElementInstance = new PaymentElementImpl(options);

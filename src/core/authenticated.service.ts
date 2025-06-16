@@ -148,6 +148,7 @@ export class AuthenticatedService {
         'Content-Type': 'application/json',
         'X-LIQUID-API-KEY': this.apiKey,
         'X-LIQUID-API-OBF': 'true',
+        'X-LIQUID-API-SDK': 'true',
         Authorization: `Bearer ${this.accessToken}`,
         ...options.headers,
       };

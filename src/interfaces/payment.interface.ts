@@ -39,7 +39,7 @@ export interface ILiquidPaymentConfig {
   elementId: string;
 
   appearance?: {
-    theme?: 'default' | 'night' | 'flat';
+    theme?: 'stripe' | 'night' | 'flat';
   };
 
   elementOptions?: ILiquidPaymentElementOptions;
@@ -151,6 +151,12 @@ export interface IPaymentElementEventMap {
 export interface IConfirmationTokenClientParams {
   returnUrl?: string;
 }
+
+export interface IConfirmationTokenPayload {
+  token: string;
+}
+
+export type IConfirmationTokenResponse = IConfirmationTokenPayload | ILiquidPaymentError;
 
 /**
  * Interface representing a payment provider that integrates with a Liquid payment gateway.

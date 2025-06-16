@@ -405,6 +405,31 @@ export interface IUserMethod {
   paymentSession: (params: IUserPaymentSession) => Promise<IApiResponseWithData<IUserSession>>;
 
   /**
+   * Confirms a payment session using a token from the payment element.
+   *
+   * @param {string} token - The payment token received from the payment provider (e.g., Stripe) after user interaction.
+   * @returns {Promise<IApiResponseWithData<ILiquidPaymentToken>>} A Promise that resolves to the API response with the confirmed payment token details.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   // Assume 'paymentElementToken' is obtained from the front-end after the user completes the payment steps.
+   *   const paymentElementToken = '1fa23fa4d5fad'; // Example token
+   *   const confirmedPayment = await liquidCommerce.user.confirmPaymentSession(paymentElementToken);
+   *
+   *   console.log('Confirmed payment session data:', confirmedPayment?.data);
+   * } catch (error) {
+   *   console.error('Failed to confirm payment session:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the confirmation request fails or the token is invalid.
+   *
+   * @see {@link ILiquidPaymentToken} for the structure of the confirmed payment data returned.
+   */
+  confirmPaymentSession: (token: string) => Promise<IApiResponseWithData<ILiquidPaymentToken>>;
+
+  /**
    * Represents a user object without creating a new session.
    *
    * @param {string} identifier - The parameters for fetching a user.
