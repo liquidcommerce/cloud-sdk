@@ -1145,7 +1145,7 @@
                  <div class="form-group">
                     <label for="peV2AppearanceTheme" class="form-label">Appearance Theme (Optional)</label>
                     <select id="peV2AppearanceTheme" class="form-select">
-                        <option value="default" selected>Default</option>
+                        <option value="stripe" selected>Default</option>
                         <option value="night">Night</option>
                         <option value="flat">Flat</option>
                     </select>
@@ -1207,6 +1207,18 @@
                 </div>
               </div>
 
+              <!-- Step 5: Confirm Payment Session -->
+              <div class="mb-4 mt-4 p-3 border rounded shadow-sm">
+                <h5>Step 5: Confirm Payment Session</h5>
+                <p>Use the confirmation token from Step 3 to finalize the payment session and get payment details.</p>
+                <div class="form-group">
+                  <label for="peV2ConfirmationTokenInput" class="form-label">Confirmation Token</label>
+                  <input type="text" id="peV2ConfirmationTokenInput" class="form-input">
+                </div>
+                <button type="button" class="btn btn-primary mt-3" id="confirmPeV2PaymentSessionButton">Confirm Session</button>
+                <div id="peV2ConfirmationResultDiv" class="session-result mt-3"></div>
+              </div>
+
             </div>
           </div>
 
@@ -1259,6 +1271,7 @@
 
   let client;
 
+  let env = 'stage';
   let orderClient;
   let paymentElementV2; // Variable to hold the Payment Element V2 instance
   let peV2SessionData = null; // To store session key and secret
@@ -1289,7 +1302,7 @@
     try {
       return await window.LiquidCommerce(API_KEY, {
         googlePlacesApiKey: GOOGLE_PLACES_API_KEY,
-        env: 'stage',
+        env,
       });
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
@@ -1306,7 +1319,7 @@
       return await window.LiquidCommerceOrders({
         userID: ORDER_API_USER,
         password: ORDER_API_PASSWORD,
-        env: 'loc',
+        env,
       });
     } catch (error) {
       console.error('Failed to initialize order SDK:', error);
@@ -2269,7 +2282,7 @@
         clientSecret,
         key,
         elementId: 'payment-element-container',
-        appearance: { theme: 'default' },
+        appearance: { theme: 'stipe' },
         elementOptions: { layout: 'tabs' },
       });
       console.log('Payment element mounted');
@@ -3249,7 +3262,7 @@
         clientSecret,
         key,
         elementId: 'payment-element-container',
-        appearance: { theme: 'default' },
+        appearance: { theme: 'stripe' },
         elementOptions: { layout: 'tabs' },
       });
       console.log('Payment element mounted');
@@ -3606,8 +3619,9 @@
       // Example: provide a return_url if needed for your payment flow.
       // const params = { returnUrl: window.location.href };
       const tokenResponse = await paymentElementV2.createConfirmationToken(/* params */);
-      if (tokenResponse.id) {
-        peV2InteractionResultDiv.innerHTML = `<p class="text-success">Confirmation Token: ${tokenResponse.id}</p>`;
+      if (tokenResponse.token) {
+        peV2InteractionResultDiv.innerHTML = `<div><p class="text-success">Confirmation Token: ${tokenResponse.token}</p></div>`;
+        document.getElementById('peV2ConfirmationTokenInput').value = tokenResponse.token;
       } else { // ILiquidPaymentError
         peV2InteractionResultDiv.innerHTML = `<p class="text-danger">Error creating token: ${tokenResponse.message} (Code: ${tokenResponse.code})</p>`;
       }
@@ -3677,6 +3691,37 @@
     }
   });
 
+  document.getElementById('confirmPeV2PaymentSessionButton').addEventListener('click', async () => {
+    const token = document.getElementById('peV2ConfirmationTokenInput').value.trim();
+    const resultDiv = document.getElementById('peV2ConfirmationResultDiv');
+    if (!token) {
+      resultDiv.innerHTML = `<p class="text-danger">Please provide a confirmation token.</p>`;
+      return;
+    }
+
+    try {
+      resultDiv.innerHTML = 'Confirming...';
+      const response = await client.user.confirmPaymentSession(token);
+
+      if (response.data) {
+        let html = `<h4>Payment Confirmation Success</h4>`;
+        html += `
+                <ul>
+                  <li>Token ID: ${response.data.id}</li>
+                  <li>Card Brand: ${response.data.card?.brand}</li>
+                  <li>Card Last 4: ${response.data.card?.last4}</li>
+                  <li>Expiry: ${response.data.card?.expMonth}/${response.data.card?.expYear}</li>
+                </ul>
+              `;
+        resultDiv.innerHTML = html;
+      } else {
+        resultDiv.innerHTML = `<p class="text-danger">Error: ${response.message || 'Unknown error'}</p>`;
+      }
+    } catch (error) {
+      console.error('Failed to confirm payment session:', error);
+      resultDiv.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+    }
+  });
 
   /**
    * Handle checkout form submission

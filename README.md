@@ -316,7 +316,7 @@ await client.payment.mount({
   key: userSession.data.session.publicKey, // Required: from session
   elementId: 'payment-element-container', // Your DOM element ID
   appearance: {
-    theme: 'night', // 'default' | 'night' | 'flat'
+    theme: 'night', // 'stripe' | 'night' | 'flat'
   },
   elementOptions: {
     layout: 'tabs', // 'tabs' | 'accordion' | 'auto'
