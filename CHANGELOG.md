@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0...v1.8.0) (2025-06-17)
+
+
+### Features
+
+* **docs:** expand Payment Element and delivery instructions in README ([0df9cb3](https://github.com/liquidcommerce/cloud-sdk/commit/0df9cb362a7d7ae2927c58c94f02837882284dd2))
+
 # [1.7.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0-beta.3...v1.7.0-beta.4) (2025-06-17)
 
 ### Bug Fixes
