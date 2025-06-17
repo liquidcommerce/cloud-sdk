@@ -14,8 +14,6 @@ interface IOrderAuthConfig {
  * Represents an order authenticated service for making HTTP requests.
  */
 export class OrderAuthenticatedService {
-  private static instance: OrderAuthenticatedService | null = null;
-
   private readonly userID: string;
 
   private readonly password: string;
@@ -30,26 +28,11 @@ export class OrderAuthenticatedService {
 
   private readonly httpClient: HttpClient;
 
-  private constructor(config: IOrderAuthConfig) {
+  public constructor(config: IOrderAuthConfig) {
     this.userID = config.userID;
     this.password = config.password;
     this.baseURL = config.baseURL;
     this.httpClient = getFetchImplementation();
-  }
-
-  /**
-   * Returns an instance of OrderAuthenticatedClient. This method follows the singleton pattern,
-   * meaning that it ensures only one instance of OrderAuthenticatedClient is created.
-   *
-   * @param {IOrderAuthConfig} config - The configuration object used to initialize the OrderAuthenticatedClient instance.
-   * @return {OrderAuthenticatedService} An instance of OrderAuthenticatedClient.
-   */
-  public static getInstance(config: IOrderAuthConfig): OrderAuthenticatedService {
-    if (!OrderAuthenticatedService.instance) {
-      OrderAuthenticatedService.instance = new OrderAuthenticatedService(config);
-    }
-
-    return OrderAuthenticatedService.instance;
   }
 
   /**
