@@ -1,9 +1,29 @@
 # [1.7.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0-beta.3...v1.7.0-beta.4) (2025-06-17)
 
+### Bug Fixes
+
+* add arizona state ([9fc2310](https://github.com/liquidcommerce/cloud-sdk/commit/9fc2310faa372ee496d8158f5c548c28a73608da))
+* added some comments ([e2d6675](https://github.com/liquidcommerce/cloud-sdk/commit/e2d66752cab5fb32229821171758fbef8db157f0))
+* **auth-service:** error response object ([69963a5](https://github.com/liquidcommerce/cloud-sdk/commit/69963a55844906d56b775c880cb354ce5f7aa733))
+* **auth:** remove static singleton pattern from AuthenticatedService ([0f8983b](https://github.com/liquidcommerce/cloud-sdk/commit/0f8983bf5b4d9089985ffd99b1a1af2db2253ace))
+* **core,interfaces:** improve presale attribute ([26af1ad](https://github.com/liquidcommerce/cloud-sdk/commit/26af1adb6abc80d67c98c3ef4f6651c13fdb6922))
+* **core,interfaces:** improve readability with enhanced formatting and import structure ([628c87b](https://github.com/liquidcommerce/cloud-sdk/commit/628c87b2ac840d3315049945ad4dfb6b5810d7f9))
+* **demo:** replace hardcoded API keys with placeholders ([253d4d8](https://github.com/liquidcommerce/cloud-sdk/commit/253d4d8eea9182b9be154bf7419c7f702a906380))
+* **demo:** update environment to stage for SDK initialization ([7080a58](https://github.com/liquidcommerce/cloud-sdk/commit/7080a58741c916a1e74215473b63e4a923cfe889))
+* **interface:** addressComponent response name ([d04990e](https://github.com/liquidcommerce/cloud-sdk/commit/d04990e7221e366958ad29faaa6a631165f63b89))
+* **interface:** checkoutItem and cartItem interface update ([feead55](https://github.com/liquidcommerce/cloud-sdk/commit/feead55e535b7c534a6ac24cf9d378a3c76a33df))
+* **interfaces, enums:** updated interfaces and enums related to presale ([a53c12b](https://github.com/liquidcommerce/cloud-sdk/commit/a53c12b36801d12e5aa495d2cfcc6d4cf8b5268b))
+* **interfaces:** implement retailer fulfillment shipping min ([188dacb](https://github.com/liquidcommerce/cloud-sdk/commit/188dacb83038358474a63717e141b967b0701a9c))
+* **presale:** removed internally used types ([dd21ebb](https://github.com/liquidcommerce/cloud-sdk/commit/dd21ebb54ac95e76e856fe0852ae1917806c1e0b))
+* **presale:** updated date type ([c1cc4f8](https://github.com/liquidcommerce/cloud-sdk/commit/c1cc4f8e63f1a7dfe8ad38f65b9341565eaee6e9))
+* **readme:** authentication readme docs ([7967b59](https://github.com/liquidcommerce/cloud-sdk/commit/7967b59c8df5602fbc53637a1bab917fcb11db2b))
+* **README:** update readme file ([60899a5](https://github.com/liquidcommerce/cloud-sdk/commit/60899a555584c799affc5f33419476004394aa00))
+* **webhook-test:** webhook test and refactor ([3620f49](https://github.com/liquidcommerce/cloud-sdk/commit/3620f4958c0e79c0129977d503186621d985029b))
+
 
 ### Features
-
 * **docs:** expand Payment Element and delivery instructions in README ([0df9cb3](https://github.com/liquidcommerce/cloud-sdk/commit/0df9cb362a7d7ae2927c58c94f02837882284dd2))
+
 
 # [1.7.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0-beta.2...v1.7.0-beta.3) (2025-06-17)
 
