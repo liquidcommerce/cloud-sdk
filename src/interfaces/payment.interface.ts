@@ -45,8 +45,6 @@ export interface ILiquidPaymentConfig {
   elementOptions?: ILiquidPaymentElementOptions;
 }
 
-
-
 /**
  * Interface representing the parameters required to confirm a session.
  *

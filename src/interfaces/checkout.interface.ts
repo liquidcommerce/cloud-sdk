@@ -105,7 +105,7 @@ export interface ICheckoutMarketingPreferences {
 }
 
 /**
- * Represents the delivery tip for a checkout.
+ * Represents the delivery tip for a checkout's specific fulfillment method.
  *
  * @interface
  */
@@ -113,6 +113,17 @@ export interface ICheckoutDeliveryTip {
   fulfillmentId: string;
 
   tip: number;
+}
+
+/**
+ * Represents the delivery instructions for a checkout's specific fulfillment method.
+ *
+ * @interface
+ */
+export interface ICheckoutDeliveryInstructions {
+  fulfillmentId: string;
+
+  instructions: string;
 }
 
 /**
@@ -147,6 +158,8 @@ export interface ICheckoutPrepareParams extends ICoreParams {
   marketingPreferences?: ICheckoutMarketingPreferences;
 
   deliveryTips?: ICheckoutDeliveryTip[];
+
+  deliveryInstructions?: ICheckoutDeliveryInstructions[];
 
   acceptedAccountCreation?: boolean;
 
@@ -246,6 +259,8 @@ export interface ICheckoutTotalAmounts {
  */
 export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
   id: string;
+
+  deliveryInstructions: string;
 
   scheduledFor?: string | Date;
 

@@ -49,7 +49,12 @@ import type {
   UserService,
   WebhookService,
 } from './services';
-import type { IApiResponseWithData, IApiResponseWithoutData, IAuth, ILiquidCommerceConfig } from './types';
+import type {
+  IApiResponseWithData,
+  IApiResponseWithoutData,
+  IAuth,
+  ILiquidCommerceConfig,
+} from './types';
 
 /**
  * The LiquidCommerceClient class is a client for interacting with the LiquidCommerce Cloud  APIs.
@@ -95,7 +100,11 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.singletonManager = SingletonManager.getInstance();
     const baseURL = this.determineBaseURL(config);
 
-    this.authenticatedClient = this.singletonManager.getAuthenticatedClient({ apiKey, baseURL, env: config.env });
+    this.authenticatedClient = this.singletonManager.getAuthenticatedClient({
+      apiKey,
+      baseURL,
+      env: config.env,
+    });
 
     this.addressService = this.singletonManager.getAddressService(this.authenticatedClient);
     this.catalogService = this.singletonManager.getCatalogService(this.authenticatedClient);
