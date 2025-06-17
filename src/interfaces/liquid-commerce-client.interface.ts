@@ -1,4 +1,4 @@
-import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig, } from '../types';
+import type { IApiResponseWithData, IApiResponseWithoutData, IAuth, ILiquidCommerceConfig } from '../types';
 import type {
   IAddressAutocompleteParams,
   IAddressAutocompleteResult,
@@ -6,14 +6,14 @@ import type {
   IAddressDetailsResult,
 } from './address.interface';
 import type { ICart, ICartUpdateParams } from './cart.interface';
-import type { IAvailabilityParams, IAvailabilityResponse, ICatalog, ICatalogParams, } from './catalog.interface';
+import type { IAvailabilityParams, IAvailabilityResponse, ICatalog, ICatalogParams } from './catalog.interface';
 import type {
   ICheckoutCompleteParams,
   ICheckoutCompleteResponse,
   ICheckoutPrepareParams,
   ICheckoutPrepareResponse,
 } from './checkout.interface';
-import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap, } from './payment.interface';
+import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './payment.interface';
 import type {
   BaseUser,
   IPurgeResponse,
@@ -21,8 +21,10 @@ import type {
   IUserAddress,
   IUserAddressParams,
   IUserPayment,
-  IUserPaymentAddParams, IUserPaymentParams,
-  IUserPaymentUpdateParams,
+  IUserPaymentAddParams,
+  IUserPaymentParams,
+  IUserPaymentSession,
+  IUserSession,
   IUserSessionParams,
 } from './user.interface';
 
@@ -41,6 +43,15 @@ export interface ILiquidCommerceClient {
    * @throws {Error} - Throws an error if initialization fails.
    */
   init(): Promise<void>;
+
+  /**
+   * Authenticates a service, initiating the authentication process and providing an
+   * authorization response.
+   *
+   * @return {Promise<IAuth>} A promise that resolves to an authentication service
+   * response containing details of the authentication process.
+   */
+  auth(): Promise<IAuth>;
 
   /**
    * Provides methods for performing address autocompletion and retrieving address details.
@@ -367,6 +378,58 @@ export interface IUserMethod {
   session: (params: IUserSessionParams) => Promise<IApiResponseWithData<IUser>>;
 
   /**
+   * Represents a payment session object used for the payment element mounting.
+   *
+   * @param {IUserPaymentSession} params - The parameters for creating a payment session.
+   * @returns {Promise<IApiResponseWithData<IUserSession>>} A Promise that resolves to the API response with user payment session.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const paymentSession = await liquidCommerce.user.paymentSession({
+   *     cartId: "6735340d5da29bac0eb78f7d",
+   *     customerEmail: "user@example.com"
+   *   });
+   *
+   *   console.log('User payment session:', paymentSession?.data);
+   * } catch (error) {
+   *   console.error('Failed to create user payment session:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the sessions request fails or if authentication is unsuccessful.
+   *
+   * @see {@link IUserPaymentSession} for the structure of the payment session request parameters.
+   * @see {@link IUserSession} for the structure of the user data returned.
+   */
+  paymentSession: (params: IUserPaymentSession) => Promise<IApiResponseWithData<IUserSession>>;
+
+  /**
+   * Confirms a payment session using a token from the payment element.
+   *
+   * @param {string} token - The payment token received from the payment provider (e.g., Stripe) after user interaction.
+   * @returns {Promise<IApiResponseWithData<ILiquidPaymentToken>>} A Promise that resolves to the API response with the confirmed payment token details.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   // Assume 'paymentElementToken' is obtained from the front-end after the user completes the payment steps.
+   *   const paymentElementToken = '1fa23fa4d5fad'; // Example token
+   *   const confirmedPayment = await liquidCommerce.user.confirmPaymentSession(paymentElementToken);
+   *
+   *   console.log('Confirmed payment session data:', confirmedPayment?.data);
+   * } catch (error) {
+   *   console.error('Failed to confirm payment session:', error);
+   * }
+   *
+   * @throws {Error} - Throws an error if the confirmation request fails or the token is invalid.
+   *
+   * @see {@link ILiquidPaymentToken} for the structure of the confirmed payment data returned.
+   */
+  confirmPaymentSession: (token: string) => Promise<IApiResponseWithData<ILiquidPaymentToken>>;
+
+  /**
    * Represents a user object without creating a new session.
    *
    * @param {string} identifier - The parameters for fetching a user.
@@ -535,7 +598,7 @@ export interface IUserMethod {
   /**
    * Updates a payment method for a user.
    *
-   * @param {IUserPaymentUpdateParams} params - The parameters for updating a payment method.
+   * @param {IUserPaymentParams} params - The parameters for updating a payment method.
    * @returns {Promise<IApiResponseWithData<IUserPayment>>} A promise that resolves to the API response with the updated payment method data.
    *
    * @example
@@ -558,7 +621,7 @@ export interface IUserMethod {
    * @see {@link IUserPaymentParams} for the structure of the update payment request parameters.
    * @see {@link IUserPayment} for the structure of the user's payment method data returned.
    */
-  updatePayment: (params: IUserPaymentParams | IUserPaymentUpdateParams) => Promise<IApiResponseWithData<boolean>>;
+  updatePayment: (params: IUserPaymentParams) => Promise<IApiResponseWithData<boolean>>;
 
   /**
    * Purges a payment method for a user.
@@ -858,4 +921,26 @@ export interface ICheckoutMethod {
   complete: (
     params: ICheckoutCompleteParams
   ) => Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>>;
+}
+
+export interface IWebhookMethod {
+  /**
+   * Retrieves whether the webhook test succeeded or not.
+   *
+   * @param {string} [endpoint] - The endpoint to test. If not provided, the default endpoint will be used.
+   * @returns {Promise<boolean>} A promise that resolves whether the test succeeded or not.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const testSucceeded = await liquidCommerce.webhook.test();
+   *   console.log('Webhook test succeeded:', testSucceeded);
+   * } catch (error) {
+   *   console.error('Failed to test Webhook:', error);
+   * }
+   *
+   * @throws {Error} Throws an error if the webhook test request fails or if authentication is unsuccessful.
+   */
+  test: (endpoint?: string) => Promise<boolean>;
 }

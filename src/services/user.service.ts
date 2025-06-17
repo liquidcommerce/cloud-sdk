@@ -1,6 +1,8 @@
-import type { AuthenticatedService } from '../core';
+import type { AuthenticatedService, PaymentSessionHelperService } from '../core';
+import type { LIQUID_COMMERCE_ENV } from '../enums';
 import type {
   BaseUser,
+  ILiquidPaymentToken,
   IPurgeResponse,
   IUser,
   IUserAddress,
@@ -8,7 +10,8 @@ import type {
   IUserPayment,
   IUserPaymentAddParams,
   IUserPaymentParams,
-  IUserPaymentUpdateParams,
+  IUserPaymentSession,
+  IUserSession,
   IUserSessionParams,
 } from '../interfaces';
 import type { IApiResponseWithData } from '../types';
@@ -19,7 +22,14 @@ import type { IApiResponseWithData } from '../types';
 export class UserService {
   private readonly servicePath = '/users';
 
-  constructor(private client: AuthenticatedService) {}
+  private readonly env: LIQUID_COMMERCE_ENV;
+
+  constructor(
+    private client: AuthenticatedService,
+    private paymentSessionHelperService: PaymentSessionHelperService
+  ) {
+    this.env = client.env;
+  }
 
   /**
    * Creates or updates a user session.
@@ -40,6 +50,65 @@ export class UserService {
         `${this.servicePath}/session`,
         params
       );
+    } catch (error) {
+      console.error('User session creation/update request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Creates a payment session for a user.
+   *
+   * @param {IUserPaymentSession} params - The parameters required to create the payment session.
+   * @return {Promise<IApiResponseWithData<IUserSession>>} A promise that resolves to the API
+   *  response containing the user session data.
+   */
+  public async createPaymentSession(
+    params: IUserPaymentSession
+  ): Promise<IApiResponseWithData<IUserSession>> {
+    try {
+      const response = await this.client.post<IApiResponseWithData<any>>(
+        `${this.servicePath}/payment-session`,
+        params
+      );
+
+      const data = this.paymentSessionHelperService.rcd(response?.data, this.env);
+
+      return {
+        ...response,
+        data,
+      };
+    } catch (error) {
+      console.error('User session creation/update request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Confirms and finalizes a payment session using the provided token.
+   *
+   * @param {string} token - The token representing the payment session to finalize.
+   * @return {Promise<IApiResponseWithData<ILiquidPaymentToken>>} A promise that resolves with the API
+   * response containing data about the finalized payment session.
+   */
+  public async finalizePaymentSession(
+    token: string
+  ): Promise<IApiResponseWithData<ILiquidPaymentToken>> {
+    try {
+      if (!token) {
+        throw new Error('Token is required');
+      }
+
+      const response = await this.client.get<IApiResponseWithData<ILiquidPaymentToken>>(
+        `${this.servicePath}/finalize-payment-session/${token}`
+      );
+
+      const data = this.paymentSessionHelperService.dd<ILiquidPaymentToken>(response?.data, token);
+
+      return {
+        ...response,
+        data,
+      };
     } catch (error) {
       console.error('User session creation/update request failed:', error);
       throw error;
@@ -283,9 +352,7 @@ export class UserService {
    *  the updated payment information.
    * @throws {Error} - Throws an error if required parameters are missing or the request fails.
    */
-  public async updatePayment(
-    params: IUserPaymentParams | IUserPaymentUpdateParams
-  ): Promise<IApiResponseWithData<boolean>> {
+  public async updatePayment(params: IUserPaymentParams): Promise<IApiResponseWithData<boolean>> {
     try {
       if (!params.customerId || !params.paymentMethodId) {
         throw new Error('Missing required parameters to add payment');

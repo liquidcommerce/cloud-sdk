@@ -4,7 +4,6 @@ import type {
   ICheckoutCompleteParams,
   ICheckoutCustomer,
   ICheckoutPrepareParams,
-  ICheckoutRecipient,
 } from '../interfaces';
 import type { LocationHelperService } from './location-helper.service';
 
@@ -35,9 +34,6 @@ export class CheckoutHelperService {
     // Validate Customer
     this.validateCustomer(normalizedParams.customer);
 
-    // Validate Recipient if provided
-    this.validateCustomer(normalizedParams.recipient);
-
     // Validate billingAddress if provided
     if (normalizedParams?.billingAddress) {
       this.validateBillingAddress(normalizedParams.billingAddress);
@@ -47,7 +43,6 @@ export class CheckoutHelperService {
       normalizedParams?.hasAgeVerify ??
         // @ts-expect-error - Due to recipient removal, this.validateCustomer is not used here.
         normalizedParams?.customer?.hasAgeVerify ??
-        normalizedParams?.recipient?.hasAgeVerify ??
         false
     );
 
@@ -86,20 +81,6 @@ export class CheckoutHelperService {
       };
     }
 
-    if (
-      normalizedParams &&
-      normalizedParams?.recipient &&
-      normalizedParams?.recipient?.phone !== ''
-    ) {
-      normalizedParams = {
-        ...normalizedParams,
-        customer: {
-          ...(normalizedParams?.recipient ?? {}),
-          phone: this.formatPhoneNumber(normalizedParams?.recipient?.phone) ?? '',
-        },
-      };
-    }
-
     // Validate giftOptions if isGift is true
     if (normalizedParams?.isGift) {
       this.validateGiftOptions(normalizedParams.giftOptions);
@@ -123,7 +104,12 @@ export class CheckoutHelperService {
     }
 
     // Validate marketingPreferences
-    this.validateMarketingPreferences(normalizedParams.marketingPreferences);
+    this.validateMarketingPreferences(normalizedParams?.marketingPreferences);
+
+    // Validate giftCards if provided
+    if (normalizedParams?.giftCards) {
+      normalizedParams.giftCards = this.validateGiftCards(normalizedParams?.giftCards ?? []);
+    }
 
     // Validate deliveryTips if provided
     if (normalizedParams?.deliveryTips) {
@@ -174,7 +160,7 @@ export class CheckoutHelperService {
    * Validates the recipient or customer information for a checkout.
    *
    * @param customer - The recipient or customer information to validate.
-   *                   Can be an object of type ICheckoutRecipient or ICheckoutCustomer,
+   *                   Can be an object of type ICheckoutCustomer,
    *                   or a string (presumably a customer ID).
    *
    * @throws {Error} Throws an error if any of the customer's information (firstName, lastName, phone, email) is present but not a string.
@@ -183,7 +169,7 @@ export class CheckoutHelperService {
    * If the customer is an object, it validates the firstName, lastName, phone, and email properties.
    * If hasAgeVerify is present, it converts it to a boolean value.
    */
-  private validateCustomer(customer?: ICheckoutRecipient | ICheckoutCustomer | string): void {
+  private validateCustomer(customer?: ICheckoutCustomer | string): void {
     if (customer && typeof customer === 'object') {
       const { firstName, lastName, phone, email } = customer;
       if (firstName && typeof firstName !== 'string')
@@ -250,6 +236,35 @@ export class CheckoutHelperService {
     }
 
     return normalizedAddress;
+  }
+
+  /**
+   * Validates and normalizes an array of gift cards. Ensures the provided input is an array of strings.
+   * Throws an error if the input is invalid.
+   *
+   * @param {string[]} [giftCards] - Optional array of gift card strings to validate.
+   * @return {string[]} A normalized array of gift card strings.
+   */
+  private validateGiftCards(giftCards?: string[]): string[] {
+    if (!giftCards || giftCards.length === 0) {
+      return [];
+    }
+
+    // Validate that address is an object if provided
+    if (!Array.isArray(giftCards)) {
+      throw new Error('Invalid gift cards: must be a string array if provided');
+    }
+
+    const normalizedGiftCards = [...giftCards];
+
+    // Only validate fields that are present
+    normalizedGiftCards.forEach((gc) => {
+      if (typeof gc !== 'string') {
+        throw new Error(`Invalid gift cards: must be a string array if provided`);
+      }
+    });
+
+    return normalizedGiftCards;
   }
 
   /**

@@ -35,12 +35,21 @@ import type {
   IUserPayment,
   IUserPaymentAddParams,
   IUserPaymentParams,
-  IUserPaymentUpdateParams,
+  IUserPaymentSession,
+  IUserSession,
   IUserSessionParams,
+  IWebhookMethod,
 } from './interfaces';
-import type { AddressService, CatalogService, CheckoutService, PaymentService, UserService, } from './services';
-import type { CartService } from './services/cart.service';
-import type { IApiResponseWithData, IApiResponseWithoutData, ILiquidCommerceConfig } from './types';
+import type {
+  AddressService,
+  CartService,
+  CatalogService,
+  CheckoutService,
+  PaymentService,
+  UserService,
+  WebhookService,
+} from './services';
+import type { IApiResponseWithData, IApiResponseWithoutData, IAuth, ILiquidCommerceConfig } from './types';
 
 /**
  * The LiquidCommerceClient class is a client for interacting with the LiquidCommerce Cloud  APIs.
@@ -68,6 +77,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
 
   private checkoutService: CheckoutService;
 
+  private webhookService: WebhookService;
+
   private config: ILiquidCommerceConfig;
 
   private singletonManager: SingletonManager;
@@ -83,13 +94,16 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.config = config;
     this.singletonManager = SingletonManager.getInstance();
     const baseURL = this.determineBaseURL(config);
-    this.authenticatedClient = this.singletonManager.getAuthenticatedClient({ apiKey, baseURL });
+
+    this.authenticatedClient = this.singletonManager.getAuthenticatedClient({ apiKey, baseURL, env: config.env });
+
     this.addressService = this.singletonManager.getAddressService(this.authenticatedClient);
     this.catalogService = this.singletonManager.getCatalogService(this.authenticatedClient);
     this.cartService = this.singletonManager.getCartService(this.authenticatedClient);
     this.userService = this.singletonManager.getUserService(this.authenticatedClient);
     this.paymentService = this.singletonManager.getPaymentService(this.authenticatedClient);
     this.checkoutService = this.singletonManager.getCheckoutService(this.authenticatedClient);
+    this.webhookService = this.singletonManager.getWebhookService(this.authenticatedClient);
   }
 
   /**
@@ -132,6 +146,21 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
   private async ensureAuthenticated(): Promise<void> {
     if (this.authenticatedClient.isTokenExpired()) {
       await this.authenticatedClient.authenticate();
+    }
+  }
+
+  /**
+   * Authenticates the client by using the authenticatedClient instance to fetch authentication details.
+   * Handles errors and logs them if the authentication process fails.
+   *
+   * @return {Promise<IAuth>} A promise that resolves to the authentication service response.
+   */
+  public async auth(): Promise<IAuth> {
+    try {
+      return await this.authenticatedClient.getAuth();
+    } catch (error) {
+      console.error('Failed to fetch auth:', error);
+      throw new Error('Authentication failed during initialization');
     }
   }
 
@@ -219,7 +248,11 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *
    * @property {function(params: IUserSessionParams): Promise<IApiResponseWithData<IUser>>} session -
    *    Method for creating or updating a user session.
-   * @property {function(dentifier: string): Promise<IApiResponseWithData<BaseUser>>} session -
+   * @property {function(params: IUserPaymentSession): Promise<IApiResponseWithData<IUserSession>>} paymentSession -
+   *    Method for creating a user payment session.
+   * @property {function(token: string): Promise<IApiResponseWithData<ILiquidPaymentToken>>} confirmPaymentSession -
+   *    Method for confirming a user payment session.
+   * @property {function(dentifier: string): Promise<IApiResponseWithData<BaseUser>>} fetch -
    *    Method for fetching user data.
    * @property {function(identifier: string): Promise<IApiResponseWithData<IPurgeResponse>>} purge -
    *    Method for purging a user's data from the system.
@@ -231,7 +264,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *    Method for purging a user's address.
    * @property {function(params: IUserPaymentAddParams): Promise<IApiResponseWithData<IUserPayment>>} addPayment -
    *    Method for adding a new payment method for a user.
-   * @property {function(params: IUserPaymentParams | IUserPaymentUpdateParams): Promise<IApiResponseWithData<boolean>>} updatePayment -
+   * @property {function(params: IUserPaymentParams): Promise<IApiResponseWithData<boolean>>} updatePayment -
    *    Method for updating an existing payment method for a user.
    * @property {function(customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>>} purgePayment -
    *    Method for purging a user's payment method.
@@ -239,7 +272,6 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    * @see {@link IUserSessionParams} for the structure of the session request parameters.
    * @see {@link IUserAddressParams} for the structure of the address add/update request parameters.
    * @see {@link IUserPaymentAddParams} for the structure of the payment add request parameters.
-   * @see {@link IUserPaymentUpdateParams} for the structure of the payment update request parameters.
    * @see {@link IUserPaymentParams} for the structure of the payment update request parameters.
    * @see {@link IUser} for the structure of the user session data returned.
    * @see {@link BaseUser} for the structure of the user data returned.
@@ -251,6 +283,18 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     session: async (params: IUserSessionParams): Promise<IApiResponseWithData<IUser>> => {
       await this.ensureAuthenticated();
       return this.userService.createOrUpdateSession(params);
+    },
+    paymentSession: async (
+      params: IUserPaymentSession
+    ): Promise<IApiResponseWithData<IUserSession>> => {
+      await this.ensureAuthenticated();
+      return this.userService.createPaymentSession(params);
+    },
+    confirmPaymentSession: async (
+      token: string
+    ): Promise<IApiResponseWithData<ILiquidPaymentToken>> => {
+      await this.ensureAuthenticated();
+      return this.userService.finalizePaymentSession(token);
     },
     fetch: async (identifier: string): Promise<IApiResponseWithData<BaseUser>> => {
       await this.ensureAuthenticated();
@@ -280,9 +324,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       await this.ensureAuthenticated();
       return this.userService.addPayment(params);
     },
-    updatePayment: async (
-      params: IUserPaymentParams | IUserPaymentUpdateParams
-    ): Promise<IApiResponseWithData<boolean>> => {
+    updatePayment: async (params: IUserPaymentParams): Promise<IApiResponseWithData<boolean>> => {
       await this.ensureAuthenticated();
       return this.userService.updatePayment(params);
     },
@@ -387,6 +429,22 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     ): Promise<IApiResponseWithoutData<ICheckoutCompleteResponse>> => {
       await this.ensureAuthenticated();
       return this.checkoutService.complete(params);
+    },
+  };
+
+  /**
+   * Webhook object that provides methods for testing webhook functionality.
+   *
+   * @interface IWebhookMethod webhook
+   *
+   * @property {function(endpoint?: string): Promise<boolean>} test -
+   *   Method to test the webhook functionality by sending a test request to the specified endpoint.
+   *   Or if no endpoint is provided, it will use the default endpoint configured in the system.
+   */
+  public webhook: IWebhookMethod = {
+    test: async (endpoint?: string): Promise<boolean> => {
+      await this.ensureAuthenticated();
+      return this.webhookService.test(endpoint);
     },
   };
 }

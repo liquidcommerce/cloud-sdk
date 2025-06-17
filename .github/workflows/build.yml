@@ -12,23 +12,27 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js and pnpm
-        uses: actions/setup-node@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        # No version needed - reads from package.json packageManager field
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org/'
 
-      - name: Install pnpm
-        run: |
-          npm install -g pnpm@9.5.0
-          pnpm install
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Lint and test
-        run: |
-          pnpm format
-          pnpm lint
+      - name: Lint code
+        run: pnpm run lint
 
-      - name: Build SDK
-        run: pnpm build
+      - name: Build package
+        run: pnpm run build
+
+      - name: Verify package can be packed
+        run: pnpm pack

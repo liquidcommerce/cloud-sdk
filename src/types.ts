@@ -52,12 +52,27 @@ export type IApiResponseWithData<T> = IApiResponseBase & {
   data: T;
 };
 
+export type AuthServiceResponse = IApiResponseWithData<IAuth>;
+
 export type IApiResponseWithoutData<T> = IApiResponseBase & {
   [K in keyof T]: T[K];
 };
 
 export interface ILiquidCommerceConfig {
   googlePlacesApiKey: string;
+
+  env: LIQUID_COMMERCE_ENV;
+
+  baseUrl?: {
+    stage?: string;
+    // prod?: string;
+  };
+}
+
+export interface ILiquidCommerceOrderConfig {
+  userID: string;
+
+  password: string;
 
   env: LIQUID_COMMERCE_ENV;
 

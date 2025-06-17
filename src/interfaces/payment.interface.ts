@@ -39,11 +39,13 @@ export interface ILiquidPaymentConfig {
   elementId: string;
 
   appearance?: {
-    theme?: 'default' | 'night' | 'flat';
+    theme?: 'stripe' | 'night' | 'flat';
   };
 
   elementOptions?: ILiquidPaymentElementOptions;
 }
+
+
 
 /**
  * Interface representing the parameters required to confirm a session.
@@ -142,6 +144,19 @@ export interface IPaymentElementEventMap {
 
   loaderstart: { elementType: 'payment' };
 }
+
+/**
+ * Parameters for creating a Stripe Confirmation Token using the UI helper.
+ */
+export interface IConfirmationTokenClientParams {
+  returnUrl?: string;
+}
+
+export interface IConfirmationTokenPayload {
+  token: string;
+}
+
+export type IConfirmationTokenResponse = IConfirmationTokenPayload | ILiquidPaymentError;
 
 /**
  * Interface representing a payment provider that integrates with a Liquid payment gateway.

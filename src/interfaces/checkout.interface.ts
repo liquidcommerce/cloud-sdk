@@ -1,61 +1,8 @@
+import type { CHECKOUT_EVENT_ENUM } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
 import type { ICartItemAttributes } from './cart.interface';
 import type { IRetailerExpectation } from './retailer.interface';
-
-/**
- * Represents a recipient of a checkout process.
- *
- * Contains recipient's information such as name, contact details, and
- * an optional flag for age verification.
- *
- * @interface
- * @public
- * @deprecated Use ICheckoutCustomer interface instead.
- * ICheckoutRecipient will be removed in a future version.
- */
-export interface ICheckoutRecipient {
-  firstName?: string;
-
-  lastName?: string;
-
-  email?: string;
-
-  phone?: string;
-
-  birthDate?: string;
-
-  hasAgeVerify?: boolean;
-}
-
-/**
- * Represents a traditional billing address structure.
- *
- * @interface
- * @public
- * @deprecated Use ICheckoutBillingAddress instead for better integration with customer data.
- */
-export interface IBillingAddress {
-  firstName?: string;
-
-  lastName?: string;
-
-  email?: string;
-
-  phone?: string;
-
-  one?: string;
-
-  two?: string;
-
-  city?: string;
-
-  state?: string;
-
-  zip?: string;
-
-  country?: string;
-}
 
 /**
  * Represents a customer in a checkout process.
@@ -82,12 +29,6 @@ export interface ICheckoutCustomer {
   profileImage?: string;
 
   birthDate?: string;
-
-  /**
-   * @deprecated - Moved to ICheckoutPrepareParams
-   * @type {ICheckoutPrepareParams}
-   */
-  hasAgeVerify?: boolean;
 
   createdAt?: Date;
 
@@ -186,20 +127,14 @@ export interface ICheckoutPrepareParams extends ICoreParams {
 
   customer?: ICheckoutCustomer | string;
 
-  /**
-   * @deprecated Use customer property instead. Recipient will be removed in a future version.
-   */
-  recipient?: ICheckoutRecipient;
-
   hasAgeVerify?: boolean;
 
   shippingAddressTwo?: string;
 
   /**
    * Billing address information supporting both new and legacy formats.
-   * Recommended to use ICheckoutBillingAddress format for new implementations.
    */
-  billingAddress?: ICheckoutBillingAddress | IBillingAddress;
+  billingAddress?: ICheckoutBillingAddress;
 
   hasSubstitutionPolicy?: boolean;
 
@@ -218,6 +153,10 @@ export interface ICheckoutPrepareParams extends ICoreParams {
   scheduledDelivery?: string;
 
   payment?: string;
+
+  promoCode?: string;
+
+  giftCards?: string[];
 }
 
 /**
@@ -381,16 +320,13 @@ export interface ICheckoutItem {
 
   mainImage: string;
 
-  /**
-   * @deprecated - use mainImage
-   */
-  image: string;
-
   brand: string;
 
   partNumber: string;
 
   upc: string;
+
+  sku: string;
 
   price: number;
 
@@ -405,6 +341,41 @@ export interface ICheckoutItem {
   bottleDeposits: number;
 
   attributes: ICartItemAttributes;
+}
+
+/**
+ * Interface representing a gift card utilized during checkout.
+ *
+ * This interface defines the structure for a gift card,
+ * including its code, the amount applied during the transaction,
+ * and any remaining balance on the card.
+ *
+ * Properties:
+ * - `code`: The unique code of the gift card used for identification.
+ * - `applied`: The amount deducted from the gift card during the current transaction.
+ * - `balance`: The remaining balance on the gift card after the applied amount is deducted.
+ */
+export interface ICheckoutGiftCard {
+  code: string;
+
+  applied: number;
+
+  balance: number;
+}
+
+/**
+ * Interface representing events related to the checkout process.
+ * This interface defines the structure for any event emitted or handled
+ * during the checkout workflow, including the type of event and its corresponding message.
+ *
+ * @interface ICheckoutEvents
+ * @property {CHECKOUT_EVENT_ENUM} type - The type of the checkout event.
+ * @property {string} message - A message providing additional context or details about the event.
+ */
+export interface ICheckoutEvents {
+  type: CHECKOUT_EVENT_ENUM;
+
+  message: string;
 }
 
 /**
@@ -441,9 +412,8 @@ export interface ICheckoutPrepareResponse {
 
   /**
    * Billing address information supporting both new and legacy formats.
-   * Recommended to use ICheckoutBillingAddress format for new implementations.
    */
-  billingAddress: ICheckoutBillingAddress | IBillingAddress;
+  billingAddress: ICheckoutBillingAddress;
 
   amounts: ICheckoutTotalAmounts;
 
@@ -452,6 +422,12 @@ export interface ICheckoutPrepareResponse {
   retailers: ICheckoutRetailer[];
 
   payment?: string;
+
+  giftCards: ICheckoutGiftCard[];
+
+  events: ICheckoutEvents[];
+
+  promoCode: string;
 }
 
 /**
@@ -474,7 +450,7 @@ export interface ICheckoutCompleteParams extends ICoreParams {
  */
 export interface ICheckoutCompleteResponse {
   order: {
-    number: string;
+    legacyOrderNumber: string;
 
     referenceId: string;
   };

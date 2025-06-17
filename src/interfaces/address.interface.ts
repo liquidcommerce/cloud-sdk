@@ -114,9 +114,12 @@ export interface IAddressDetailsParams extends ICoreParams {
  *
  * @property {string} formattedAddress - The formatted address as a string.
  * @property {ICoords} coords - The coordinates associated with the address.
+ * @property {Omit<IAddress, 'id'>} address - The address object containing all address fields except the id property.
  */
 export interface IAddressDetailsResult {
   formattedAddress: string;
 
   coords: ICoords;
+
+  address: Omit<IAddress, 'id'>;
 }

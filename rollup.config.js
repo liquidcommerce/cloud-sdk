@@ -5,8 +5,8 @@ import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
-// import livereload from 'rollup-plugin-livereload';
-// import serve from 'rollup-plugin-serve';
+import livereload from 'rollup-plugin-livereload';
+import serve from 'rollup-plugin-serve';
 
 dotenv.config();
 
@@ -14,18 +14,22 @@ const require = createRequire(import.meta.url);
 
 const pkg = require('./package.json');
 
-const env = 'production';
+// Get environment from NODE_ENV or default to development
+const env = process.env.NODE_ENV || 'development';
 const isProd = env === 'production';
+const isDev = !isProd;
 
-const sourcemap = false;
+const sourcemap = isDev; // Enable sourcemaps in development
 
 const commonPlugins = [
   replace({
     preventAssignment: true,
     values: {
       'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.NODE_ENV': JSON.stringify(env),
       'process.env.GOOGLE_PLACES_API_KEY': JSON.stringify(process.env.GOOGLE_PLACES_API_KEY),
+      'process.env.ORDER_API_USER': JSON.stringify(process.env.ORDER_API_USER),
+      'process.env.ORDER_API_PASSWORD': JSON.stringify(process.env.ORDER_API_PASSWORD),
       'process.env.ENV_LOC': JSON.stringify(process.env.ENV_LOC),
       'process.env.ENV_DEV': JSON.stringify(process.env.ENV_DEV),
       'process.env.ENV_STAGE': JSON.stringify(process.env.ENV_STAGE),
@@ -46,21 +50,18 @@ const commonPlugins = [
     preferBuiltins: false,
   }),
   commonjs(),
-
-  /*
-  *
-  * Run only for demo purposes
-  *
-  * */
-
-  // serve({
-  //   open: false,
-  //   contentBase: ['.', 'demo'], // Serve from root and demo directories
-  //   host: 'localhost',
-  //   port: 3000,
-  // }),
-  // livereload({ watch: ['dist', 'demo'] }),
 ];
+
+// Development-only plugins
+const devPlugins = isDev ? [
+  serve({
+    open: false,
+    contentBase: ['.', 'demo'],
+    host: 'localhost',
+    port: 3000,
+  }),
+  livereload({ watch: ['dist', 'demo'] }),
+] : [];
 
 export default [
   // ESM build
@@ -71,7 +72,7 @@ export default [
       format: 'es',
       sourcemap,
     },
-    plugins: [...commonPlugins, terser()],
+    plugins: [...commonPlugins, ...devPlugins, isProd && terser()].filter(Boolean),
     external: ['@stripe/stripe-js'],
   },
   // CommonJS build
@@ -83,7 +84,7 @@ export default [
       sourcemap,
       exports: 'named',
     },
-    plugins: [...commonPlugins, terser()],
+    plugins: [...commonPlugins, ...devPlugins, isProd && terser()].filter(Boolean),
     external: ['@stripe/stripe-js'],
   },
   // UMD build (separate directory)
@@ -101,11 +102,12 @@ export default [
     },
     plugins: [
       ...commonPlugins,
+      ...devPlugins,
       replace({
         'typeof window': JSON.stringify('object'),
         preventAssignment: true,
       }),
-      terser({
+      isProd && terser({
         compress: {
           drop_console: true,
           passes: 3,
@@ -115,13 +117,13 @@ export default [
           properties: {
             regex: /^_/,
           },
-          reserved: ['LiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
+          reserved: ['LiquidCommerce', 'OrderLiquidCommerce', 'LIQUID_COMMERCE_ENV'],
         },
         output: {
           comments: false,
         },
       }),
-    ],
+    ].filter(Boolean),
   },
   // SSR build
   {
@@ -148,13 +150,13 @@ export default [
           properties: {
             regex: /^_/,
           },
-          reserved: ['LiquidCommerce', 'LIQUID_COMMERCE_ENV'], // Prevent mangling of these globals
+          reserved: ['LiquidCommerce', 'OrderLiquidCommerce', 'LIQUID_COMMERCE_ENV'],
         },
         output: {
           comments: false,
         },
       }),
-    ],
+    ].filter(Boolean),
     external: ['@stripe/stripe-js'],
   },
 ];

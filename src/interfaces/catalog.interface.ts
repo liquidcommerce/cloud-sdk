@@ -1,5 +1,6 @@
 import type {
   ENUM_AVAILABILITY_VALUE,
+  ENUM_BINARY_FILTER,
   ENUM_ENGRAVING,
   ENUM_FILTER_KEYS,
   ENUM_MODALITIES,
@@ -66,7 +67,24 @@ export interface IFulfillmentFilter {
 export interface IEngravingFilter {
   key: ENUM_FILTER_KEYS.ENGRAVING | 'engraving';
 
-  values: ENUM_ENGRAVING | keyof typeof ENUM_ENGRAVING;
+  values:
+    | ENUM_BINARY_FILTER
+    | keyof typeof ENUM_BINARY_FILTER
+    | ENUM_ENGRAVING
+    | keyof typeof ENUM_ENGRAVING;
+}
+
+/**
+ * The IPresaleFilter interface defines the structure for filtering presale items in a given context.
+ * It includes properties for specifying the filter key and the filter values.
+ *
+ * @property {ENUM_FILTER_KEYS.PRESALE | 'presale'} key - The key indicating the type of filter, specific to presale.
+ * @property {ENUM_BINARY_FILTER | keyof typeof ENUM_BINARY_FILTER} values - The values associated with the presale filter, which can be enumerable binary filter values.
+ */
+export interface IPresaleFilter {
+  key: ENUM_FILTER_KEYS.PRESALE | 'presale';
+
+  values: ENUM_BINARY_FILTER | keyof typeof ENUM_BINARY_FILTER;
 }
 
 /**
@@ -103,6 +121,8 @@ export interface ICatalogParams extends ILocBase {
 
   visitorId?: string;
 
+  retailers?: string[];
+
   orderBy?: ENUM_ORDER_BY;
 
   orderDirection?: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE;
@@ -113,6 +133,7 @@ export interface ICatalogParams extends ILocBase {
     | IAvailabilityFilter
     | IFulfillmentFilter
     | IEngravingFilter
+    | IPresaleFilter
     | IFilter
   >;
 }
@@ -134,7 +155,7 @@ export interface ICatalog {
  * It is designed to hold a specific value and its associated count.
  */
 export interface IFilterValue {
-  value: LiquidTaxonomy | ENUM_AVAILABILITY_VALUE | string;
+  value: LiquidTaxonomy | ENUM_AVAILABILITY_VALUE | ENUM_BINARY_FILTER | string;
 
   count: number;
 }
@@ -151,6 +172,7 @@ export type FacetFilterKeys =
   | ENUM_FILTER_KEYS.REGION
   | ENUM_FILTER_KEYS.VARIETY
   | ENUM_FILTER_KEYS.ENGRAVING
+  | ENUM_FILTER_KEYS.PRESALE
   | ENUM_FILTER_KEYS.PRICE
   | ENUM_FILTER_KEYS.AVAILABILITY
   | ENUM_FILTER_KEYS.CATEGORIES
@@ -404,12 +426,43 @@ export interface IProductSizeEngraving {
 }
 
 /**
+ * Interface representing a product presale.
+ *
+ * @interface IProductPresale
+ *
+ * @property {null | string} canPurchaseOn - The date when the product can be added to the cart.
+ *                                      If null, the canPurchaseOn date is not set.
+ *
+ * @property {null | string} estimatedShipBy - The date when the product is expected to ship.
+ *                                      If null, the estimatedShipBy date is not set.
+ *
+ * @property {boolean} isActive - Indicates whether the presale is currently active.
+ *
+ * @property {string} language - The language associated with the product presale.
+ */
+export interface IProductPresale {
+  canPurchaseOn: null | string;
+
+  estimatedShipBy: null | string;
+
+  isActive: boolean;
+
+  language: string;
+}
+
+/**
  * Interface representing attributes related to the size of a product.
  *
  * @property {IProductSizeEngraving} [engraving] - Optional engraving details for the product size.
  */
 export interface IProductSizeAttributes {
-  engraving?: IProductSizeEngraving;
+  salsifyPid?: string;
+
+  salsifyGrouping?: string;
+
+  presale: IProductPresale;
+
+  engraving: IProductSizeEngraving;
 }
 
 /**
@@ -447,6 +500,20 @@ export interface IProductSize {
   variants: IProductVariant[];
 }
 
+/**
+ * Represents product price information.
+ *
+ * @interface IProductPriceInfo
+ */
+export interface IProductPriceInfo {
+  currency: string;
+
+  minimum: number;
+
+  average: number;
+
+  maximum: number;
+}
 
 /**
  * Represents a product with various attributes and details.
@@ -503,4 +570,6 @@ export interface IProduct {
   sizes: IProductSize[];
 
   attributes?: Partial<IAttributes>;
+
+  priceInfo: IProductPriceInfo | null;
 }

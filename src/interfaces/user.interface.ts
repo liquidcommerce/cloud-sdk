@@ -1,6 +1,12 @@
 import type { ENUM_ADDRESS_TYPE } from '../enums';
 import type { ICoreParams } from '../types';
 
+export interface IUserSessionOb {
+  values?: [string, string[]];
+
+  createdAt: Date;
+}
+
 /**
  * Represents a user session with key and secret used for authentication.
  */
@@ -178,6 +184,19 @@ export interface IUserSessionParams extends ICoreParams {
 }
 
 /**
+ * Interface representing a user payment session.
+ */
+export interface IUserPaymentSession {
+  cartId?: string;
+
+  checkoutToken?: string;
+
+  customerId?: string;
+
+  customerEmail?: string;
+}
+
+/**
  * Interface representing the response from a purge operation.
  */
 export interface IPurgeResponse {
@@ -241,14 +260,4 @@ export interface IUserPaymentParams extends ICoreParams {
  */
 export interface IUserPaymentAddParams extends IUserPaymentParams {
   isDefault?: boolean;
-}
-
-/**
- *
- * @deprecated - Use IUserPaymentParams
- *
- * @interface IUserPaymentParams
- */
-export interface IUserPaymentUpdateParams extends IUserPaymentParams {
-  isDefault: boolean;
 }

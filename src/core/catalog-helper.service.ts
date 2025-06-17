@@ -1,7 +1,7 @@
 import {
   ENUM_AVAILABILITY_VALUE,
   ENUM_BEER,
-  ENUM_ENGRAVING,
+  ENUM_BINARY_FILTER,
   ENUM_FILTER_KEYS,
   ENUM_FOOD,
   ENUM_MERCHANDISE,
@@ -82,6 +82,43 @@ export class CatalogHelperService {
   }
 
   /**
+   * Validates if a string is a valid MongoDB ObjectId format
+   * @param {string} id - The string to validate
+   * @returns {boolean} - Whether the string is a valid ObjectId format
+   */
+  private isValidObjectId(id: string): boolean {
+    if (!id || typeof id !== 'string') return false;
+    return /^[0-9a-fA-F]{24}$/.test(id);
+  }
+
+  /**
+   * Validates the retailers array parameter
+   * @param {string[]} retailers - Array of retailer IDs to validate
+   * @param {string[]} errors - Array to collect validation errors
+   */
+  private validateRetailers(retailers: string[] | undefined, errors: string[]): void {
+    if (retailers !== undefined) {
+      if (!Array.isArray(retailers)) {
+        errors.push('Retailers must be an array');
+      } else {
+        // Check array length
+        if (retailers.length > 20) {
+          errors.push('Retailers array can have a maximum of 20 values');
+        }
+
+        // Check each retailer ID
+        retailers.forEach((retailerId, index) => {
+          if (typeof retailerId !== 'string') {
+            errors.push(`Retailer at index ${index} must be a string`);
+          } else if (!this.isValidObjectId(retailerId)) {
+            errors.push(`Retailer ID at index ${index} must be a valid ObjectId string`);
+          }
+        });
+      }
+    }
+  }
+
+  /**
    * Validates and normalizes the search parameters for catalog search.
    *
    * @param {ICatalogParams} params - The search parameters to be validated and normalized.
@@ -93,6 +130,7 @@ export class CatalogHelperService {
     const errors: string[] = [];
     const normalizedParams = { ...params };
 
+    this.validateRetailers(normalizedParams.retailers, errors);
     this.validateOrderBy(normalizedParams.orderBy, errors);
     this.validateOrderDirection(normalizedParams.orderDirection, errors);
     this.validateFilters(normalizedParams.filters, errors);
@@ -190,7 +228,10 @@ export class CatalogHelperService {
           this.validateFulfillmentFilter(filter.values as ENUM_MODALITIES[], errors);
           break;
         case ENUM_FILTER_KEYS.ENGRAVING:
-          this.validateEngravingFilter(filter.values as ENUM_ENGRAVING, errors);
+          this.validateBinaryFilter(filter.values as ENUM_BINARY_FILTER, errors);
+          break;
+        case ENUM_FILTER_KEYS.PRESALE:
+          this.validateBinaryFilter(filter.values as ENUM_BINARY_FILTER, errors);
           break;
         case ENUM_FILTER_KEYS.CATEGORIES:
           this.validateCategoriesFilter(filter.values as LiquidTaxonomy[], errors);
@@ -271,14 +312,15 @@ export class CatalogHelperService {
   }
 
   /**
-   * Validates if the provided engraving filter value is one of the allowed enums.
+   * Validates the given binary filter value against the ENUM_BINARY_FILTER.
+   * If the value is not valid, it adds an appropriate error message to the errors array.
    *
-   * @param value The engraving filter value to be validated.
-   * @param errors An array that collects error messages encountered during validation.
-   * @return void
+   * @param {ENUM_BINARY_FILTER} value - The binary filter value to validate.
+   * @param {string[]} errors - The array to push error messages into if validation fails.
+   * @return {void}
    */
-  private validateEngravingFilter(value: ENUM_ENGRAVING, errors: string[]): void {
-    if (!Object.values(ENUM_ENGRAVING).includes(value)) {
+  private validateBinaryFilter(value: ENUM_BINARY_FILTER, errors: string[]): void {
+    if (!Object.values(ENUM_BINARY_FILTER).includes(value)) {
       errors.push(`Invalid availability value: ${value}`);
     }
   }
