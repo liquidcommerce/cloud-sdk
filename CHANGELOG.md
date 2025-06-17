@@ -1,3 +1,10 @@
+# [1.7.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0-beta.2...v1.7.0-beta.3) (2025-06-17)
+
+
+### Features
+
+* **payment:** add payment session confirmation and enhance theme support ([ee05c36](https://github.com/liquidcommerce/cloud-sdk/commit/ee05c36a7663c1e759ac6b39875c7682d6c0c2eb))
+
 # [1.7.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0-beta.1...v1.7.0-beta.2) (2025-06-10)
 
 
