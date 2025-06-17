@@ -104,9 +104,7 @@ export class PaymentSessionHelperService {
     if (d && k) {
       try {
         const c =
-          typeof atob === 'function'
-            ? atob(d)
-            : Buffer.from(d, 'base64').toString('binary');
+          typeof atob === 'function' ? atob(d) : Buffer.from(d, 'base64').toString('binary');
 
         let p = '';
         for (let i = 0; i < c.length; i++) {

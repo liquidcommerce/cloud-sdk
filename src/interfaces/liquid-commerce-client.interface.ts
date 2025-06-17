@@ -1,4 +1,9 @@
-import type { IApiResponseWithData, IApiResponseWithoutData, IAuth, ILiquidCommerceConfig } from '../types';
+import type {
+  IApiResponseWithData,
+  IApiResponseWithoutData,
+  IAuth,
+  ILiquidCommerceConfig,
+} from '../types';
 import type {
   IAddressAutocompleteParams,
   IAddressAutocompleteResult,
@@ -6,14 +11,23 @@ import type {
   IAddressDetailsResult,
 } from './address.interface';
 import type { ICart, ICartUpdateParams } from './cart.interface';
-import type { IAvailabilityParams, IAvailabilityResponse, ICatalog, ICatalogParams } from './catalog.interface';
+import type {
+  IAvailabilityParams,
+  IAvailabilityResponse,
+  ICatalog,
+  ICatalogParams,
+} from './catalog.interface';
 import type {
   ICheckoutCompleteParams,
   ICheckoutCompleteResponse,
   ICheckoutPrepareParams,
   ICheckoutPrepareResponse,
 } from './checkout.interface';
-import type { ILiquidPaymentConfig, ILiquidPaymentToken, IPaymentElementEventMap } from './payment.interface';
+import type {
+  ILiquidPaymentConfig,
+  ILiquidPaymentToken,
+  IPaymentElementEventMap,
+} from './payment.interface';
 import type {
   BaseUser,
   IPurgeResponse,

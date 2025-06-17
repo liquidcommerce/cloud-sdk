@@ -21,7 +21,8 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
   - [Catalog](#catalog)
   - [Cart](#cart)
   - [User](#user)
-  - [Payment](#payment)
+  - [Payment Element](#payment-element)
+  - [Legacy Payment](#legacy-payment)
   - [Checkout](#checkout)
   - [Order](#order)
   - [Webhook](#webhook)
@@ -63,10 +64,10 @@ const client = await LiquidCommerce('YOUR_LIQUIDCOMMERCE_API_KEY', {
 
 LiquidCommerce provides a separate authentication mechanism for Order API endpoints. The Order client uses Basic Authentication with a username and password.
 
-Example using OrderLiquidCommerce client:
+Example using LiquidCommerceOrders client:
 
 ```typescript
-const orderClient = await OrderLiquidCommerce({
+const orderClient = await LiquidCommerceOrders({
   userID: 'YOUR_ORDER_API_USER_ID',
   password: 'YOUR_ORDER_API_PASSWORD',
   env: LIQUID_COMMERCE_ENV.STAGE, // or PROD
@@ -288,13 +289,112 @@ await client.user.purgeAddress('address_id');
 await client.user.purgePayment('customer_id', 'payment_id');
 ```
 
-### Payment
+### Payment Element
 
-The payment system uses secure elements for handling sensitive payment data. Before using payment features, you must first create a user session.
+The Payment Element is a secure and modern UI component for collecting payment details. It simplifies PCI compliance by handling all sensitive information within an iframe.
 
 #### Prerequisites
 
-1. User Session Creation:
+Before mounting the Payment Element, you must create a payment session. This can be tied to a user, cart, or checkout.
+
+```typescript
+// Create a payment session to get a client secret
+const paymentSession = await client.user.paymentSession({
+  // Optionally link to a cart, checkout, or customer
+  // cartId: 'your_cart_id',
+  // checkoutToken: 'your_checkout_token',
+  // customerId: 'your_customer_id',
+});
+
+const { key, secret } = paymentSession.data.session;
+```
+
+#### Integration
+
+1.  **Initialize and Mount**
+
+    The `LiquidCommercePaymentElement` function creates and manages the UI component.
+
+    ```typescript
+    // Initialize the payment element
+    const paymentElement = LiquidCommercePaymentElement({
+      session: {
+        key, // Public key from payment session
+        secret, // Client secret from payment session
+      },
+    });
+
+    // Mount the element to a container in your DOM
+    await paymentElement.mount({
+      elementId: 'payment-element-container',
+      appearance: {
+        theme: 'night', // 'stripe' | 'night' | 'flat'
+      },
+      elementOptions: {
+        layout: 'tabs', // 'tabs' | 'accordion' | 'auto'
+      },
+    });
+    ```
+
+2.  **Generate a Confirmation Token**
+
+    Once the user has filled out the payment form, create a confirmation token. This token securely represents the payment details.
+
+    ```typescript
+    const result = await paymentElement.createConfirmationToken({
+      returnUrl: 'https://your-return-url.com/checkout/confirm',
+    });
+
+    if (result.token) {
+      // Token successfully created
+      const confirmationToken = result.token;
+      // Use this token to complete the checkout or save the payment method
+    } else {
+      // Handle error
+      console.error(result.message);
+    }
+    ```
+
+3.  **Confirm the Payment Session**
+
+    Use the confirmation token to finalize the payment and retrieve the payment method details.
+
+    ```typescript
+    const confirmation = await client.user.confirmPaymentSession(confirmationToken);
+
+    if (confirmation.data) {
+      const paymentMethod = confirmation.data;
+      // Now you have the payment method ID, card details, etc.
+      // e.g., paymentMethod.id, paymentMethod.card.brand
+    }
+    ```
+
+4.  **Lifecycle Management**
+
+    Properly manage the element's lifecycle to ensure a smooth user experience and resource cleanup.
+
+    ```typescript
+    // Listen to events
+    paymentElement.subscribe('ready', () => {
+      console.log('Payment element is ready.');
+    });
+
+    paymentElement.subscribe('change', (event) => {
+      // Handle form state changes (e.g., enable/disable submit button)
+    });
+
+    // Clean up when the element is no longer needed
+    paymentElement.unmount();
+    paymentElement.destroy();
+    ```
+
+### Legacy Payment
+
+The legacy payment system uses a previous version of our payment integration. For new integrations, we strongly recommend using the [Payment Element](#payment-element) for a more secure and flexible solution.
+
+#### Prerequisites
+
+1.  User Session Creation:
 
 ```typescript
 // First create or get a user session
@@ -509,6 +609,12 @@ const preparedCheckout = await client.checkout.prepare({
       tip: 500, // Amount in cents
     },
   ],
+   deliveryInstructions: [
+    {
+      fulfillmentId: 'fulfillment_id',
+      instructions: "", // 250 Max characters
+    },
+  ],
   acceptedAccountCreation: true,
   scheduledDelivery: '2024-12-25T14:00:00Z',
   promoCode: 'DISCOUNT10', // Optional
@@ -533,34 +639,35 @@ const preparedCheckout = await client.checkout.prepare({
   // ... other checkout details
 });
 
-// 2. Initialize payment form with checkout data
-await client.payment.mount({
-  clientSecret: preparedCheckout.payment.clientSecret, // From checkout prepare response
-  key: preparedCheckout.payment.publicKey, // From checkout prepare response
+// 2. Initialize payment element with checkout session
+const paymentElement = LiquidCommercePaymentElement({
+  session: {
+    key: preparedCheckout.data.payment.publicKey, // From checkout prepare response
+    secret: preparedCheckout.data.payment.clientSecret, // From checkout prepare response
+  }
+});
+
+// 3. Mount the element
+await paymentElement.mount({
   elementId: 'payment-element-container',
   appearance: { theme: 'night' },
   elementOptions: { layout: 'tabs' },
 });
 
-// 3. Handle payment element events
-client.payment.subscribe('change', (event) => {
-  // Monitor payment form state
-  const { complete, empty, value } = event;
-});
+// 4. Handle payment element events and create confirmation token
+const result = await paymentElement.createConfirmationToken();
 
-// 4. When ready to complete checkout, generate payment token
-const tokenResult = await client.payment.generateToken();
-if (!('error' in tokenResult)) {
-  // 5. Complete checkout with payment token
+if (result.token) {
+  // 5. Complete checkout with the confirmation token
   const completedCheckout = await client.checkout.complete({
-    token: preparedCheckout.token,
-    payment: tokenResult.id,
+    token: preparedCheckout.data.token,
+    payment: result.token,
   });
 }
 
 // 6. Clean up
-client.payment.unmount();
-client.payment.destroy();
+paymentElement.unmount();
+paymentElement.destroy();
 ```
 
 ### Order
@@ -568,8 +675,14 @@ client.payment.destroy();
 Order retrieval services:
 
 ```typescript
+const orderClient = await LiquidCommerceOrders({
+  userID: 'YOUR_ORDER_API_USER_ID',
+  password: 'YOUR_ORDER_API_PASSWORD',
+  env: LIQUID_COMMERCE_ENV.STAGE, // or PROD
+});
+
 // Fetch order details by ID or number
-const orderResponse = await client.order.fetch(/* reference id or order number */);
+const orderResponse = await orderClient.order.fetch(/* reference id or order number */);
 ```
 
 [Click here to access the docs for the order response structure](https://docs.liquidcommerce.cloud/types/order)
