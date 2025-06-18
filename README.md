@@ -24,7 +24,7 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
   - [Payment Element](#payment-element)
   - [Legacy Payment](#legacy-payment)
   - [Checkout](#checkout)
-  - [Order](#order)
+  - [Orders](#orders)
   - [Webhook](#webhook)
 - [Response Types](#response-types)
 - [Error Handling](#error-handling)
@@ -99,6 +99,21 @@ interface ApiResponse<T> {
 ```
 
 ## Services and Usage
+
+### Auth
+
+While the SDK handles authentication automatically, you can also manually retrieve the authentication details:
+
+```typescript
+// Manually retrieve authentication details
+try {
+  const authDetails = await client.auth();
+  console.log('Access Token:', authDetails.token);
+  console.log('Expires In:', authDetails.exp);
+} catch (error) {
+  console.error('Failed to get auth details:', error);
+}
+```
 
 ### Address
 
@@ -304,6 +319,7 @@ const paymentSession = await client.user.paymentSession({
   // cartId: 'your_cart_id',
   // checkoutToken: 'your_checkout_token',
   // customerId: 'your_customer_id',
+  // customerEmail: 'your_customer_id',
 });
 
 const { key, secret } = paymentSession.data.session;
@@ -341,9 +357,7 @@ const { key, secret } = paymentSession.data.session;
     Once the user has filled out the payment form, create a confirmation token. This token securely represents the payment details.
 
     ```typescript
-    const result = await paymentElement.createConfirmationToken({
-      returnUrl: 'https://your-return-url.com/checkout/confirm',
-    });
+    const result = await paymentElement.createConfirmationToken();
 
     if (result.token) {
       // Token successfully created
@@ -658,21 +672,26 @@ await paymentElement.mount({
 const result = await paymentElement.createConfirmationToken();
 
 if (result.token) {
-  // 5. Complete checkout with the confirmation token
-  const completedCheckout = await client.checkout.complete({
-    token: preparedCheckout.data.token,
-    payment: result.token,
-  });
+  // 5. Confirm the payment collected with the confirmation token
+  const confirmation = await client.user.confirmPaymentSession(confirmationToken);
+
+  if (confirmation?.data?.id) {
+    // 6. Complete checkout with the confirmation token
+    const completedCheckout = await client.checkout.complete({
+      token: preparedCheckout.data.token,
+      payment: confirmation?.data?.id,
+    });
+  }
 }
 
-// 6. Clean up
+// 7. Clean up
 paymentElement.unmount();
 paymentElement.destroy();
 ```
 
-### Order
+### Orders
 
-Order retrieval services:
+Provides secure access to order data throughout the finalized states of the order lifecycle within the LiquidCommerce ecosystem.
 
 ```typescript
 const orderClient = await LiquidCommerceOrders({
