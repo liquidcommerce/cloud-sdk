@@ -1,4 +1,11 @@
-# [1.8.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0...v1.8.0) (2025-06-17)
+# [1.8.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.8.0-beta.1...v1.8.0-beta.2) (2025-06-18)
+
+
+### Bug Fixes
+
+* **readme:** update auth example and improve payment flow details ([88bf241](https://github.com/liquidcommerce/cloud-sdk/commit/88bf241bf5fae0674c2644768391b7c0eb0874d8))
+
+# [1.8.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.7.0...v1.8.0-beta.1) (2025-06-17)
 
 
 ### Features

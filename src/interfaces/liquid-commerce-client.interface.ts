@@ -64,6 +64,17 @@ export interface ILiquidCommerceClient {
    *
    * @return {Promise<IAuth>} A promise that resolves to an authentication service
    * response containing details of the authentication process.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const authResponse = await liquidCommerce.auth();
+   *   console.log('Authentication details:', authResponse);
+   *   // This will log an IAuth object e.g. { token: 'jwt-token', exp: 167... }
+   * } catch (error) {
+   *   console.error('Authentication failed:', error);
+   * }
    */
   auth(): Promise<IAuth>;
 
