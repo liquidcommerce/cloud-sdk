@@ -208,6 +208,7 @@ export enum CART_EVENT_ENUM {
   ITEM_ID_NOT_FOUND = 'ItemIdNotFound',
   ITEMS_REMOVED = 'ItemsRemoved',
   RETAILER_FULFILLMENT_INVALID = 'RetailerFulfillmentInvalid',
+  RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE = 'RetailerOnDemandHoursNotAvailable',
 
   // Coupon validation events
   COUPON_PROCESSING_ERROR = 'CouponProcessingError',
