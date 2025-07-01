@@ -267,6 +267,9 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_CART_UPDATED_ERROR = 5501,
   REQUEST_ADDRESS_DEFAULT_ERROR = 5502,
   REQUEST_TIPS_ERROR = 5503,
+  REQUEST_COMPLETE_CUSTOMER_MISSING_FIELDS = 5504,
+  REQUEST_RETAILER_HOURS_ERROR = 5505,
+  REQUEST_ITEM_QUANTITY_CHANGE_ERROR = 5506,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -293,6 +296,9 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_CART_UPDATED_ERROR = 'The cart requested was updated during your checkout.',
   REQUEST_ADDRESS_DEFAULT_ERROR = "There's been an error with your address configurations in cart and/or billing address, check and try again.",
   REQUEST_TIPS_ERROR = "There's been an error applying your tips to the checkout.",
+  REQUEST_COMPLETE_CUSTOMER_MISSING_FIELDS = 'Customer profile information is incomplete. Please provide all required details.',
+  REQUEST_RETAILER_HOURS_ERROR = 'The retailer is currently closed or on-demand hours are not available.',
+  REQUEST_ITEM_QUANTITY_CHANGE_ERROR = 'Some items in your cart exceed available stock quantities. Please adjust your cart and try again.',
 }
 
 export enum CHECKOUT_EVENT_ENUM {
@@ -303,6 +309,8 @@ export enum CHECKOUT_EVENT_ENUM {
   GIFT_CARD_ALREADY_IN_USE = 'GiftCardAlreadyInUse',
   GIFT_CARD_EXPIRED = 'GiftCardExpired',
   GIFT_CARD_BALANCE_DEPLETED = 'GiftCardBalanceDepleted',
+  RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE = 'RetailerOnDemandHoursNotAvailable',
+  ITEM_QTY_CHANGE = 'ItemQuantityChange',
 }
 
 export enum ENUM_ORDER_STATUS {
