@@ -137,7 +137,7 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
 export interface ICartAttributesPromoCode {
   value: string;
 
-  discount?: number;
+  discount: number;
 
   freeDelivery: boolean;
 
