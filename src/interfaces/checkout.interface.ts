@@ -1,7 +1,7 @@
 import type { CHECKOUT_EVENT_ENUM } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
-import type { ICartItemAttributes } from './cart.interface';
+import type { ICartAttributesPromoCode, ICartItemAttributes } from './cart.interface';
 import type { IRetailerExpectation } from './retailer.interface';
 
 /**
@@ -445,7 +445,7 @@ export interface ICheckoutPrepareResponse {
 
   events: ICheckoutEvents[];
 
-  promoCode: string;
+  promoCode: ICartAttributesPromoCode;
 }
 
 /**
