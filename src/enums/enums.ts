@@ -209,6 +209,7 @@ export enum CART_EVENT_ENUM {
   ITEMS_REMOVED = 'ItemsRemoved',
   RETAILER_FULFILLMENT_INVALID = 'RetailerFulfillmentInvalid',
   RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE = 'RetailerOnDemandHoursNotAvailable',
+  MAX_QUANTITY_PER_ORDER_EXCEEDED = 'MaxQuantityPerOrderExceeded',
 
   // Coupon validation events
   COUPON_PROCESSING_ERROR = 'CouponProcessingError',
@@ -270,6 +271,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_COMPLETE_CUSTOMER_MISSING_FIELDS = 5504,
   REQUEST_RETAILER_HOURS_ERROR = 5505,
   REQUEST_ITEM_QUANTITY_CHANGE_ERROR = 5506,
+  REQUEST_MAX_QUANTITY_PER_ORDER_ERROR = 5507,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -299,6 +301,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_COMPLETE_CUSTOMER_MISSING_FIELDS = 'Customer profile information is incomplete. Please provide all required details.',
   REQUEST_RETAILER_HOURS_ERROR = 'The retailer is currently closed or on-demand hours are not available.',
   REQUEST_ITEM_QUANTITY_CHANGE_ERROR = 'Some items in your cart exceed available stock quantities. Please adjust your cart and try again.',
+  REQUEST_MAX_QUANTITY_PER_ORDER_ERROR = 'You have exceeded the maximum quantity allowed per order for one or more items in your cart.',
 }
 
 export enum CHECKOUT_EVENT_ENUM {
@@ -311,6 +314,7 @@ export enum CHECKOUT_EVENT_ENUM {
   GIFT_CARD_BALANCE_DEPLETED = 'GiftCardBalanceDepleted',
   RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE = 'RetailerOnDemandHoursNotAvailable',
   ITEM_QTY_CHANGE = 'ItemQuantityChange',
+  MAX_QUANTITY_PER_ORDER_EXCEEDED = 'MaxQuantityPerOrderExceeded',
 }
 
 export enum ENUM_ORDER_STATUS {
