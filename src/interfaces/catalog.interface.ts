@@ -463,6 +463,8 @@ export interface IProductSizeAttributes {
   presale: IProductPresale;
 
   engraving: IProductSizeEngraving;
+
+  maxQuantityPerOrder?: number;
 }
 
 /**

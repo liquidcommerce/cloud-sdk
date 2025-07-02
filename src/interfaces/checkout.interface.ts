@@ -1,7 +1,7 @@
 import type { CHECKOUT_EVENT_ENUM } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
-import type { ICartItemAttributes } from './cart.interface';
+import type { ICartAttributesPromoCode, ICartItemAttributes } from './cart.interface';
 import type { IRetailerExpectation } from './retailer.interface';
 
 /**
@@ -386,11 +386,14 @@ export interface ICheckoutGiftCard {
  * @interface ICheckoutEvents
  * @property {CHECKOUT_EVENT_ENUM} type - The type of the checkout event.
  * @property {string} message - A message providing additional context or details about the event.
+ * @property {Array<Partial<ICheckoutItem>>} [items] - An optional array of items associated with the event, providing details about the products involved in the checkout process.
  */
 export interface ICheckoutEvents {
   type: CHECKOUT_EVENT_ENUM;
 
   message: string;
+
+  items?: Array<Partial<ICheckoutItem>>;
 }
 
 /**
@@ -442,7 +445,7 @@ export interface ICheckoutPrepareResponse {
 
   events: ICheckoutEvents[];
 
-  promoCode: string;
+  promoCode: ICartAttributesPromoCode;
 }
 
 /**
