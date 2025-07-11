@@ -574,4 +574,6 @@ export interface IProduct {
   attributes?: Partial<IAttributes>;
 
   priceInfo: IProductPriceInfo | null;
+
+  additionalInformation?: string;
 }
