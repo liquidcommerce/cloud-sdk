@@ -293,7 +293,7 @@ export class CheckoutHelperService {
         typeof giftOptions.message === 'string' &&
         giftOptions.message.length > 500
       ) {
-        throw new Error('Invalid gift message: message must not exceed 500 characters');
+        throw new Error('Invalid gift message: Gift message cannot exceed 500 characters');
       }
 
       if ('recipient' in giftOptions) {
