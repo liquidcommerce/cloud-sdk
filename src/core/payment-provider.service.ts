@@ -314,9 +314,7 @@ export class PaymentProviderService implements IPaymentProvider {
 
     return {
       theme: appearance.theme === 'night' ? 'night' : 'stripe',
-      // Pass through the variables if they exist
-      ...(appearance.variables || {}),
-      // Map other appearance options as needed
+      ...(appearance.variables && { variables: appearance.variables }),
     };
   }
 
