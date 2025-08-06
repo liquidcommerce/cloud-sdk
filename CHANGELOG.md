@@ -1,3 +1,11 @@
+# [1.9.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.2...v1.9.0-beta.3) (2025-08-06)
+
+
+### Features
+
+* **payment:** add optional variables property to appearance configuration ([e2a3385](https://github.com/liquidcommerce/cloud-sdk/commit/e2a3385606f02c5d5eafa58236237cda731751cf))
+* **payment:** update appearance configuration to include optional variables for styling ([41471f0](https://github.com/liquidcommerce/cloud-sdk/commit/41471f0ee41456bf3eb51eaa7155365df41fdc15))
+
 # [1.9.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.1...v1.9.0-beta.2) (2025-08-06)
 
 
