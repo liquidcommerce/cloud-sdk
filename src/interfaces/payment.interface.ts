@@ -29,6 +29,8 @@ export interface ILiquidPaymentElementOptions {
  *
  * @property {'default' | 'night' | 'flat'} [appearance.theme] - An optional theme for the payment form appearance.
  *
+ * @property {Object} [appearance.variables] - Optional style variables for customizing the payment element appearance.
+ *
  * @property {ILiquidPaymentElementOptions} [elementOptions] - Additional options for configuring the payment element.
  */
 export interface ILiquidPaymentConfig {
@@ -40,6 +42,7 @@ export interface ILiquidPaymentConfig {
 
   appearance?: {
     theme?: 'stripe' | 'night' | 'flat';
+    variables?: Record<string, string | number>;
   };
 
   elementOptions?: ILiquidPaymentElementOptions;
