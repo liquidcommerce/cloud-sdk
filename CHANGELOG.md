@@ -1,3 +1,11 @@
+# [1.9.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.1...v1.9.0-beta.2) (2025-08-06)
+
+
+### Bug Fixes
+
+* **checkout:** add validation for gift message length in giftOptions ([c32a318](https://github.com/liquidcommerce/cloud-sdk/commit/c32a3180f1d121abd762892bbe410b97b7e59223))
+* **checkout:** update error message for gift message length validation ([37f8061](https://github.com/liquidcommerce/cloud-sdk/commit/37f80618d0566c320e35594359988d778d17320e))
+
 # [1.9.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.8.1-beta.1...v1.9.0-beta.1) (2025-07-02)
 
 
