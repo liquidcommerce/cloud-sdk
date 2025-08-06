@@ -40,6 +40,7 @@ export interface ILiquidPaymentConfig {
 
   appearance?: {
     theme?: 'stripe' | 'night' | 'flat';
+    variables?: Record<string, string | number>;
   };
 
   elementOptions?: ILiquidPaymentElementOptions;
