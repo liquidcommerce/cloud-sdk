@@ -272,6 +272,8 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_RETAILER_HOURS_ERROR = 5505,
   REQUEST_ITEM_QUANTITY_CHANGE_ERROR = 5506,
   REQUEST_MAX_QUANTITY_PER_ORDER_ERROR = 5507,
+  REQUEST_PRESALE_NOT_STARTED_ERROR = 5508,
+  REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 5509,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -289,7 +291,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_CHECKOUT_COMPLETE_UPDATE_ERROR = 'Unable to update your checkout status.',
   REQUEST_CHECKOUT_COMPLETE_SAVE_ERROR = 'Unable to save your completed checkout.',
   REQUEST_CHECKOUT_HAS_COMPLETE_ERROR = 'This checkout has already been processed, create a new cart to process a new checkout.',
-  REQUEST_NO_CART_ITEM_ERROR = 'No items found in your cart.',
+  REQUEST_NO_CART_ITEM_ERROR = 'Item(s) in your cart are no longer available',
   REQUEST_NO_CUSTOMER_FOUND_ERROR = 'The customer account was not found.',
   REQUEST_PAYMENT_ATTACHED_ERROR = 'The payment attached to the checkout is not a valid payment method for this customer.',
   REQUEST_SHIPPING_ADDRESS_ERROR = 'The address in your cart has changed, check and try again.',
@@ -302,6 +304,8 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_RETAILER_HOURS_ERROR = 'The retailer is currently closed or on-demand hours are not available.',
   REQUEST_ITEM_QUANTITY_CHANGE_ERROR = 'Some items in your cart exceed available stock quantities. Please adjust your cart and try again.',
   REQUEST_MAX_QUANTITY_PER_ORDER_ERROR = 'You have exceeded the maximum quantity allowed per order for one or more items in your cart.',
+  REQUEST_PRESALE_NOT_STARTED_ERROR = 'The presale for this item has not started yet. Please check back later.',
+  REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 'Some items in your cart do not meet the minimum retailer requirements per order quantity. Please adjust your cart and try again.',
 }
 
 export enum CHECKOUT_EVENT_ENUM {
