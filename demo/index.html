@@ -487,6 +487,32 @@
     .show {
       display: block;
     }
+
+    .alert {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+    .alert-info {
+      background-color: #cfe2ff;
+      border: 1px solid #b6d4fe;
+      color: #084298;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      border: 1px solid #f5c2c7;
+      color: #842029;
+    }
+
+    .mb-3 {
+      margin-bottom: 1rem;
+    }
+
+    .text-danger {
+      color: #dc3545;
+    }
   </style>
 </head>
 <body>
@@ -641,12 +667,27 @@
           <!-- ADDRESS SEARCH & DETAILS EXAMPLE -->
           <div class="tab-pane fade show active" id="address" role="tabpanel" aria-labelledby="address-tab">
             <div class="section-container">
-              <h2 class="section-title mb-3">Search Addresses</h3>
-                <input type="text" id="addressInput" class="form-control" placeholder="Enter address (min 3 characters)">
-                <ul id="autocompleteResults"></ul>
-                <div id="results"></div>
+              <h2 class="section-title">Search Addresses</h2>
+              <div class="alert alert-info mb-3">
+                <p>Start typing an address to see suggestions. Select one to view complete details.</p>
+              </div>
+              <div class="address-search mb-3">
+                <label for="addressInput" class="form-label">Address Search</label>
+                <input 
+                  type="text" 
+                  id="addressInput" 
+                  class="form-control" 
+                  placeholder="e.g., 100 Madison Ave, New York"
+                >
+                <div class="form-text">Type at least 3 characters to see suggestions</div>
+              </div>
+              <!-- Autocomplete Results -->
+              <ul id="autocompleteResults" class="list-group"></ul>
+              <!-- Selected Address Details -->
+              <div id="results"></div>
             </div>
           </div>
+
 
           <!-- CATALOG AVAILABILITY EXAMPLE -->
           <div id="catalog" class="tab-pane fade" role="tabpanel" aria-labelledby="catalog-tab">
@@ -654,34 +695,67 @@
               <div class="catalog-section">
                 <div id="catalogAvailabilityForm" class="catalog-form">
                   <h2 class="section-title">Check Product Availability</h2>
+                   <div class="alert alert-info mb-3">
+                      <p>Please provide at least one of the following identifiers: UPCs, Grouping, or IDs.</p>
+                  </div>
                   <form id="availabilityForm">
-                    <div class="mb-3">
-                      <label for="upcs" class="form-label">UPCs (comma-separated)</label>
-                      <input type="text" class="form-control" id="upcs" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="zipCode" class="form-label">Zip Code</label>
-                      <input type="text" class="form-control" id="zipCode" required>
-                    </div>
+                    <form id="availabilityForm">
+                  <div class="mb-3">
+                    <label for="upcs" class="form-label">UPCs (comma-separated)</label>
+                    <input type="text" class="form-control" id="upcs" 
+                          placeholder="e.g., 00619947000020, 00812066021598">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="grouping" class="form-label">Grouping (comma-separated)</label>
+                    <input type="text" class="form-control" id="grouping" 
+                          placeholder="e.g., GROUPING-113027, GROUPING-39553">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="ids" class="form-label">IDs (comma-separated)</label>
+                    <input type="text" class="form-control" id="ids" 
+                          placeholder="e.g., 1985115, 926">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="zipCode" class="form-label">Zip Code <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="zipCode" required 
+                          pattern="[0-9]{5}" placeholder="e.g., 10016">
+                  </div>
+
+                  <div id="validationMessage" class="alert alert-danger d-none mb-3">
+                    Please provide at least one identifier (UPCs, Grouping, or IDs)
+                  </div>
                     <button type="submit" class="btn btn-primary">Check Availability</button>
                   </form>
                 </div>
                 <div id="availabilityResults"></div>
               </div>
               <hr>
-
-              <div class="catalog-section">
+             <div class="catalog-section">
                 <div id="catalogSearchForm" class="catalog-form">
                   <h2 class="section-title">Search Products</h2>
+                  
+                 
+                  <!-- Info Alert -->
+                    <div class="alert alert-info mb-3">
+                      <p>Search our catalog. For local pricing and availability, you can include your zip code.</p>
+                    </div>
+
                   <form id="searchForm">
                     <div class="mb-3">
                       <label for="searchQuery" class="form-label">Search Query</label>
-                      <input type="text" class="form-control" id="searchQuery">
+                      <input type="text" class="form-control" id="searchQuery" 
+                            placeholder="e.g., Tito's Vodka, Whiskey, etc.">
                     </div>
-                    <div class="mb-3">
+
+                     <div class="mb-3">
                       <label for="searchZipCode" class="form-label">Zip Code</label>
-                      <input type="text" class="form-control" id="searchZipCode">
+                      <input type="text" class="form-control" id="searchZipCode" 
+                            pattern="[0-9]{5}" placeholder="e.g., 10016">
                     </div>
+
                     <div class="mb-3">
                       <label for="priceRange" class="form-label">Price Range</label>
                       <select class="form-select" id="priceRange">
@@ -692,39 +766,48 @@
                         <option value="200+">$200+</option>
                       </select>
                     </div>
+
                     <div class="mb-3">
                       <label for="category" class="form-label">Category</label>
                       <select class="form-select" id="category">
                         <option value="">All Categories</option>
-                        <option value="SPIRITS > TEQUILA">TEQUILA</option>
-                        <option value="SPIRITS > GIN">GIN</option>
-                        <option value="SPIRITS > WHISKEY">WHISKEY</option>
-                        <option value="WINE > CHAMPAGNE & SPARKLING">CHAMPAGNE & SPARKLING</option>
-                        <option value="WINE > RED WINE">RED WINE</option>
-                        <option value="WINE > WHITE WINE">WHITE WINE</option>
-                        <option value="BEER">BEER</option>
+                        <option value="SPIRITS > TEQUILA">Tequila</option>
+                        <option value="SPIRITS > GIN">Gin</option>
+                        <option value="SPIRITS > WHISKEY">Whiskey</option>
+                        <option value="WINE > CHAMPAGNE & SPARKLING">Champagne & Sparkling</option>
+                        <option value="WINE > RED WINE">Red Wine</option>
+                        <option value="WINE > WHITE WINE">White Wine</option>
+                        <option value="BEER">Beer</option>
                       </select>
                     </div>
+
                     <div class="mb-3">
                       <label for="engraving" class="form-label">Engraving</label>
                       <select class="form-select" id="engraving">
-                        <option value="">All</option>
-                        <option value="YES">Yes</option>
-                        <option value="NO">No</option>
+                        <option value="">All Products</option>
+                        <option value="YES">Engravable Only</option>
+                        <option value="NO">Non-Engravable Only</option>
                       </select>
                     </div>
+
                     <div class="mb-3">
-                      <label for="fulfillment" class="form-label">Fulfillment</label>
+                      <label for="fulfillment" class="form-label">Fulfillment Method</label>
                       <select class="form-select" id="fulfillment" multiple>
                         <option value="shipping">Shipping</option>
                         <option value="onDemand">On Demand</option>
                       </select>
+                      <div class="form-text">Hold Ctrl/Cmd to select multiple options</div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
+
+                    <!-- Validation Message -->
+                    <div id="searchValidationMessage" class="alert alert-danger d-none mb-3"></div>
+
+                    <button type="submit" class="btn btn-primary w-100">Search Products</button>
                   </form>
                 </div>
                 <div id="catalogResults"></div>
-              </div>
+          </div>
+           
             </div>
           </div>
 
@@ -733,38 +816,75 @@
             <div class="section-container">
               <h2 class="section-title">Cart</h2>
               <div class="cart-section">
-                <div id="cartForm" class="cart-form mb-4">
+               <div id="cartForm" class="cart-form mb-4">
+                  <!-- Info Alert -->
+                  <div class="alert alert-info mb-3">
+                    <p>Enter a Cart ID to view its contents and details.</p>
+                  </div>
+
                   <div class="mb-3">
                     <label for="cartIdGet" class="form-label">Cart ID</label>
-                    <input type="text" class="form-control" id="cartIdGet">
+                    <input type="text" 
+                          class="form-control" 
+                          id="cartIdGet"
+                          placeholder="Enter cart ID">
+                    <div class="form-text">Leave empty to create a new cart</div>
                   </div>
-                  <button type="button" class="btn btn-primary" id="getCart">Get Cart</button>
-                  <span id="cartEventMessage"></span>
+                  
+                  <button type="button" class="btn btn-primary w-100" id="getCart">Get Cart</button>
+                  <div id="cartEventMessage" class="alert alert-danger mt-3 d-none"></div>
                 </div>
-                <div id="cartResults"></div>
+
+                <div id="cartResults" class="mb-4"></div>
                 <div id="engravingModalContainer"></div>
                 <hr>
 
                 <div id="updateCartForm" class="cart-form mt-4">
+                  <!-- Info Alert -->
+                  
                   <h5>Update Cart</h5>
+                  <div class="alert alert-info mb-3">
+                    <p>Update an existing cart by adding items or modifying quantities.</p>
+                  </div>
                   <div class="mb-3">
                     <label for="cartIdUpdate" class="form-label">Cart ID</label>
-                    <input type="text" class="form-control" id="cartIdUpdate">
+                    <input type="text" 
+                          class="form-control" 
+                          id="cartIdUpdate"
+                          placeholder="Enter cart ID to update">
                   </div>
+
                   <div class="mb-3">
                     <label for="partNumber" class="form-label">Part Number</label>
-                    <input type="text" class="form-control" id="partNumber">
+                    <input type="text" 
+                          class="form-control" 
+                          id="partNumber"
+                          placeholder="e.g., 00619947000020_6565f4e8700628ce191059d9">
                   </div>
+
                   <div class="mb-3">
                     <label for="quantity" class="form-label">Quantity</label>
-                    <input type="number" class="form-control" id="quantity" min="1">
+                    <input type="number" 
+                          class="form-control" 
+                          id="quantity" 
+                          min="1"
+                          value="1">
                   </div>
+
                   <div class="mb-3">
                     <label for="fulfillmentId" class="form-label">Fulfillment ID</label>
-                    <input type="text" class="form-control" id="fulfillmentId">
+                    <input type="text" 
+                          class="form-control" 
+                          id="fulfillmentId"
+                          placeholder="Enter fulfillment ID">
                   </div>
-                  <button type="button" class="btn btn-primary" id="updateCart">Update Cart</button>
+
+                  <button type="button" class="btn btn-primary w-100" id="updateCart">Update Cart</button>
                 </div>
+
+
+
+
               </div>
             </div>
           </div>
@@ -773,189 +893,398 @@
           <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
             <div class="section-container">
               <h2 class="section-title">User Methods</h2>
-
+              <!-- User Session -->
               <div class="user-section">
-                <h5>Create/Update User Session</h5>
-                <form id="userSessionForm">
-                  <div class="mb-3">
-                    <label for="userEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="userEmail" required>
+                <h5 class="mb-3">Create/Update User Session</h5>
+                
+                  <div class="alert alert-info mb-3">
+                    <p>Create or update a user session. Only email is required.</p>
                   </div>
-                  <div class="mb-3">
-                    <label for="userFirstName" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="userFirstName">
-                  </div>
-                  <button type="submit" class="btn btn-primary">Create/Update Session</button>
-                </form>
-                <div id="userSessionResult" class="session-result"></div>
+
+
+                      <form id="userSessionForm">
+                        <div class="mb-3">
+                          <label for="userEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                          <input type="email" 
+                                  class="form-control" 
+                                  id="userEmail"
+                                  placeholder="Enter email address" 
+                                  required>
+                          <div class="form-text">Required to identify the user session</div>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="userFirstName" class="form-label">First Name</label>
+                          <input type="text" 
+                                  class="form-control" 
+                                  id="userFirstName"
+                                  placeholder="Enter first name (optional)">
+                          <div class="form-text">Optional user identification</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Create/Update Session</button>
+                      </form>
+
+                      <div id="userSessionResult" class="session-result mt-3"></div>
+
               </div>
               <hr>
 
+              <!-- Fetch User by ID -->
               <div class="user-section mt-4">
-                <h5>Fetch User by ID (without creating session)</h5>
-                <form id="fetchUserByIDForm">
-                  <div class="mb-3">
-                    <label for="userIDFetch" class="form-label">ID</label>
-                    <input type="text" class="form-control" id="userIDFetch" required>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Fetch User</button>
-                </form>
-                <div id="fetchUserByIDResult" class="mt-3 session-result"></div>
-              </div>
+                    <h5 class="mb-3">Fetch User by ID</h5>
+                     <div class="alert alert-info mb-3">
+                        <p>Look up an existing user's details using their ID without creating a new session.</p>
+                     </div>
+                    
+                    <form id="fetchUserByIDForm">
+                      <div class="mb-3">
+                        <label for="userIDFetch" class="form-label">User ID <span class="text-danger">*</span></label>
+                        <input type="text" 
+                                class="form-control" 
+                                id="userIDFetch"
+                                placeholder="Enter user ID" 
+                                required>
+                        <div class="form-text">Enter the unique identifier of the user you want to look up</div>
+                      </div>
 
-              <div class="user-section mt-4">
-                <h5>Purge User</h5>
-                <form id="purgeUserForm">
-                  <div class="mb-3">
-                    <label for="purgeUserId" class="form-label">User ID or Email</label>
-                    <input type="text" class="form-control" id="purgeUserId" required>
-                  </div>
-                  <button type="submit" class="btn btn-danger">Purge User</button>
-                </form>
-                <div id="purgeUserResult" class="mt-3"></div>
+                      <div id="fetchMessage" class="alert alert-danger d-none mb-3"></div>
+
+                      <button type="submit" class="btn btn-primary w-100">Fetch User</button>
+                    </form>
+
+                    <div id="fetchUserByIDResult" class="session-result mt-3"></div>
               </div>
               <hr>
 
+              <!-- Purge User -->
               <div class="user-section mt-4">
-                <h5>Update/Create Address</h>
-                  <form id="updateAddressForm">
+                
+                <h5 class="mb-3">Purge User</h5>
+                
+                <div class="alert alert-warning mb-3">
+                  <p>Warning: This will permanently delete all user data. This action cannot be undone.</p>
+                </div>
+
+                  <form id="purgeUserForm">
                     <div class="mb-3">
-                      <label for="customerId" class="form-label">Customer ID</label>
-                      <input type="text" class="form-control" id="customerId" required>
+                      <label for="purgeUserId" class="form-label">User ID or Email <span class="text-danger">*</span></label>
+                      <input type="text" 
+                              class="form-control" 
+                              id="purgeUserId"
+                              placeholder="Enter user ID or email address" 
+                              required>
+                      <div class="form-text">Enter either the user's ID or email address to delete their data</div>
                     </div>
-                    <div class="mb-3">
-                      <label for="addressOne" class="form-label">Address Line 1</label>
-                      <input type="text" class="form-control" id="addressOne" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressCity" class="form-label">City</label>
-                      <input type="text" class="form-control" id="addressCity" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressState" class="form-label">State</label>
-                      <input type="text" class="form-control" id="addressState" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="isDefaultAddress" class="form-label">Set as Default?</label>
-                      <input type="checkbox" id="isDefaultAddress">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
+
+                    <button type="submit" class="btn btn-danger w-100">Purge User Data</button>
                   </form>
-                  <div id="updateAddressResult" class="mt-3"></div>
-              </div>
 
+                  <div id="purgeUserResult" class="session-result mt-3"></div>
+              </div>
               <hr>
 
+              <!-- Update/Create Address -->
               <div class="user-section mt-4">
-                <h5>Update/Create Address (w/ Coordinates)</h>
+                
+                <h5 class="mb-3">Update/Create Address</h5>
+               
+                <div class="alert alert-info mb-3">
+                  <p>Add or update a delivery address for a user. All fields except Default setting are required.</p>
+                </div>
+                
+                <form id="updateAddressForm">
+                  <div class="mb-3">
+                    <label for="customerId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="customerId"
+                            placeholder="Enter customer ID" 
+                            required>
+                    <div class="form-text">The ID of the customer to update/create address for</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="addressOne" class="form-label">Address Line 1 <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="addressOne"
+                            placeholder="e.g., 100 Madison Ave" 
+                            required>
+                    <div class="form-text">Street address, P.O. box, company name</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="addressCity" class="form-label">City <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="addressCity"
+                            placeholder="e.g., New York" 
+                            required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="addressState" class="form-label">State <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="addressState"
+                            placeholder="e.g., NY" 
+                            required>
+                    <div class="form-text">2-letter state code or full state name</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="addressZip" class="form-label">ZIP Code <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="addressZip"
+                          placeholder="e.g., 10016" 
+                          required>
+                    <div class="form-text">5-digit ZIP code</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <div class="form-check">
+                      <input type="checkbox" 
+                              class="form-check-input" 
+                              id="isDefaultAddress">
+                      <label class="form-check-label" for="isDefaultAddress">Set as Default Address</label>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-100">Update/Create Address</button>
+                </form>
+
+                <div id="updateAddressResult" class="session-result mt-3"></div>
+              </div>
+              <hr>
+
+              <!-- Update/Create Addres With Coordinates-->
+              <div class="user-section mt-4">
+                
+                <h5 class="mb-3">Update/Create Address</h5>
+                
+                <div class="alert alert-info mb-3">
+                    <p>Create or update a user's address with geographical coordinates.</p>
+                </div>
+
                   <form id="updateAddressWithCoordsForm">
-                    <div class="mb-3">
-                      <label for="customerIdAddress" class="form-label">Customer ID</label>
-                      <input type="text" class="form-control" id="customerIdAddress" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressLat" class="form-label">Latitude</label>
-                      <input type="text" class="form-control" id="addressLat" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressLong" class="form-label">Longitude</label>
-                      <input type="text" class="form-control" id="addressLong" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
-                  </form>
-                  <div id="updateAddressWithCoordsResult" class="mt-3"></div>
-              </div>
+                      <div class="mb-3">
+                          <label for="customerIdAddress" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="customerIdAddress" 
+                                placeholder="Enter customer ID"
+                                required>
+                          <div class="form-text">Required to identify the customer</div>
+                      </div>
 
+                      <div class="mb-3">
+                          <label for="addressLat" class="form-label">Latitude <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="addressLat" 
+                                placeholder="Enter latitude coordinate"
+                                required>
+                          <div class="form-text">Geographic coordinate (e.g., 40.7128)</div>
+                      </div>
+
+                      <div class="mb-3">
+                          <label for="addressLong" class="form-label">Longitude <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="addressLong" 
+                                placeholder="Enter longitude coordinate"
+                                required>
+                          <div class="form-text">Geographic coordinate (e.g., -74.0060)</div>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary w-100">Update/Create Address</button>
+                  </form>
+
+                  <div id="updateAddressWithCoordsResult" class="session-result mt-3"></div>
+              </div>
               <hr>
 
+              <!-- Update/Create Address with Places ID -->
               <div class="user-section mt-4">
-                <h5>Update/Create Address (w/ Google PlacesId)</h>
+                
+                <h5 class="mb-3">Update/Create Address with Places ID</h5>
+
+                <div class="alert alert-info mb-3">
+                    <p>Create or update a user's address using a Google Places ID.</p>
+                </div>
+
                   <form id="updateAddressWithPlacesIdForm">
-                    <div class="mb-3">
-                      <label for="customerIdAddress" class="form-label">Customer ID</label>
-                      <input type="text" class="form-control" id="customerIdAddressWithPlacesId" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="addressLat" class="form-label">Places Id</label>
-                      <input type="text" class="form-control" id="addressWithPlacesId" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update/Create Address</button>
-                  </form>
-                  <div id="updateAddressWithPlacesIdResult" class="mt-3"></div>
-              </div>
+                      <div class="mb-3">
+                          <label for="customerIdAddressWithPlacesId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="customerIdAddressWithPlacesId" 
+                                placeholder="Enter customer ID"
+                                required>
+                          <div class="form-text">Required to identify the customer</div>
+                      </div>
 
+                      <div class="mb-3">
+                          <label for="addressWithPlacesId" class="form-label">Places ID <span class="text-danger">*</span></label>
+                          <input type="text" 
+                                class="form-control" 
+                                id="addressWithPlacesId" 
+                                placeholder="Enter Google Places ID"
+                                required>
+                          <div class="form-text">Unique identifier from Google Places API</div>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary w-100">Update/Create Address</button>
+                  </form>
+
+                  <div id="updateAddressWithPlacesIdResult" class="session-result mt-3"></div>
+              </div>
               <hr>
 
+              <!-- Purge Address -->
               <div class="user-section mt-4">
-                <h5>Purge Address</h5>
+                <h5 class="mb-3">Purge Address</h5>
+                
+                <div class="alert alert-warning mb-3">
+                  <p>Warning: This will permanently delete the selected address. This action cannot be undone.</p>
+                </div>
+
                 <form id="purgeAddressForm">
                   <div class="mb-3">
-                    <label for="purgeAddressId" class="form-label">Address ID</label>
-                    <input type="text" class="form-control" id="purgeAddressId" required>
+                    <label for="purgeAddressId" class="form-label">Address ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="purgeAddressId"
+                          placeholder="Enter address ID" 
+                          required>
+                    <div class="form-text">Enter the unique identifier of the address to delete</div>
                   </div>
-                  <button type="submit" class="btn btn-danger">Purge Address</button>
+
+                  <button type="submit" class="btn btn-danger w-100">Purge Address</button>
                 </form>
-                <div id="purgeAddressResult" class="mt-3"></div>
+
+                <div id="purgeAddressResult" class="session-result mt-3"></div>
               </div>
               <hr>
 
+              <!-- Add Payment Method -->
               <div class="user-section mt-4">
-                <h5>Add Payment Method</h>
-                  <form id="addPaymentMethodForm">
-                    <div class="mb-3">
-                      <label for="customerId" class="form-label">Customer ID</label>
-                      <input type="text" class="form-control" id="addPaymentCustomerId" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="paymentMethodId" class="form-label">Payment Method ID</label>
-                      <input type="text" class="form-control" id="paymentMethodId" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="isDefault" class="form-label">Set as Default?</label>
-                      <input type="checkbox" id="isDefault">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Payment Method</button>
-                  </form>
-                  <div id="addPaymentMethodResult" class="mt-3"></div>
-              </div>
-              <hr>
+                <h5 class="mb-3">Add Payment Method</h5>
 
-              <div class="user-section mt-4">
-                <h5>Update Payment Method</h5>
-                <form id="updatePaymentMethodForm">
+                <div class="alert alert-info mb-3">
+                  <p>Add a new payment method to a user's account. The payment method ID can be obtained from the payment element.</p>
+                </div>
+
+                <form id="addPaymentMethodForm">
                   <div class="mb-3">
-                    <label for="updatePaymentCustomerId" class="form-label">Customer ID</label>
-                    <input type="text" class="form-control" id="updatePaymentCustomerId" required>
+                    <label for="addPaymentCustomerId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="addPaymentCustomerId"
+                          placeholder="Enter customer ID" 
+                          required>
+                    <div class="form-text">The unique identifier of the customer</div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="updatePaymentMethodId" class="form-label">Payment Method ID</label>
-                    <input type="text" class="form-control" id="updatePaymentMethodId" required>
+                    <label for="paymentMethodId" class="form-label">Payment Method ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="paymentMethodId"
+                          placeholder="Enter payment method ID" 
+                          required>
+                    <div class="form-text">The payment method token from your payment provider</div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="updateIsDefault" class="form-label">Set as Default?</label>
-                    <input type="checkbox" id="updateIsDefault">
+                    <div class="form-check">
+                      <input type="checkbox" 
+                            class="form-check-input" 
+                            id="isDefault">
+                      <label class="form-check-label" for="isDefault">Set as Default?</label>
+                    </div>
                   </div>
-                  <button type="submit" class="btn btn-primary">Update Payment Method</button>
+
+                  <button type="submit" class="btn btn-primary w-100">Add Payment Method</button>
                 </form>
-                <div id="updatePaymentMethodResult" class="mt-3"></div>
+
+                <div id="addPaymentMethodResult" class="session-result mt-3"></div>
               </div>
               <hr>
 
+              <!-- Update Default Payment Method -->
               <div class="user-section mt-4">
-                <h5>Purge Payment Method</h5>
+                <h5 class="mb-3">Update Default Payment Method</h5>
+                
+                <div class="alert alert-info mb-3">
+                  <p>Set an existing payment method as the default payment method.</p>
+                </div>
+
+                <form id="updateDefaultPaymentForm">
+                  <div class="mb-3">
+                    <label for="updatePaymentCustomerId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="updatePaymentCustomerId"
+                          placeholder="Enter customer ID" 
+                          required>
+                    <div class="form-text">The unique identifier of the customer</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="updatePaymentMethodId" class="form-label">Payment ID<span class="text-danger">*</span></label>
+                    <input type="text" 
+                          class="form-control" 
+                          id="updatePaymentMethodId"
+                          placeholder="Enter payment method ID" 
+                          required>
+                    <div class="form-text">The ID of the payment method to update</div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-100">Update Payment Method</button>
+                </form>
+
+                <div id="updateDefaultPaymentResult" class="session-result mt-3"></div>
+              </div>
+              <hr>
+
+              <!-- Purge Payment Method -->
+              <div class="user-section mt-4">
+                <h5 class="mb-3">Purge Payment Method</h5>
+
+                <div class="alert alert-warning mb-3">
+                  <p>Warning: This will permanently delete the selected payment method. This action cannot be undone.</p>
+                </div>
+
                 <form id="purgePaymentMethodForm">
                   <div class="mb-3">
-                    <label for="purgeCustomerId" class="form-label">Customer ID</label>
-                    <input type="text" class="form-control" id="purgeCustomerId" required>
+                    <label for="purgeCustomerId" class="form-label">Customer ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="purgeCustomerId"
+                            placeholder="Enter customer ID" 
+                            required>
+                    <div class="form-text">The unique identifier of the customer</div>
                   </div>
+
                   <div class="mb-3">
-                    <label for="purgePaymentId" class="form-label">Payment Method ID</label>
-                    <input type="text" class="form-control" id="purgePaymentId" required>
+                    <label for="purgePaymentId" class="form-label">Payment Method ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="purgePaymentId"
+                            placeholder="Enter payment method ID" 
+                            required>
+                    <div class="form-text">The ID of the payment method to delete</div>
                   </div>
-                  <button type="submit" class="btn btn-danger">Purge Payment Method</button>
+
+                  <button type="submit" class="btn btn-danger w-100">Purge Payment Method</button>
                 </form>
-                <div id="purgePaymentMethodResult" class="mt-3"></div>
+
+                <div id="purgePaymentMethodResult" class="session-result mt-3"></div>
               </div>
+
             </div>
           </div>
 
@@ -988,58 +1317,118 @@
 
           <!-- PAYMENT EXAMPLE -->
           <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
-            <div class="section-container">
-              <h2 class="section-title">Payment Method</h2>
-              <form id="paymentForm" class="payment-form">
-                <div class="form-group">
-                  <label for="sessionKey" class="form-label">Session Key</label>
-                  <input type="text" id="sessionKey" class="form-input" required>
-                </div>
-                <div class="form-group">
-                  <label for="sessionSecret" class="form-label">Session Secret</label>
-                  <input type="text" id="sessionSecret" class="form-input" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Mount Payment Element</button>
-              </form>
-              <div id="payment-element-container" class="payment-element-container"></div>
-              <div id="paymentTokenResult" class="payment-token-result"></div>
-              <div class="button-group">
-                <button id="generateTokenButton" class="btn btn-secondary">Generate Payment Token</button>
-                <button id="collapsePaymentButton" class="btn btn-secondary">Collapse Payment Element</button>
-                <button id="unmountPaymentButton" class="btn btn-warning">Unmount Payment Element</button>
-                <button id="destroyPaymentButton" class="btn btn-danger">Destroy Payment Element</button>
-              </div>
+          <div class="section-container">
+            <h2 class="section-title mb-4">Payment Method</h2>
+
+            <div class="alert alert-info mb-4">
+              <p>Mount a payment element to securely collect payment details. The session key and secret are required to initialize the payment element.</p>
             </div>
+
+            <form id="paymentForm" class="mb-4">
+              <div class="mb-3">
+                <label for="sessionKey" class="form-label">Session Key <span class="text-danger">*</span></label>
+                <input type="text" 
+                        id="sessionKey" 
+                        class="form-control"
+                        placeholder="Enter session key"
+                        required>
+                <div class="form-text">The session key from your user session</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="sessionSecret" class="form-label">Session Secret <span class="text-danger">*</span></label>
+                <input type="text" 
+                        id="sessionSecret" 
+                        class="form-control"
+                        placeholder="Enter session secret"
+                        required>
+                <div class="form-text">The session secret from your user session</div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">Mount Payment Element</button>
+            </form>
+
+            <!-- Payment Element Container -->
+            <div id="payment-element-container" class="mb-4 p-3 border rounded"></div>
+            
+            <!-- Payment Token Result -->
+            <div id="paymentTokenResult" class="session-result mb-4"></div>
+
+            <!-- Control Buttons -->
+            <div class="d-grid gap-2">
+              <button id="generateTokenButton" class="btn btn-secondary">
+                Generate Payment Token
+              </button>
+              <button id="collapsePaymentButton" class="btn btn-secondary">
+                Collapse Payment Element
+              </button>
+              <button id="unmountPaymentButton" class="btn btn-warning">
+                Unmount Payment Element
+              </button>
+              <button id="destroyPaymentButton" class="btn btn-danger">
+                Destroy Payment Element
+              </button>
+            </div>
+
+          </div>
           </div>
 
           <!-- CHECKOUT EXAMPLE -->
           <div class="tab-pane fade" id="checkout" role="tabpanel" aria-labelledby="checkout-tab">
             <div class="section-container">
               <h2 class="section-title">Checkout</h2>
-              <form id="checkoutForm">
-                <div class="mb-3">
-                  <label for="checkoutCartId" class="form-label">Checkout Cart ID</label>
-                  <input type="text" class="form-control" id="checkoutCartId" required>
+              <h5 class="mb-3">Prepare Checkout</h5>
+               <div class="alert alert-info mb-4">
+                  <p>Prepare a checkout session for a cart. You'll need a valid cart ID to initiate the checkout process.</p>
                 </div>
-                <button type="submit" class="btn btn-primary">Prepare Checkout</button>
-              </form>
+
+                <form id="checkoutForm">
+                  <div class="mb-3">
+                    <label for="checkoutCartId" class="form-label">Cart ID <span class="text-danger">*</span></label>
+                    <input type="text" 
+                            class="form-control" 
+                            id="checkoutCartId"
+                            placeholder="Enter cart ID"
+                            required>
+                    <div class="form-text">The ID of the cart to process for checkout</div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-100">Prepare Checkout</button>
+                </form>
 
               <div id="checkoutResults" class="mt-3"></div>
 
               <hr>
 
               <!-- Complete Checkout Form -->
-              <h2 class="section-title">Complete Checkout</h2>
+              <h5 class="mb-3">Complete Checkout</h5>
+
+              <div class="alert alert-info mb-4">
+                <p>Complete a prepared checkout by providing the checkout token and payment method ID.</p>
+              </div>
+
               <form id="completeCheckoutForm">
                 <div class="mb-3">
-                  <label for="checkoutToken" class="form-label">Checkout Token</label>
-                  <input type="text" class="form-control" id="checkoutToken" required>
+                  <label for="checkoutToken" class="form-label">Checkout Token <span class="text-danger">*</span></label>
+                  <input type="text" 
+                          class="form-control" 
+                          id="checkoutToken"
+                          placeholder="Enter checkout token" 
+                          required>
+                  <div class="form-text">The token received from the prepare checkout step</div>
                 </div>
+
                 <div class="mb-3">
-                  <label for="paymentId" class="form-label">Payment ID</label>
-                  <input type="text" class="form-control" id="paymentId" required>
+                  <label for="paymentId" class="form-label">Payment ID <span class="text-danger">*</span></label>
+                  <input type="text" 
+                          class="form-control" 
+                          id="paymentId"
+                          placeholder="Enter payment ID" 
+                          required>
+                  <div class="form-text">The ID of the payment method to use for this checkout</div>
                 </div>
-                <button type="submit" class="btn btn-success">Complete Checkout</button>
+
+                <button type="submit" class="btn btn-success w-100">Complete Checkout</button>
               </form>
 
               <div id="completeCheckoutResults" class="mt-3"></div>
@@ -1389,6 +1778,7 @@
     const searchQuery = document.getElementById('searchQuery').value;
     const category = document.getElementById('category').value;
     const engraving = document.getElementById('engraving').value;
+    const priceRange = document.getElementById('priceRange').value;
     const fulfillmentSelect = document.getElementById('fulfillment');
     const fulfillment = Array.from(fulfillmentSelect.selectedOptions).map(option => option.value);
     const catalogResults = document.getElementById('catalogResults');
@@ -1408,7 +1798,6 @@
         });
       }
 
-      console.log("engraving: ", engraving)
       if (engraving) {
         filters.push({
           key: "engraving",
@@ -1421,6 +1810,39 @@
           key: "fulfillment",
           values: fulfillment
         });
+      }
+
+      if (priceRange) {
+        let minPrice, maxPrice;
+        
+        switch(priceRange) {
+          case '0-50':
+            minPrice = '0';
+            maxPrice = '50';
+            break;
+          case '50-100':
+            minPrice = '50';
+            maxPrice = '100';
+            break;
+          case '100-200':
+            minPrice = '100';
+            maxPrice = '200';
+            break;
+          case '200+':
+            minPrice = '200';
+            maxPrice = '999999';
+            break;
+        }
+
+        if (minPrice && maxPrice) {
+          filters.push({
+            key: "price",
+            values: {
+              min: minPrice,
+              max: maxPrice
+            }
+          });
+        }
       }
 
       const response = await client.catalog.search({
@@ -1535,33 +1957,57 @@
    * Check availability of products
    * @param {Event} event - The form submission event
    */
-  async function checkAvailability( event ) {
-    event.preventDefault();
-    const upcs = document.getElementById('upcs').value.split(',').map(upc => upc.trim());
-    const zipCode = document.getElementById('zipCode').value;
-    const availabilityResults = document.getElementById('availabilityResults');
 
-    if (!client) {
-      availabilityResults.innerHTML = '<p>SDK not initialized. Please try again.</p>';
-      return;
-    }
+async function checkAvailability(event) {
+  event.preventDefault();
+  const availabilityResults = document.getElementById('availabilityResults');
+  const validationMessage = document.getElementById('validationMessage');
 
-    try {
-      const response = await client.catalog.availability({
-        upcs: upcs,
-        loc: {
-          address: NEW_YORK_ADDRESS,
-        },
-        isLegacy: true,
-        isLean: false,
-      });
-      displayAvailabilityResults(response);
-    } catch (error) {
-      console.error('Error checking availability:', error);
-      availabilityResults.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
-    }
+  const upcs = document.getElementById('upcs').value.split(',').map(upc => upc.trim()).filter(Boolean);
+  const grouping = document.getElementById('grouping').value.split(',').map(grouping => grouping.trim()).filter(Boolean);
+  const ids = document.getElementById('ids').value.split(',').map(id => id.trim()).filter(Boolean);
+
+  const zipCode = document.getElementById('zipCode').value;
+
+  if (upcs.length === 0 && grouping.length === 0 && ids.length === 0) {
+    validationMessage.classList.remove('d-none');
+    return;
   }
 
+  if (!client) {
+    availabilityResults.innerHTML = '<p class="text-danger">SDK not initialized. Please try again.</p>';
+    return;
+  }
+
+  validationMessage.classList.add('d-none');
+  
+  availabilityResults.innerHTML = '<p>Checking availability...</p>';
+
+  try {
+    const requestParams = {
+      loc: {
+        address: NEW_YORK_ADDRESS,
+      },
+      isLegacy: true,
+      isLean: false
+    };
+
+ 
+    if (upcs.length > 0) requestParams.upcs = upcs;
+    if (grouping.length > 0) requestParams.grouping = grouping;
+    if (ids.length > 0) requestParams.ids = ids;
+
+    const response = await client.catalog.availability(requestParams);
+    displayAvailabilityResults(response);
+  } catch (error) {
+    console.error('Error checking availability:', error);
+    availabilityResults.innerHTML = `
+      <div class="alert alert-danger">
+        <strong>Error:</strong> ${error.message}
+      </div>
+    `;
+  }
+}
   /**
    * Display availability results
    * @param {Object} response - The availability check response
@@ -1583,7 +2029,7 @@
               <p>UPC: ${product.sizes[0].upc}</p>
               <p>Size: ${product.sizes[0].size}</p>
               <p>Availability: ${availability}</p>
-              <p>Price: $${product.sizes[0].variants[0].price.toFixed(2)}</p>
+              <p>Price: ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.sizes[0].variants[0].price / 100)}</p>
             </div>
           </div>
         </li>
@@ -2009,8 +2455,6 @@
     const id = document.getElementById('userIDFetch').value;
     const fetchUserByIDResult = document.getElementById('fetchUserByIDResult');
 
-    console.log("id: ", id)
-
     try {
       const userFetchedByID = await client.user.fetch(id);
       const { data, metadata, message, statusCode } = userFetchedByID;
@@ -2089,16 +2533,17 @@
     const one = document.getElementById('addressOne').value;
     const city = document.getElementById('addressCity').value;
     const state = document.getElementById('addressState').value;
+    const zip = document.getElementById('addressZip').value;
     const isDefault = document.getElementById('isDefaultAddress').checked;
     const updateAddressResult = document.getElementById('updateAddressResult');
 
     try {
       const addressResponse = await client.user.updateAddress({
         customerId,
-        one: NEW_YORK_ADDRESS.one,
-        city: NEW_YORK_ADDRESS.city,
-        state: NEW_YORK_ADDRESS.state,
-        zip: NEW_YORK_ADDRESS.zip,
+        one,         
+        city,      
+        state,       
+        zip,  
         type: 'SHIPPING',
         isDefault,
       });
@@ -2207,33 +2652,27 @@
   });
 
   /**
-   * Update Payment Method Event Listener
+   * Update Default Payment Method Event Listener
    */
-  document.getElementById('updatePaymentMethodForm').addEventListener('submit', async ( event ) => {
+  document.getElementById('updateDefaultPaymentForm').addEventListener('submit', async ( event ) => {
     event.preventDefault();
     const customerId = document.getElementById('updatePaymentCustomerId').value;
     const paymentMethodId = document.getElementById('updatePaymentMethodId').value;
-    const isDefault = document.getElementById('updateIsDefault').checked;
-    const updatePaymentMethodResult = document.getElementById('updatePaymentMethodResult');
+    const updateDefaultPaymentResult = document.getElementById('updateDefaultPaymentResult');
 
     try {
       const response = await client.user.updatePayment({
         customerId,
         paymentMethodId,
-        // comment out to test multiple scenarios
-        isDefault,
+        isDefault:true,
       });
 
-      updatePaymentMethodResult.innerHTML = `
-          <p>Payment method updated successfully:</p>
-          <ul>
-            <li>Payment Method ID: ${response.data.id}</li>
-            <li>Default: ${response.data.isDefault ? 'Yes' : 'No'}</li>
-          </ul>
+      updateDefaultPaymentResult.innerHTML = `
+          <p>Default payment updated successfully.</p>
         `;
     } catch (error) {
       console.error('Failed to update payment method:', error);
-      updatePaymentMethodResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+      updateDefaultPaymentResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
     }
   });
 
@@ -2384,28 +2823,28 @@
     // Build the checkout object
     const checkoutData = {
       cartId,
-      'recipient': {
-        'firstName': 'dioriJoe',
+      'customer': {
+        'firstName': 'Joe',
         'lastName': 'John',
-        'email': 'john.diori.joe@gmail.com',
+        'email': 'john.joe@gmail.com',
         'phone': '9732119920',
         'birthDate': '11-22-1998',
         'hasAgeVerify': true,
       },
-      'billingAddress': {
-        'firstName': 'NewJoe',
-        'lastName': 'NewJohn',
-        'email': 'joe.new.john@gmail.com',
-        'phone': '1234324987',
-        'one': '22 Washington Ave',
-        'two': '',
-        'city': 'Cliffside Park',
-        'state': 'NJ',
-        'zip': '07010',
-      },
+      // 'billingAddress': {
+      //   'firstName': 'NewJoe',
+      //   'lastName': 'NewJohn',
+      //   'email': 'joe.new.john@gmail.com',
+      //   'phone': '1234324987',
+      //   'one': '22 Washington Ave',
+      //   'two': '',
+      //   'city': 'Cliffside Park',
+      //   'state': 'NJ',
+      //   'zip': '07010',
+      // },
+      'billingSameAsShipping': true, // Set to false to provide a separate billing address
       'hasSubstitutionPolicy': true,
       'isGift': false,
-      'billingSameAsShipping': true,
       'giftOptions': {
         'message': '',
         'recipient': {
@@ -2459,10 +2898,13 @@
 
     const completeCheckoutResults = document.getElementById('completeCheckoutResults');
 
+    const token = document.getElementById('checkoutToken').value;
+    const payment = document.getElementById('paymentId').value;
+
     // Build the complete checkout request object
     const completeCheckoutData = {
-      token: document.getElementById('checkoutToken').value,
-      payment: document.getElementById('paymentId').value,
+      token,
+      payment
     };
 
     try {
