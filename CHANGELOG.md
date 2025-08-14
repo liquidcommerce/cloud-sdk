@@ -1,6 +1,5 @@
 # [1.9.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.3...v1.9.0-beta.4) (2025-08-12)
 
-
 ### Features
 
 * **catalog:** add additionalInformation field to IProduct interface and update error messages in ENUM_CHECKOUT_STATUS_CODE ([cbc8fce](https://github.com/liquidcommerce/cloud-sdk/commit/cbc8fce92e5b9586294b57ceef8af9301ac5a8b0))
