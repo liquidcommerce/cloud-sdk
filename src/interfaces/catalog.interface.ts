@@ -463,6 +463,8 @@ export interface IProductSizeAttributes {
   presale: IProductPresale;
 
   engraving: IProductSizeEngraving;
+
+  maxQuantityPerOrder?: number;
 }
 
 /**
@@ -572,4 +574,6 @@ export interface IProduct {
   attributes?: Partial<IAttributes>;
 
   priceInfo: IProductPriceInfo | null;
+
+  additionalInformation?: string;
 }

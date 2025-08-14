@@ -288,6 +288,14 @@ export class CheckoutHelperService {
         throw new Error('Invalid gift message: must be a string if provided');
       }
 
+      if (
+        'message' in giftOptions &&
+        typeof giftOptions.message === 'string' &&
+        giftOptions.message.length > 500
+      ) {
+        throw new Error('Invalid gift message: Gift message cannot exceed 500 characters');
+      }
+
       if ('recipient' in giftOptions) {
         if (typeof giftOptions.recipient !== 'object') {
           throw new Error('Invalid gift recipient: must be an object if provided');

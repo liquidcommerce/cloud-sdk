@@ -1,4 +1,42 @@
-## [1.8.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.8.0...v1.8.1) (2025-06-18)
+# [1.9.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.3...v1.9.0-beta.4) (2025-08-12)
+
+### Features
+
+* **catalog:** add additionalInformation field to IProduct interface and update error messages in ENUM_CHECKOUT_STATUS_CODE ([cbc8fce](https://github.com/liquidcommerce/cloud-sdk/commit/cbc8fce92e5b9586294b57ceef8af9301ac5a8b0))
+
+# [1.9.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.2...v1.9.0-beta.3) (2025-08-06)
+
+
+### Features
+
+* **payment:** add optional variables property to appearance configuration ([e2a3385](https://github.com/liquidcommerce/cloud-sdk/commit/e2a3385606f02c5d5eafa58236237cda731751cf))
+* **payment:** update appearance configuration to include optional variables for styling ([41471f0](https://github.com/liquidcommerce/cloud-sdk/commit/41471f0ee41456bf3eb51eaa7155365df41fdc15))
+
+# [1.9.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.1...v1.9.0-beta.2) (2025-08-06)
+
+
+### Bug Fixes
+
+* **checkout:** add validation for gift message length in giftOptions ([c32a318](https://github.com/liquidcommerce/cloud-sdk/commit/c32a3180f1d121abd762892bbe410b97b7e59223))
+* **checkout:** update error message for gift message length validation ([37f8061](https://github.com/liquidcommerce/cloud-sdk/commit/37f80618d0566c320e35594359988d778d17320e))
+
+# [1.9.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.8.1-beta.1...v1.9.0-beta.1) (2025-07-02)
+
+
+### Bug Fixes
+
+* **cart:** change discount field in ICartAttributesPromoCode to required ([08d1920](https://github.com/liquidcommerce/cloud-sdk/commit/08d1920972c9ec70a0b673169aa70b6948bbd531))
+
+
+### Features
+
+* **cart:** add max quantity exceeded error codes to CART_EVENT_ENUM and ENUM_CHECKOUT_STATUS_CODE_ERROR ([b82d53d](https://github.com/liquidcommerce/cloud-sdk/commit/b82d53d4393a9465c481a67e8e68ef5ad6631820))
+* **cart:** add optional discount field to ICartAttributesPromoCode interface ([78d51b2](https://github.com/liquidcommerce/cloud-sdk/commit/78d51b211d0f28270fac07d520ad1e179075135c))
+* **catalog:** add optional maxQuantityPerOrder field to IProductSizeAttributes interface ([6f87559](https://github.com/liquidcommerce/cloud-sdk/commit/6f87559f0dee3441f1a7f7219837375ef20f82c5))
+* **checkout:** add new error codes and update checkout event interface ([83ec210](https://github.com/liquidcommerce/cloud-sdk/commit/83ec2102124d445a15ec9ab8f50e905beec70283))
+* **enums:** added RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE enum on CART_EVENT_ENUM ([29fad73](https://github.com/liquidcommerce/cloud-sdk/commit/29fad73c1a6c31de78e4e2e8c51ed005c0b075b8))
+
+## [1.8.1-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.8.0...v1.8.1-beta.1) (2025-06-18)
 
 
 ### Bug Fixes

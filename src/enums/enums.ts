@@ -208,6 +208,8 @@ export enum CART_EVENT_ENUM {
   ITEM_ID_NOT_FOUND = 'ItemIdNotFound',
   ITEMS_REMOVED = 'ItemsRemoved',
   RETAILER_FULFILLMENT_INVALID = 'RetailerFulfillmentInvalid',
+  RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE = 'RetailerOnDemandHoursNotAvailable',
+  MAX_QUANTITY_PER_ORDER_EXCEEDED = 'MaxQuantityPerOrderExceeded',
 
   // Coupon validation events
   COUPON_PROCESSING_ERROR = 'CouponProcessingError',
@@ -266,6 +268,12 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_CART_UPDATED_ERROR = 5501,
   REQUEST_ADDRESS_DEFAULT_ERROR = 5502,
   REQUEST_TIPS_ERROR = 5503,
+  REQUEST_COMPLETE_CUSTOMER_MISSING_FIELDS = 5504,
+  REQUEST_RETAILER_HOURS_ERROR = 5505,
+  REQUEST_ITEM_QUANTITY_CHANGE_ERROR = 5506,
+  REQUEST_MAX_QUANTITY_PER_ORDER_ERROR = 5507,
+  REQUEST_PRESALE_NOT_STARTED_ERROR = 5508,
+  REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 5509,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -283,7 +291,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_CHECKOUT_COMPLETE_UPDATE_ERROR = 'Unable to update your checkout status.',
   REQUEST_CHECKOUT_COMPLETE_SAVE_ERROR = 'Unable to save your completed checkout.',
   REQUEST_CHECKOUT_HAS_COMPLETE_ERROR = 'This checkout has already been processed, create a new cart to process a new checkout.',
-  REQUEST_NO_CART_ITEM_ERROR = 'No items found in your cart.',
+  REQUEST_NO_CART_ITEM_ERROR = 'Item(s) in your cart are no longer available',
   REQUEST_NO_CUSTOMER_FOUND_ERROR = 'The customer account was not found.',
   REQUEST_PAYMENT_ATTACHED_ERROR = 'The payment attached to the checkout is not a valid payment method for this customer.',
   REQUEST_SHIPPING_ADDRESS_ERROR = 'The address in your cart has changed, check and try again.',
@@ -292,6 +300,12 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_CART_UPDATED_ERROR = 'The cart requested was updated during your checkout.',
   REQUEST_ADDRESS_DEFAULT_ERROR = "There's been an error with your address configurations in cart and/or billing address, check and try again.",
   REQUEST_TIPS_ERROR = "There's been an error applying your tips to the checkout.",
+  REQUEST_COMPLETE_CUSTOMER_MISSING_FIELDS = 'Customer profile information is incomplete. Please provide all required details.',
+  REQUEST_RETAILER_HOURS_ERROR = 'The retailer is currently closed or on-demand hours are not available.',
+  REQUEST_ITEM_QUANTITY_CHANGE_ERROR = 'Some items in your cart exceed available stock quantities. Please adjust your cart and try again.',
+  REQUEST_MAX_QUANTITY_PER_ORDER_ERROR = 'You have exceeded the maximum quantity allowed per order for one or more items in your cart.',
+  REQUEST_PRESALE_NOT_STARTED_ERROR = 'The presale for this item has not started yet. Please check back later.',
+  REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 'Some items in your cart do not meet the minimum retailer requirements per order quantity. Please adjust your cart and try again.',
 }
 
 export enum CHECKOUT_EVENT_ENUM {
@@ -302,6 +316,9 @@ export enum CHECKOUT_EVENT_ENUM {
   GIFT_CARD_ALREADY_IN_USE = 'GiftCardAlreadyInUse',
   GIFT_CARD_EXPIRED = 'GiftCardExpired',
   GIFT_CARD_BALANCE_DEPLETED = 'GiftCardBalanceDepleted',
+  RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE = 'RetailerOnDemandHoursNotAvailable',
+  ITEM_QTY_CHANGE = 'ItemQuantityChange',
+  MAX_QUANTITY_PER_ORDER_EXCEEDED = 'MaxQuantityPerOrderExceeded',
 }
 
 export enum ENUM_ORDER_STATUS {
