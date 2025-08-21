@@ -158,6 +158,10 @@ export type IRetailerFees = IRetailerFeeShipping | IRetailerFeeDelivery;
  * @property {IRetailerTimes[]} breaks - The breaks within the working hours.
  *
  * @property {string[]} items - List of item identifiers included in the fulfillment.
+ *
+ * @property {boolean} doesAllowPromos - Indicates if promotions are allowed for this fulfillment.
+ *
+ * @property {boolean} doesAllowGiftCards - Indicates if gift cards are allowed for this fulfillment.
  */
 export interface IRetailerFulfillments {
   id: string;
@@ -183,6 +187,10 @@ export interface IRetailerFulfillments {
   breaks: IRetailerTimes[];
 
   items: string[];
+
+  doesAllowPromos: boolean;
+
+  doesAllowGiftCards: boolean;
 }
 
 /**

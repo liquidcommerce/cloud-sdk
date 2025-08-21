@@ -269,6 +269,10 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
   expectation: IRetailerExpectation;
 
   items: string[];
+
+  doesAllowPromos: boolean;
+
+  doesAllowGiftCards: boolean;
 }
 
 /**

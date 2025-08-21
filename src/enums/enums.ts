@@ -237,6 +237,10 @@ export enum CART_EVENT_ENUM {
   PRESALE_NOT_STARTED = 'PresaleNotStarted',
   PRESALE_EXPIRED = 'PresaleExpired',
   PRESALE_MIXED_CART = 'PresaleMixedCart',
+
+  // Retailer restriction events
+  RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',
+  RETAILERS_DO_NOT_ALLOW_PROMOS = 'RetailersDoNotAllowPromos',
 }
 
 export enum ENUM_ADDRESS_TYPE {
@@ -319,6 +323,12 @@ export enum CHECKOUT_EVENT_ENUM {
   RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE = 'RetailerOnDemandHoursNotAvailable',
   ITEM_QTY_CHANGE = 'ItemQuantityChange',
   MAX_QUANTITY_PER_ORDER_EXCEEDED = 'MaxQuantityPerOrderExceeded',
+
+  // Retailer restriction events
+  RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',
+  RETAILERS_DO_NOT_ALLOW_PROMOS = 'RetailersDoNotAllowPromos',
+  RETAILER_DOES_NOT_ALLOW_GIFT_CARDS = 'RetailerDoesNotAllowGiftCards',
+  RETAILERS_DO_NOT_ALLOW_GIFT_CARDS = 'RetailersDoNotAllowGiftCards',
 }
 
 export enum ENUM_ORDER_STATUS {
