@@ -1,4 +1,4 @@
-import type { DAYS_OF_WEEK, ENUM_MODALITIES } from '../enums';
+import type { DAYS_OF_WEEK, ENUM_MODALITIES, SHIPPING_CATEGORY_TYPE } from '../enums';
 import type { IAddress } from './address.interface';
 
 /**
@@ -145,6 +145,8 @@ export type IRetailerFees = IRetailerFeeShipping | IRetailerFeeDelivery;
  *
  * @property {number} [engravingFee] - Optional engraving fee for the fulfillment.
  *
+ * @property {number} [platformFee] - Optional platform fee for the fulfillment.
+ *
  * @property {number} [subtotal] - Optional subtotal amount for the fulfillment.
  *
  * @property {string} [timezone] - Optional timezone associated with the fulfillment.
@@ -158,6 +160,12 @@ export type IRetailerFees = IRetailerFeeShipping | IRetailerFeeDelivery;
  * @property {IRetailerTimes[]} breaks - The breaks within the working hours.
  *
  * @property {string[]} items - List of item identifiers included in the fulfillment.
+ *
+ * @property {boolean} doesAllowPromos - Indicates if promotions are allowed for this fulfillment.
+ *
+ * @property {boolean} doesAllowGiftCards - Indicates if gift cards are allowed for this fulfillment.
+ *
+ * @property {string[]} productTypesAllowed - List of fulfillment categories allowed for this fulfillment (SPIRITS, WINE, ...).
  */
 export interface IRetailerFulfillments {
   id: string;
@@ -169,6 +177,8 @@ export interface IRetailerFulfillments {
   shippingFee?: number;
 
   engravingFee?: number;
+
+  platformFee?: number;
 
   subtotal?: number;
 
@@ -183,6 +193,12 @@ export interface IRetailerFulfillments {
   breaks: IRetailerTimes[];
 
   items: string[];
+
+  doesAllowPromos: boolean;
+
+  doesAllowGiftCards: boolean;
+
+  productTypesAllowed: SHIPPING_CATEGORY_TYPE[];
 }
 
 /**
