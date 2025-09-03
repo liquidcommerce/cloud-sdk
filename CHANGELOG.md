@@ -1,3 +1,10 @@
+# [1.9.0-beta.5](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.4...v1.9.0-beta.5) (2025-09-03)
+
+
+### Bug Fixes
+
+* **payment-session-v2:** update environment variable and adjust return value ([3290c0b](https://github.com/liquidcommerce/cloud-sdk/commit/3290c0b2061c450e7ba9276790f22af63ccf02db))
+
 # [1.9.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0-beta.3...v1.9.0-beta.4) (2025-08-12)
 
 ### Features
