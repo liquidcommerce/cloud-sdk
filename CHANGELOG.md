@@ -1,3 +1,11 @@
+## [1.9.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.0...v1.9.1) (2025-09-04)
+
+
+### Bug Fixes
+
+* **checkout:** add retailer promo and gift card allowance properties ([a85591f](https://github.com/liquidcommerce/cloud-sdk/commit/a85591fe17ff363b3cece767dede968a82924736))
+* **payment-session-v2:** update environment variable and adjust return value ([3290c0b](https://github.com/liquidcommerce/cloud-sdk/commit/3290c0b2061c450e7ba9276790f22af63ccf02db))
+
 # [1.9.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.8.1...v1.9.0) (2025-08-14)
 
 
