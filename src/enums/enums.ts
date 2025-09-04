@@ -1,3 +1,12 @@
+import {
+  ENUM_BEER,
+  ENUM_MERCHANDISE,
+  ENUM_MISCELLANEOUS,
+  ENUM_NON_ALCOHOLIC,
+  ENUM_SPIRITS,
+  ENUM_WINE,
+} from './taxonomy';
+
 export enum LIQUID_COMMERCE_ENV {
   LOC = 'loc',
   STAGE = 'stage',
@@ -237,6 +246,10 @@ export enum CART_EVENT_ENUM {
   PRESALE_NOT_STARTED = 'PresaleNotStarted',
   PRESALE_EXPIRED = 'PresaleExpired',
   PRESALE_MIXED_CART = 'PresaleMixedCart',
+
+  // Retailer restriction events
+  RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',
+  RETAILERS_DO_NOT_ALLOW_PROMOS = 'RetailersDoNotAllowPromos',
 }
 
 export enum ENUM_ADDRESS_TYPE {
@@ -319,6 +332,12 @@ export enum CHECKOUT_EVENT_ENUM {
   RETAILER_ONDEMAND_HOURS_NOT_AVAILABLE = 'RetailerOnDemandHoursNotAvailable',
   ITEM_QTY_CHANGE = 'ItemQuantityChange',
   MAX_QUANTITY_PER_ORDER_EXCEEDED = 'MaxQuantityPerOrderExceeded',
+
+  // Retailer restriction events
+  RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',
+  RETAILERS_DO_NOT_ALLOW_PROMOS = 'RetailersDoNotAllowPromos',
+  RETAILER_DOES_NOT_ALLOW_GIFT_CARDS = 'RetailerDoesNotAllowGiftCards',
+  RETAILERS_DO_NOT_ALLOW_GIFT_CARDS = 'RetailersDoNotAllowGiftCards',
 }
 
 export enum ENUM_ORDER_STATUS {
@@ -353,4 +372,14 @@ export enum ENUM_CUSTOMER_PLACEMENT {
   STANDARD = 'standard',
   PRE_SALE = 'pre_sale',
   BACK_ORDER = 'back_order',
+}
+
+export enum SHIPPING_CATEGORY_TYPE {
+  SPIRITS = ENUM_SPIRITS.BASE,
+  WINE = ENUM_WINE.BASE,
+  BEER = ENUM_BEER.BASE,
+  NON_ALCOHOLIC = ENUM_NON_ALCOHOLIC.BASE,
+  MISCELLANEOUS = ENUM_MISCELLANEOUS.BASE,
+  MERCHANDISE = ENUM_MERCHANDISE.BASE,
+  OTHER = 'OTHER',
 }

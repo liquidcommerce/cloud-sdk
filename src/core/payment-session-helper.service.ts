@@ -21,7 +21,7 @@ enum D {
   R = 'seti_',
   S = '_secret_',
   T_C = 'ctoken_',
-  U = 'production',
+  U = 'prod',
 }
 
 enum E {
@@ -68,7 +68,7 @@ export class PaymentSessionHelperService {
   }
 
   private a(c: string, env: string): string {
-    return `${env === D.U ? D.P : D.Q}${c}`;
+    return `${env === D.U ? '' : D.Q}${c}`;
   }
 
   private b(i: string, t: string): string {
