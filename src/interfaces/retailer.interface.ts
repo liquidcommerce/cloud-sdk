@@ -51,6 +51,8 @@ export interface IRetailerExpectation {
   detail: string;
 
   short: string;
+
+  engraving?: string;
 }
 
 /**
