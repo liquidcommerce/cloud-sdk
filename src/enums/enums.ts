@@ -333,6 +333,27 @@ export enum CHECKOUT_EVENT_ENUM {
   ITEM_QTY_CHANGE = 'ItemQuantityChange',
   MAX_QUANTITY_PER_ORDER_EXCEEDED = 'MaxQuantityPerOrderExceeded',
 
+  // Coupon/discount related events
+  COUPON_PROCESSING_ERROR = 'CouponProcessingError',
+  COUPON_NOT_FOUND = 'CouponNotFound',
+  COUPON_EXPIRED = 'CouponExpired',
+  NO_APPLICABLE_DISCOUNT = 'NoApplicableDiscount',
+  COUPON_NOT_STARTED = 'CouponNotStarted',
+  MINIMUM_ORDER_VALUE_NOT_MET = 'MinimumOrderValueNotMet',
+  MINIMUM_ORDER_UNITS_NOT_MET = 'MinimumOrderUnitsNotMet',
+  MINIMUM_DISTINCT_ITEMS_NOT_MET = 'MinimumDistinctItemsNotMet',
+  QUOTA_EXCEEDED = 'QuotaExceeded',
+  USER_LIMIT_EXCEEDED = 'UserLimitExceeded',
+  NOT_FIRST_PURCHASE = 'NotFirstPurchase',
+  INVALID_COUPON = 'InvalidCoupon',
+  INVALID_MEMBERSHIP = 'InvalidMembership',
+  INVALID_DOMAIN = 'InvalidDomain',
+  INVALID_REQUIREMENTS = 'InvalidRequirements',
+  INVALID_ORGANIZATION = 'InvalidOrganization',
+  PRESALE_ITEMS_NOT_ALLOWED = 'PresaleItemsNotAllowed',
+  PRODUCT_NOT_ELIGIBLE = 'ProductNotEligible',
+  NOT_ENOUGH_PREVIOUS_ORDERS = 'NotEnoughPreviousOrders',
+
   // Retailer restriction events
   RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',
   RETAILERS_DO_NOT_ALLOW_PROMOS = 'RetailersDoNotAllowPromos',
