@@ -287,6 +287,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_MAX_QUANTITY_PER_ORDER_ERROR = 5507,
   REQUEST_PRESALE_NOT_STARTED_ERROR = 5508,
   REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 5509,
+  REQUEST_CHECKOUT_PROCESSING_LOCK_NOT_ACQUIRED_ERROR = 5510,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -319,6 +320,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_MAX_QUANTITY_PER_ORDER_ERROR = 'You have exceeded the maximum quantity allowed per order for one or more items in your cart.',
   REQUEST_PRESALE_NOT_STARTED_ERROR = 'The presale for this item has not started yet. Please check back later.',
   REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 'Some items in your cart do not meet the minimum retailer requirements per order quantity. Please adjust your cart and try again.',
+  REQUEST_CHECKOUT_PROCESSING_LOCK_NOT_ACQUIRED_ERROR = 'This checkout is currently being processed, please try again later.',
 }
 
 export enum CHECKOUT_EVENT_ENUM {
