@@ -12,7 +12,7 @@ export interface IPaymentElementConfig {
   elementId: string;
 
   appearance?: {
-    theme?: 'stipe' | 'night' | 'flat';
+    theme?: 'stripe' | 'night' | 'flat' | 'stipe'; //deprecated 'stipe' kept for backward compatibility
   };
 
   elementOptions?: ILiquidPaymentElementOptions;

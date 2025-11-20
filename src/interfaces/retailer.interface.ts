@@ -46,11 +46,14 @@ export type RetailerHours = { [day in DAYS_OF_WEEK]: IRetailerHoursConfig };
  *
  * @property {string} detail - A detailed description of the expectation.
  * @property {string} short - A brief, summarized version of the expectation.
+ * @property {string} engraving - An optional property that provides details about engraving services, if applicable.
  */
 export interface IRetailerExpectation {
   detail: string;
 
   short: string;
+
+  engraving?: string;
 }
 
 /**
@@ -139,6 +142,8 @@ export type IRetailerFees = IRetailerFeeShipping | IRetailerFeeDelivery;
  *
  * @property {ENUM_MODALITIES} type - The modality type of the fulfillment.
  *
+ * @property {boolean} canEngrave - Indicates if engraving is allowed for the fulfillment.
+ *
  * @property {number} [deliveryFee] - Optional delivery fee for the fulfillment.
  *
  * @property {number} [shippingFee] - Optional shipping fee for the fulfillment.
@@ -171,6 +176,8 @@ export interface IRetailerFulfillments {
   id: string;
 
   type: ENUM_MODALITIES;
+
+  canEngrave: boolean;
 
   deliveryFee?: number;
 
