@@ -116,7 +116,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
       }
 
       const appearance = (config?.appearance ?? {
-        theme: 'stipe',
+        theme: 'stripe',
       }) as Appearance;
 
       const componentOptions: StripeElementsOptionsClientSecret = {
