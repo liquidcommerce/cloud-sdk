@@ -1,3 +1,12 @@
+## [1.9.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.1...v1.9.2) (2025-11-26)
+
+
+### Bug Fixes
+
+* **expectation:** add missing optional engraving property to IRetailerExpectation interface ([8ae1acb](https://github.com/liquidcommerce/cloud-sdk/commit/8ae1acbdcc87a9f60cd06d3766daa4bd9b012dbd))
+* **payment:** correct theme spelling in IPaymentElementConfig and add new checkout error ([f286d21](https://github.com/liquidcommerce/cloud-sdk/commit/f286d215d2fc436c35c4c0b4b704ad760df0389c))
+* **retailer/checkout:** add retailer missing fields and promo code checkout events ([a9029cc](https://github.com/liquidcommerce/cloud-sdk/commit/a9029ccc23d94ae150e480a410a7239b77412e17))
+
 ## [1.9.2-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.1...v1.9.2-beta.1) (2025-11-25)
 
 
