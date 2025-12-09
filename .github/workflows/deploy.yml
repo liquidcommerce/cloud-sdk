@@ -101,7 +101,7 @@ jobs:
 
       - name: Set up NPM Token
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.CLOUD_SDK_NPM_TOKEN }}" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NEW_NPM_AUTOMATION_PUBLISH_ORG }}" > ~/.npmrc
           cat ~/.npmrc
 
       - name: Semantic Release
@@ -111,7 +111,7 @@ jobs:
           GIT_COMMITTER_NAME: ${{ secrets.CLOUD_USER_NAME }}
           GIT_COMMITTER_EMAIL: ${{ secrets.CLOUD_USER_EMAIL }}
           GITHUB_TOKEN: ${{ secrets.CLOUD_SDK_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.CLOUD_SDK_NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NEW_NPM_AUTOMATION_PUBLISH_ORG }}
         run: |
           GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o UserKnownHostsFile=~/.ssh/known_hosts" pnpm semantic-release --debug
 
