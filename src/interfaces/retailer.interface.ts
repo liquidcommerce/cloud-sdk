@@ -1,5 +1,5 @@
 import type { DAYS_OF_WEEK, ENUM_MODALITIES, SHIPPING_CATEGORY_TYPE } from '../enums';
-import type { IAddress } from './address.interface';
+import type { IAddress, ICoords } from './address.interface';
 
 /**
  * The IRetailerTimes interface represents the working hours of a retailer.
@@ -241,7 +241,7 @@ export interface IRetailer {
 
   total?: number;
 
-  address?: IAddress;
+  address?: IAddress & ICoords;
 
   fulfillments: IRetailerFulfillments[];
 }
