@@ -1,3 +1,11 @@
+## [1.9.2-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.2-beta.1...v1.9.2-beta.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* **deploy:** update NPM token reference in deploy workflow ([f828ea8](https://github.com/liquidcommerce/cloud-sdk/commit/f828ea83c2c88e0446a76a77ff0694c025f39a7d))
+* **retailer-interface:** extend address type to include coordinates ([7dd8488](https://github.com/liquidcommerce/cloud-sdk/commit/7dd8488740bf0c7cc6c6f49539e93ce303d476ab))
+
 ## [1.9.2-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.1...v1.9.2-beta.1) (2025-11-25)
 
 
