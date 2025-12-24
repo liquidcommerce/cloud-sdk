@@ -1,13 +1,13 @@
-## [1.9.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.1...v1.9.2) (2025-11-26)
+## [1.9.3-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.2...v1.9.3-beta.1) (2025-12-24)
 
 
 ### Bug Fixes
 
-* **expectation:** add missing optional engraving property to IRetailerExpectation interface ([8ae1acb](https://github.com/liquidcommerce/cloud-sdk/commit/8ae1acbdcc87a9f60cd06d3766daa4bd9b012dbd))
-* **payment:** correct theme spelling in IPaymentElementConfig and add new checkout error ([f286d21](https://github.com/liquidcommerce/cloud-sdk/commit/f286d215d2fc436c35c4c0b4b704ad760df0389c))
-* **retailer/checkout:** add retailer missing fields and promo code checkout events ([a9029cc](https://github.com/liquidcommerce/cloud-sdk/commit/a9029ccc23d94ae150e480a410a7239b77412e17))
+* **deploy:** update NPM token reference in deploy workflow ([f828ea8](https://github.com/liquidcommerce/cloud-sdk/commit/f828ea83c2c88e0446a76a77ff0694c025f39a7d))
+* **orders:** update orders api interfaces ([#125](https://github.com/liquidcommerce/cloud-sdk/issues/125)) ([af98add](https://github.com/liquidcommerce/cloud-sdk/commit/af98addbac71ed6a297224ed1307a281edb72bfd))
+* **retailer-interface:** extend address type to include coordinates ([7dd8488](https://github.com/liquidcommerce/cloud-sdk/commit/7dd8488740bf0c7cc6c6f49539e93ce303d476ab))
 
-## [1.9.2-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.1...v1.9.2-beta.1) (2025-11-25)
+## [1.9.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.1...v1.9.2) (2025-11-26)
 
 
 ### Bug Fixes

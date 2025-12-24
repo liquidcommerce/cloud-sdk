@@ -1,5 +1,5 @@
 import type { IApiResponseWithData, ILiquidCommerceOrderConfig } from '../types';
-import type { IOrder } from './order.interface';
+import type { IOrder, IOrdersList, IOrdersListParams } from './order.interface';
 
 /**
  * Interface representing the LiquidCommerce order client.
@@ -57,4 +57,39 @@ export interface IOrderMethod {
    * @see {@link IOrder} for the structure of the order data returned.
    */
   fetch: (identifier: string) => Promise<IApiResponseWithData<IOrder>>;
+
+  /**
+   * Retrieves a list of orders within a specified date range.
+   *
+   * @param {IOrdersListParams} params - The parameters for listing orders.
+   * @returns {Promise<IApiResponseWithData<IOrdersList>>} A promise that resolves to the API response with paginated order data.
+   *
+   * @example
+   * const orderClient = await LiquidCommerceOrders({
+   *   userID: 'yourUserID',
+   *   password: 'yourPassword',
+   *   env: LIQUID_COMMERCE_ENV.STAGE,
+   * });
+   *
+   * try {
+   *   const ordersList = await orderClient.order.list({
+   *     startDate: '2025-01-01',
+   *     endDate: '2025-01-31',
+   *     page: 1,
+   *     limit: 20,
+   *     customerEmail: 'customer@example.com', // optional
+   *   });
+   *
+   *   console.log('Total orders:', ordersList.data.total);
+   *   console.log('Orders:', ordersList.data.orders);
+   * } catch (error) {
+   *   console.error('Failed to list orders:', error);
+   * }
+   *
+   * @throws {Error} Throws an error if the list request fails or if authentication is unsuccessful.
+   *
+   * @see {@link IOrdersListParams} for the structure of the request parameters.
+   * @see {@link IOrdersList} for the structure of the paginated order data returned.
+   */
+  list: (params: IOrdersListParams) => Promise<IApiResponseWithData<IOrdersList>>;
 }
