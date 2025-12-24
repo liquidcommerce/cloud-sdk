@@ -366,6 +366,7 @@ export enum CHECKOUT_EVENT_ENUM {
 export enum ENUM_ORDER_STATUS {
   CREATED = 'created',
   PROCESSING = 'processing',
+  IN_TRANSIT = 'inTransit',
   CANCELED = 'canceled',
   DELIVERED = 'delivered',
   TEST = 'test',

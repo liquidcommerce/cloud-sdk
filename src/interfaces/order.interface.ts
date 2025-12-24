@@ -6,11 +6,6 @@ import type {
   ENUM_ORDER_SYSTEM,
 } from 'enums';
 
-export interface IAddressCoordinates {
-  latitude: number | null;
-  longitude: number | null;
-}
-
 export interface IOrderAddress {
   one: string;
   two: string | null;
@@ -42,6 +37,17 @@ export interface IOrderFulfillmentPackage {
   dateShipped: string | null; // new Date().toISOString()
 }
 
+export interface IOrderFulfillmentCancellation {
+  category: string | null;
+  subcategory: string | null;
+  notes: string | null;
+}
+
+export interface IOrderFulfillmentExpectationFormatted {
+  detail: string | null;
+  engraving: string | null;
+}
+
 export interface IOrderFulfillment {
   id: string;
   type: ENUM_ORDER_FULFILLMENT_TYPE;
@@ -49,12 +55,15 @@ export interface IOrderFulfillment {
   scheduledFor: string | null; // new Date().toISOString()
   updatedAt: string; // new Date().toISOString()
   itemIds: string[];
+  cancellation: IOrderFulfillmentCancellation;
+  expectationFormatted: IOrderFulfillmentExpectationFormatted;
   packages: IOrderFulfillmentPackage[];
   timeline: IOrderFulfillmentTimeline[];
 }
 
 export interface IOrderRetailerAddress extends IOrderAddress {
-  coordinates: IAddressCoordinates;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 export interface IOrderRetailer {
@@ -125,6 +134,7 @@ export interface IOrderItem {
   liquidId: string | null;
   legacyGrouping: string | null;
   legacyPid: string | null;
+  expectation: string | null;
   customerPlacement: ENUM_CUSTOMER_PLACEMENT;
   product: IOrderItemProduct;
   image: string | null;
@@ -216,6 +226,8 @@ export interface IOrder {
   legacyOrderNumber: string | null;
   isHybrid: boolean;
   partnerId: string;
+  partnerName: string;
+  promoCode: string | null;
   createdAt: string; // new Date().toISOString()
   updatedAt: string; // new Date().toISOString()
   customer: IOrderCustomer;
@@ -225,4 +237,26 @@ export interface IOrder {
   paymentMethods: IOrderPaymentMethod[];
   retailers: IOrderRetailer[];
   items: IOrderItem[];
+}
+
+export interface IOrdersList {
+  startDate: string;
+  endDate: string;
+  page: number;
+  limit: number;
+  total: number;
+  orders: IOrder[];
+}
+
+export interface IOrdersListParams {
+  /** Start date for filtering orders (ISO 8601 format, e.g., '2025-01-01') */
+  startDate: string;
+  /** End date for filtering orders (ISO 8601 format, e.g., '2025-01-31') */
+  endDate: string;
+  /** Page number (default: 1) */
+  page?: number;
+  /** Number of items per page (default: 10, max: 100) */
+  limit?: number;
+  /** Filter orders by customer email address */
+  customerEmail?: string;
 }

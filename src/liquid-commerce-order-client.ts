@@ -2,7 +2,13 @@ import { DEFAULT_BASE_URLS } from './constants/core.constant';
 import type { OrderAuthenticatedService } from './core';
 import { OrderSingletonManager } from './core';
 import { LIQUID_COMMERCE_ENV } from './enums';
-import type { ILiquidCommerceOrderClient, IOrder, IOrderMethod } from './interfaces';
+import type {
+  ILiquidCommerceOrderClient,
+  IOrder,
+  IOrderMethod,
+  IOrdersList,
+  IOrdersListParams,
+} from './interfaces';
 import type { OrderService } from './services';
 import type { IApiResponseWithData, ILiquidCommerceOrderConfig } from './types';
 
@@ -95,14 +101,22 @@ class LiquidCommerceOrderClient implements ILiquidCommerceOrderClient {
    *
    * @property {function(identifier: string): Promise<IApiResponseWithData<IOrder>>} fetch -
    *    Method to fetch an order by its identifier.
+   * @property {function(params: IOrdersListParams): Promise<IApiResponseWithData<IOrdersList>>} list -
+   *    Method to list orders within a date range.
    *
-   * @see {@link IApiResponseWithData} for the structure of the promise returned by the fetch method.
+   * @see {@link IApiResponseWithData} for the structure of the promise returned by both methods.
    * @see {@link IOrder} for the structure of the order data returned.
+   * @see {@link IOrdersList} for the structure of the paginated order list returned.
+   * @see {@link IOrdersListParams} for the structure of the list request parameters.
    */
   public order: IOrderMethod = {
     fetch: async (identifier: string): Promise<IApiResponseWithData<IOrder>> => {
       await this.ensureOrderAuthenticated();
       return this.orderService.fetch(identifier);
+    },
+    list: async (params: IOrdersListParams): Promise<IApiResponseWithData<IOrdersList>> => {
+      await this.ensureOrderAuthenticated();
+      return this.orderService.list(params);
     },
   };
 }
