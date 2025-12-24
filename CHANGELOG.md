@@ -1,3 +1,10 @@
+## [1.9.2-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.2-beta.2...v1.9.2-beta.3) (2025-12-24)
+
+
+### Bug Fixes
+
+* **orders:** update orders api interfaces ([#125](https://github.com/liquidcommerce/cloud-sdk/issues/125)) ([af98add](https://github.com/liquidcommerce/cloud-sdk/commit/af98addbac71ed6a297224ed1307a281edb72bfd))
+
 ## [1.9.2-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.2-beta.1...v1.9.2-beta.2) (2025-12-10)
 
 
