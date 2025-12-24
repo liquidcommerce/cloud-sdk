@@ -1327,10 +1327,10 @@
      */
 
     // API Keys and Constants
-    const API_KEY = 'e71df2ac1edf89c83095dcfd100115aa6a1ad1efd922e4e70e919a12';
-    const ORDER_API_USER = 'reservebarshop4bc44df2c8';
-    const ORDER_API_PASSWORD = '12beed2206c1b6e21b0142072690';
-    const GOOGLE_PLACES_API_KEY = 'AIzaSyD_LT-4RhPTrURUZjrrDtB3zIor0WFO6hE';
+    const API_KEY = 'API_KEY';
+    const ORDER_API_USER = 'ORDER_API_USER';
+    const ORDER_API_PASSWORD = 'ORDER_API_PASSWORD';
+    const GOOGLE_PLACES_API_KEY = 'GOOGLE_PLACES_API_KEY';
     const NEW_YORK_ADDRESS = {
       one: '100 madison ave',
       two: 'apt 1707',
@@ -2806,7 +2806,6 @@
                         ${item.product.attributes.packDescription ? `<p class="mb-1">Pack Description: ${item.product.attributes.packDescription}</p>` : ''}
                         ${item.isPresale ? `<p class="mb-1 text-warning">Pre-sale Item</p>` : ''}
                         ${item.estimatedShipBy ? `<p class="mb-1">Est. Ship By: ${new Date(item.estimatedShipBy).toLocaleDateString()}</p>` : ''}
-                        ${item.expectation ? `<p class="mb-1">Expectation: ${item.expectation}</p>` : ''}
                         <p class="mb-1">Placement: ${item.customerPlacement}</p>
                       </div>
                     </td>
@@ -2933,7 +2932,7 @@
                               ${fulfillment.expectationFormatted?.engraving ? `<p class="mb-1"><strong>Engraving Expectation:</strong> ${fulfillment.expectationFormatted.engraving}</p>` : ''}
 
                               ${fulfillment.cancellation?.category ? `
-                                <div class="mt-2 mb-2 alert alert-warning">
+                                <div class="alert alert-warning mt-2 mb-2">
                                   <h6>Cancellation Details</h6>
                                   <p class="mb-1"><strong>Category:</strong> ${fulfillment.cancellation.category}</p>
                                   ${fulfillment.cancellation.subcategory ? `<p class="mb-1"><strong>Subcategory:</strong> ${fulfillment.cancellation.subcategory}</p>` : ''}
@@ -2967,6 +2966,15 @@
                                         </p>
                                       ` : ''}
                                       ${pkg.dateShipped ? `<p class="mb-1"><strong>Shipped:</strong> ${new Date(pkg.dateShipped).toLocaleString()}</p>` : ''}
+
+                                      ${pkg.timeline && pkg.timeline.length > 0 ? `
+                                        <h6 class="mt-2 mb-1">Package Timeline</h6>
+                                        <ul class="list-unstyled">
+                                          ${pkg.timeline.map(event => `
+                                            <li><small>${new Date(event.timestamp).toLocaleString()} - ${event.status}</small></li>
+                                          `).join('')}
+                                        </ul>
+                                      ` : ''}
                                     </div>
                                   `).join('')}
                                 </div>
