@@ -8,4 +8,5 @@ export * from './order.interface';
 export * from './payment.interface';
 export * from './payment-element.interface';
 export * from './retailer.interface';
+export * from './tracking.interface';
 export * from './user.interface';
