@@ -28,6 +28,8 @@ import type {
   IPaymentElementEventMap,
   IPaymentMethod,
   IPurgeResponse,
+  ITracking,
+  ITrackingMethod,
   IUser,
   IUserAddress,
   IUserAddressParams,
@@ -46,6 +48,7 @@ import type {
   CatalogService,
   CheckoutService,
   PaymentService,
+  TrackingService,
   UserService,
   WebhookService,
 } from './services';
@@ -84,6 +87,8 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
 
   private webhookService: WebhookService;
 
+  private trackingService: TrackingService;
+
   private config: ILiquidCommerceConfig;
 
   private singletonManager: SingletonManager;
@@ -113,6 +118,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     this.paymentService = this.singletonManager.getPaymentService(this.authenticatedClient);
     this.checkoutService = this.singletonManager.getCheckoutService(this.authenticatedClient);
     this.webhookService = this.singletonManager.getWebhookService(this.authenticatedClient);
+    this.trackingService = this.singletonManager.getTrackingService(this.authenticatedClient);
   }
 
   /**
@@ -454,6 +460,13 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     test: async (endpoint?: string): Promise<boolean> => {
       await this.ensureAuthenticated();
       return this.webhookService.test(endpoint);
+    },
+  };
+
+  public tracking: ITrackingMethod = {
+    get: async (identifier: string): Promise<IApiResponseWithData<ITracking>> => {
+      await this.ensureAuthenticated();
+      return this.trackingService.get(identifier);
     },
   };
 }

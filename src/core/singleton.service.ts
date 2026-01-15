@@ -11,6 +11,7 @@ import {
   CatalogService,
   CheckoutService,
   PaymentService,
+  TrackingService,
   UserService,
   WebhookService,
 } from '../services';
@@ -321,6 +322,14 @@ export class SingletonManager {
     return this.getOrCreateService(
       `WebhookService_${authenticatedClient.getUniqueKey()}`,
       WebhookService,
+      authenticatedClient
+    );
+  }
+
+  public getTrackingService(authenticatedClient: AuthenticatedService): TrackingService {
+    return this.getOrCreateService(
+      `TrackingService_${authenticatedClient.getUniqueKey()}`,
+      TrackingService,
       authenticatedClient
     );
   }

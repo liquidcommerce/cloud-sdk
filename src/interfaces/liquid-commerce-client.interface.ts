@@ -28,6 +28,7 @@ import type {
   ILiquidPaymentToken,
   IPaymentElementEventMap,
 } from './payment.interface';
+import type { ITracking } from './tracking.interface';
 import type {
   BaseUser,
   IPurgeResponse,
@@ -113,6 +114,12 @@ export interface ILiquidCommerceClient {
    * See {@link ICheckoutMethod} for more details on the available methods.
    */
   checkout: ICheckoutMethod;
+
+  /**
+   * Provides methods for tracking orders.
+   * See {@link ITrackingMethod} for more details on the available methods.
+   */
+  tracking: ITrackingMethod;
 }
 
 /**
@@ -968,4 +975,28 @@ export interface IWebhookMethod {
    * @throws {Error} Throws an error if the webhook test request fails or if authentication is unsuccessful.
    */
   test: (endpoint?: string) => Promise<boolean>;
+}
+
+export interface ITrackingMethod {
+  /**
+   * Retrieves tracking information for an order.
+   *
+   * @param {string} identifier - The order identifier (legacy order number or reference ID).
+   * @returns {Promise<IApiResponseWithData<ITracking>>} A promise that resolves to the tracking data.
+   *
+   * @example
+   * const liquidCommerce = await LiquidCommerce(apiKey, config);
+   *
+   * try {
+   *   const tracking = await liquidCommerce.tracking.get('1767238969642');
+   *   console.log('Tracking data:', tracking.data);
+   * } catch (error) {
+   *   console.error('Failed to fetch tracking:', error);
+   * }
+   *
+   * @throws {Error} Throws an error if the tracking request fails or if authentication is unsuccessful.
+   *
+   * @see {@link ITracking} for the structure of the tracking data returned.
+   */
+  get: (identifier: string) => Promise<IApiResponseWithData<ITracking>>;
 }
