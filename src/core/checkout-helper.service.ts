@@ -26,9 +26,22 @@ export class CheckoutHelperService {
   public validateAndNormalizePrepareParams(params: ICheckoutPrepareParams): ICheckoutPrepareParams {
     let normalizedParams = { ...params };
 
-    // Validate cartId
-    if (!normalizedParams?.cartId || typeof normalizedParams?.cartId !== 'string') {
-      throw new Error('Invalid cartId');
+    // Validate that at least one of cartId or token exists
+    const hasCartId = normalizedParams?.cartId !== undefined && normalizedParams?.cartId !== null;
+    const hasToken = normalizedParams?.token !== undefined && normalizedParams?.token !== null;
+
+    if (!hasCartId && !hasToken) {
+      throw new Error('At least one of cartId or token must be provided');
+    }
+
+    // Validate cartId if provided
+    if (hasCartId && typeof normalizedParams.cartId !== 'string') {
+      throw new Error('Invalid cartId provided');
+    }
+
+    // Validate token if provided
+    if (hasToken && typeof normalizedParams.token !== 'string') {
+      throw new Error('Invalid token provided');
     }
 
     // Validate Customer
