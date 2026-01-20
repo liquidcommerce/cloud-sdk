@@ -1,3 +1,5 @@
+import type { ENUM_TRACKING_PACKAGE_STATUS } from 'enums';
+
 export interface ITrackingPackageDetails {
   aftershipTrackingUrl: string | null;
   carrierTrackingUrl: string | null;
@@ -32,7 +34,7 @@ export interface ITrackingPackage {
   id: string | null;
   retailerOrderId: string | null;
   isLegacy: boolean;
-  status: string;
+  status: ENUM_TRACKING_PACKAGE_STATUS;
   trackingNumber: string | null;
   carrier: string | null;
   trackingDetails: ITrackingPackageDetails;

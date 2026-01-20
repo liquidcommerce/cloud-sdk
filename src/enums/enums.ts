@@ -407,3 +407,15 @@ export enum SHIPPING_CATEGORY_TYPE {
   MERCHANDISE = ENUM_MERCHANDISE.BASE,
   OTHER = 'OTHER',
 }
+
+export enum ENUM_TRACKING_PACKAGE_STATUS {
+  PENDING = 'pending',
+  SHIPPED = 'shipped',
+  DELIVERED = 'delivered',
+  CANCELED = 'canceled',
+  RETURNED = 'returned',
+  EXCEPTION = 'exception',
+  OUT_FOR_DELIVERY = 'outForDelivery',
+  AVAILABLE_FOR_PICKUP = 'availableForPickup',
+  INFO_RECEIVED = 'infoReceived',
+}
