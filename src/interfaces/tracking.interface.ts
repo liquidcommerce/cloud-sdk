@@ -33,6 +33,7 @@ export interface ITrackingPackageItem {
 export interface ITrackingPackage {
   id: string | null;
   retailerOrderId: string | null;
+  retailerName: string | null;
   isLegacy: boolean;
   status: ENUM_TRACKING_PACKAGE_STATUS;
   trackingNumber: string | null;

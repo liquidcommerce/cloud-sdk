@@ -382,6 +382,7 @@ export enum ENUM_ORDER_PACKAGE_STATUS {
   SHIPPED = 'shipped',
   DELIVERED = 'delivered',
   CANCELED = 'canceled',
+  EXCEPTION = 'exception',
   RETURNED = 'returned',
 }
 
