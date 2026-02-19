@@ -46,5 +46,6 @@ export interface ITrackingPackage {
 export interface ITracking {
   legacyOrderNumber: string | null;
   referenceId: string | null;
+  partnerId: string;
   packages: ITrackingPackage[];
 }
