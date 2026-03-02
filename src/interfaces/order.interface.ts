@@ -69,6 +69,7 @@ export interface IOrderRetailerAddress extends IOrderAddress {
 export interface IOrderRetailer {
   id: string;
   legacyId: string | null;
+  tdLinx: string | null;
   name: string;
   system: ENUM_ORDER_SYSTEM;
   timezone: string;
@@ -224,6 +225,7 @@ export interface IOrderPaymentMethod {
 export interface IOrder {
   referenceId: string | null;
   legacyOrderNumber: string | null;
+  legacyStorefrontId: number | null;
   isHybrid: boolean;
   partnerId: string;
   partnerName: string;

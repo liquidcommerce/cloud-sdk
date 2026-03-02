@@ -383,6 +383,7 @@ export enum ENUM_ORDER_PACKAGE_STATUS {
   DELIVERED = 'delivered',
   CANCELED = 'canceled',
   RETURNED = 'returned',
+  EXCEPTION = 'exception',
 }
 
 export enum ENUM_ORDER_FULFILLMENT_TYPE {
