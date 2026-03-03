@@ -7,7 +7,9 @@ type ServiceFactory<T> =
   | {
       getInstance: (...args: any[]) => T;
     }
-  | (new (...args: any[]) => T);
+  | (new (
+      ...args: any[]
+    ) => T);
 
 /**
  * The OrderSingletonManager class is responsible for managing singleton instances of various order services.
@@ -31,14 +33,14 @@ export class OrderSingletonManager {
   /**
    * Sets the constructor for the Liquid Commerce Order Client.
    *
-   * @param {ILiquidCommerceOrderClientConstructor} constructor - The constructor function for the Liquid Commerce Order Client.
+   * @param {ILiquidCommerceOrderClientConstructor} orderClientConstructor - The constructor function for the Liquid Commerce Order Client.
    *
    * @return {void}
    */
   public setLiquidCommerceOrderClientConstructor(
-    constructor: ILiquidCommerceOrderClientConstructor
+    orderClientConstructor: ILiquidCommerceOrderClientConstructor
   ): void {
-    this.liquidCommerceOrderClientConstructor = constructor;
+    this.liquidCommerceOrderClientConstructor = orderClientConstructor;
   }
 
   /**

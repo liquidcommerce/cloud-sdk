@@ -18,7 +18,7 @@ export class WebhookService {
    */
   public async test(endpoint?: string): Promise<boolean> {
     try {
-      const response = await this.client.post<IApiResponseBase>(`/webhook/test`, {
+      const response = await this.client.post<IApiResponseBase>('/webhook/test', {
         endpoint,
       });
 

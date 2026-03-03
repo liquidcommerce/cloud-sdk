@@ -27,7 +27,9 @@ type ServiceFactory<T> =
   | {
       getInstance: (...args: any[]) => T;
     }
-  | (new (...args: any[]) => T);
+  | (new (
+      ...args: any[]
+    ) => T);
 
 /**
  * The SingletonManager class is responsible for managing singleton instances of various services.
@@ -53,16 +55,18 @@ export class SingletonManager {
   /**
    * Sets the constructor for the Liquid Commerce Client.
    *
-   * @param {ILiquidCommerceClientConstructor} constructor - The constructor function for the Liquid Commerce Client.
+   * @param {ILiquidCommerceClientConstructor} clientConstructor - The constructor function for the Liquid Commerce Client.
    *
    * @return {void}
    */
-  public setLiquidCommerceClientConstructor(constructor: ILiquidCommerceClientConstructor): void {
-    this.liquidCommerceClientConstructor = constructor;
+  public setLiquidCommerceClientConstructor(
+    clientConstructor: ILiquidCommerceClientConstructor
+  ): void {
+    this.liquidCommerceClientConstructor = clientConstructor;
   }
 
-  public setPaymentElementConstructor(constructor: PaymentElementImplConstructor): void {
-    this.paymentElementConstructor = constructor;
+  public setPaymentElementConstructor(paymentConstructor: PaymentElementImplConstructor): void {
+    this.paymentElementConstructor = paymentConstructor;
   }
 
   /**
