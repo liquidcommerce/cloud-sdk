@@ -8,7 +8,6 @@ import type {
   StripePaymentElementOptions,
 } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-
 import { PaymentSessionHelperService, SingletonManager } from './core';
 import type {
   IConfirmationTokenClientParams,

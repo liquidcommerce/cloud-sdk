@@ -298,7 +298,7 @@ export class CatalogHelperService {
    */
   private validateFulfillmentFilter(values: ENUM_MODALITIES[], errors: string[]): void {
     if (!Array.isArray(values)) {
-      errors.push(`Fulfillment filter must be an array`);
+      errors.push('Fulfillment filter must be an array');
       return;
     }
 

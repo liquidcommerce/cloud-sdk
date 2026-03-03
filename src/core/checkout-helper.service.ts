@@ -23,6 +23,7 @@ export class CheckoutHelperService {
    *
    * @throws {Error} - Invalid cartId if cartId is missing or not a string.
    */
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: complex validation logic
   public validateAndNormalizePrepareParams(params: ICheckoutPrepareParams): ICheckoutPrepareParams {
     let normalizedParams = { ...params };
 
@@ -53,6 +54,7 @@ export class CheckoutHelperService {
     normalizedParams.billingSameAsShipping = Boolean(normalizedParams?.billingSameAsShipping);
 
     if (
+      // biome-ignore lint/complexity/useOptionalChain: keeping explicit null checks
       normalizedParams &&
       normalizedParams?.billingAddress &&
       normalizedParams?.billingAddress?.phone !== ''
@@ -67,6 +69,7 @@ export class CheckoutHelperService {
     }
 
     if (
+      // biome-ignore lint/complexity/useOptionalChain: keeping explicit null checks
       normalizedParams &&
       normalizedParams?.customer &&
       (normalizedParams?.customer as ICheckoutCustomer)?.phone !== ''
@@ -86,6 +89,7 @@ export class CheckoutHelperService {
       this.validateGiftOptions(normalizedParams.giftOptions);
 
       if (
+        // biome-ignore lint/complexity/useOptionalChain: keeping explicit null checks
         normalizedParams &&
         normalizedParams?.giftOptions &&
         normalizedParams?.giftOptions?.recipient?.phone !== ''
@@ -260,7 +264,7 @@ export class CheckoutHelperService {
     // Only validate fields that are present
     normalizedGiftCards.forEach((gc) => {
       if (typeof gc !== 'string') {
-        throw new Error(`Invalid gift cards: must be a string array if provided`);
+        throw new Error('Invalid gift cards: must be a string array if provided');
       }
     });
 
@@ -278,6 +282,7 @@ export class CheckoutHelperService {
    *
    * @returns {void}
    */
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: complex validation logic
   private validateGiftOptions(giftOptions?: ICheckoutPrepareParams['giftOptions']): void {
     if (giftOptions !== undefined && typeof giftOptions !== 'object') {
       throw new Error('Invalid giftOptions: must be an object if provided');

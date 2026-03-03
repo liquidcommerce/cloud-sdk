@@ -7,7 +7,6 @@ import type {
   StripePaymentElementOptions,
 } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-
 import type {
   IConfirmSessionParams,
   ILiquidPaymentConfig,
@@ -81,6 +80,7 @@ export class PaymentProviderService implements IPaymentProvider {
         );
       }
     } catch (e) {
+      // biome-ignore lint/complexity/noUselessCatch: preserving error boundary
       throw e;
     }
 

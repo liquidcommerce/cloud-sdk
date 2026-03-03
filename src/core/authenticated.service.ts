@@ -161,7 +161,7 @@ export class AuthenticatedService {
 
       const response = await this.httpClient(url.toString(), fetchOptions);
 
-      let responseData;
+      let responseData: any;
       try {
         responseData = await response.json();
       } catch (error) {
@@ -183,6 +183,7 @@ export class AuthenticatedService {
 
       return responseData;
     } catch (error) {
+      // biome-ignore lint/complexity/noUselessCatch: preserving error boundary
       throw error;
     }
   }
