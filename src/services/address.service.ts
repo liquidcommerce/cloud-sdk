@@ -1,10 +1,5 @@
 import type { AuthenticatedService } from '../core';
-import type {
-  IAddressAutocompleteParams,
-  IAddressAutocompleteResult,
-  IAddressDetailsParams,
-  IAddressDetailsResult,
-} from '../interfaces';
+import type { IAddressAutocompleteParams, IAddressAutocompleteResult, IAddressDetailsParams, IAddressDetailsResult } from '../interfaces';
 import type { AddressServiceResponse } from '../types';
 
 /**
@@ -29,13 +24,10 @@ export class AddressService {
     googlePlacesApiKey: string
   ): Promise<AddressServiceResponse<IAddressAutocompleteResult[]>> {
     try {
-      return await this.client.post<AddressServiceResponse<IAddressAutocompleteResult[]>>(
-        '/address/autocomplete',
-        {
-          ...params,
-          key: googlePlacesApiKey,
-        }
-      );
+      return await this.client.post<AddressServiceResponse<IAddressAutocompleteResult[]>>('/address/autocomplete', {
+        ...params,
+        key: googlePlacesApiKey,
+      });
     } catch (error) {
       console.error('Address autocomplete request failed:', error);
       throw error;
@@ -51,18 +43,12 @@ export class AddressService {
    * @return {Promise<AddressServiceResponse<IAddressDetailsResult>>} A promise that resolves to the response containing the detailed information about an address.
    * @throws {Error} if the request to retrieve address details fails.
    */
-  public async details(
-    params: IAddressDetailsParams,
-    googlePlacesApiKey: string
-  ): Promise<AddressServiceResponse<IAddressDetailsResult>> {
+  public async details(params: IAddressDetailsParams, googlePlacesApiKey: string): Promise<AddressServiceResponse<IAddressDetailsResult>> {
     try {
-      return await this.client.post<AddressServiceResponse<IAddressDetailsResult>>(
-        '/address/details',
-        {
-          ...params,
-          key: googlePlacesApiKey,
-        }
-      );
+      return await this.client.post<AddressServiceResponse<IAddressDetailsResult>>('/address/details', {
+        ...params,
+        key: googlePlacesApiKey,
+      });
     } catch (error) {
       console.error('Address details request failed:', error);
       throw error;

@@ -1,9 +1,4 @@
-import {
-  LIQUID_COMMERCE_ENV,
-  LiquidCommerce,
-  LiquidCommerceOrders,
-  LiquidCommercePaymentElement,
-} from './index';
+import { LIQUID_COMMERCE_ENV, LiquidCommerce, LiquidCommerceOrders, LiquidCommercePaymentElement } from './index';
 
 if (typeof window !== 'undefined') {
   // Attach to the global window object if available

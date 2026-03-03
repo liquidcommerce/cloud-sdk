@@ -38,18 +38,13 @@ export class UserService {
    * @returns {Promise<IApiResponseWithData<IUser>>} A promise that resolves to the user data.
    * @throws {Error} If the session creation/update request fails or if neither id nor email is provided.
    */
-  public async createOrUpdateSession(
-    params: IUserSessionParams
-  ): Promise<IApiResponseWithData<IUser>> {
+  public async createOrUpdateSession(params: IUserSessionParams): Promise<IApiResponseWithData<IUser>> {
     try {
       if (!params?.id && !params?.email) {
         throw new Error('Either id or email must be provided');
       }
 
-      return await this.client.post<IApiResponseWithData<IUser>>(
-        `${this.servicePath}/session`,
-        params
-      );
+      return await this.client.post<IApiResponseWithData<IUser>>(`${this.servicePath}/session`, params);
     } catch (error) {
       console.error('User session creation/update request failed:', error);
       throw error;
@@ -63,14 +58,9 @@ export class UserService {
    * @return {Promise<IApiResponseWithData<IUserSession>>} A promise that resolves to the API
    *  response containing the user session data.
    */
-  public async createPaymentSession(
-    params: IUserPaymentSession
-  ): Promise<IApiResponseWithData<IUserSession>> {
+  public async createPaymentSession(params: IUserPaymentSession): Promise<IApiResponseWithData<IUserSession>> {
     try {
-      const response = await this.client.post<IApiResponseWithData<any>>(
-        `${this.servicePath}/payment-session`,
-        params
-      );
+      const response = await this.client.post<IApiResponseWithData<any>>(`${this.servicePath}/payment-session`, params);
 
       const data = this.paymentSessionHelperService.rcd(response?.data, this.env);
 
@@ -91,17 +81,13 @@ export class UserService {
    * @return {Promise<IApiResponseWithData<ILiquidPaymentToken>>} A promise that resolves with the API
    * response containing data about the finalized payment session.
    */
-  public async finalizePaymentSession(
-    token: string
-  ): Promise<IApiResponseWithData<ILiquidPaymentToken>> {
+  public async finalizePaymentSession(token: string): Promise<IApiResponseWithData<ILiquidPaymentToken>> {
     try {
       if (!token) {
         throw new Error('Token is required');
       }
 
-      const response = await this.client.get<IApiResponseWithData<ILiquidPaymentToken>>(
-        `${this.servicePath}/finalize-payment-session/${token}`
-      );
+      const response = await this.client.get<IApiResponseWithData<ILiquidPaymentToken>>(`${this.servicePath}/finalize-payment-session/${token}`);
 
       const data = this.paymentSessionHelperService.dd<ILiquidPaymentToken>(response?.data, token);
 
@@ -128,9 +114,7 @@ export class UserService {
         throw new Error('Id is required');
       }
 
-      return await this.client.get<IApiResponseWithData<BaseUser>>(
-        `${this.servicePath}/fetch/${identifier}`
-      );
+      return await this.client.get<IApiResponseWithData<BaseUser>>(`${this.servicePath}/fetch/${identifier}`);
     } catch (error) {
       console.error('User session creation/update request failed:', error);
       throw error;
@@ -150,9 +134,7 @@ export class UserService {
         throw new Error('User identifier (ID or email) must be provided');
       }
 
-      return await this.client.delete<IApiResponseWithData<IPurgeResponse>>(
-        `${this.servicePath}/purge/${identifier}`
-      );
+      return await this.client.delete<IApiResponseWithData<IPurgeResponse>>(`${this.servicePath}/purge/${identifier}`);
     } catch (error) {
       console.error('User purge request failed:', error);
       throw error;
@@ -170,10 +152,7 @@ export class UserService {
     try {
       this.validateAddressParams(params);
 
-      return await this.client.post<IApiResponseWithData<IUserAddress>>(
-        `${this.servicePath}/addresses/add`,
-        params
-      );
+      return await this.client.post<IApiResponseWithData<IUserAddress>>(`${this.servicePath}/addresses/add`, params);
     } catch (error) {
       console.error('User address add request failed:', error);
       throw error;
@@ -187,16 +166,11 @@ export class UserService {
    * @returns {Promise<IApiResponseWithData<IUserAddress>>} A promise that resolves to the updated or created address.
    * @throws {Error} If the address update request fails or if required parameters are missing.
    */
-  public async updateAddress(
-    params: IUserAddressParams
-  ): Promise<IApiResponseWithData<IUserAddress>> {
+  public async updateAddress(params: IUserAddressParams): Promise<IApiResponseWithData<IUserAddress>> {
     try {
       const validatedParams = this.validateAddressParams(params);
 
-      return await this.client.post<IApiResponseWithData<IUserAddress>>(
-        `${this.servicePath}/addresses/update`,
-        validatedParams
-      );
+      return await this.client.post<IApiResponseWithData<IUserAddress>>(`${this.servicePath}/addresses/update`, validatedParams);
     } catch (error) {
       console.error('User address update request failed:', error);
       throw error;
@@ -221,9 +195,7 @@ export class UserService {
     }
 
     if (hasNoAddressObj && hasNoAddressCoords && hasNoAddressPlacesId) {
-      throw new Error(
-        'Missing required parameters for address update, you need at least, an address object or lat and long, or a google placesId'
-      );
+      throw new Error('Missing required parameters for address update, you need at least, an address object or lat and long, or a google placesId');
     }
 
     if (!hasNoAddressCoords) {
@@ -273,10 +245,7 @@ export class UserService {
    * @return {boolean} Returns true if latitude or longitude are not provided or are not numbers, otherwise returns false.
    */
   private hasUserAddressCoords(params: IUserAddressParams): boolean {
-    return (
-      (!params?.lat && !params?.long) ||
-      (typeof Number(params?.lat) !== 'number' && typeof Number(params?.long) !== 'number')
-    );
+    return (!params?.lat && !params?.long) || (typeof Number(params?.lat) !== 'number' && typeof Number(params?.long) !== 'number');
   }
 
   /**
@@ -302,9 +271,7 @@ export class UserService {
         throw new Error('Address ID must be provided');
       }
 
-      return await this.client.delete<IApiResponseWithData<IPurgeResponse>>(
-        `${this.servicePath}/addresses/purge/${addressId}`
-      );
+      return await this.client.delete<IApiResponseWithData<IPurgeResponse>>(`${this.servicePath}/addresses/purge/${addressId}`);
     } catch (error) {
       console.error('Address purge request failed:', error);
       throw error;
@@ -321,9 +288,7 @@ export class UserService {
    * @return {Promise<IApiResponseWithData<IUserPayment>>} - A promise that resolves to the response containing user payment information.
    * @throws {Error} - Throws an error if required parameters are missing or if the request fails.
    */
-  public async addPayment(
-    params: IUserPaymentAddParams
-  ): Promise<IApiResponseWithData<IUserPayment>> {
+  public async addPayment(params: IUserPaymentAddParams): Promise<IApiResponseWithData<IUserPayment>> {
     try {
       if (!params.customerId || !params.paymentMethodId) {
         throw new Error('Missing required parameters to add payment');
@@ -333,10 +298,7 @@ export class UserService {
         delete params?.isDefault;
       }
 
-      return await this.client.post<IApiResponseWithData<IUserPayment>>(
-        `${this.servicePath}/payments/add`,
-        params
-      );
+      return await this.client.post<IApiResponseWithData<IUserPayment>>(`${this.servicePath}/payments/add`, params);
     } catch (error) {
       console.error('User add payment request failed:', error);
       throw error;
@@ -360,9 +322,7 @@ export class UserService {
 
       const { customerId, paymentMethodId } = params;
 
-      return await this.client.get<IApiResponseWithData<boolean>>(
-        `${this.servicePath}/payments/updateDefault/${customerId}/${paymentMethodId}`
-      );
+      return await this.client.get<IApiResponseWithData<boolean>>(`${this.servicePath}/payments/updateDefault/${customerId}/${paymentMethodId}`);
     } catch (error) {
       console.error('User add payment request failed:', error);
       throw error;
@@ -376,18 +336,13 @@ export class UserService {
    * @param {string} paymentId - The ID of the payment record to be purged.
    * @return {Promise<IApiResponseWithData<IPurgeResponse>>} A promise that resolves to the response of the purge request.
    */
-  public async purgePayment(
-    customerId: string,
-    paymentId: string
-  ): Promise<IApiResponseWithData<IPurgeResponse>> {
+  public async purgePayment(customerId: string, paymentId: string): Promise<IApiResponseWithData<IPurgeResponse>> {
     try {
       if (!customerId || !paymentId) {
         throw new Error('Missing required parameters for payment purge');
       }
 
-      return await this.client.delete<IApiResponseWithData<IPurgeResponse>>(
-        `${this.servicePath}/payments/purge/${customerId}/${paymentId}`
-      );
+      return await this.client.delete<IApiResponseWithData<IPurgeResponse>>(`${this.servicePath}/payments/purge/${customerId}/${paymentId}`);
     } catch (error) {
       console.error('Address purge request failed:', error);
       throw error;

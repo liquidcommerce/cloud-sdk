@@ -73,10 +73,7 @@ export function fetchAdapter(fetchFunc: FetchFunction): HttpClient {
  * @returns {Promise<ICustomResponse>} - A Promise that resolves to a custom response object.
  * @throws {TypeError} - If the network request fails.
  */
-export const xhrFetch: HttpClient = (
-  url: string,
-  options: IHttpClientOptions
-): Promise<ICustomResponse> =>
+export const xhrFetch: HttpClient = (url: string, options: IHttpClientOptions): Promise<ICustomResponse> =>
   new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open(options.method || 'GET', url);
@@ -126,9 +123,11 @@ export const xhrFetch: HttpClient = (
 export function getFetchImplementation(): HttpClient {
   if (typeof fetch !== 'undefined') {
     return fetchAdapter(fetch);
-  } else if (typeof global !== 'undefined' && global.fetch) {
+  }
+  if (typeof global !== 'undefined' && global.fetch) {
     return fetchAdapter(global.fetch);
-  } else if (typeof window !== 'undefined' && window.fetch) {
+  }
+  if (typeof window !== 'undefined' && window.fetch) {
     return fetchAdapter(window.fetch);
   }
 

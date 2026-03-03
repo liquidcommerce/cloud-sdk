@@ -7,7 +7,9 @@ type ServiceFactory<T> =
   | {
       getInstance: (...args: any[]) => T;
     }
-  | (new (...args: any[]) => T);
+  | (new (
+      ...args: any[]
+    ) => T);
 
 /**
  * The OrderSingletonManager class is responsible for managing singleton instances of various order services.
@@ -31,14 +33,12 @@ export class OrderSingletonManager {
   /**
    * Sets the constructor for the Liquid Commerce Order Client.
    *
-   * @param {ILiquidCommerceOrderClientConstructor} constructor - The constructor function for the Liquid Commerce Order Client.
+   * @param {ILiquidCommerceOrderClientConstructor} orderClientConstructor - The constructor function for the Liquid Commerce Order Client.
    *
    * @return {void}
    */
-  public setLiquidCommerceOrderClientConstructor(
-    constructor: ILiquidCommerceOrderClientConstructor
-  ): void {
-    this.liquidCommerceOrderClientConstructor = constructor;
+  public setLiquidCommerceOrderClientConstructor(orderClientConstructor: ILiquidCommerceOrderClientConstructor): void {
+    this.liquidCommerceOrderClientConstructor = orderClientConstructor;
   }
 
   /**
@@ -74,10 +74,7 @@ export class OrderSingletonManager {
    */
   private getOrCreateService<T>(key: string, ServiceClass: ServiceFactory<T>, ...args: any[]): T {
     if (!this.services.has(key)) {
-      const service =
-        'getInstance' in ServiceClass
-          ? ServiceClass.getInstance(...args)
-          : new ServiceClass(...args);
+      const service = 'getInstance' in ServiceClass ? ServiceClass.getInstance(...args) : new ServiceClass(...args);
       this.services.set(key, service);
     }
 
@@ -94,16 +91,8 @@ export class OrderSingletonManager {
    *
    * @return The order authenticated service object.
    */
-  public getAuthenticatedClient(config: {
-    userID: string;
-    password: string;
-    baseURL: string;
-  }): OrderAuthenticatedService {
-    return this.getOrCreateService(
-      `OrderAuthenticatedClient_${JSON.stringify(config)}`,
-      OrderAuthenticatedService,
-      config
-    );
+  public getAuthenticatedClient(config: { userID: string; password: string; baseURL: string }): OrderAuthenticatedService {
+    return this.getOrCreateService(`OrderAuthenticatedClient_${JSON.stringify(config)}`, OrderAuthenticatedService, config);
   }
 
   /**
@@ -113,10 +102,6 @@ export class OrderSingletonManager {
    * @return The OrderService instance.
    */
   public getOrderService(orderAuthenticatedClient: OrderAuthenticatedService): OrderService {
-    return this.getOrCreateService(
-      `OrderService_${orderAuthenticatedClient.getUniqueKey()}`,
-      OrderService,
-      orderAuthenticatedClient
-    );
+    return this.getOrCreateService(`OrderService_${orderAuthenticatedClient.getUniqueKey()}`, OrderService, orderAuthenticatedClient);
   }
 }

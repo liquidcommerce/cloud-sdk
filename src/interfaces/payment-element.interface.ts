@@ -47,9 +47,7 @@ export interface ILiquidCommercePaymentElement {
    * an object containing the confirmation token ID on success, or an error object describing
    * the failure reason (validation errors, network issues, etc.).
    */
-  createConfirmationToken(
-    params?: IConfirmationTokenClientParams
-  ): Promise<IConfirmationTokenResponse>;
+  createConfirmationToken(params?: IConfirmationTokenClientParams): Promise<IConfirmationTokenResponse>;
 
   /**
    * Subscribes to events emitted by the payment UI component for real-time updates
@@ -63,10 +61,7 @@ export interface ILiquidCommercePaymentElement {
    * to execute when the specified event occurs. Receives event-specific data.
    * @returns {void}
    */
-  subscribe<K extends keyof IPaymentElementEventMap>(
-    eventType: K,
-    handler: (event: IPaymentElementEventMap[K]) => void
-  ): void;
+  subscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler: (event: IPaymentElementEventMap[K]) => void): void;
 
   /**
    * Unsubscribes from events emitted by the payment UI component.
@@ -77,10 +72,7 @@ export interface ILiquidCommercePaymentElement {
    * function to remove. If not provided, all handlers for the specified event type will be removed.
    * @returns {void}
    */
-  unsubscribe<K extends keyof IPaymentElementEventMap>(
-    eventType: K,
-    handler?: (event: IPaymentElementEventMap[K]) => void
-  ): void;
+  unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void;
 
   /**
    * Unmounts the payment UI component from the DOM, removing its visual elements
@@ -110,6 +102,4 @@ export interface ILiquidCommercePaymentElement {
  * Defines the constructor signature for the PaymentElementImpl class.
  * Used internally by the singleton manager to instantiate the payment element.
  */
-export type PaymentElementImplConstructor = new (
-  options: IPaymentElementConfig
-) => ILiquidCommercePaymentElement;
+export type PaymentElementImplConstructor = new (options: IPaymentElementConfig) => ILiquidCommercePaymentElement;

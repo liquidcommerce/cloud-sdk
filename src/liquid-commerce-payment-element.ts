@@ -8,7 +8,6 @@ import type {
   StripePaymentElementOptions,
 } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-
 import { PaymentSessionHelperService, SingletonManager } from './core';
 import type {
   IConfirmationTokenClientParams,
@@ -169,9 +168,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
   /**
    * Generates a secure token for payment confirmation.
    */
-  async createConfirmationToken(
-    params?: IConfirmationTokenClientParams
-  ): Promise<IConfirmationTokenResponse> {
+  async createConfirmationToken(params?: IConfirmationTokenClientParams): Promise<IConfirmationTokenResponse> {
     if (!this.provider || !this.componentSet || !this.uiComponent) {
       return {
         type: 'client_error',
@@ -260,19 +257,14 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
    * @param {(event: IPaymentElementEventMap[K]) => void} handler - Event handler function.
    * @returns {void}
    */
-  subscribe<K extends keyof IPaymentElementEventMap>(
-    eventType: K,
-    handler: (event: IPaymentElementEventMap[K]) => void
-  ): void {
+  subscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler: (event: IPaymentElementEventMap[K]) => void): void {
     if (!this.uiComponent) {
       this.logger.error('Cannot subscribe: Component not initialized.');
       return;
     }
 
     if (!this.allowedEvents.includes(eventType)) {
-      this.logger.error(
-        `Event "${eventType}" not supported. Available: ${this.allowedEvents.join(', ')}`
-      );
+      this.logger.error(`Event "${eventType}" not supported. Available: ${this.allowedEvents.join(', ')}`);
       return;
     }
 
@@ -287,10 +279,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
    * @param {(event: IPaymentElementEventMap[K]) => void} [handler] - Specific handler to remove.
    * @returns {void}
    */
-  unsubscribe<K extends keyof IPaymentElementEventMap>(
-    eventType: K,
-    handler?: (event: IPaymentElementEventMap[K]) => void
-  ): void {
+  unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void {
     if (!this.uiComponent) {
       this.logger.error('Cannot unsubscribe: Component not initialized.');
       return;
@@ -349,19 +338,11 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
  * @returns {ILiquidCommercePaymentElement} Payment element instance.
  * @throws {Error} If singleton manager is not properly configured.
  */
-export function LiquidCommercePaymentElement(
-  options: IPaymentElementConfig
-): ILiquidCommercePaymentElement {
+export function LiquidCommercePaymentElement(options: IPaymentElementConfig): ILiquidCommercePaymentElement {
   const manager = SingletonManager.getInstance() as any;
 
-  if (
-    typeof manager.setPaymentElementConstructor !== 'function' ||
-    typeof manager.getPaymentElement !== 'function'
-  ) {
-    console.error(
-      'SingletonManager missing required payment element methods. ' +
-        'Falling back to direct instantiation.'
-    );
+  if (typeof manager.setPaymentElementConstructor !== 'function' || typeof manager.getPaymentElement !== 'function') {
+    console.error('SingletonManager missing required payment element methods. ' + 'Falling back to direct instantiation.');
     if (!manager.__paymentElementInstance) {
       manager.__paymentElementInstance = new PaymentElementImpl(options);
     }

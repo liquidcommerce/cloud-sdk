@@ -67,11 +67,7 @@ export interface IFulfillmentFilter {
 export interface IEngravingFilter {
   key: ENUM_FILTER_KEYS.ENGRAVING | 'engraving';
 
-  values:
-    | ENUM_BINARY_FILTER
-    | keyof typeof ENUM_BINARY_FILTER
-    | ENUM_ENGRAVING
-    | keyof typeof ENUM_ENGRAVING;
+  values: ENUM_BINARY_FILTER | keyof typeof ENUM_BINARY_FILTER | ENUM_ENGRAVING | keyof typeof ENUM_ENGRAVING;
 }
 
 /**
@@ -95,11 +91,7 @@ export interface IPresaleFilter {
 export interface IFilter {
   key: Omit<
     ENUM_FILTER_KEYS,
-    | ENUM_FILTER_KEYS.CATEGORIES
-    | ENUM_FILTER_KEYS.PRICE
-    | ENUM_FILTER_KEYS.AVAILABILITY
-    | ENUM_FILTER_KEYS.ENGRAVING
-    | ENUM_FILTER_KEYS.FULFILLMENT
+    ENUM_FILTER_KEYS.CATEGORIES | ENUM_FILTER_KEYS.PRICE | ENUM_FILTER_KEYS.AVAILABILITY | ENUM_FILTER_KEYS.ENGRAVING | ENUM_FILTER_KEYS.FULFILLMENT
   >;
 
   values: string | string[] | number | number[];
@@ -127,15 +119,7 @@ export interface ICatalogParams extends ILocBase {
 
   orderDirection?: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE;
 
-  filters?: Array<
-    | ICategoryFilter
-    | IPriceFilter
-    | IAvailabilityFilter
-    | IFulfillmentFilter
-    | IEngravingFilter
-    | IPresaleFilter
-    | IFilter
-  >;
+  filters?: Array<ICategoryFilter | IPriceFilter | IAvailabilityFilter | IFulfillmentFilter | IEngravingFilter | IPresaleFilter | IFilter>;
 }
 
 /**

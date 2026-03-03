@@ -161,7 +161,7 @@ export class AuthenticatedService {
 
       const response = await this.httpClient(url.toString(), fetchOptions);
 
-      let responseData;
+      let responseData: any;
       try {
         responseData = await response.json();
       } catch (error) {
@@ -209,11 +209,7 @@ export class AuthenticatedService {
    *
    * @throws {Error} - If an error occurs while making the request.
    */
-  public async post<T = any>(
-    path: string,
-    body?: any,
-    headers?: Record<string, string>
-  ): Promise<T> {
+  public async post<T = any>(path: string, body?: any, headers?: Record<string, string>): Promise<T> {
     return this.request<T>(path, { method: 'POST', body, headers });
   }
 
@@ -225,11 +221,7 @@ export class AuthenticatedService {
    * @param {Record<string, string>} [headers] - The optional headers of the request.
    * @return {Promise<T>} A Promise that resolves with the response data.
    */
-  public async put<T = any>(
-    path: string,
-    body?: any,
-    headers?: Record<string, string>
-  ): Promise<T> {
+  public async put<T = any>(path: string, body?: any, headers?: Record<string, string>): Promise<T> {
     return this.request<T>(path, { method: 'PUT', body, headers });
   }
 

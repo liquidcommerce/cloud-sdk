@@ -64,10 +64,7 @@ interface ICheckoutBaseAddress {
  * @type
  */
 export type ICheckoutBillingAddress = ICheckoutBaseAddress &
-  Omit<
-    ICheckoutCustomer,
-    'birthDate' | 'id' | 'createdAt' | 'hasAgeVerify' | 'updatedAt' | 'profileImage'
-  >;
+  Omit<ICheckoutCustomer, 'birthDate' | 'id' | 'createdAt' | 'hasAgeVerify' | 'updatedAt' | 'profileImage'>;
 
 /**
  * Represents the recipient information for gift options during checkout.

@@ -103,8 +103,7 @@ export class PaymentSessionHelperService {
     const k = this.gdk(t);
     if (d && k) {
       try {
-        const c =
-          typeof atob === 'function' ? atob(d) : Buffer.from(d, 'base64').toString('binary');
+        const c = typeof atob === 'function' ? atob(d) : Buffer.from(d, 'base64').toString('binary');
 
         let p = '';
         for (let i = 0; i < c.length; i++) {
