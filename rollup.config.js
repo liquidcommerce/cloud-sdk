@@ -2,7 +2,7 @@ import typescript from 'rollup-plugin-typescript2';
 import { createRequire } from 'module';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
 import livereload from 'rollup-plugin-livereload';
