@@ -55,7 +55,9 @@ export class OrderService {
         queryParams.append('customerEmail', params.customerEmail);
       }
 
-      return await this.client.get<IApiResponseWithData<IOrdersList>>(`/orders?${queryParams.toString()}`);
+      return await this.client.get<IApiResponseWithData<IOrdersList>>(
+        `/orders?${queryParams.toString()}`
+      );
     } catch (error) {
       console.error('Failed to list orders:', error);
       throw error;

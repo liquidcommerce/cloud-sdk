@@ -37,7 +37,9 @@ export class OrderSingletonManager {
    *
    * @return {void}
    */
-  public setLiquidCommerceOrderClientConstructor(orderClientConstructor: ILiquidCommerceOrderClientConstructor): void {
+  public setLiquidCommerceOrderClientConstructor(
+    orderClientConstructor: ILiquidCommerceOrderClientConstructor
+  ): void {
     this.liquidCommerceOrderClientConstructor = orderClientConstructor;
   }
 
@@ -74,7 +76,10 @@ export class OrderSingletonManager {
    */
   private getOrCreateService<T>(key: string, ServiceClass: ServiceFactory<T>, ...args: any[]): T {
     if (!this.services.has(key)) {
-      const service = 'getInstance' in ServiceClass ? ServiceClass.getInstance(...args) : new ServiceClass(...args);
+      const service =
+        'getInstance' in ServiceClass
+          ? ServiceClass.getInstance(...args)
+          : new ServiceClass(...args);
       this.services.set(key, service);
     }
 
@@ -91,8 +96,16 @@ export class OrderSingletonManager {
    *
    * @return The order authenticated service object.
    */
-  public getAuthenticatedClient(config: { userID: string; password: string; baseURL: string }): OrderAuthenticatedService {
-    return this.getOrCreateService(`OrderAuthenticatedClient_${JSON.stringify(config)}`, OrderAuthenticatedService, config);
+  public getAuthenticatedClient(config: {
+    userID: string;
+    password: string;
+    baseURL: string;
+  }): OrderAuthenticatedService {
+    return this.getOrCreateService(
+      `OrderAuthenticatedClient_${JSON.stringify(config)}`,
+      OrderAuthenticatedService,
+      config
+    );
   }
 
   /**
@@ -102,6 +115,10 @@ export class OrderSingletonManager {
    * @return The OrderService instance.
    */
   public getOrderService(orderAuthenticatedClient: OrderAuthenticatedService): OrderService {
-    return this.getOrCreateService(`OrderService_${orderAuthenticatedClient.getUniqueKey()}`, OrderService, orderAuthenticatedClient);
+    return this.getOrCreateService(
+      `OrderService_${orderAuthenticatedClient.getUniqueKey()}`,
+      OrderService,
+      orderAuthenticatedClient
+    );
   }
 }

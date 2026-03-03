@@ -2,7 +2,13 @@ import { DEFAULT_BASE_URLS } from './constants/core.constant';
 import type { OrderAuthenticatedService } from './core';
 import { OrderSingletonManager } from './core';
 import { LIQUID_COMMERCE_ENV } from './enums';
-import type { ILiquidCommerceOrderClient, IOrder, IOrderMethod, IOrdersList, IOrdersListParams } from './interfaces';
+import type {
+  ILiquidCommerceOrderClient,
+  IOrder,
+  IOrderMethod,
+  IOrdersList,
+  IOrdersListParams,
+} from './interfaces';
 import type { OrderService } from './services';
 import type { IApiResponseWithData, ILiquidCommerceOrderConfig } from './types';
 
@@ -131,7 +137,9 @@ class LiquidCommerceOrderClient implements ILiquidCommerceOrderClient {
  *
  * @throws {Error} - Throws an error if the client initialization fails.
  */
-export async function LiquidCommerceOrders(config: ILiquidCommerceOrderConfig): Promise<ILiquidCommerceOrderClient> {
+export async function LiquidCommerceOrders(
+  config: ILiquidCommerceOrderConfig
+): Promise<ILiquidCommerceOrderClient> {
   const singletonManager = OrderSingletonManager.getInstance();
   singletonManager.setLiquidCommerceOrderClientConstructor(LiquidCommerceOrderClient);
   return await singletonManager.getClient<ILiquidCommerceOrderClient>(config);

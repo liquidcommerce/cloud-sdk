@@ -73,7 +73,10 @@ export function fetchAdapter(fetchFunc: FetchFunction): HttpClient {
  * @returns {Promise<ICustomResponse>} - A Promise that resolves to a custom response object.
  * @throws {TypeError} - If the network request fails.
  */
-export const xhrFetch: HttpClient = (url: string, options: IHttpClientOptions): Promise<ICustomResponse> =>
+export const xhrFetch: HttpClient = (
+  url: string,
+  options: IHttpClientOptions
+): Promise<ICustomResponse> =>
   new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open(options.method || 'GET', url);

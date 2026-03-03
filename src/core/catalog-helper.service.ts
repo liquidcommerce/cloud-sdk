@@ -73,7 +73,9 @@ export class CatalogHelperService {
       normalizedParams.ids = ids;
     }
 
-    this.validateIds(normalizedParams?.upcs ?? normalizedParams?.grouping ?? normalizedParams?.ids ?? []);
+    this.validateIds(
+      normalizedParams?.upcs ?? normalizedParams?.grouping ?? normalizedParams?.ids ?? []
+    );
     this.locationServiceHelper.validateAndNormalizeLocation(normalizedParams.loc);
 
     return normalizedParams;
@@ -122,7 +124,9 @@ export class CatalogHelperService {
    * @param {ICatalogParams} params - The search parameters to be validated and normalized.
    * @returns {ICatalogParams} - The validated and normalized search parameters.
    */
-  public validateAndNormalizeSearchParams(params: ICatalogParams): ICatalogParams & { error?: string } {
+  public validateAndNormalizeSearchParams(
+    params: ICatalogParams
+  ): ICatalogParams & { error?: string } {
     const errors: string[] = [];
     const normalizedParams = { ...params };
 
@@ -185,8 +189,14 @@ export class CatalogHelperService {
    *
    * @return {void} This method does not return any value.
    */
-  private validateOrderDirection(orderDirection: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE | undefined, errors: string[]): void {
-    if (orderDirection && !Object.values(ENUM_NAVIGATION_ORDER_DIRECTION_TYPE).includes(orderDirection)) {
+  private validateOrderDirection(
+    orderDirection: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE | undefined,
+    errors: string[]
+  ): void {
+    if (
+      orderDirection &&
+      !Object.values(ENUM_NAVIGATION_ORDER_DIRECTION_TYPE).includes(orderDirection)
+    ) {
       errors.push(`Invalid orderDirection value: ${orderDirection}`);
     }
   }
@@ -332,7 +342,12 @@ export class CatalogHelperService {
    * If the array has a length that exceeds the maxLength parameter, an error message is added to the errors
    * array indicating that the filter can have a maximum of maxLength values.
    */
-  private validateArrayFilter(values: any, maxLength: number, filterName: string, errors: string[]): void {
+  private validateArrayFilter(
+    values: any,
+    maxLength: number,
+    filterName: string,
+    errors: string[]
+  ): void {
     if (!Array.isArray(values)) {
       errors.push(`${filterName} filter must be an array`);
     } else if (values.length > maxLength) {
@@ -370,7 +385,11 @@ export class CatalogHelperService {
    * The `page` argument must be a non-negative number, and the `perPage` argument must be a positive number.
    * If either argument fails validation, an error message is pushed to the `errors` array.
    */
-  private validatePagination(page: number | undefined, perPage: number | undefined, errors: string[]): void {
+  private validatePagination(
+    page: number | undefined,
+    perPage: number | undefined,
+    errors: string[]
+  ): void {
     if (page !== undefined && (typeof page !== 'number' || page < 0)) {
       errors.push('Page must be a non-negative number');
     }

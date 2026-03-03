@@ -31,7 +31,9 @@ export interface ILiquidCommerceOrderClient {
  *
  * @type {new (config: ILiquidCommerceOrderConfig) => ILiquidCommerceOrderClient} ILiquidCommerceOrderClientConstructor
  */
-export type ILiquidCommerceOrderClientConstructor = new (config: ILiquidCommerceOrderConfig) => ILiquidCommerceOrderClient;
+export type ILiquidCommerceOrderClientConstructor = new (
+  config: ILiquidCommerceOrderConfig
+) => ILiquidCommerceOrderClient;
 
 export interface IOrderMethod {
   /**

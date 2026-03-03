@@ -1,5 +1,10 @@
 import type { PaymentProviderService } from '../core';
-import type { ILiquidPaymentConfig, ILiquidPaymentError, ILiquidPaymentToken, IPaymentElementEventMap } from '../interfaces';
+import type {
+  ILiquidPaymentConfig,
+  ILiquidPaymentError,
+  ILiquidPaymentToken,
+  IPaymentElementEventMap,
+} from '../interfaces';
 
 /**
  * The PaymentService class provides methods for interacting with payment functionality.
@@ -39,7 +44,10 @@ export class PaymentService {
    * @param handler - The handler function to be called when the specified event occurs.
    * @return void
    */
-  public subscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler: (event: IPaymentElementEventMap[K]) => void): void {
+  public subscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler: (event: IPaymentElementEventMap[K]) => void
+  ): void {
     this.paymentProvider.subscribe(eventType, handler);
   }
 
@@ -50,7 +58,10 @@ export class PaymentService {
    * @param handler - Optional. The handler function to unsubscribe. If provided, only the specific handler will be unsubscribed. If not provided, all handlers for the event type will be unsubscribed.
    * @return void
    */
-  public unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void {
+  public unsubscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler?: (event: IPaymentElementEventMap[K]) => void
+  ): void {
     this.paymentProvider.unsubscribe(eventType, handler);
   }
 

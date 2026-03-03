@@ -5,7 +5,15 @@ import type {
   IPaymentElementConfig,
   PaymentElementImplConstructor,
 } from '../interfaces';
-import { AddressService, CartService, CatalogService, CheckoutService, PaymentService, UserService, WebhookService } from '../services';
+import {
+  AddressService,
+  CartService,
+  CatalogService,
+  CheckoutService,
+  PaymentService,
+  UserService,
+  WebhookService,
+} from '../services';
 import type { ILiquidCommerceConfig } from '../types';
 import { AuthenticatedService } from './authenticated.service';
 import { CartHelperService } from './cart-helper.service';
@@ -51,7 +59,9 @@ export class SingletonManager {
    *
    * @return {void}
    */
-  public setLiquidCommerceClientConstructor(clientConstructor: ILiquidCommerceClientConstructor): void {
+  public setLiquidCommerceClientConstructor(
+    clientConstructor: ILiquidCommerceClientConstructor
+  ): void {
     this.liquidCommerceClientConstructor = clientConstructor;
   }
 
@@ -114,7 +124,10 @@ export class SingletonManager {
    */
   private getOrCreateService<T>(key: string, ServiceClass: ServiceFactory<T>, ...args: any[]): T {
     if (!this.services.has(key)) {
-      const service = 'getInstance' in ServiceClass ? ServiceClass.getInstance(...args) : new ServiceClass(...args);
+      const service =
+        'getInstance' in ServiceClass
+          ? ServiceClass.getInstance(...args)
+          : new ServiceClass(...args);
       this.services.set(key, service);
     }
 
@@ -130,8 +143,16 @@ export class SingletonManager {
    *
    * @return The authenticated service object.
    */
-  public getAuthenticatedClient(config: { apiKey: string; baseURL: string; env: LIQUID_COMMERCE_ENV }): AuthenticatedService {
-    return this.getOrCreateService(`AuthenticatedClient_${JSON.stringify(config)}`, AuthenticatedService, config);
+  public getAuthenticatedClient(config: {
+    apiKey: string;
+    baseURL: string;
+    env: LIQUID_COMMERCE_ENV;
+  }): AuthenticatedService {
+    return this.getOrCreateService(
+      `AuthenticatedClient_${JSON.stringify(config)}`,
+      AuthenticatedService,
+      config
+    );
   }
 
   /**
@@ -151,7 +172,11 @@ export class SingletonManager {
    * @return The AddressService instance associated with the authenticated client.
    */
   public getAddressService(authenticatedClient: AuthenticatedService): AddressService {
-    return this.getOrCreateService(`AddressService_${authenticatedClient.getUniqueKey()}`, AddressService, authenticatedClient);
+    return this.getOrCreateService(
+      `AddressService_${authenticatedClient.getUniqueKey()}`,
+      AddressService,
+      authenticatedClient
+    );
   }
 
   /**
@@ -160,7 +185,11 @@ export class SingletonManager {
    * @return {CatalogHelperService} The CatalogHelperService instance.
    */
   public getCatalogHelperService(): CatalogHelperService {
-    return this.getOrCreateService('CatalogHelperService', CatalogHelperService, this.getLocationHelperService());
+    return this.getOrCreateService(
+      'CatalogHelperService',
+      CatalogHelperService,
+      this.getLocationHelperService()
+    );
   }
 
   /**
@@ -185,7 +214,11 @@ export class SingletonManager {
    * @return {CartHelperService} The CartHelperService instance.
    */
   public getCartHelperService(): CartHelperService {
-    return this.getOrCreateService('CartHelperService', CartHelperService, this.getLocationHelperService());
+    return this.getOrCreateService(
+      'CartHelperService',
+      CartHelperService,
+      this.getLocationHelperService()
+    );
   }
 
   public getPaymentSessionHelperService(): PaymentSessionHelperService {
@@ -229,8 +262,14 @@ export class SingletonManager {
    * @param {AuthenticatedService} authenticatedClient - The authenticated client instance
    * @return {PaymentProviderService} The instance of the `PaymentProviderService` class.
    */
-  public getPaymentProviderService(authenticatedClient: AuthenticatedService): PaymentProviderService {
-    return this.getOrCreateService(`PaymentProviderService_${authenticatedClient.getUniqueKey()}`, PaymentProviderService, authenticatedClient);
+  public getPaymentProviderService(
+    authenticatedClient: AuthenticatedService
+  ): PaymentProviderService {
+    return this.getOrCreateService(
+      `PaymentProviderService_${authenticatedClient.getUniqueKey()}`,
+      PaymentProviderService,
+      authenticatedClient
+    );
   }
 
   /**
@@ -254,7 +293,11 @@ export class SingletonManager {
    * @return {CheckoutHelperService} The CheckoutHelperService instance.
    */
   public getCheckoutHelperService(): CheckoutHelperService {
-    return this.getOrCreateService('CheckoutHelperService', CheckoutHelperService, this.getLocationHelperService());
+    return this.getOrCreateService(
+      'CheckoutHelperService',
+      CheckoutHelperService,
+      this.getLocationHelperService()
+    );
   }
 
   /**
@@ -279,6 +322,10 @@ export class SingletonManager {
    * @return The WebhookService instance.
    */
   public getWebhookService(authenticatedClient: AuthenticatedService): WebhookService {
-    return this.getOrCreateService(`WebhookService_${authenticatedClient.getUniqueKey()}`, WebhookService, authenticatedClient);
+    return this.getOrCreateService(
+      `WebhookService_${authenticatedClient.getUniqueKey()}`,
+      WebhookService,
+      authenticatedClient
+    );
   }
 }

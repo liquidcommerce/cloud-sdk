@@ -56,7 +56,10 @@ export class CartService {
   public async update(params: ICartUpdateParams): Promise<IApiResponseWithoutData<ICart>> {
     try {
       const validatedParams = this.cartHelperService.validateAndNormalizeParams(params);
-      return await this.client.post<IApiResponseWithoutData<ICart>>(this.servicePath, validatedParams);
+      return await this.client.post<IApiResponseWithoutData<ICart>>(
+        this.servicePath,
+        validatedParams
+      );
     } catch (error) {
       console.error('Cart update request failed:', error);
       throw error;

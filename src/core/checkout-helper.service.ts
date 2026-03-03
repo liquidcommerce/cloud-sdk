@@ -1,5 +1,10 @@
 import type { STATES_CODE, STATES_NAME } from '../enums';
-import type { ICheckoutBillingAddress, ICheckoutCompleteParams, ICheckoutCustomer, ICheckoutPrepareParams } from '../interfaces';
+import type {
+  ICheckoutBillingAddress,
+  ICheckoutCompleteParams,
+  ICheckoutCustomer,
+  ICheckoutPrepareParams,
+} from '../interfaces';
 import type { LocationHelperService } from './location-helper.service';
 
 /**
@@ -47,7 +52,11 @@ export class CheckoutHelperService {
     normalizedParams.isGift = Boolean(normalizedParams?.isGift);
     normalizedParams.billingSameAsShipping = Boolean(normalizedParams?.billingSameAsShipping);
 
-    if (normalizedParams && normalizedParams?.billingAddress && normalizedParams?.billingAddress?.phone !== '') {
+    if (
+      normalizedParams &&
+      normalizedParams?.billingAddress &&
+      normalizedParams?.billingAddress?.phone !== ''
+    ) {
       normalizedParams = {
         ...normalizedParams,
         billingAddress: {
@@ -57,12 +66,17 @@ export class CheckoutHelperService {
       };
     }
 
-    if (normalizedParams && normalizedParams?.customer && (normalizedParams?.customer as ICheckoutCustomer)?.phone !== '') {
+    if (
+      normalizedParams &&
+      normalizedParams?.customer &&
+      (normalizedParams?.customer as ICheckoutCustomer)?.phone !== ''
+    ) {
       normalizedParams = {
         ...normalizedParams,
         customer: {
           ...((normalizedParams?.customer as ICheckoutCustomer) ?? {}),
-          phone: this.formatPhoneNumber((normalizedParams?.customer as ICheckoutCustomer)?.phone) ?? '',
+          phone:
+            this.formatPhoneNumber((normalizedParams?.customer as ICheckoutCustomer)?.phone) ?? '',
         },
       };
     }
@@ -71,7 +85,11 @@ export class CheckoutHelperService {
     if (normalizedParams?.isGift) {
       this.validateGiftOptions(normalizedParams.giftOptions);
 
-      if (normalizedParams && normalizedParams?.giftOptions && normalizedParams?.giftOptions?.recipient?.phone !== '') {
+      if (
+        normalizedParams &&
+        normalizedParams?.giftOptions &&
+        normalizedParams?.giftOptions?.recipient?.phone !== ''
+      ) {
         normalizedParams = {
           ...normalizedParams,
           giftOptions: {
@@ -115,7 +133,9 @@ export class CheckoutHelperService {
    *
    * @return {ICheckoutCompleteParams} The validated and normalized complete checkout parameters.
    */
-  public validateAndNormalizeCompleteParams(params: ICheckoutCompleteParams): ICheckoutCompleteParams {
+  public validateAndNormalizeCompleteParams(
+    params: ICheckoutCompleteParams
+  ): ICheckoutCompleteParams {
     const normalizedParams = { ...params };
 
     // Validate token
@@ -152,7 +172,8 @@ export class CheckoutHelperService {
   private validateCustomer(customer?: ICheckoutCustomer | string): void {
     if (customer && typeof customer === 'object') {
       const { firstName, lastName, phone, email } = customer;
-      if (firstName && typeof firstName !== 'string') throw new Error('Invalid customer first name');
+      if (firstName && typeof firstName !== 'string')
+        throw new Error('Invalid customer first name');
       if (lastName && typeof lastName !== 'string') throw new Error('Invalid customer last name');
       if (phone && typeof phone !== 'string') throw new Error('Invalid customer phone');
       if (email && typeof email !== 'string') throw new Error('Invalid customer email');
@@ -209,7 +230,9 @@ export class CheckoutHelperService {
 
     // Normalize state if provided
     if ('state' in normalizedAddress && normalizedAddress.state) {
-      normalizedAddress.state = this.locationHelperService.normalizeState(normalizedAddress.state as STATES_CODE | STATES_NAME);
+      normalizedAddress.state = this.locationHelperService.normalizeState(
+        normalizedAddress.state as STATES_CODE | STATES_NAME
+      );
     }
 
     return normalizedAddress;
@@ -265,7 +288,11 @@ export class CheckoutHelperService {
         throw new Error('Invalid gift message: must be a string if provided');
       }
 
-      if ('message' in giftOptions && typeof giftOptions.message === 'string' && giftOptions.message.length > 500) {
+      if (
+        'message' in giftOptions &&
+        typeof giftOptions.message === 'string' &&
+        giftOptions.message.length > 500
+      ) {
         throw new Error('Invalid gift message: Gift message cannot exceed 500 characters');
       }
 
@@ -339,7 +366,9 @@ export class CheckoutHelperService {
    *
    * @throws {Error} The error thrown if the marketing preferences are invalid.
    */
-  private validateMarketingPreferences(preferences?: ICheckoutPrepareParams['marketingPreferences']): void {
+  private validateMarketingPreferences(
+    preferences?: ICheckoutPrepareParams['marketingPreferences']
+  ): void {
     if (preferences !== undefined && typeof preferences !== 'object') {
       throw new Error('Invalid marketingPreferences: must be an object if provided');
     }

@@ -189,7 +189,10 @@ export interface IPaymentProvider {
    *
    * @return void
    */
-  subscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler: (event: IPaymentElementEventMap[K]) => void): void;
+  subscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler: (event: IPaymentElementEventMap[K]) => void
+  ): void;
 
   /**
    * Unsubscribes the specified event handler from the specified event type.
@@ -199,5 +202,8 @@ export interface IPaymentProvider {
    *
    * @return void
    */
-  unsubscribe<K extends keyof IPaymentElementEventMap>(eventType: K, handler?: (event: IPaymentElementEventMap[K]) => void): void;
+  unsubscribe<K extends keyof IPaymentElementEventMap>(
+    eventType: K,
+    handler?: (event: IPaymentElementEventMap[K]) => void
+  ): void;
 }

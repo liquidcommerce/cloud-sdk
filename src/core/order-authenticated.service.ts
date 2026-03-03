@@ -73,7 +73,10 @@ export class OrderAuthenticatedService {
 
     this.isAuthenticating = true;
     try {
-      const response = await this.requestWithoutAuth<IApiResponseWithData<IAuth>>('/order-authentication', { method: 'GET' });
+      const response = await this.requestWithoutAuth<IApiResponseWithData<IAuth>>(
+        '/order-authentication',
+        { method: 'GET' }
+      );
       this.accessToken = response?.data?.token;
       this.tokenExpiration = Date.now() + response?.data?.exp * 1000;
     } catch (error) {
@@ -197,7 +200,11 @@ export class OrderAuthenticatedService {
    *
    * @throws {Error} - If an error occurs while making the request.
    */
-  public async post<T = any>(path: string, body?: any, headers?: Record<string, string>): Promise<T> {
+  public async post<T = any>(
+    path: string,
+    body?: any,
+    headers?: Record<string, string>
+  ): Promise<T> {
     return this.request<T>(path, { method: 'POST', body, headers });
   }
 
@@ -209,7 +216,11 @@ export class OrderAuthenticatedService {
    * @param {Record<string, string>} [headers] - The optional headers of the request.
    * @return {Promise<T>} A Promise that resolves with the response data.
    */
-  public async put<T = any>(path: string, body?: any, headers?: Record<string, string>): Promise<T> {
+  public async put<T = any>(
+    path: string,
+    body?: any,
+    headers?: Record<string, string>
+  ): Promise<T> {
     return this.request<T>(path, { method: 'PUT', body, headers });
   }
 
