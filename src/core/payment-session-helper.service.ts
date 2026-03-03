@@ -60,7 +60,7 @@ export class PaymentSessionHelperService {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-function-type
+  // biome-ignore lint/complexity/noBannedTypes: validation helper uses generic callback
   private v(x: any, f: Function, l: any, m: string): void {
     if (!f(x) || (l !== null && x.length < l)) {
       throw new Error(m);

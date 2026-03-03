@@ -174,6 +174,7 @@ export class OrderAuthenticatedService {
 
       return responseData;
     } catch (error) {
+      // biome-ignore lint/complexity/noUselessCatch: preserving error boundary
       throw error;
     }
   }

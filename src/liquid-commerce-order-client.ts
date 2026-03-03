@@ -27,6 +27,7 @@ class LiquidCommerceOrderClient implements ILiquidCommerceOrderClient {
 
   private orderService: OrderService;
 
+  // biome-ignore lint/correctness/noUnusedPrivateClassMembers: kept for future use
   private config: ILiquidCommerceOrderConfig;
 
   private singletonManager: OrderSingletonManager;

@@ -80,6 +80,7 @@ export class PaymentProviderService implements IPaymentProvider {
         );
       }
     } catch (e) {
+      // biome-ignore lint/complexity/noUselessCatch: preserving error boundary
       throw e;
     }
 

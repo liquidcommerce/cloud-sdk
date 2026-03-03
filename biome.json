@@ -133,11 +133,21 @@
 			"linter": {
 				"rules": {
 					"performance": {
-						"noBarrelFile": "warn",
-						"noReExportAll": "warn"
+						"noBarrelFile": "off",
+						"noReExportAll": "off"
 					},
 					"style": {
 						"useImportType": "warn"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/src/enums/enums.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useLiteralEnumMembers": "off"
 					}
 				}
 			}
