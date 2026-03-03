@@ -1,3 +1,17 @@
+## [1.9.3-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.3-beta.1...v1.9.3-beta.2) (2026-03-03)
+
+
+### Bug Fixes
+
+* **build:** run pnpm update for adding package loc updates ([078606b](https://github.com/liquidcommerce/cloud-sdk/commit/078606bab1e0bf7bc4323e606742097823683d64))
+* **build:** update Node.js version to 22 and bump pnpm to 10.30.3 ([287226f](https://github.com/liquidcommerce/cloud-sdk/commit/287226f572a1437c11220b0a52bde9c8af738ed7))
+* **constants:** handle undefined environment variables for base URLs ([22c0377](https://github.com/liquidcommerce/cloud-sdk/commit/22c0377e9162d0fadf91fdacbf5dbdc75e9b894e))
+* **constants:** specify string type for environment variable URLs ([e0e3ff6](https://github.com/liquidcommerce/cloud-sdk/commit/e0e3ff6816f53c68dc3815ba08c160aa3dd5ba6b))
+* **dependencies:** bump dev dependencies version and use biome ([dc005d9](https://github.com/liquidcommerce/cloud-sdk/commit/dc005d98a10093a6fc082fc858b2b031031209ac))
+* **dependencies:** update terser plugin import and bump stripe-js version ([ea63afb](https://github.com/liquidcommerce/cloud-sdk/commit/ea63afbb61c18610403fd14ea6243d0bcd5a5aed))
+* **formatting:** standardize code formatting and improve readability ([4eeefa4](https://github.com/liquidcommerce/cloud-sdk/commit/4eeefa47350c9c913e4868000a694dcbf01c13b9))
+* **lint:** adjust biome rules for complexity and unused members ([db8af31](https://github.com/liquidcommerce/cloud-sdk/commit/db8af31fb179223ff4c064807d84968a69c99d66))
+
 ## [1.9.3-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.2...v1.9.3-beta.1) (2025-12-24)
 
 
