@@ -28,12 +28,12 @@ jobs:
       - name: Set up Node.js and pnpm
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Install pnpm
         run: |
-          npm install -g pnpm@9.5.0
+          npm install -g pnpm@10.30.3
           npm cache clean --force
           pnpm install
 

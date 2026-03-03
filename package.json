@@ -6,7 +6,7 @@
  "module": "./dist/index.esm.js",
  "browser": "./umd/liquidcommerce-cloud-sdk.js",
  "types": "./dist/types/index.d.ts",
- "packageManager": "pnpm@9.5.0",
+ "packageManager": "pnpm@10.30.3",
  "exports": {
   ".": {
    "import": {
@@ -85,7 +85,7 @@
   "vitest": "^4.0.18"
  },
  "engines": {
-  "node": ">=20"
+  "node": ">=22"
  },
  "pnpm": {
   "peerDependencyRules": {
