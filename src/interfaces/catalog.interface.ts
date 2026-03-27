@@ -423,6 +423,8 @@ export interface IProductSizeEngraving {
   fee: number;
 
   location: string;
+
+  isRequired: boolean;
 }
 
 /**
