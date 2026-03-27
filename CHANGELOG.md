@@ -1,3 +1,10 @@
+# [1.10.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.3-beta.2...v1.10.0-beta.1) (2026-03-27)
+
+
+### Features
+
+* **engraving:** added engraving isRequired field ([714a81e](https://github.com/liquidcommerce/cloud-sdk/commit/714a81e2203cf32ddbceff366cf32bd718d527d8))
+
 ## [1.9.3-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.3-beta.1...v1.9.3-beta.2) (2026-03-03)
 
 
