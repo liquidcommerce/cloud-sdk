@@ -23,6 +23,9 @@ import type { LocationHelperService } from './location-helper.service';
  * input parameters for availability and catalog search.
  */
 export class CatalogHelperService {
+  /**
+   * @deprecated Taxonomy values are now fetched dynamically from the backend. This property will be removed in a future version.
+   */
   private readonly taxonomyValues: Set<LiquidTaxonomy>;
 
   constructor(private locationServiceHelper: LocationHelperService) {
@@ -233,9 +236,6 @@ export class CatalogHelperService {
         case ENUM_FILTER_KEYS.PRESALE:
           this.validateBinaryFilter(filter.values as ENUM_BINARY_FILTER, errors);
           break;
-        case ENUM_FILTER_KEYS.CATEGORIES:
-          this.validateCategoriesFilter(filter.values as LiquidTaxonomy[], errors);
-          break;
         case ENUM_FILTER_KEYS.BRANDS:
           this.validateArrayFilter(filter.values, 75, 'brands', errors);
           break;
@@ -356,6 +356,8 @@ export class CatalogHelperService {
   }
 
   /**
+   * @deprecated Categories are now validated dynamically by the backend. This method will be removed in a future version.
+   *
    * Validates the categories filter values.
    *
    * @param {LiquidTaxonomy[]} values - The array of category values to validate.
