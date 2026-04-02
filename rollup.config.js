@@ -2,7 +2,7 @@ import typescript from 'rollup-plugin-typescript2';
 import { createRequire } from 'module';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
 import livereload from 'rollup-plugin-livereload';
@@ -30,10 +30,11 @@ const commonPlugins = [
       'process.env.GOOGLE_PLACES_API_KEY': JSON.stringify(process.env.GOOGLE_PLACES_API_KEY),
       'process.env.ORDER_API_USER': JSON.stringify(process.env.ORDER_API_USER),
       'process.env.ORDER_API_PASSWORD': JSON.stringify(process.env.ORDER_API_PASSWORD),
-      'process.env.ENV_LOC': JSON.stringify(process.env.ENV_LOC),
-      'process.env.ENV_DEV': JSON.stringify(process.env.ENV_DEV),
-      'process.env.ENV_STAGE': JSON.stringify(process.env.ENV_STAGE),
-      'process.env.ENV_PROD': JSON.stringify(process.env.ENV_PROD),
+      'process.env.ENV_LOC': JSON.stringify(process.env.ENV_LOC || ''),
+      'process.env.ENV_DEV': JSON.stringify(process.env.ENV_DEV || ''),
+      'process.env.ENV_STAGE': JSON.stringify(process.env.ENV_STAGE || ''),
+      'process.env.ENV_PROD': JSON.stringify(process.env.ENV_PROD || ''),
+      'process.env.SDK_VERSION': JSON.stringify(pkg.version),
     },
   }),
   typescript({

@@ -7,7 +7,6 @@ import type {
   ENUM_NAVIGATION_ORDER_DIRECTION_TYPE,
   ENUM_ORDER_BY,
 } from '../enums';
-import type { LiquidTaxonomy } from '../types';
 import type { ILocBase } from './address.interface';
 import type { IRetailer } from './retailer.interface';
 
@@ -17,7 +16,7 @@ import type { IRetailer } from './retailer.interface';
 export interface ICategoryFilter {
   key: ENUM_FILTER_KEYS.CATEGORIES | 'categories';
 
-  values: LiquidTaxonomy[];
+  values: string[];
 }
 
 /**
@@ -155,7 +154,7 @@ export interface ICatalog {
  * It is designed to hold a specific value and its associated count.
  */
 export interface IFilterValue {
-  value: LiquidTaxonomy | ENUM_AVAILABILITY_VALUE | ENUM_BINARY_FILTER | string;
+  value: ENUM_AVAILABILITY_VALUE | ENUM_BINARY_FILTER | string;
 
   count: number;
 }
@@ -423,6 +422,8 @@ export interface IProductSizeEngraving {
   fee: number;
 
   location: string;
+
+  isRequired: boolean;
 }
 
 /**

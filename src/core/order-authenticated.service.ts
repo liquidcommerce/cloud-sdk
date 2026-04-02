@@ -140,6 +140,8 @@ export class OrderAuthenticatedService {
       const url = new URL(`api${path}`, this.baseURL);
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
+        'X-LIQUID-API-SDK': 'true',
+        'X-LIQUID-SDK-VERSION': process.env.SDK_VERSION as string,
         Authorization: `Bearer ${this.accessToken}`,
         ...options.headers,
       };
@@ -174,6 +176,7 @@ export class OrderAuthenticatedService {
 
       return responseData;
     } catch (error) {
+      // biome-ignore lint/complexity/noUselessCatch: preserving error boundary
       throw error;
     }
   }

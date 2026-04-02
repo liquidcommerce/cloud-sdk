@@ -1,0 +1,181 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.5/schema.json",
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"includes": ["**/src/**/*.ts", "!**/node_modules/**/*", "!**/dist/**/*", "!**/umd/**/*", "!**/*.d.ts", "!**/demo/**/*"]
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"includes": ["**"],
+		"attributePosition": "auto",
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 150,
+		"lineEnding": "lf"
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": {
+					"level": "on",
+					"options": {
+						"identifierOrder": "lexicographic",
+						"groups": [":NODE:", ":PACKAGE:", ":ALIAS:", ":PATH:"]
+					}
+				}
+			}
+		}
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noConfusingVoidType": "error",
+				"noArrayIndexKey": "warn",
+				"noExplicitAny": "off",
+				"noPrototypeBuiltins": "off",
+				"noImplicitAnyLet": "off"
+			},
+			"style": {
+				"noNamespace": "error",
+				"useFilenamingConvention": {
+					"level": "warn",
+					"options": {
+						"strictCase": false,
+						"requireAscii": true
+					}
+				},
+				"noNonNullAssertion": "off",
+				"useNodejsImportProtocol": "off",
+				"useImportType": "error",
+				"useExportType": "error",
+				"noParameterAssign": "error",
+				"useAsConstAssertion": "error",
+				"useDefaultParameterLast": "error",
+				"useEnumInitializers": "error",
+				"useSelfClosingElements": "error",
+				"useSingleVarDeclarator": "error",
+				"noUnusedTemplateLiteral": "error",
+				"useNumberNamespace": "error",
+				"noInferrableTypes": "error",
+				"noUselessElse": "error"
+			},
+			"correctness": {
+				"noUndeclaredVariables": "error",
+				"noUnusedVariables": "error",
+				"noUnusedImports": "error",
+				"useExhaustiveDependencies": "warn"
+			},
+			"complexity": {
+				"noUselessConstructor": "error",
+				"noUselessRename": "error",
+				"noExcessiveCognitiveComplexity": {
+					"level": "error",
+					"options": {
+						"maxAllowedComplexity": 30
+					}
+				},
+				"noThisInStatic": "off",
+				"noStaticOnlyClass": "off",
+				"noAdjacentSpacesInRegex": "error"
+			},
+			"performance": {
+				"noBarrelFile": "warn"
+			},
+			"nursery": {
+				"useSortedClasses": "off"
+			}
+		}
+	},
+	"javascript": {
+		"globals": ["browser", "ES2018"],
+		"formatter": {
+			"enabled": true,
+			"lineWidth": 100,
+			"indentStyle": "space",
+			"indentWidth": 2,
+			"lineEnding": "lf",
+			"semicolons": "always",
+			"quoteStyle": "single",
+			"quoteProperties": "asNeeded",
+			"jsxQuoteStyle": "double",
+			"trailingCommas": "es5",
+			"bracketSpacing": true,
+			"bracketSameLine": false,
+			"arrowParentheses": "always"
+		}
+	},
+	"json": {
+		"formatter": {
+			"trailingCommas": "none"
+		}
+	},
+	"overrides": [
+		{
+			"includes": ["**/src/index.ts", "**/src/enums/index.ts", "**/src/interfaces/index.ts", "**/src/services/index.ts", "**/src/constants/index.ts"],
+			"linter": {
+				"rules": {
+					"performance": {
+						"noBarrelFile": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/src/core/index.ts"],
+			"linter": {
+				"rules": {
+					"performance": {
+						"noBarrelFile": "off",
+						"noReExportAll": "off"
+					},
+					"style": {
+						"useImportType": "warn"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/src/enums/enums.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useLiteralEnumMembers": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/src/**/*.interface.ts", "**/src/interfaces/**/*.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useExportType": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/src/**/*.service.ts"],
+			"linter": {
+				"rules": {
+					"complexity": {
+						"noExcessiveCognitiveComplexity": {
+							"level": "warn",
+							"options": {
+								"maxAllowedComplexity": 20
+							}
+						}
+					}
+				}
+			}
+		}
+	]
+}

@@ -149,6 +149,7 @@ export class AuthenticatedService {
         'X-LIQUID-API-KEY': this.apiKey,
         'X-LIQUID-API-OBF': 'true',
         'X-LIQUID-API-SDK': 'true',
+        'X-LIQUID-SDK-VERSION': process.env.SDK_VERSION as string,
         Authorization: `Bearer ${this.accessToken}`,
         ...options.headers,
       };
@@ -161,7 +162,7 @@ export class AuthenticatedService {
 
       const response = await this.httpClient(url.toString(), fetchOptions);
 
-      let responseData;
+      let responseData: any;
       try {
         responseData = await response.json();
       } catch (error) {
@@ -183,6 +184,7 @@ export class AuthenticatedService {
 
       return responseData;
     } catch (error) {
+      // biome-ignore lint/complexity/noUselessCatch: preserving error boundary
       throw error;
     }
   }
