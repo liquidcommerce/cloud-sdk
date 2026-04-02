@@ -34,6 +34,7 @@ const commonPlugins = [
       'process.env.ENV_DEV': JSON.stringify(process.env.ENV_DEV || ''),
       'process.env.ENV_STAGE': JSON.stringify(process.env.ENV_STAGE || ''),
       'process.env.ENV_PROD': JSON.stringify(process.env.ENV_PROD || ''),
+      'process.env.SDK_VERSION': JSON.stringify(pkg.version),
     },
   }),
   typescript({

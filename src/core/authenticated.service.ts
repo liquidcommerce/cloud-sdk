@@ -149,6 +149,7 @@ export class AuthenticatedService {
         'X-LIQUID-API-KEY': this.apiKey,
         'X-LIQUID-API-OBF': 'true',
         'X-LIQUID-API-SDK': 'true',
+        'X-LIQUID-SDK-VERSION': process.env.SDK_VERSION as string,
         Authorization: `Bearer ${this.accessToken}`,
         ...options.headers,
       };
