@@ -1,3 +1,10 @@
+# [1.10.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.1...v1.10.0-beta.2) (2026-04-02)
+
+
+### Bug Fixes
+
+* **search-categories:** add SDK version and deprecate taxonomy ([eed7622](https://github.com/liquidcommerce/cloud-sdk/commit/eed762243393112e3f4633f4ae61ee1c67c3dd16))
+
 # [1.10.0-beta.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.9.3-beta.2...v1.10.0-beta.1) (2026-03-27)
 
 
