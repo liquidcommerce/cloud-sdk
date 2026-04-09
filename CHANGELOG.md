@@ -1,3 +1,10 @@
+# [1.10.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.2...v1.10.0-beta.3) (2026-04-09)
+
+
+### Bug Fixes
+
+* **cart:** added isRequired engraving in ICartItemEngraving ([22eadaf](https://github.com/liquidcommerce/cloud-sdk/commit/22eadaf4de5773d3d66f4391c8b15e8b2a7346de))
+
 # [1.10.0-beta.2](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.1...v1.10.0-beta.2) (2026-04-02)
 
 
