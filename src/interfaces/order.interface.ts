@@ -89,6 +89,7 @@ export interface IOrderItemProductAttributes {
 export interface IOrderItemProduct {
   name: string;
   brand: string;
+  parentCo: string | null;
   upc: string;
   sku: string;
   mskus: string[];
@@ -229,6 +230,8 @@ export interface IOrder {
   isHybrid: boolean;
   partnerId: string;
   partnerName: string;
+  organizationId: string;
+  organizationName: string;
   promoCode: string | null;
   createdAt: string; // new Date().toISOString()
   updatedAt: string; // new Date().toISOString()
