@@ -25,6 +25,7 @@ The LiquidCommerce Cloud SDK provides an easy way to interact with our APIs thro
   - [Legacy Payment](#legacy-payment)
   - [Checkout](#checkout)
   - [Orders](#orders)
+  - [Tracking](#tracking)
   - [Webhook](#webhook)
 - [Response Types](#response-types)
 - [Error Handling](#error-handling)
@@ -705,6 +706,24 @@ const orderResponse = await orderClient.order.fetch(/* reference id or order num
 ```
 
 [Click here to access the docs for the order response structure](https://docs.liquidcommerce.cloud/types/order)
+
+### Tracking
+
+Provides order tracking information including package status and delivery updates.
+
+```typescript
+// Fetch tracking details by reference ID or legacy order number
+const trackingResponse = await client.tracking.get('ABCD_12345678901');
+
+// Response type: IApiResponseWithData<ITracking>
+// {
+//   legacyOrderNumber: string | null;
+//   referenceId: string | null;
+//   packages: ITrackingPackage[];
+// }
+```
+
+[Click here to access the docs for the tracking response structure](https://docs.liquidcommerce.cloud/types/tracking)
 
 ### Webhook
 
