@@ -29,6 +29,8 @@ export interface ICartItemEngraving {
   location: string;
 
   lines: string[];
+
+  isRequired: boolean;
 }
 
 /**
