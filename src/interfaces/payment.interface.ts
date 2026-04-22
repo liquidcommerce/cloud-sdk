@@ -46,6 +46,8 @@ export interface ILiquidPaymentConfig {
   };
 
   elementOptions?: ILiquidPaymentElementOptions;
+
+  isHybrid?: boolean;
 }
 
 /**
