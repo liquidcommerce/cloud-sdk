@@ -41,6 +41,8 @@ export class PaymentProviderService implements IPaymentProvider {
 
   private clientSecret: string | null = null;
 
+  private isHybrid = true;
+
   constructor(private client: AuthenticatedService) {}
 
   /**
@@ -79,6 +81,9 @@ export class PaymentProviderService implements IPaymentProvider {
           `The client secret (${this.clientSecret}) has already been used previously. Generate a new one through a use session.`
         );
       }
+
+      // Auto-detect isHybrid from SetupIntent usage if not explicitly provided
+      this.isHybrid = config.isHybrid ?? (setupIntent?.usage === 'on_session');
     } catch (e) {
       // biome-ignore lint/complexity/noUselessCatch: preserving error boundary
       throw e;
@@ -163,23 +168,82 @@ export class PaymentProviderService implements IPaymentProvider {
       };
     }
 
-    // Then create the payment method
-    const { error, paymentMethod } = await this.stripe.createPaymentMethod({
-      elements: this.elements,
-    });
+    if (this.isHybrid) {
+      // Legacy flow: create payment method + server-side confirm (no 3DS)
+      const { error, paymentMethod } = await this.stripe.createPaymentMethod({
+        elements: this.elements,
+      });
 
-    if (error) {
+      if (error) {
+        return {
+          type: error.type === 'validation_error' ? 'validation_error' : 'api_error',
+          message: error.message,
+          code: error.code,
+          param: error.param,
+        };
+      }
+
+      const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret);
+
+      if (!setupIntent) {
+        return {
+          type: 'confirm_error',
+          message: "There's been an error during your session confirmation",
+          code: '7190',
+        };
+      }
+
+      const { data } = await this.confirmSession({
+        paymentMethodId: paymentMethod?.id ?? '',
+        sessionSecret: setupIntent?.id ?? '',
+      });
+
+      if (!data) {
+        return {
+          type: 'confirm_error',
+          message: "There's been an error during your session confirmation",
+          code: '7191',
+        };
+      }
+
+      if (paymentMethod) {
+        return {
+          id: paymentMethod.id,
+          type: paymentMethod.type,
+          card: paymentMethod?.card
+            ? {
+                brand: paymentMethod.card?.brand ?? '',
+                country: paymentMethod.card.country ?? '',
+                expMonth: paymentMethod.card.exp_month ?? 0,
+                expYear: paymentMethod.card.exp_year ?? 0,
+                last4: paymentMethod.card.last4 ?? '',
+                funding: paymentMethod.card.funding ?? '',
+              }
+            : undefined,
+          created: paymentMethod?.created ?? 0,
+        };
+      }
+
       return {
-        type: error.type === 'validation_error' ? 'validation_error' : 'api_error',
-        message: error.message,
-        code: error.code,
-        param: error.param,
+        type: 'client_error',
+        message: 'Failed to generate payment token',
       };
     }
 
-    const { setupIntent } = await this.stripe.retrieveSetupIntent(this.clientSecret);
+    // New services flow: confirmation token + client-side confirm (3DS enabled)
+    const { error: tokenError, confirmationToken } = await this.stripe.createConfirmationToken({
+      elements: this.elements,
+    });
 
-    if (!setupIntent) {
+    if (tokenError) {
+      return {
+        type: tokenError.type === 'validation_error' ? 'validation_error' : 'api_error',
+        message: tokenError.message,
+        code: tokenError.code,
+      };
+    }
+
+    if (!confirmationToken?.id) {
       return {
         type: 'confirm_error',
         message: "There's been an error during your session confirmation",
@@ -187,9 +251,39 @@ export class PaymentProviderService implements IPaymentProvider {
       };
     }
 
+    const { error: confirmError, setupIntent } = await this.stripe.confirmSetup({
+      clientSecret: this.clientSecret,
+      confirmParams: {
+        confirmation_token: confirmationToken.id,
+        return_url: window.location.href,
+      },
+      redirect: 'if_required',
+    });
+
+    if (confirmError) {
+      return {
+        type: confirmError.type === 'validation_error' ? 'validation_error' : 'confirm_error',
+        message: confirmError.message,
+        code: confirmError.code,
+      };
+    }
+
+    if (!setupIntent || setupIntent.status !== 'succeeded') {
+      return {
+        type: 'confirm_error',
+        message: "There's been an error during your session confirmation",
+        code: '7190',
+      };
+    }
+
+    const paymentMethodId =
+      typeof setupIntent.payment_method === 'string'
+        ? setupIntent.payment_method
+        : setupIntent.payment_method?.id ?? '';
+
     const { data } = await this.confirmSession({
-      paymentMethodId: paymentMethod?.id ?? '',
-      sessionSecret: setupIntent?.id ?? '',
+      paymentMethodId,
+      sessionSecret: setupIntent.id,
     });
 
     if (!data) {
@@ -200,27 +294,22 @@ export class PaymentProviderService implements IPaymentProvider {
       };
     }
 
-    if (paymentMethod) {
-      return {
-        id: paymentMethod.id,
-        type: paymentMethod.type,
-        card: paymentMethod?.card
-          ? {
-              brand: paymentMethod.card?.brand ?? '',
-              country: paymentMethod.card.country ?? '',
-              expMonth: paymentMethod.card.exp_month ?? 0,
-              expYear: paymentMethod.card.exp_year ?? 0,
-              last4: paymentMethod.card.last4 ?? '',
-              funding: paymentMethod.card.funding ?? '',
-            }
-          : undefined,
-        created: paymentMethod?.created ?? 0,
-      };
-    }
+    const cardPreview = confirmationToken.payment_method_preview?.card;
 
     return {
-      type: 'client_error',
-      message: 'Failed to generate payment token',
+      id: paymentMethodId,
+      type: confirmationToken.payment_method_preview?.type ?? 'card',
+      card: cardPreview
+        ? {
+            brand: cardPreview.brand ?? '',
+            country: cardPreview.country ?? '',
+            expMonth: cardPreview.exp_month ?? 0,
+            expYear: cardPreview.exp_year ?? 0,
+            last4: cardPreview.last4 ?? '',
+            funding: cardPreview.funding ?? '',
+          }
+        : undefined,
+      created: confirmationToken.created ?? 0,
     };
   }
 

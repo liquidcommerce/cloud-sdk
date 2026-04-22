@@ -16,6 +16,8 @@ export interface IUserSession {
   secret: string | null;
 
   createdAt: Date;
+
+  isHybrid?: boolean;
 }
 
 /**
