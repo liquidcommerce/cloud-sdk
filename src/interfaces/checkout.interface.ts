@@ -257,6 +257,23 @@ export interface ICheckoutTotalAmounts {
  *
  * @interface
  */
+/**
+ * BOPIS pickup contact captured at the fulfillment level.
+ *
+ * Set when `ICheckoutFulfillment.type === 'bopis'`.
+ */
+export interface ICheckoutFulfillmentBopisContact {
+  firstName: string;
+
+  lastName: string;
+
+  email: string;
+
+  phoneNumber: string;
+
+  isGift: boolean;
+}
+
 export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
   id: string;
 
@@ -264,7 +281,7 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
 
   scheduledFor?: string | Date;
 
-  type: 'shipping' | 'onDemand';
+  type: 'shipping' | 'onDemand' | 'bopis';
 
   expectation: IRetailerExpectation;
 
@@ -273,6 +290,8 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
   doesAllowPromos: boolean;
 
   doesAllowGiftCards: boolean;
+
+  bopisContact?: ICheckoutFulfillmentBopisContact;
 }
 
 /**
@@ -360,6 +379,8 @@ export interface ICheckoutItem {
   bottleDeposits: number;
 
   attributes: ICartItemAttributes;
+
+  bopis?: import('./cart.interface').ICartItemBopis | null;
 }
 
 /**

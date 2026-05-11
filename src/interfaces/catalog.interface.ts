@@ -379,6 +379,8 @@ export interface IProductFulfillmentTypes {
   shipping: string;
 
   onDemand: string;
+
+  bopis: string;
 }
 
 /**
@@ -455,6 +457,7 @@ export interface IProductPresale {
  * Interface representing attributes related to the size of a product.
  *
  * @property {IProductSizeEngraving} [engraving] - Optional engraving details for the product size.
+ * @property {boolean} [allowBopis] - True when the partner has opted this product in for BOPIS pickup. BOPIS is only surfaced when both the retailer and the product allow it.
  */
 export interface IProductSizeAttributes {
   salsifyPid?: string;
@@ -464,6 +467,8 @@ export interface IProductSizeAttributes {
   presale: IProductPresale;
 
   engraving: IProductSizeEngraving;
+
+  allowBopis?: boolean;
 
   maxQuantityPerOrder?: number;
 }
