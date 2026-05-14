@@ -40,6 +40,8 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
 
   private readonly s: string;
 
+  private isHybrid: boolean | null;
+
   private isProviderLoading = false;
 
   private providerLoadPromise: Promise<Stripe | null> | null = null;
@@ -60,6 +62,7 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
 
     this.k = options.session.key;
     this.s = options.session?.secret;
+    this.isHybrid = options.session?.isHybrid ?? null;
     this.paymentSessionHelperService = new PaymentSessionHelperService();
   }
 
@@ -114,6 +117,16 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
         throw new Error('Provider initialization failed');
       }
 
+      // Auto-detect isHybrid from SetupIntent if not explicitly provided
+      if (this.isHybrid === null) {
+        try {
+          const { setupIntent } = await providerInstance.retrieveSetupIntent(this.s);
+          this.isHybrid = setupIntent?.usage === 'on_session';
+        } catch {
+          this.isHybrid = true; // default to legacy if detection fails
+        }
+      }
+
       const appearance = (config?.appearance ?? {
         theme: 'stripe',
       }) as Appearance;
@@ -130,16 +143,14 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
         defaultValues: {
           billingDetails: {
             name: 'Guest',
-            address: {
-              country: 'US',
-            },
+            ...(this.isHybrid ? { address: { country: 'US' } } : {}),
           },
         },
         fields: {
           billingDetails: {
             address: {
               postalCode: 'auto',
-              country: 'never',
+              country: this.isHybrid ? 'never' : 'auto',
             },
           },
         },
@@ -194,24 +205,30 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
           return_url: params?.returnUrl ?? window.location.href,
           payment_method_data: {
             allow_redisplay: 'always',
-            billing_details: {
-              name: 'Guest',
-              address: {
-                country: 'US',
-              },
-            },
+            ...(this.isHybrid
+              ? {
+                  billing_details: {
+                    name: 'Guest',
+                    address: { country: 'US' },
+                  },
+                }
+              : {}),
           },
-          shipping: {
-            name: 'Guest',
-            address: {
-              country: 'US',
-              city: null,
-              line1: null,
-              line2: null,
-              postal_code: null,
-              state: null,
-            },
-          },
+          ...(this.isHybrid
+            ? {
+                shipping: {
+                  name: 'Guest',
+                  address: {
+                    country: 'US',
+                    city: null,
+                    line1: null,
+                    line2: null,
+                    postal_code: null,
+                    state: null,
+                  },
+                },
+              }
+            : {}),
         },
       };
 
@@ -230,6 +247,26 @@ class PaymentElementImpl implements ILiquidCommercePaymentElement {
           type: 'api_error',
           message: 'Token generation incomplete.',
         };
+      }
+
+      // For new services (non-hybrid), confirm client-side to trigger 3DS modal if needed
+      if (!this.isHybrid) {
+        const { error: confirmError } = await this.provider.confirmSetup({
+          clientSecret: this.s,
+          confirmParams: {
+            confirmation_token: confirmationToken.id,
+            return_url: params?.returnUrl ?? window.location.href,
+          },
+          redirect: 'if_required',
+        });
+
+        if (confirmError) {
+          return {
+            type: confirmError.type === 'validation_error' ? 'validation_error' : 'confirm_error',
+            message: confirmError.message || 'Payment authentication failed',
+            code: confirmError.code,
+          };
+        }
       }
 
       const token = this.paymentSessionHelperService.ocd(confirmationToken.id, this.s);
