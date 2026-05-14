@@ -1,3 +1,10 @@
+# [1.10.0-beta.5](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.4...v1.10.0-beta.5) (2026-05-14)
+
+
+### Features
+
+* **bopis:** update interfaces to support bopis & events ([9cc5e30](https://github.com/liquidcommerce/cloud-sdk/commit/9cc5e3049b825aebfc9b4da695dbfa14cbda4dcd))
+
 # [1.10.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.3...v1.10.0-beta.4) (2026-05-14)
 
 
