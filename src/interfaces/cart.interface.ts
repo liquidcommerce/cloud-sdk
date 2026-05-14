@@ -65,6 +65,25 @@ export interface ICartItemAttributes {
 }
 
 /**
+ * BOPIS pickup contact and scheduling data attached to a cart item.
+ *
+ * Required when the item's `fulfillmentId` points to a BOPIS config.
+ */
+export interface ICartItemBopis {
+  firstName?: string;
+
+  lastName?: string;
+
+  email?: string;
+
+  phoneNumber?: string;
+
+  isGift?: boolean;
+
+  scheduledFor?: string;
+}
+
+/**
  * Interface representing a cart item.
  * @interface
  */
@@ -74,6 +93,8 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
   retailerId: string;
 
   fulfillmentId: string;
+
+  parentFulfillmentId?: string;
 
   variantId: string;
 
@@ -130,6 +151,8 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
   mainImage: string;
 
   attributes: ICartItemAttributes;
+
+  bopis?: ICartItemBopis | null;
 }
 
 /**
@@ -280,9 +303,13 @@ export interface ICartUpdateItem {
 
   fulfillmentId: string;
 
+  parentFulfillmentId?: string;
+
   engravingLines?: string[];
 
   scheduledFor?: string | Date;
+
+  bopis?: ICartItemBopis;
 }
 
 /**

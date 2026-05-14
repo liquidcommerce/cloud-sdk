@@ -17,6 +17,7 @@ export enum LIQUID_COMMERCE_ENV {
 export enum ENUM_MODALITIES {
   ON_DEMAND = 'onDemand',
   SHIPPING = 'shipping',
+  BOPIS = 'bopis',
 }
 
 export enum DAYS_OF_WEEK {
@@ -250,6 +251,19 @@ export enum CART_EVENT_ENUM {
   // Retailer restriction events
   RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',
   RETAILERS_DO_NOT_ALLOW_PROMOS = 'RetailersDoNotAllowPromos',
+
+  // BOPIS (buy online pickup in store) events
+  BOPIS_CONTACT_REQUIRED = 'BopisContactRequired',
+  BOPIS_PARENT_FULFILLMENT_REQUIRED = 'BopisParentFulfillmentRequired',
+  BOPIS_INVALID_PARENT_FULFILLMENT = 'BopisInvalidParentFulfillment',
+  BOPIS_PARENT_RETAILER_MISMATCH = 'BopisParentRetailerMismatch',
+  BOPIS_NOT_APPLICABLE = 'BopisNotApplicable',
+  BOPIS_NOT_ALLOWED = 'BopisNotAllowed',
+  BOPIS_PRODUCT_NOT_OPTED_IN = 'BopisProductNotOptedIn',
+  BOPIS_NOT_AVAILABLE = 'BopisNotAvailable',
+  BOPIS_SCHEDULE_IN_PAST = 'BopisScheduleInPast',
+  BOPIS_SCHEDULE_OUTSIDE_HOURS = 'BopisScheduleOutsideHours',
+  BOPIS_FALLBACK = 'BopisFallback',
 }
 
 export enum ENUM_ADDRESS_TYPE {
@@ -288,6 +302,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_PRESALE_NOT_STARTED_ERROR = 5508,
   REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 5509,
   REQUEST_CHECKOUT_PROCESSING_LOCK_NOT_ACQUIRED_ERROR = 5510,
+  REQUEST_BOPIS_PRODUCT_NOT_OPTED_IN_ERROR = 5511,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -321,6 +336,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_PRESALE_NOT_STARTED_ERROR = 'The presale for this item has not started yet. Please check back later.',
   REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 'Some items in your cart do not meet the minimum retailer requirements per order quantity. Please adjust your cart and try again.',
   REQUEST_CHECKOUT_PROCESSING_LOCK_NOT_ACQUIRED_ERROR = 'This checkout is currently being processed, please try again later.',
+  REQUEST_BOPIS_PRODUCT_NOT_OPTED_IN_ERROR = 'One or more items in your cart are no longer eligible for in-store pickup (BOPIS) and were removed. Please review your cart and try again.',
 }
 
 export enum CHECKOUT_EVENT_ENUM {
