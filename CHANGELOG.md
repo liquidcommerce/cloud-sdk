@@ -1,3 +1,10 @@
+# [1.10.0-beta.4](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.3...v1.10.0-beta.4) (2026-05-14)
+
+
+### Features
+
+* **payment:** add 3D Secure support for new services ([5dfdbe5](https://github.com/liquidcommerce/cloud-sdk/commit/5dfdbe5e2903bf7ede2d6bc77d3feb1ba6d1c3eb))
+
 # [1.10.0-beta.3](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.2...v1.10.0-beta.3) (2026-04-09)
 
 
