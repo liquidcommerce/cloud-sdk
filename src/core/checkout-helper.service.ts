@@ -232,8 +232,12 @@ export class CheckoutHelperService {
       }
     });
 
-    // Normalize state if provided
-    if ('state' in normalizedAddress && normalizedAddress.state) {
+    // Normalize state if provided. Only enforce US state codes/names when the
+    // billing country is US (or unset, which defaults to US server-side);
+    // international subdivisions like "Greater London" or "Île-de-France"
+    // would otherwise be rejected by the US-only normalizer.
+    const billingCountry = (normalizedAddress.country ?? 'US').toUpperCase();
+    if (billingCountry === 'US' && 'state' in normalizedAddress && normalizedAddress.state) {
       normalizedAddress.state = this.locationHelperService.normalizeState(
         normalizedAddress.state as STATES_CODE | STATES_NAME
       );

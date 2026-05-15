@@ -62,11 +62,18 @@ export class LocationHelperService {
    * @return {void}
    */
   private validateAndNormalizeAddress(address: any): void {
-    if (!address?.state || typeof address?.state !== 'string') {
-      throw new Error('State is required and must be a string');
+    // State is required (and US-normalised) only for US addresses. For
+    // international addresses (e.g. UK, FR, NL) the subdivision concept may
+    // not exist, so we skip both the presence check and the US normalizer.
+    const country = (address?.country ?? 'US').toUpperCase();
+    if (country === 'US') {
+      if (!address?.state || typeof address?.state !== 'string') {
+        throw new Error('State is required and must be a string');
+      }
+      address.state = this.normalizeState(address.state);
+    } else if (address?.state && typeof address.state !== 'string') {
+      throw new Error('State must be a string if provided');
     }
-
-    address.state = this.normalizeState(address.state);
 
     // Validate other address fields as necessary
     if (!address.city || typeof address.city !== 'string') {
