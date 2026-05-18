@@ -1,3 +1,11 @@
+# [1.11.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.1...v1.11.0) (2026-05-18)
+
+
+### Features
+
+* **bopis:** update interfaces to support bopis & events ([9cc5e30](https://github.com/liquidcommerce/cloud-sdk/commit/9cc5e3049b825aebfc9b4da695dbfa14cbda4dcd))
+* **payment:** add 3D Secure support for new services ([5dfdbe5](https://github.com/liquidcommerce/cloud-sdk/commit/5dfdbe5e2903bf7ede2d6bc77d3feb1ba6d1c3eb))
+
 ### Features
 
 * **bopis:** update interfaces to support bopis & events ([9cc5e30](https://github.com/liquidcommerce/cloud-sdk/commit/9cc5e3049b825aebfc9b4da695dbfa14cbda4dcd))
