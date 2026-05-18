@@ -152,7 +152,7 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
 
   attributes: ICartItemAttributes;
 
-  bopis?: ICartItemBopis | null;
+  bopis?: ICartItemBopis;
 }
 
 /**
