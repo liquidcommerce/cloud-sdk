@@ -1,3 +1,10 @@
+# [1.10.0-beta.6](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.5...v1.10.0-beta.6) (2026-05-18)
+
+
+### Bug Fixes
+
+* **bopis:** unify bopis types ([4d7df1e](https://github.com/liquidcommerce/cloud-sdk/commit/4d7df1e7e976e4d6864b3a2cc07175419b4d5171))
+
 # [1.10.0-beta.5](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.4...v1.10.0-beta.5) (2026-05-14)
 
 
