@@ -1,4 +1,5 @@
-# [1.11.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.1...v1.11.0) (2026-05-18)
+
+* **bopis:** unify bopis types ([4d7df1e](https://github.com/liquidcommerce/cloud-sdk/commit/4d7df1e7e976e4d6864b3a2cc07175419b4d5171))
 
 
 ### Features
