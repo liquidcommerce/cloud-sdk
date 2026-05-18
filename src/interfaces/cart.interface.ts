@@ -309,7 +309,7 @@ export interface ICartUpdateItem {
 
   scheduledFor?: string | Date;
 
-  bopis?: ICartItemBopis;
+  bopis?: ICartItemBopis | null;
 }
 
 /**
