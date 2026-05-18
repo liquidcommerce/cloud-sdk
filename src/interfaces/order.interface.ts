@@ -48,6 +48,14 @@ export interface IOrderFulfillmentExpectationFormatted {
   engraving: string | null;
 }
 
+export interface IOrderFulfillmentBopisContact {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  isGift: boolean;
+}
+
 export interface IOrderFulfillment {
   id: string;
   type: ENUM_ORDER_FULFILLMENT_TYPE;
@@ -59,6 +67,7 @@ export interface IOrderFulfillment {
   expectationFormatted: IOrderFulfillmentExpectationFormatted;
   packages: IOrderFulfillmentPackage[];
   timeline: IOrderFulfillmentTimeline[];
+  bopisContact?: IOrderFulfillmentBopisContact | null;
 }
 
 export interface IOrderRetailerAddress extends IOrderAddress {

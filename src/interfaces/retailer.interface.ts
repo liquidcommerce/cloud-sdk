@@ -172,6 +172,16 @@ export type IRetailerFees = IRetailerFeeShipping | IRetailerFeeDelivery;
  *
  * @property {string[]} productTypesAllowed - List of fulfillment categories allowed for this fulfillment (SPIRITS, WINE, ...).
  */
+export interface IRetailerFulfillmentBopis {
+  id: string;
+
+  hours: RetailerHours;
+
+  breaks: IRetailerTimes[];
+
+  expectation: IRetailerExpectation;
+}
+
 export interface IRetailerFulfillments {
   id: string;
 
@@ -206,6 +216,8 @@ export interface IRetailerFulfillments {
   doesAllowGiftCards: boolean;
 
   productTypesAllowed: SHIPPING_CATEGORY_TYPE[];
+
+  bopis?: IRetailerFulfillmentBopis | null;
 }
 
 /**
@@ -244,4 +256,6 @@ export interface IRetailer {
   address?: IAddress & ICoords;
 
   fulfillments: IRetailerFulfillments[];
+
+  allowBopis?: boolean;
 }

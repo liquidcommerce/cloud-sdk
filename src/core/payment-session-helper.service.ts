@@ -54,6 +54,7 @@ export class PaymentSessionHelperService {
         key: this.a(q, env),
         secret: this.b(r[B.I], r[B.J]),
         createdAt: d?.[C.T] || new Date(),
+        isHybrid: d?.isHybrid ?? true,
       };
     } catch (e: any) {
       throw new Error(`${PaymentSessionHelperService.F.J}${e?.message}`);
