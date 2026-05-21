@@ -471,6 +471,8 @@ export interface ICheckoutPrepareResponse {
   events: ICheckoutEvents[];
 
   promoCode: ICartAttributesPromoCode;
+
+  isInternationalAllowed: boolean;
 }
 
 /**
