@@ -1,3 +1,10 @@
+# [1.10.0-beta.7](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.6...v1.10.0-beta.7) (2026-05-21)
+
+
+### Features
+
+* **checkout:** add isInternationalAllowed to ICheckoutPrepareResponse ([ed9e11d](https://github.com/liquidcommerce/cloud-sdk/commit/ed9e11d920b70da6f91ca07368659033ce24e874))
+
 # [1.10.0-beta.6](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.5...v1.10.0-beta.6) (2026-05-18)
 
 
