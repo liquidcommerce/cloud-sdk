@@ -1,3 +1,10 @@
+# [1.10.0-beta.8](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.7...v1.10.0-beta.8) (2026-05-26)
+
+
+### Bug Fixes
+
+* **bopis:** let empty state pass when not US ([56fb88a](https://github.com/liquidcommerce/cloud-sdk/commit/56fb88a38dbf9e1e4959b1999d66eae992e638a0))
+
 # [1.10.0-beta.7](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.6...v1.10.0-beta.7) (2026-05-21)
 
 
