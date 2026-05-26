@@ -1,3 +1,15 @@
+# [1.12.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.11.1...v1.12.0) (2026-05-26)
+
+
+### Bug Fixes
+
+* **bopis:** let empty state pass when not US ([56fb88a](https://github.com/liquidcommerce/cloud-sdk/commit/56fb88a38dbf9e1e4959b1999d66eae992e638a0))
+
+
+### Features
+
+* **checkout:** add isInternationalAllowed to ICheckoutPrepareResponse ([ed9e11d](https://github.com/liquidcommerce/cloud-sdk/commit/ed9e11d920b70da6f91ca07368659033ce24e874))
+
 ### Bug Fixes
 
 - **bopis:** let empty state pass when not US ([56fb88a](https://github.com/liquidcommerce/cloud-sdk/commit/56fb88a38dbf9e1e4959b1999d66eae992e638a0))
