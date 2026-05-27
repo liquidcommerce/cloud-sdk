@@ -1,3 +1,10 @@
+# [1.10.0-beta.10](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.9...v1.10.0-beta.10) (2026-05-27)
+
+
+### Bug Fixes
+
+* **env:** update NODE_ENV to include 'beta' option ([b95fae9](https://github.com/liquidcommerce/cloud-sdk/commit/b95fae9cf378204c9822cf46b84744d4f848fa1e))
+
 # [1.10.0-beta.9](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.8...v1.10.0-beta.9) (2026-05-27)
 
 
