@@ -1,14 +1,16 @@
-# [1.12.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.11.1...v1.12.0) (2026-05-26)
+### Bug Fixes
 
+- **env:** update NODE_ENV to include 'beta' option ([b95fae9](https://github.com/liquidcommerce/cloud-sdk/commit/b95fae9cf378204c9822cf46b84744d4f848fa1e))
 
 ### Bug Fixes
 
-* **bopis:** let empty state pass when not US ([56fb88a](https://github.com/liquidcommerce/cloud-sdk/commit/56fb88a38dbf9e1e4959b1999d66eae992e638a0))
+- **env:** add ENV_BETA to environment variables and constants ([b3046b4](https://github.com/liquidcommerce/cloud-sdk/commit/b3046b41f8ff943df5f9b837d683352fdf33d3f5))
 
+- **bopis:** let empty state pass when not US ([56fb88a](https://github.com/liquidcommerce/cloud-sdk/commit/56fb88a38dbf9e1e4959b1999d66eae992e638a0))
 
 ### Features
 
-* **checkout:** add isInternationalAllowed to ICheckoutPrepareResponse ([ed9e11d](https://github.com/liquidcommerce/cloud-sdk/commit/ed9e11d920b70da6f91ca07368659033ce24e874))
+- **checkout:** add isInternationalAllowed to ICheckoutPrepareResponse ([ed9e11d](https://github.com/liquidcommerce/cloud-sdk/commit/ed9e11d920b70da6f91ca07368659033ce24e874))
 
 ### Bug Fixes
 

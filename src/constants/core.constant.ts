@@ -13,4 +13,5 @@ export const DEFAULT_BASE_URLS = {
   [LIQUID_COMMERCE_ENV.DEV]: process.env.ENV_DEV,
   [LIQUID_COMMERCE_ENV.STAGE]: process.env.ENV_STAGE,
   [LIQUID_COMMERCE_ENV.PROD]: process.env.ENV_PROD,
+  [LIQUID_COMMERCE_ENV.BETA]: process.env.ENV_BETA,
 };

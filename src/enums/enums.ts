@@ -12,6 +12,7 @@ export enum LIQUID_COMMERCE_ENV {
   STAGE = 'stage',
   PROD = 'prod',
   DEV = 'dev',
+  BETA = 'beta',
 }
 
 export enum ENUM_MODALITIES {
