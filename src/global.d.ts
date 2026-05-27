@@ -10,5 +10,6 @@ declare namespace NodeJS {
     ENV_DEV: string;
     ENV_STAGE: string;
     ENV_PROD: string;
+    ENV_BETA: string;
   }
 }
