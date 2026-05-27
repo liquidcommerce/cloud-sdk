@@ -399,8 +399,8 @@ export enum ENUM_ORDER_PACKAGE_STATUS {
   SHIPPED = 'shipped',
   DELIVERED = 'delivered',
   CANCELED = 'canceled',
-  RETURNED = 'returned',
   EXCEPTION = 'exception',
+  RETURNED = 'returned',
 }
 
 export enum ENUM_ORDER_FULFILLMENT_TYPE {
@@ -424,4 +424,16 @@ export enum SHIPPING_CATEGORY_TYPE {
   MISCELLANEOUS = ENUM_MISCELLANEOUS.BASE,
   MERCHANDISE = ENUM_MERCHANDISE.BASE,
   OTHER = 'OTHER',
+}
+
+export enum ENUM_TRACKING_PACKAGE_STATUS {
+  PENDING = 'pending',
+  SHIPPED = 'shipped',
+  DELIVERED = 'delivered',
+  CANCELED = 'canceled',
+  RETURNED = 'returned',
+  EXCEPTION = 'exception',
+  OUT_FOR_DELIVERY = 'outForDelivery',
+  AVAILABLE_FOR_PICKUP = 'availableForPickup',
+  INFO_RECEIVED = 'infoReceived',
 }
