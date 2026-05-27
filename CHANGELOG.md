@@ -1,3 +1,10 @@
+# [1.10.0-beta.9](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.8...v1.10.0-beta.9) (2026-05-27)
+
+
+### Bug Fixes
+
+* **env:** add ENV_BETA to environment variables and constants ([b3046b4](https://github.com/liquidcommerce/cloud-sdk/commit/b3046b41f8ff943df5f9b837d683352fdf33d3f5))
+
 # [1.10.0-beta.8](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.7...v1.10.0-beta.8) (2026-05-26)
 
 
