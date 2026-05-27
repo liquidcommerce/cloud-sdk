@@ -1,3 +1,11 @@
+## [1.12.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.12.0...v1.12.1) (2026-05-27)
+
+
+### Bug Fixes
+
+* **env:** add ENV_BETA to environment variables and constants ([b3046b4](https://github.com/liquidcommerce/cloud-sdk/commit/b3046b41f8ff943df5f9b837d683352fdf33d3f5))
+* **env:** update NODE_ENV to include 'beta' option ([b95fae9](https://github.com/liquidcommerce/cloud-sdk/commit/b95fae9cf378204c9822cf46b84744d4f848fa1e))
+
 ### Bug Fixes
 
 - **env:** update NODE_ENV to include 'beta' option ([b95fae9](https://github.com/liquidcommerce/cloud-sdk/commit/b95fae9cf378204c9822cf46b84744d4f848fa1e))
