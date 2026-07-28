@@ -75,9 +75,12 @@ export interface ILocBase extends ICoreParams {
  * @extends ICoreParams
  *
  * @property {string} input - The user's input string for address lookup.
+ * @property {string} [sessionToken] - The Google Places session token for the autocomplete session.
  */
 export interface IAddressAutocompleteParams extends ICoreParams {
   input: string;
+
+  sessionToken?: string;
 }
 
 /**
@@ -102,9 +105,12 @@ export interface IAddressAutocompleteResult {
  *
  * Properties:
  *  - id: Represents the unique identifier for the address details.
+ *  - sessionToken: The optional Google Places session token used for autocomplete.
  */
 export interface IAddressDetailsParams extends ICoreParams {
   id: string;
+
+  sessionToken?: string;
 }
 
 /**
