@@ -85,16 +85,6 @@ export class CatalogHelperService {
   }
 
   /**
-   * Validates if a string is a valid MongoDB ObjectId format
-   * @param {string} id - The string to validate
-   * @returns {boolean} - Whether the string is a valid ObjectId format
-   */
-  private isValidObjectId(id: string): boolean {
-    if (!id || typeof id !== 'string') return false;
-    return /^[0-9a-fA-F]{24}$/.test(id);
-  }
-
-  /**
    * Validates the retailers array parameter
    * @param {string[]} retailers - Array of retailer IDs to validate
    * @param {string[]} errors - Array to collect validation errors
@@ -113,8 +103,8 @@ export class CatalogHelperService {
         retailers.forEach((retailerId, index) => {
           if (typeof retailerId !== 'string') {
             errors.push(`Retailer at index ${index} must be a string`);
-          } else if (!this.isValidObjectId(retailerId)) {
-            errors.push(`Retailer ID at index ${index} must be a valid ObjectId string`);
+          } else if (retailerId.trim() === '') {
+            errors.push(`Retailer ID at index ${index} must be a non-empty string`);
           }
         });
       }
