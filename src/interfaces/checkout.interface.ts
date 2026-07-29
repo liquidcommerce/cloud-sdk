@@ -134,7 +134,9 @@ export interface ICheckoutDeliveryInstructions {
  * @interface
  */
 export interface ICheckoutPrepareParams extends ICoreParams {
-  cartId: string;
+  cartId?: string;
+
+  token?: string;
 
   customer?: ICheckoutCustomer | string;
 
