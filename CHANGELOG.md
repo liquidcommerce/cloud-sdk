@@ -1,3 +1,10 @@
+# [1.10.0-beta.11](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.10...v1.10.0-beta.11) (2026-07-29)
+
+
+### Features
+
+* support Places session tokens ([3498a49](https://github.com/liquidcommerce/cloud-sdk/commit/3498a498660b89234a70e463284b86ccd081af4c))
+
 ## [1.12.1](https://github.com/liquidcommerce/cloud-sdk/compare/v1.12.0...v1.12.1) (2026-05-27)
 
 
