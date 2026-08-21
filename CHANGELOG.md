@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.13.0...v1.14.0) (2026-08-21)
+
+
+### Features
+
+* **catalog:** type default, price and catPath on IProductSize ([ef9ceba](https://github.com/liquidcommerce/cloud-sdk/commit/ef9ceba1ce53712c9ee630fe6c37baf15841c8ba)), closes [cloud#929](https://github.com/cloud/issues/929) [cloud#929](https://github.com/cloud/issues/929) [#156](https://github.com/liquidcommerce/cloud-sdk/issues/156)
+
 # [1.13.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.12.1...v1.13.0) (2026-07-29)
 
 
