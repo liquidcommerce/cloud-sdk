@@ -133,6 +133,10 @@ export class CatalogHelperService {
     const errors: string[] = [];
     const normalizedParams = { ...params };
 
+    if (!normalizedParams.deliveryFirst) {
+      delete normalizedParams.deliveryFirst;
+    }
+
     this.validateRetailers(normalizedParams.retailers, errors);
     this.validateOrderBy(normalizedParams.orderBy, errors);
     this.validateOrderDirection(normalizedParams.orderDirection, errors);

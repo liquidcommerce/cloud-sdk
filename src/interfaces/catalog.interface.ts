@@ -110,6 +110,9 @@ export interface IFilter {
 export interface ICatalogParams extends ILocBase {
   search?: string;
 
+  /** Requests delivery-first result ordering for a resolved location. */
+  deliveryFirst?: boolean;
+
   pageToken?: string;
 
   entity?: string;
