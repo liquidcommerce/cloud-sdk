@@ -43,6 +43,7 @@ const searchParams = {
 
 describe('CatalogService', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
     vi.unstubAllGlobals();
   });
 
@@ -93,4 +94,18 @@ describe('CatalogService', () => {
       })
     );
   });
+
+	 it.each(['false', 1])('rejects a non-boolean deliveryFirst value (%s)', async (value) => {
+	   const fetch = vi.fn<typeof globalThis.fetch>();
+	   vi.stubGlobal('fetch', fetch);
+	   vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+	   await expect(
+	     createService().search({
+	       ...searchParams,
+	       deliveryFirst: value as unknown as boolean,
+	     })
+	   ).rejects.toThrow('deliveryFirst must be a boolean');
+	   expect(fetch).not.toHaveBeenCalled();
+	 });
 });

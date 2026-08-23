@@ -133,7 +133,12 @@ export class CatalogHelperService {
     const errors: string[] = [];
     const normalizedParams = { ...params };
 
-    if (!normalizedParams.deliveryFirst) {
+    if (
+      normalizedParams.deliveryFirst !== undefined &&
+      typeof normalizedParams.deliveryFirst !== 'boolean'
+    ) {
+      errors.push('deliveryFirst must be a boolean');
+    } else if (normalizedParams.deliveryFirst !== true) {
       delete normalizedParams.deliveryFirst;
     }
 
