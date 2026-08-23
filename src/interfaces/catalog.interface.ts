@@ -480,6 +480,20 @@ export interface IProductSizeAttributes {
  * Represents the size details of a product in an inventory system.
  *
  * @interface IProductSize
+ *
+ * @property {boolean} [default] - Whether this size is the default selection on the product
+ *                                 details page. Set from the partner's per-SKU flag when the
+ *                                 partner carries this size, otherwise from the catalog row's
+ *                                 own default. Sizes flagged here are returned first.
+ *                                 Optional: older API versions omit the key entirely, so
+ *                                 consumers should read it as
+ *                                 `sizes.find((s) => s.default) ?? sizes[0]`.
+ *
+ * @property {null | number} price - This size's own national price in minor units (cents);
+ *                                  `null` when no price is available - never `0`. The key is
+ *                                  always present. Reads `null` on every size until the
+ *                                  platform half ships, so consumers must keep the
+ *                                  `priceInfo` fallback.
  */
 export interface IProductSize {
   id: string;
@@ -491,6 +505,8 @@ export interface IProductSize {
   size: string;
 
   volume: string;
+
+  catPath: string;
 
   uom: string;
 
@@ -507,6 +523,10 @@ export interface IProductSize {
   attributes: IProductSizeAttributes;
 
   modalities?: ENUM_MODALITIES;
+
+  default?: boolean;
+
+  price: null | number;
 
   variants: IProductVariant[];
 }
