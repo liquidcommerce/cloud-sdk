@@ -83,7 +83,7 @@ export class PaymentProviderService implements IPaymentProvider {
       }
 
       // Auto-detect isHybrid from SetupIntent usage if not explicitly provided
-      this.isHybrid = config.isHybrid ?? (setupIntent?.usage === 'on_session');
+      this.isHybrid = config.isHybrid ?? setupIntent?.usage === 'on_session';
     } catch (e) {
       // biome-ignore lint/complexity/noUselessCatch: preserving error boundary
       throw e;
@@ -279,7 +279,7 @@ export class PaymentProviderService implements IPaymentProvider {
     const paymentMethodId =
       typeof setupIntent.payment_method === 'string'
         ? setupIntent.payment_method
-        : setupIntent.payment_method?.id ?? '';
+        : (setupIntent.payment_method?.id ?? '');
 
     const { data } = await this.confirmSession({
       paymentMethodId,

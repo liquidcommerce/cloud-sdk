@@ -5,6 +5,13 @@ on:
     branches-ignore:
       - beta
       - main
+  pull_request:
+    branches:
+      - beta
+      - main
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -29,10 +36,29 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint code
-        run: pnpm run lint
+        run: pnpm biome check .
+
+      - name: Typecheck source and tests
+        run: pnpm run typecheck
+
+      - name: Run tests
+        run: pnpm run test
+
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level=high
+        continue-on-error: true
 
       - name: Build package
         run: pnpm run build
 
       - name: Verify package can be packed
         run: pnpm pack
+
+  dependency-review:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
