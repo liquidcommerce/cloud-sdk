@@ -1,3 +1,15 @@
+# [1.15.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.14.0...v1.15.0) (2026-08-27)
+
+
+### Bug Fixes
+
+* **catalog:** validate delivery-first boolean ([44806b6](https://github.com/liquidcommerce/cloud-sdk/commit/44806b613347f766cda4f2adeac16d4acc78bb0e))
+
+
+### Features
+
+* **catalog:** support delivery-first search intent ([066252c](https://github.com/liquidcommerce/cloud-sdk/commit/066252ccf95d1d7ca3743bbc3680a0692a38df01))
+
 # [1.10.0-beta.13](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.12...v1.10.0-beta.13) (2026-08-27)
 
 
