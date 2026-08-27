@@ -178,6 +178,8 @@ const availabilityResponse = await client.catalog.availability({
 // Search catalog with filters
 const searchResponse = await client.catalog.search({
   search: 'whiskey',
+  // Requires a complete loc.address. When false or omitted, legacy ordering is used.
+  deliveryFirst: true,
   pageToken: '',
   entity: '',
   page: 1,
@@ -204,6 +206,7 @@ const searchResponse = await client.catalog.search({
       city: 'New York',
       state: 'NY',
       zip: '10001',
+      country: 'US',
     },
   },
 });
