@@ -110,6 +110,13 @@ export interface IFilter {
 export interface ICatalogParams extends ILocBase {
   search?: string;
 
+  /**
+   * Requests delivery-first result ordering. Supply a complete US postal address
+   * in `loc.address` so the backend can resolve serviceability. `false` is omitted
+   * from the request to preserve the legacy search contract.
+   */
+  deliveryFirst?: boolean;
+
   pageToken?: string;
 
   entity?: string;
