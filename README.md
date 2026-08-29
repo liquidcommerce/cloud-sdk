@@ -584,6 +584,7 @@ Checkout process management:
 // Prepare checkout
 const preparedCheckout = await client.checkout.prepare({
   cartId: 'cart_id',
+  token: 'checkout_id',
   customer: {
     id: 'customer_id', // Optional
     email: 'customer@example.com',
@@ -626,10 +627,10 @@ const preparedCheckout = await client.checkout.prepare({
       tip: 500, // Amount in cents
     },
   ],
-   deliveryInstructions: [
+  deliveryInstructions: [
     {
       fulfillmentId: 'fulfillment_id',
-      instructions: "", // 250 Max characters
+      instructions: '', // 250 Max characters
     },
   ],
   acceptedAccountCreation: true,
@@ -661,7 +662,7 @@ const paymentElement = LiquidCommercePaymentElement({
   session: {
     key: preparedCheckout.data.payment.publicKey, // From checkout prepare response
     secret: preparedCheckout.data.payment.clientSecret, // From checkout prepare response
-  }
+  },
 });
 
 // 3. Mount the element
