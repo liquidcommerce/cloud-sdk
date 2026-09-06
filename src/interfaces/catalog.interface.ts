@@ -156,6 +156,39 @@ export interface ICatalog {
 }
 
 /**
+ * Parameters for search-as-you-type product suggestions (`POST catalog/autocomplete`).
+ */
+export interface ICatalogAutocompleteParams {
+  /**
+   * The partial search term as typed. Only the final token is prefix-matched;
+   * earlier tokens must match in full, so `hendricks oasi` means `hendricks`
+   * complete plus `oasi` as a prefix. A trailing space marks the last token
+   * complete. A final token shorter than 2 characters is ignored.
+   */
+  term: string;
+
+  /**
+   * Maximum suggestions to return (1–25). Omit to use the platform default of 10.
+   */
+  limit?: number;
+}
+
+/**
+ * One product suggestion. Identify-and-link only: it carries no availability or
+ * price, and the product may not be purchasable at the shopper's location.
+ */
+export interface ICatalogSuggestion {
+  itemType: 'catalog' | 'custom';
+
+  /** Product grouping — the key to link or hydrate on (one document per product). */
+  grouping: string;
+
+  name: string;
+
+  image?: string;
+}
+
+/**
  * IFilterValue interface represents a filterable value typically used in context
  * with searching or sorting functionalities within an application.
  * It is designed to hold a specific value and its associated count.

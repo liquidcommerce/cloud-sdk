@@ -210,6 +210,14 @@ const searchResponse = await client.catalog.search({
     },
   },
 });
+
+// Search-as-you-type suggestions (cheap per-keystroke endpoint; no facets,
+// availability or price — only the final token is prefix-matched)
+const suggestions = await client.catalog.autocomplete({
+  term: 'hendricks oasi',
+  limit: 8, // 1–25, defaults to 10
+});
+// suggestions.data: [{ itemType: 'catalog', grouping: '...', name: "Hendrick's Oasium Gin", image?: '...' }]
 ```
 
 ### Cart
