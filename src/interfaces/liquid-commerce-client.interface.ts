@@ -15,6 +15,8 @@ import type {
   IAvailabilityParams,
   IAvailabilityResponse,
   ICatalog,
+  ICatalogHomeFeed,
+  ICatalogHomeFeedParams,
   ICatalogParams,
 } from './catalog.interface';
 import type {
@@ -285,6 +287,8 @@ export interface ICatalogMethod {
    * @see {@link ICatalog} for the structure of the catalog data returned.
    */
   search: (params: ICatalogParams) => Promise<IApiResponseWithoutData<ICatalog>>;
+
+  homeFeed: (params: ICatalogHomeFeedParams) => Promise<IApiResponseWithoutData<ICatalogHomeFeed>>;
 }
 
 /**

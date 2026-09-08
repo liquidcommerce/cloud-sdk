@@ -2,8 +2,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AuthenticatedService } from '../src/core/authenticated.service';
 import { CatalogHelperService } from '../src/core/catalog-helper.service';
 import { LocationHelperService } from '../src/core/location-helper.service';
-import { LIQUID_COMMERCE_ENV } from '../src/enums';
-import type { ICatalogParams } from '../src/interfaces';
+import { LIQUID_COMMERCE_ENV, ENUM_ORDER_BY, ENUM_NAVIGATION_ORDER_DIRECTION_TYPE } from '../src/enums';
+import type { ICatalogParams, ICatalogHomeFeedParams } from '../src/interfaces';
 import { CatalogService } from '../src/services/catalog.service';
 
 const createService = () =>
@@ -107,5 +107,30 @@ describe('CatalogService', () => {
       })
     ).rejects.toThrow('deliveryFirst must be a boolean');
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('posts a delivery-first home feed as one catalog request', async () => {
+    const fetch = createFetch();
+    vi.stubGlobal('fetch', fetch);
+    const params: ICatalogHomeFeedParams = {
+      loc: { coords: { lat: 40.7448, long: -73.9853 } },
+      rails: [
+        {
+          railId: 'bourbon',
+          search: 'bourbon',
+          perPage: 12,
+          orderBy: ENUM_ORDER_BY.PRICE,
+          orderDirection: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE.DESC,
+        },
+      ],
+    };
+
+    await createService().homeFeed(params);
+
+    expect(fetch).toHaveBeenNthCalledWith(
+      2,
+      'https://cloud.example/api/catalog/home-feed',
+      expect.objectContaining({ method: 'POST', body: JSON.stringify(params) })
+    );
   });
 });
