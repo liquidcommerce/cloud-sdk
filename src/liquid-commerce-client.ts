@@ -15,6 +15,8 @@ import type {
   ICartMethod,
   ICartUpdateParams,
   ICatalog,
+  ICatalogHomeFeed,
+  ICatalogHomeFeedParams,
   ICatalogMethod,
   ICatalogParams,
   ICheckoutCompleteParams,
@@ -222,6 +224,12 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     search: async (params: ICatalogParams): Promise<IApiResponseWithoutData<ICatalog>> => {
       await this.ensureAuthenticated();
       return this.catalogService.search(params);
+    },
+    homeFeed: async (
+      params: ICatalogHomeFeedParams
+    ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> => {
+      await this.ensureAuthenticated();
+      return this.catalogService.homeFeed(params);
     },
   };
 

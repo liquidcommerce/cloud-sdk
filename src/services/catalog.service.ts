@@ -3,6 +3,8 @@ import type {
   IAvailabilityParams,
   IAvailabilityResponse,
   ICatalog,
+  ICatalogHomeFeed,
+  ICatalogHomeFeedParams,
   ICatalogParams,
 } from '../interfaces';
 import type { IApiResponseWithoutData } from '../types';
@@ -61,6 +63,24 @@ export class CatalogService {
       );
     } catch (error) {
       console.error('Catalog search request failed:', error);
+      throw error;
+    }
+  }
+
+  public async homeFeed(
+    params: ICatalogHomeFeedParams
+  ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> {
+    try {
+      if (!Array.isArray(params.rails) || params.rails.length < 1 || params.rails.length > 16) {
+        throw new Error('Home feed requires between 1 and 16 rails');
+      }
+
+      return await this.client.post<IApiResponseWithoutData<ICatalogHomeFeed>>(
+        `${this.servicePath}home-feed`,
+        params
+      );
+    } catch (error) {
+      console.error('Catalog home feed request failed:', error);
       throw error;
     }
   }
