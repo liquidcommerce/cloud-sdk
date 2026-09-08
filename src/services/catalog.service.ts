@@ -86,24 +86,25 @@ export class CatalogService {
     params: ICatalogAutocompleteParams
   ): Promise<IApiResponseWithData<ICatalogSuggestion[]>> {
     try {
-      const term = typeof params?.term === 'string' ? params.term.trim() : '';
-      if (term.length === 0) {
+      // Only leading whitespace is dropped: a trailing space is meaningful to
+      // the backend (it marks the last token complete rather than a prefix).
+      const term = typeof params?.term === 'string' ? params.term.replace(/^\s+/, '') : '';
+      if (term.trim().length === 0) {
         throw new Error('term must be a non-empty string');
       }
 
-      const body: ICatalogAutocompleteParams = { term };
-      if (params.limit !== undefined) {
-        if (
-          !Number.isInteger(params.limit) ||
+      if (
+        params.limit !== undefined &&
+        (!Number.isInteger(params.limit) ||
           params.limit < AUTOCOMPLETE_LIMIT_MIN ||
-          params.limit > AUTOCOMPLETE_LIMIT_MAX
-        ) {
-          throw new Error(
-            `limit must be an integer between ${AUTOCOMPLETE_LIMIT_MIN} and ${AUTOCOMPLETE_LIMIT_MAX}`
-          );
-        }
-        body.limit = params.limit;
+          params.limit > AUTOCOMPLETE_LIMIT_MAX)
+      ) {
+        throw new Error(
+          `limit must be an integer between ${AUTOCOMPLETE_LIMIT_MIN} and ${AUTOCOMPLETE_LIMIT_MAX}`
+        );
       }
+      const body: ICatalogAutocompleteParams =
+        params.limit === undefined ? { term } : { term, limit: params.limit };
 
       return await this.client.post<IApiResponseWithData<ICatalogSuggestion[]>>(
         `${this.servicePath}autocomplete`,

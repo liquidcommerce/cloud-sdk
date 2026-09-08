@@ -130,10 +130,11 @@ describe('CatalogService', () => {
           })
         );
 
-    it('POSTs the trimmed term to catalog/autocomplete and returns the suggestions', async () => {
+    it('POSTs the term to catalog/autocomplete, dropping only leading whitespace, and returns the suggestions', async () => {
       const fetch = createAutocompleteFetch();
       vi.stubGlobal('fetch', fetch);
 
+      // The trailing space is kept: the backend reads it as "last token complete".
       const response = await createService().autocomplete({ term: '  hendricks oasi ' });
 
       expect(fetch).toHaveBeenNthCalledWith(
@@ -141,7 +142,7 @@ describe('CatalogService', () => {
         'https://cloud.example/api/catalog/autocomplete',
         expect.objectContaining({
           method: 'POST',
-          body: '{"term":"hendricks oasi"}',
+          body: '{"term":"hendricks oasi "}',
         })
       );
       expect(response.data).toEqual([
