@@ -3,9 +3,14 @@ import type {
   IAvailabilityParams,
   IAvailabilityResponse,
   ICatalog,
+  ICatalogAutocompleteParams,
   ICatalogParams,
+  ICatalogSuggestion,
 } from '../interfaces';
-import type { IApiResponseWithoutData } from '../types';
+import type { IApiResponseWithData, IApiResponseWithoutData } from '../types';
+
+const AUTOCOMPLETE_LIMIT_MIN = 1;
+const AUTOCOMPLETE_LIMIT_MAX = 25;
 
 /**
  * The CatalogService class provides methods for interacting with the catalog API.
@@ -61,6 +66,52 @@ export class CatalogService {
       );
     } catch (error) {
       console.error('Catalog search request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Returns search-as-you-type product suggestions for a partial term.
+   *
+   * Unlike `search`, this hits the dedicated prefix endpoint: no facets, scoring
+   * chain, spell correction, or hydration run, so it is cheap enough to call on
+   * every keystroke. Suggestions identify and link a product only; they carry no
+   * availability or price.
+   *
+   * @param {ICatalogAutocompleteParams} params - The typed term and optional limit.
+   * @return {Promise<IApiResponseWithData<ICatalogSuggestion[]>>} - A promise that resolves to the ordered suggestions.
+   * @throws {Error} - If the term is empty or the limit is out of range, or if the request fails.
+   */
+  public async autocomplete(
+    params: ICatalogAutocompleteParams
+  ): Promise<IApiResponseWithData<ICatalogSuggestion[]>> {
+    try {
+      // Only leading whitespace is dropped: a trailing space is meaningful to
+      // the backend (it marks the last token complete rather than a prefix).
+      const term = typeof params?.term === 'string' ? params.term.replace(/^\s+/, '') : '';
+      if (term.trim().length === 0) {
+        throw new Error('term must be a non-empty string');
+      }
+
+      if (
+        params.limit !== undefined &&
+        (!Number.isInteger(params.limit) ||
+          params.limit < AUTOCOMPLETE_LIMIT_MIN ||
+          params.limit > AUTOCOMPLETE_LIMIT_MAX)
+      ) {
+        throw new Error(
+          `limit must be an integer between ${AUTOCOMPLETE_LIMIT_MIN} and ${AUTOCOMPLETE_LIMIT_MAX}`
+        );
+      }
+      const body: ICatalogAutocompleteParams =
+        params.limit === undefined ? { term } : { term, limit: params.limit };
+
+      return await this.client.post<IApiResponseWithData<ICatalogSuggestion[]>>(
+        `${this.servicePath}autocomplete`,
+        body
+      );
+    } catch (error) {
+      console.error('Catalog autocomplete request failed:', error);
       throw error;
     }
   }

@@ -15,8 +15,10 @@ import type {
   ICartMethod,
   ICartUpdateParams,
   ICatalog,
+  ICatalogAutocompleteParams,
   ICatalogMethod,
   ICatalogParams,
+  ICatalogSuggestion,
   ICheckoutCompleteParams,
   ICheckoutCompleteResponse,
   ICheckoutMethod,
@@ -222,6 +224,12 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     search: async (params: ICatalogParams): Promise<IApiResponseWithoutData<ICatalog>> => {
       await this.ensureAuthenticated();
       return this.catalogService.search(params);
+    },
+    autocomplete: async (
+      params: ICatalogAutocompleteParams
+    ): Promise<IApiResponseWithData<ICatalogSuggestion[]>> => {
+      await this.ensureAuthenticated();
+      return this.catalogService.autocomplete(params);
     },
   };
 

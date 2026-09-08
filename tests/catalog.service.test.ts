@@ -108,4 +108,81 @@ describe('CatalogService', () => {
     ).rejects.toThrow('deliveryFirst must be a boolean');
     expect(fetch).not.toHaveBeenCalled();
   });
+
+  describe('autocomplete', () => {
+    const createAutocompleteFetch = () =>
+      vi
+        .fn<typeof globalThis.fetch>()
+        .mockResolvedValueOnce(
+          successfulResponse({
+            data: {
+              token: 'access-token',
+              exp: Date.now() + 60_000,
+            },
+          })
+        )
+        .mockResolvedValueOnce(
+          successfulResponse({
+            statusCode: 200,
+            data: [
+              { itemType: 'catalog', grouping: 'group-1', name: "Hendrick's Oasium Gin" },
+            ],
+          })
+        );
+
+    it('POSTs the term to catalog/autocomplete, dropping only leading whitespace, and returns the suggestions', async () => {
+      const fetch = createAutocompleteFetch();
+      vi.stubGlobal('fetch', fetch);
+
+      // The trailing space is kept: the backend reads it as "last token complete".
+      const response = await createService().autocomplete({ term: '  hendricks oasi ' });
+
+      expect(fetch).toHaveBeenNthCalledWith(
+        2,
+        'https://cloud.example/api/catalog/autocomplete',
+        expect.objectContaining({
+          method: 'POST',
+          body: '{"term":"hendricks oasi "}',
+        })
+      );
+      expect(response.data).toEqual([
+        { itemType: 'catalog', grouping: 'group-1', name: "Hendrick's Oasium Gin" },
+      ]);
+    });
+
+    it('serializes an explicit limit', async () => {
+      const fetch = createAutocompleteFetch();
+      vi.stubGlobal('fetch', fetch);
+
+      await createService().autocomplete({ term: 'veuve', limit: 8 });
+
+      expect(fetch).toHaveBeenNthCalledWith(
+        2,
+        'https://cloud.example/api/catalog/autocomplete',
+        expect.objectContaining({ method: 'POST', body: '{"term":"veuve","limit":8}' })
+      );
+    });
+
+    it.each(['', '   '])('rejects an empty term (%j) without a request', async (term) => {
+      const fetch = vi.fn<typeof globalThis.fetch>();
+      vi.stubGlobal('fetch', fetch);
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+      await expect(createService().autocomplete({ term })).rejects.toThrow(
+        'term must be a non-empty string'
+      );
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    it.each([0, 26, 2.5])('rejects an out-of-range limit (%s) without a request', async (limit) => {
+      const fetch = vi.fn<typeof globalThis.fetch>();
+      vi.stubGlobal('fetch', fetch);
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+      await expect(createService().autocomplete({ term: 'veuve', limit })).rejects.toThrow(
+        'limit must be an integer between 1 and 25'
+      );
+      expect(fetch).not.toHaveBeenCalled();
+    });
+  });
 });

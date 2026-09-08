@@ -15,7 +15,9 @@ import type {
   IAvailabilityParams,
   IAvailabilityResponse,
   ICatalog,
+  ICatalogAutocompleteParams,
   ICatalogParams,
+  ICatalogSuggestion,
 } from './catalog.interface';
 import type {
   ICheckoutCompleteParams,
@@ -285,6 +287,36 @@ export interface ICatalogMethod {
    * @see {@link ICatalog} for the structure of the catalog data returned.
    */
   search: (params: ICatalogParams) => Promise<IApiResponseWithoutData<ICatalog>>;
+
+  /**
+   * Returns search-as-you-type product suggestions for a partial term.
+   *
+   * Served by the dedicated prefix endpoint rather than `search`: no facets,
+   * scoring chain, spell correction, or hydration run, so it is cheap enough to
+   * call on every keystroke. Only the final token is prefix-matched; earlier
+   * tokens must match in full. Suggestions identify and link a product only —
+   * they carry no availability or price.
+   *
+   * @param {ICatalogAutocompleteParams} params - The typed term and an optional limit (1–25, default 10).
+   * @return {Promise<IApiResponseWithData<ICatalogSuggestion[]>>} - A promise that resolves to the ordered suggestions.
+   *
+   * @example
+   * try {
+   *   const suggestions = await liquidCommerce.catalog.autocomplete({
+   *     term: 'hendricks oasi',
+   *     limit: 8,
+   *   });
+   *   console.log('Suggestions:', suggestions.data.map((s) => s.name));
+   * } catch (error) {
+   *   console.error('Catalog autocomplete failed:', error);
+   * }
+   *
+   * @see {@link ICatalogAutocompleteParams} for the request parameters.
+   * @see {@link ICatalogSuggestion} for the structure of one suggestion.
+   */
+  autocomplete: (
+    params: ICatalogAutocompleteParams
+  ) => Promise<IApiResponseWithData<ICatalogSuggestion[]>>;
 }
 
 /**
