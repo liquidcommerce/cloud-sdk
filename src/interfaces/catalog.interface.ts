@@ -144,6 +144,89 @@ export interface ICatalogParams extends ILocBase {
   >;
 }
 
+export interface ICatalogHomeFeedRailParams {
+  railId: string;
+  source?: 'query' | 'regionalPopularity';
+  search?: string;
+  perPage?: number;
+  orderBy?: ENUM_ORDER_BY;
+  orderDirection?: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE;
+  filters?: ICatalogParams['filters'];
+}
+
+export interface ICatalogHomeFeedParams {
+  /** State and delivery area are resolved by Cloud from these coordinates. */
+  loc?: { coords: { lat: number; long: number } };
+  retailers?: string[];
+  fulfillmentType?: 'onDemand' | 'shipping';
+  rails: ICatalogHomeFeedRailParams[];
+}
+
+export interface ICatalogHomeFeedRail {
+  railId: string;
+  status: 'ok' | 'partial' | 'exhausted' | 'error' | 'unavailable';
+  products: IHomeFeedCardProduct[];
+  total: number;
+  requestedCount: number;
+  examinedCandidates: number;
+  selection?: IRegionalPopularitySelection;
+  reason?: string;
+}
+
+export interface IRegionalPopularityCandidate {
+  gtin14: string;
+  catalogVariantId: string;
+  catalogProductId: string;
+  rank: number;
+}
+
+export interface IRegionalPopularitySelection {
+  source: 'regionalPopularity';
+  status: 'fresh' | 'stale';
+  snapshotId: string;
+  policyVersion: 'v1';
+  generatedAtMs: number;
+  sourceWatermarkMs: number;
+  windowStart: string;
+  windowEndExclusive: string;
+  regionType: 'state' | 'national';
+  regionKey: string;
+  fallback: boolean;
+  fallbackReason?: 'no_state' | 'state_not_qualified';
+}
+
+export interface IHomeFeedCardProduct
+  extends Pick<IProduct, 'id' | 'name' | 'brand' | 'images' | 'priceInfo'> {
+  popularity?: IRegionalPopularityCandidate;
+  fulfillmentKind: 'onDemand' | 'shipping';
+  sizes: Array<
+    Pick<IProductSize, 'id' | 'upc' | 'size' | 'image' | 'price' | 'pack' | 'packDesc'> & {
+      variants: Array<
+        Pick<
+          IProductVariant,
+          'partNumber' | 'retailerId' | 'price' | 'salePrice' | 'stock' | 'fulfillmentTypes'
+        >
+      >;
+    }
+  >;
+}
+
+export interface IHomeFeedRetailerSummary {
+  id: string;
+  name: string;
+  fulfillments: Array<{
+    id: string;
+    type: string;
+    fees: unknown;
+    expectation: unknown;
+  }>;
+}
+
+export interface ICatalogHomeFeed {
+  rails: ICatalogHomeFeedRail[];
+  retailers: IHomeFeedRetailerSummary[];
+}
+
 /**
  * ICatalog interface represents a structured collection of retailers, products, and navigation schema.
  */

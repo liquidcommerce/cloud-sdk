@@ -16,6 +16,8 @@ import type {
   IAvailabilityResponse,
   ICatalog,
   ICatalogAutocompleteParams,
+  ICatalogHomeFeed,
+  ICatalogHomeFeedParams,
   ICatalogParams,
   ICatalogProductItem,
   ICatalogProductsPage,
@@ -390,6 +392,7 @@ export interface ICatalogMethod {
   iterateProducts: (
     params?: Omit<ICatalogProductsParams, 'cursor'>
   ) => AsyncGenerator<ICatalogProductItem>;
+  homeFeed: (params: ICatalogHomeFeedParams) => Promise<IApiResponseWithoutData<ICatalogHomeFeed>>;
 }
 
 /**

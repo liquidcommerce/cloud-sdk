@@ -16,6 +16,8 @@ import type {
   ICartUpdateParams,
   ICatalog,
   ICatalogAutocompleteParams,
+  ICatalogHomeFeed,
+  ICatalogHomeFeedParams,
   ICatalogMethod,
   ICatalogParams,
   ICatalogProductItem,
@@ -243,6 +245,12 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     iterateProducts: (
       params: Omit<ICatalogProductsParams, 'cursor'> = {}
     ): AsyncGenerator<ICatalogProductItem> => this.iterateCatalogProducts(params),
+    homeFeed: async (
+      params: ICatalogHomeFeedParams
+    ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> => {
+      await this.ensureAuthenticated();
+      return this.catalogService.homeFeed(params);
+    },
   };
 
   /**

@@ -4,6 +4,8 @@ import type {
   IAvailabilityResponse,
   ICatalog,
   ICatalogAutocompleteParams,
+  ICatalogHomeFeed,
+  ICatalogHomeFeedParams,
   ICatalogParams,
   ICatalogProductItem,
   ICatalogProductsPage,
@@ -214,5 +216,22 @@ export class CatalogService {
       // query, so continuing on it would re-request the first page forever.
       cursor = data?.nextCursor;
     } while (typeof cursor === 'string' && cursor.length > 0);
+  }
+  public async homeFeed(
+    params: ICatalogHomeFeedParams
+  ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> {
+    try {
+      if (!Array.isArray(params.rails) || params.rails.length < 1 || params.rails.length > 16) {
+        throw new Error('Home feed requires between 1 and 16 rails');
+      }
+
+      return await this.client.post<IApiResponseWithoutData<ICatalogHomeFeed>>(
+        `${this.servicePath}home-feed`,
+        params
+      );
+    } catch (error) {
+      console.error('Catalog home feed request failed:', error);
+      throw error;
+    }
   }
 }
