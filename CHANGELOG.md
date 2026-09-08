@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.15.0...v1.16.0) (2026-09-08)
+
+
+### Features
+
+* **catalog:** add catalog.autocomplete for search-as-you-type suggestions ([#163](https://github.com/liquidcommerce/cloud-sdk/issues/163)) ([1927ab8](https://github.com/liquidcommerce/cloud-sdk/commit/1927ab89dd1fe12f371ebb407753b40944d08524))
+
 # [1.15.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.14.0...v1.15.0) (2026-08-27)
 
 
