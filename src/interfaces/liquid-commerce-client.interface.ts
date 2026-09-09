@@ -17,6 +17,9 @@ import type {
   ICatalog,
   ICatalogAutocompleteParams,
   ICatalogParams,
+  ICatalogProductItem,
+  ICatalogProductsPage,
+  ICatalogProductsParams,
   ICatalogSuggestion,
 } from './catalog.interface';
 import type {
@@ -317,6 +320,63 @@ export interface ICatalogMethod {
   autocomplete: (
     params: ICatalogAutocompleteParams
   ) => Promise<IApiResponseWithData<ICatalogSuggestion[]>>;
+
+  /**
+   * Lists one page of every product in the authenticated partner's catalog, for
+   * building the product-page half of a storefront sitemap.
+   *
+   * There is no partner argument: cloud derives the partner from the API key, so
+   * a caller can only ever enumerate its own catalog. The enumeration is
+   * availability-blind by design — it lists products whose page exists, not
+   * products purchasable right now — and `counts` reports how many products were
+   * dropped as unlinkable, and why.
+   *
+   * Terminate on `nextCursor`, never on an empty `items` array. Prefer
+   * {@link ICatalogMethod.iterateProducts}, which does this for you.
+   *
+   * @param {ICatalogProductsParams} params - Optional page size (default 1000, clamped to 5000) and cursor.
+   * @return {Promise<IApiResponseWithData<ICatalogProductsPage>>} - A promise that resolves to one page of products.
+   *
+   * @example
+   * let cursor: string | undefined;
+   * do {
+   *   const page = await liquidCommerce.catalog.listProducts({ cursor });
+   *   for (const { grouping, upc } of page.data.items) {
+   *     console.log(grouping, upc);
+   *   }
+   *   cursor = page.data.nextCursor;
+   * } while (cursor !== undefined);
+   *
+   * @see {@link ICatalogProductsParams} for the request parameters.
+   * @see {@link ICatalogProductsPage} for the structure of one page.
+   */
+  listProducts: (
+    params?: ICatalogProductsParams
+  ) => Promise<IApiResponseWithData<ICatalogProductsPage>>;
+
+  /**
+   * Walks the partner's entire catalog, yielding one product at a time and
+   * fetching each page as it is needed.
+   *
+   * Prefer this over hand-rolling the loop around
+   * {@link ICatalogMethod.listProducts}: it terminates on `nextCursor` rather
+   * than on an empty page. Products are filtered out after a page is read, so a
+   * page can legitimately yield nothing and still have successors — stopping
+   * there truncates the enumeration silently.
+   *
+   * @param {Omit<ICatalogProductsParams, 'cursor'>} params - Optional page size; the cursor is managed internally.
+   * @return {AsyncGenerator<ICatalogProductItem>} - Each product in the partner's catalog.
+   *
+   * @example
+   * for await (const product of liquidCommerce.catalog.iterateProducts()) {
+   *   console.log(product.grouping, product.upc);
+   * }
+   *
+   * @see {@link ICatalogProductItem} for the structure of one product.
+   */
+  iterateProducts: (
+    params?: Omit<ICatalogProductsParams, 'cursor'>
+  ) => AsyncGenerator<ICatalogProductItem>;
 }
 
 /**

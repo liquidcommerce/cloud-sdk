@@ -218,7 +218,33 @@ const suggestions = await client.catalog.autocomplete({
   limit: 8, // 1–25, defaults to 10
 });
 // suggestions.data: [{ itemType: 'catalog', grouping: '...', name: "Hendrick's Oasium Gin", image?: '...' }]
+
+// Enumerate every product in your own catalog — for building a sitemap.
+// The partner comes from the API key, so there is no partner argument.
+for await (const product of client.catalog.iterateProducts()) {
+  console.log(product.grouping, product.upc); // upc is zero-padded: use it verbatim
+}
+
+// Or page manually. Terminate on `nextCursor`, NOT on an empty `items`:
+// products are dropped after a page is read, so a page can be empty and
+// still have successors — stopping there truncates the enumeration silently.
+let cursor: string | undefined;
+do {
+  const page = await client.catalog.listProducts({ pageSize: 1000, cursor });
+  for (const { grouping, upc } of page.data.items) {
+    console.log(grouping, upc);
+  }
+  // counts: { inScope, emitted, droppedNoUpc, droppedUnresolvable }
+  // `inScope - emitted` is how many of your products are currently unlinkable.
+  console.log(page.data.counts);
+  cursor = page.data.nextCursor;
+} while (cursor !== undefined);
 ```
+
+> The enumeration is availability-blind by design: it lists products whose page
+> exists, not products purchasable right now. Products whose barcode does not
+> resolve are dropped rather than published as dead URLs, so the total can fall
+> short of your assignment count — `counts` reports how many and why.
 
 ### Cart
 
