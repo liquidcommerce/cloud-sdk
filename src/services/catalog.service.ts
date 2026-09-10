@@ -16,14 +16,6 @@ const AUTOCOMPLETE_LIMIT_MIN = 1;
 const AUTOCOMPLETE_LIMIT_MAX = 25;
 
 /**
- * The only page-size bound the SDK enforces. The default (1000) and maximum
- * (5000) are cloud's `PARTNER_PRODUCTS_DEFAULT_PAGE_SIZE` /
- * `PARTNER_PRODUCTS_MAX_PAGE_SIZE`; the platform owns both, so an oversized
- * value is clamped upstream rather than rejected here.
- */
-const PRODUCTS_PAGE_SIZE_MIN = 1;
-
-/**
  * The CatalogService class provides methods for interacting with the catalog API.
  */
 export class CatalogService {
@@ -145,20 +137,19 @@ export class CatalogService {
    *
    * @param {ICatalogProductsParams} params - Optional page size and cursor.
    * @return {Promise<IApiResponseWithData<ICatalogProductsPage>>} - A promise that resolves to one page of products.
-   * @throws {Error} - If `pageSize` is not an integer of at least 1, or if the request fails.
+   * @throws {Error} - If `pageSize` is not an integer, or if the request fails.
    */
   public async listProducts(
     params: ICatalogProductsParams = {}
   ): Promise<IApiResponseWithData<ICatalogProductsPage>> {
     try {
-      // Cloud rejects a fractional pageSize outright, so fail here rather than
-      // spend a round trip on it. An oversized value is deliberately left alone:
-      // it is clamped to the server-side maximum, not rejected.
-      if (
-        params.pageSize !== undefined &&
-        (!Number.isInteger(params.pageSize) || params.pageSize < PRODUCTS_PAGE_SIZE_MIN)
-      ) {
-        throw new Error(`pageSize must be an integer of at least ${PRODUCTS_PAGE_SIZE_MIN}`);
+      // Cloud's DTO carries `@IsInt()`, so a fractional pageSize is rejected with
+      // a 400: fail here rather than spend a round trip on it. Every integer is
+      // forwarded as given, because the platform owns the range and adjusts
+      // rather than rejects — above the maximum is capped, below 1 falls back to
+      // the default.
+      if (params.pageSize !== undefined && !Number.isInteger(params.pageSize)) {
+        throw new Error('pageSize must be an integer');
       }
 
       const queryParams = new URLSearchParams();

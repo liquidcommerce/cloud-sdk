@@ -22,17 +22,35 @@ const successfulResponse = (body: unknown) =>
     headers: { 'Content-Type': 'application/json' },
   });
 
+/** The token handshake every authenticated call makes before its own request. */
+const authResponse = () =>
+  successfulResponse({ data: { token: 'access-token', exp: Date.now() + 60_000 } });
+
+/**
+ * One page of the partner product enumeration. `counts` defaults to a page where
+ * nothing was dropped; pass it explicitly to model dropped products.
+ */
+const productPage = (
+  items: Array<{ grouping: string; upc: string }>,
+  nextCursor?: string,
+  counts?: Record<string, number>
+) => ({
+  data: {
+    items,
+    ...(nextCursor === undefined ? {} : { nextCursor }),
+    counts: counts ?? {
+      inScope: items.length,
+      emitted: items.length,
+      droppedNoUpc: 0,
+      droppedUnresolvable: 0,
+    },
+  },
+});
+
 const createFetch = () =>
   vi
     .fn<typeof globalThis.fetch>()
-    .mockResolvedValueOnce(
-      successfulResponse({
-        data: {
-          token: 'access-token',
-          exp: Date.now() + 60_000,
-        },
-      })
-    )
+    .mockResolvedValueOnce(authResponse())
     .mockResolvedValueOnce(successfulResponse({ products: [] }));
 
 const searchParams = {
@@ -113,14 +131,7 @@ describe('CatalogService', () => {
     const createAutocompleteFetch = () =>
       vi
         .fn<typeof globalThis.fetch>()
-        .mockResolvedValueOnce(
-          successfulResponse({
-            data: {
-              token: 'access-token',
-              exp: Date.now() + 60_000,
-            },
-          })
-        )
+        .mockResolvedValueOnce(authResponse())
         .mockResolvedValueOnce(
           successfulResponse({
             statusCode: 200,
@@ -187,31 +198,11 @@ describe('CatalogService', () => {
   });
 
   describe('listProducts', () => {
-    const authResponse = () =>
-      successfulResponse({ data: { token: 'access-token', exp: Date.now() + 60_000 } });
-
-    const page = (
-      items: Array<{ grouping: string; upc: string }>,
-      nextCursor?: string,
-      counts?: Record<string, number>
-    ) => ({
-      data: {
-        items,
-        ...(nextCursor === undefined ? {} : { nextCursor }),
-        counts: counts ?? {
-          inScope: items.length,
-          emitted: items.length,
-          droppedNoUpc: 0,
-          droppedUnresolvable: 0,
-        },
-      },
-    });
-
     it('GETs the products route with no query when given no params', async () => {
       const fetch = vi
         .fn<typeof globalThis.fetch>()
         .mockResolvedValueOnce(authResponse())
-        .mockResolvedValueOnce(successfulResponse(page([])));
+        .mockResolvedValueOnce(successfulResponse(productPage([])));
       vi.stubGlobal('fetch', fetch);
 
       await createService().listProducts();
@@ -227,7 +218,7 @@ describe('CatalogService', () => {
       const fetch = vi
         .fn<typeof globalThis.fetch>()
         .mockResolvedValueOnce(authResponse())
-        .mockResolvedValueOnce(successfulResponse(page([])));
+        .mockResolvedValueOnce(successfulResponse(productPage([])));
       vi.stubGlobal('fetch', fetch);
 
       await createService().listProducts({ pageSize: 2000, cursor: 'a b/c' });
@@ -248,7 +239,7 @@ describe('CatalogService', () => {
         .mockResolvedValueOnce(authResponse())
         .mockResolvedValueOnce(
           successfulResponse(
-            page([{ grouping: '665f1a2b3c4d5e6f7a8b9c0d', upc: '00087229178758' }], 'cur-2', counts)
+            productPage([{ grouping: '665f1a2b3c4d5e6f7a8b9c0d', upc: '00087229178758' }], 'cur-2', counts)
           )
         );
       vi.stubGlobal('fetch', fetch);
@@ -264,58 +255,53 @@ describe('CatalogService', () => {
       expect(response.data.counts).toEqual(counts);
     });
 
+    it.each([2.5, -0.5])(
+      'rejects a non-integer pageSize (%s) without a request',
+      async (pageSize) => {
+        const fetch = vi.fn<typeof globalThis.fetch>();
+        vi.stubGlobal('fetch', fetch);
+        vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+        await expect(createService().listProducts({ pageSize })).rejects.toThrow(
+          'pageSize must be an integer'
+        );
+        expect(fetch).not.toHaveBeenCalled();
+      }
+    );
+
+    // The platform adjusts every out-of-range integer instead of rejecting it,
+    // so the SDK must not be stricter than the endpoint it wraps: an oversized
+    // value is capped upstream and a non-positive one falls back to the default.
     it.each([
-      0, -1, 2.5,
-    ])('rejects a pageSize that is not a positive integer (%s) without a request', async (pageSize) => {
-      const fetch = vi.fn<typeof globalThis.fetch>();
-      vi.stubGlobal('fetch', fetch);
-      vi.spyOn(console, 'error').mockImplementation(() => undefined);
-
-      await expect(createService().listProducts({ pageSize })).rejects.toThrow(
-        'pageSize must be an integer of at least 1'
-      );
-      expect(fetch).not.toHaveBeenCalled();
-    });
-
-    it('sends an oversized pageSize for the server to clamp rather than rejecting it', async () => {
+      [999_999, 'pageSize=999999'],
+      [0, 'pageSize=0'],
+      [-1, 'pageSize=-1'],
+    ])('forwards an out-of-range integer pageSize (%s) for the server to adjust', async (
+      pageSize,
+      expectedQuery
+    ) => {
       const fetch = vi
         .fn<typeof globalThis.fetch>()
         .mockResolvedValueOnce(authResponse())
-        .mockResolvedValueOnce(successfulResponse(page([])));
+        .mockResolvedValueOnce(successfulResponse(productPage([])));
       vi.stubGlobal('fetch', fetch);
 
-      await createService().listProducts({ pageSize: 999_999 });
+      await createService().listProducts({ pageSize });
 
       const [url] = fetch.mock.calls[1] as [string, RequestInit];
-      expect(url).toBe('https://cloud.example/api/catalog/products?pageSize=999999');
+      expect(url).toBe(`https://cloud.example/api/catalog/products?${expectedQuery}`);
     });
   });
 
   describe('iterateProducts', () => {
-    const authResponse = () =>
-      successfulResponse({ data: { token: 'access-token', exp: Date.now() + 60_000 } });
-
-    const pageBody = (items: Array<{ grouping: string; upc: string }>, nextCursor?: string) => ({
-      data: {
-        items,
-        ...(nextCursor === undefined ? {} : { nextCursor }),
-        counts: {
-          inScope: items.length,
-          emitted: items.length,
-          droppedNoUpc: 0,
-          droppedUnresolvable: 0,
-        },
-      },
-    });
-
     const product = (upc: string) => ({ grouping: `g-${upc}`, upc });
 
     it('walks every page and stops when nextCursor is absent', async () => {
       const fetch = vi
         .fn<typeof globalThis.fetch>()
         .mockResolvedValueOnce(authResponse())
-        .mockResolvedValueOnce(successfulResponse(pageBody([product('001')], 'cur-2')))
-        .mockResolvedValueOnce(successfulResponse(pageBody([product('002')])));
+        .mockResolvedValueOnce(successfulResponse(productPage([product('001')], 'cur-2')))
+        .mockResolvedValueOnce(successfulResponse(productPage([product('002')])));
       vi.stubGlobal('fetch', fetch);
 
       const seen = [];
@@ -335,9 +321,9 @@ describe('CatalogService', () => {
       const fetch = vi
         .fn<typeof globalThis.fetch>()
         .mockResolvedValueOnce(authResponse())
-        .mockResolvedValueOnce(successfulResponse(pageBody([], 'cur-2')))
-        .mockResolvedValueOnce(successfulResponse(pageBody([], 'cur-3')))
-        .mockResolvedValueOnce(successfulResponse(pageBody([product('003')])));
+        .mockResolvedValueOnce(successfulResponse(productPage([], 'cur-2')))
+        .mockResolvedValueOnce(successfulResponse(productPage([], 'cur-3')))
+        .mockResolvedValueOnce(successfulResponse(productPage([product('003')])));
       vi.stubGlobal('fetch', fetch);
 
       const seen = [];
@@ -354,8 +340,8 @@ describe('CatalogService', () => {
       const fetch = vi
         .fn<typeof globalThis.fetch>()
         .mockResolvedValueOnce(authResponse())
-        .mockResolvedValueOnce(successfulResponse(pageBody([product('001')], 'cur-2')))
-        .mockResolvedValueOnce(successfulResponse(pageBody([product('002')])));
+        .mockResolvedValueOnce(successfulResponse(productPage([product('001')], 'cur-2')))
+        .mockResolvedValueOnce(successfulResponse(productPage([product('002')])));
       vi.stubGlobal('fetch', fetch);
 
       for await (const _ of createService().iterateProducts({ pageSize: 500 })) {
@@ -376,7 +362,7 @@ describe('CatalogService', () => {
       const fetch = vi
         .fn<typeof globalThis.fetch>()
         .mockResolvedValueOnce(authResponse())
-        .mockResolvedValue(successfulResponse(pageBody([product('001')], '')));
+        .mockResolvedValue(successfulResponse(productPage([product('001')], '')));
       vi.stubGlobal('fetch', fetch);
 
       const seen: string[] = [];

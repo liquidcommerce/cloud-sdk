@@ -653,9 +653,10 @@ export interface IProduct {
  */
 export interface ICatalogProductsParams {
   /**
-   * Products read per page. Defaults to 1000 and is clamped to 5000 upstream, so
-   * an oversized value is capped rather than rejected. Must be an integer —
-   * cloud rejects a fractional value.
+   * Products read per page, defaulting to 1000. The platform owns the range and
+   * adjusts an out-of-range value rather than rejecting it: above 5000 is capped
+   * at 5000, and below 1 falls back to the default. Must be an integer, though —
+   * cloud rejects a fractional value with a 400.
    *
    * A page may return fewer items than this and still not be the last page.
    */
