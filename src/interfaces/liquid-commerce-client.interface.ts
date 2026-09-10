@@ -345,7 +345,7 @@ export interface ICatalogMethod {
    *     console.log(grouping, upc);
    *   }
    *   cursor = page.data.nextCursor;
-   * } while (cursor !== undefined);
+   * } while (cursor);
    *
    * @see {@link ICatalogProductsParams} for the request parameters.
    * @see {@link ICatalogProductsPage} for the structure of one page.
@@ -364,8 +364,21 @@ export interface ICatalogMethod {
    * page can legitimately yield nothing and still have successors — stopping
    * there truncates the enumeration silently.
    *
+   * Two behaviours differ from every other method on this client:
+   *
+   * 1. This call returns a generator synchronously, so it never rejects.
+   *    Authentication runs on the first pull — an auth or network failure
+   *    surfaces at the `for await`, not at the call, so wrap the loop rather
+   *    than the call. The same applies to an invalid `pageSize`.
+   * 2. A walk is not resumable. The cursor is held internally and never
+   *    exposed, so a page request that fails mid-walk (including a `500` from
+   *    the platform) ends the iteration and a retry restarts from the
+   *    beginning. To checkpoint progress over a large catalog, drive
+   *    {@link ICatalogMethod.listProducts} yourself and keep each `nextCursor`.
+   *
    * @param {Omit<ICatalogProductsParams, 'cursor'>} params - Optional page size; the cursor is managed internally.
    * @return {AsyncGenerator<ICatalogProductItem>} - Each product in the partner's catalog.
+   * @throws {Error} - On the first pull if authentication fails, or on any page request that fails.
    *
    * @example
    * for await (const product of liquidCommerce.catalog.iterateProducts()) {

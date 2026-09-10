@@ -264,19 +264,18 @@ describe('CatalogService', () => {
       expect(response.data.counts).toEqual(counts);
     });
 
-    it.each([0, -1, 2.5])(
-      'rejects a pageSize that is not a positive integer (%s) without a request',
-      async (pageSize) => {
-        const fetch = vi.fn<typeof globalThis.fetch>();
-        vi.stubGlobal('fetch', fetch);
-        vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    it.each([
+      0, -1, 2.5,
+    ])('rejects a pageSize that is not a positive integer (%s) without a request', async (pageSize) => {
+      const fetch = vi.fn<typeof globalThis.fetch>();
+      vi.stubGlobal('fetch', fetch);
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
-        await expect(createService().listProducts({ pageSize })).rejects.toThrow(
-          'pageSize must be a positive integer'
-        );
-        expect(fetch).not.toHaveBeenCalled();
-      }
-    );
+      await expect(createService().listProducts({ pageSize })).rejects.toThrow(
+        'pageSize must be an integer of at least 1'
+      );
+      expect(fetch).not.toHaveBeenCalled();
+    });
 
     it('sends an oversized pageSize for the server to clamp rather than rejecting it', async () => {
       const fetch = vi
@@ -296,10 +295,7 @@ describe('CatalogService', () => {
     const authResponse = () =>
       successfulResponse({ data: { token: 'access-token', exp: Date.now() + 60_000 } });
 
-    const pageBody = (
-      items: Array<{ grouping: string; upc: string }>,
-      nextCursor?: string
-    ) => ({
+    const pageBody = (items: Array<{ grouping: string; upc: string }>, nextCursor?: string) => ({
       data: {
         items,
         ...(nextCursor === undefined ? {} : { nextCursor }),
@@ -372,6 +368,25 @@ describe('CatalogService', () => {
       expect(secondUrl).toBe(
         'https://cloud.example/api/catalog/products?pageSize=500&cursor=cur-2'
       );
+    });
+
+    it('stops on an empty-string nextCursor instead of re-requesting the first page', async () => {
+      // `listProducts` drops an empty cursor from the query, so treating `''` as
+      // "keep going" would ask for page 1 forever and re-yield it every time.
+      const fetch = vi
+        .fn<typeof globalThis.fetch>()
+        .mockResolvedValueOnce(authResponse())
+        .mockResolvedValue(successfulResponse(pageBody([product('001')], '')));
+      vi.stubGlobal('fetch', fetch);
+
+      const seen: string[] = [];
+      for await (const item of createService().iterateProducts()) {
+        seen.push(item.upc);
+      }
+
+      expect(seen).toEqual(['001']);
+      // Auth call plus exactly one page: the empty cursor ended the walk.
+      expect(fetch).toHaveBeenCalledTimes(2);
     });
   });
 });

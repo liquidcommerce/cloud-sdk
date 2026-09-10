@@ -228,6 +228,8 @@ for await (const product of client.catalog.iterateProducts()) {
 // Or page manually. Terminate on `nextCursor`, NOT on an empty `items`:
 // products are dropped after a page is read, so a page can be empty and
 // still have successors — stopping there truncates the enumeration silently.
+// Page manually when you need to resume: `iterateProducts` keeps the cursor
+// to itself, so a page that fails mid-walk restarts the whole enumeration.
 let cursor: string | undefined;
 do {
   const page = await client.catalog.listProducts({ pageSize: 1000, cursor });
@@ -238,7 +240,7 @@ do {
   // `inScope - emitted` is how many of your products are currently unlinkable.
   console.log(page.data.counts);
   cursor = page.data.nextCursor;
-} while (cursor !== undefined);
+} while (cursor);
 ```
 
 > The enumeration is availability-blind by design: it lists products whose page

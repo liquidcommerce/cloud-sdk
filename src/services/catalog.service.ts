@@ -16,6 +16,14 @@ const AUTOCOMPLETE_LIMIT_MIN = 1;
 const AUTOCOMPLETE_LIMIT_MAX = 25;
 
 /**
+ * The only page-size bound the SDK enforces. The default (1000) and maximum
+ * (5000) are cloud's `PARTNER_PRODUCTS_DEFAULT_PAGE_SIZE` /
+ * `PARTNER_PRODUCTS_MAX_PAGE_SIZE`; the platform owns both, so an oversized
+ * value is clamped upstream rather than rejected here.
+ */
+const PRODUCTS_PAGE_SIZE_MIN = 1;
+
+/**
  * The CatalogService class provides methods for interacting with the catalog API.
  */
 export class CatalogService {
@@ -137,7 +145,7 @@ export class CatalogService {
    *
    * @param {ICatalogProductsParams} params - Optional page size and cursor.
    * @return {Promise<IApiResponseWithData<ICatalogProductsPage>>} - A promise that resolves to one page of products.
-   * @throws {Error} - If `pageSize` is not a positive integer, or if the request fails.
+   * @throws {Error} - If `pageSize` is not an integer of at least 1, or if the request fails.
    */
   public async listProducts(
     params: ICatalogProductsParams = {}
@@ -146,10 +154,11 @@ export class CatalogService {
       // Cloud rejects a fractional pageSize outright, so fail here rather than
       // spend a round trip on it. An oversized value is deliberately left alone:
       // it is clamped to the server-side maximum, not rejected.
-      if (params.pageSize !== undefined) {
-        if (!Number.isInteger(params.pageSize) || params.pageSize < 1) {
-          throw new Error('pageSize must be a positive integer');
-        }
+      if (
+        params.pageSize !== undefined &&
+        (!Number.isInteger(params.pageSize) || params.pageSize < PRODUCTS_PAGE_SIZE_MIN)
+      ) {
+        throw new Error(`pageSize must be an integer of at least ${PRODUCTS_PAGE_SIZE_MIN}`);
       }
 
       const queryParams = new URLSearchParams();
@@ -184,9 +193,14 @@ export class CatalogService {
    * there truncates the enumeration silently, and a short sitemap looks exactly
    * like a working one.
    *
+   * A walk is not resumable: the cursor is held internally and never exposed,
+   * so a page request that fails mid-walk (including a `500` from the platform)
+   * ends the iteration and a retry restarts from the beginning. Drive
+   * {@link listProducts} directly to checkpoint progress over a large catalog.
+   *
    * @param {Omit<ICatalogProductsParams, 'cursor'>} params - Optional page size; the cursor is managed internally.
    * @return {AsyncGenerator<ICatalogProductItem>} - Each product in the partner's catalog.
-   * @throws {Error} - If any page request fails.
+   * @throws {Error} - If any page request fails; the walk cannot be resumed from where it stopped.
    *
    * @example
    * for await (const product of client.catalog.iterateProducts()) {
@@ -205,7 +219,9 @@ export class CatalogService {
       yield* data?.items ?? [];
 
       // Terminate only when the cursor is gone. An empty `items` is not the end.
+      // An empty-string cursor counts as gone: `listProducts` drops it from the
+      // query, so continuing on it would re-request the first page forever.
       cursor = data?.nextCursor;
-    } while (cursor !== undefined && cursor !== null);
+    } while (typeof cursor === 'string' && cursor.length > 0);
   }
 }
