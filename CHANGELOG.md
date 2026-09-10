@@ -1,3 +1,16 @@
+# [1.17.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.16.0...v1.17.0) (2026-09-10)
+
+
+### Bug Fixes
+
+* **catalog:** let the server own pageSize lower-bound clamping ([876ca9c](https://github.com/liquidcommerce/cloud-sdk/commit/876ca9cecdbe642026021f854421479ae08b1392))
+* **catalog:** terminate product iteration on an empty-string cursor ([3d1112e](https://github.com/liquidcommerce/cloud-sdk/commit/3d1112e38cddd1584709d779a6a926ccde68fe7b))
+
+
+### Features
+
+* **catalog:** add listProducts/iterateProducts for partner catalog enumeration ([8371ba0](https://github.com/liquidcommerce/cloud-sdk/commit/8371ba0119c6e3f9f0b80ab7c549a631c1b27266)), closes [#162](https://github.com/liquidcommerce/cloud-sdk/issues/162)
+
 # [1.16.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.15.0...v1.16.0) (2026-09-08)
 
 
