@@ -643,3 +643,85 @@ export interface IProduct {
 
   additionalInformation?: string;
 }
+
+/**
+ * Parameters for one page of the authenticated partner's product enumeration
+ * (`GET catalog/products`).
+ *
+ * There is no partner argument: cloud derives the partner from the API key, so a
+ * caller can only ever enumerate its own catalog.
+ */
+export interface ICatalogProductsParams {
+  /**
+   * Products read per page, defaulting to 1000. The platform owns the range and
+   * adjusts an out-of-range value rather than rejecting it: above 5000 is capped
+   * at 5000, and below 1 falls back to the default. Must be an integer, though —
+   * cloud rejects a fractional value with a 400.
+   *
+   * A page may return fewer items than this and still not be the last page.
+   */
+  pageSize?: number;
+
+  /**
+   * Opaque cursor from the previous response's `nextCursor`. Omit to start at the
+   * beginning of the partner's scope.
+   */
+  cursor?: string;
+}
+
+/**
+ * One product in the partner's scope, keyed for a product detail page link.
+ */
+export interface ICatalogProductItem {
+  /** Product grouping — the product key, one entry per product. */
+  grouping: string;
+
+  /**
+   * The barcode the product detail page is addressed by, in the catalog's stored
+   * zero-padded form (`00087229178758`). Pass it through verbatim: re-padding,
+   * trimming, or stripping zeros breaks the lookup, which normalizes on its own
+   * side.
+   */
+  upc: string;
+}
+
+/**
+ * Per-page tally of what the enumeration read and what it dropped.
+ *
+ * `inScope` minus `emitted` is accounted for entirely by the drop counters. They
+ * tell a caller how many of its products are currently unlinkable, and why.
+ */
+export interface ICatalogProductPageCounts {
+  /** Products this page read from the partner's scope. */
+  inScope: number;
+
+  /** Products actually returned in `items`. */
+  emitted: number;
+
+  /** Dropped because the product carries no usable barcode. */
+  droppedNoUpc: number;
+
+  /**
+   * Dropped because the barcode does not resolve to a product detail page, so
+   * linking it would publish a dead URL.
+   */
+  droppedUnresolvable: number;
+}
+
+/**
+ * One page of the partner's product enumeration.
+ */
+export interface ICatalogProductsPage {
+  items: ICatalogProductItem[];
+
+  /**
+   * Cursor for the next page, absent only on the last page.
+   *
+   * Terminate on this field, never on an empty `items`: products are dropped
+   * after a page is read from the index, so a page can legitimately return zero
+   * items and still have successors.
+   */
+  nextCursor?: string;
+
+  counts: ICatalogProductPageCounts;
+}
