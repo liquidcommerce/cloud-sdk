@@ -249,7 +249,7 @@ export class CatalogService {
       params.locationContext !== undefined &&
       (typeof params.locationContext !== 'string' ||
         !params.locationContext ||
-        params.locationContext.length > 512 ||
+        params.locationContext.length > 256 ||
         params.loc !== undefined)
     ) {
       throw new Error('Home feed requires a valid context or location, not both');

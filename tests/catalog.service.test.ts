@@ -449,4 +449,12 @@ describe('CatalogService', () => {
     expect(error).not.toHaveBeenCalled();
   });
 
+  it('rejects context tokens beyond the Cloud contract bound', async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    vi.stubGlobal('fetch', fetch);
+    await expect(createService().homeFeed({ locationContext: 'x'.repeat(257), rails: [{ railId: 'wine' }] }))
+      .rejects.toThrow('valid context');
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
 });
