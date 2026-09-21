@@ -394,10 +394,12 @@ export interface ICatalogMethod {
   iterateProducts: (
     params?: Omit<ICatalogProductsParams, 'cursor'>
   ) => AsyncGenerator<ICatalogProductItem>;
-  createLocationContext: (
+  /** Optional for existing custom clients; check this capability before calling. */
+  createLocationContext?: (
     params: ICatalogLocationContextParams
   ) => Promise<IApiResponseWithoutData<ICatalogLocationContext>>;
-  homeFeed: (params: ICatalogHomeFeedParams) => Promise<IApiResponseWithoutData<ICatalogHomeFeed>>;
+  /** Optional for existing custom clients; check this capability before calling. */
+  homeFeed?: (params: ICatalogHomeFeedParams) => Promise<IApiResponseWithoutData<ICatalogHomeFeed>>;
 }
 
 /**
