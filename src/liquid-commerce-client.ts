@@ -18,6 +18,8 @@ import type {
   ICatalogAutocompleteParams,
   ICatalogHomeFeed,
   ICatalogHomeFeedParams,
+  ICatalogLocationContext,
+  ICatalogLocationContextParams,
   ICatalogMethod,
   ICatalogParams,
   ICatalogProductItem,
@@ -245,6 +247,12 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
     iterateProducts: (
       params: Omit<ICatalogProductsParams, 'cursor'> = {}
     ): AsyncGenerator<ICatalogProductItem> => this.iterateCatalogProducts(params),
+    createLocationContext: async (
+      params: ICatalogLocationContextParams
+    ): Promise<IApiResponseWithoutData<ICatalogLocationContext>> => {
+      await this.ensureAuthenticated();
+      return this.catalogService.createLocationContext(params);
+    },
     homeFeed: async (
       params: ICatalogHomeFeedParams
     ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> => {

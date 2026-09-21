@@ -155,6 +155,8 @@ export interface ICatalogHomeFeedRailParams {
 }
 
 export interface ICatalogHomeFeedParams {
+  /** Opaque Cloud-issued context; mutually exclusive with loc. */
+  locationContext?: string;
   /** State and delivery area are resolved by Cloud from these coordinates. */
   loc?: { coords: { lat: number; long: number } };
   retailers?: string[];
@@ -807,4 +809,14 @@ export interface ICatalogProductsPage {
   nextCursor?: string;
 
   counts: ICatalogProductPageCounts;
+}
+
+/** Issue an opaque context through the authenticated partner's Cloud location semantics. */
+export interface ICatalogLocationContextParams {
+  loc: { coords: { lat: number; long: number } };
+}
+
+export interface ICatalogLocationContext {
+  locationContext: string;
+  expiresAt: string;
 }

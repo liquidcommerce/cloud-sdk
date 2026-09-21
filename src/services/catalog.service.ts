@@ -6,6 +6,8 @@ import type {
   ICatalogAutocompleteParams,
   ICatalogHomeFeed,
   ICatalogHomeFeedParams,
+  ICatalogLocationContext,
+  ICatalogLocationContextParams,
   ICatalogParams,
   ICatalogProductItem,
   ICatalogProductsPage,
@@ -217,21 +219,44 @@ export class CatalogService {
       cursor = data?.nextCursor;
     } while (typeof cursor === 'string' && cursor.length > 0);
   }
+  /** Does not log location-bearing requests or upstream error objects. */
+  public async createLocationContext(
+    params: ICatalogLocationContextParams
+  ): Promise<IApiResponseWithoutData<ICatalogLocationContext>> {
+    const coords = params?.loc?.coords;
+    if (
+      !coords ||
+      !Number.isFinite(coords.lat) ||
+      !Number.isFinite(coords.long) ||
+      Math.abs(coords.lat) > 90 ||
+      Math.abs(coords.long) > 180
+    ) {
+      throw new Error('Location context requires valid coordinates');
+    }
+    return this.client.post<IApiResponseWithoutData<ICatalogLocationContext>>(
+      `${this.servicePath}location-context`,
+      { loc: { coords: { lat: coords.lat, long: coords.long } } }
+    );
+  }
+
   public async homeFeed(
     params: ICatalogHomeFeedParams
   ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> {
-    try {
-      if (!Array.isArray(params.rails) || params.rails.length < 1 || params.rails.length > 16) {
-        throw new Error('Home feed requires between 1 and 16 rails');
-      }
-
-      return await this.client.post<IApiResponseWithoutData<ICatalogHomeFeed>>(
-        `${this.servicePath}home-feed`,
-        params
-      );
-    } catch (error) {
-      console.error('Catalog home feed request failed:', error);
-      throw error;
+    if (!Array.isArray(params?.rails) || params.rails.length < 1 || params.rails.length > 16) {
+      throw new Error('Home feed requires between 1 and 16 rails');
     }
+    if (
+      params.locationContext !== undefined &&
+      (typeof params.locationContext !== 'string' ||
+        !params.locationContext ||
+        params.locationContext.length > 512 ||
+        params.loc !== undefined)
+    ) {
+      throw new Error('Home feed requires a valid context or location, not both');
+    }
+    return this.client.post<IApiResponseWithoutData<ICatalogHomeFeed>>(
+      `${this.servicePath}home-feed`,
+      params
+    );
   }
 }

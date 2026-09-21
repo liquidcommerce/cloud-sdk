@@ -400,4 +400,53 @@ describe('CatalogService', () => {
       expect.objectContaining({ method: 'POST', body: JSON.stringify(params) })
     );
   });
+  it('posts an opaque context without location coordinates', async () => {
+    const fetch = createFetch();
+    vi.stubGlobal('fetch', fetch);
+    const params = { locationContext: 'v1.test.opaque.signed', rails: [{ railId: 'wine' }] };
+    await createService().homeFeed(params);
+    expect(fetch).toHaveBeenNthCalledWith(2, 'https://cloud.example/api/catalog/home-feed',
+      expect.objectContaining({ body: JSON.stringify(params) }));
+  });
+
+  it('rejects context plus coordinates before a request', async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    vi.stubGlobal('fetch', fetch);
+    await expect(createService().homeFeed({ locationContext: 'opaque',
+      loc: { coords: { lat: 40, long: -73 } }, rails: [{ railId: 'wine' }] }))
+      .rejects.toThrow('context or location');
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('issues a context, stripping unrelated location fields', async () => {
+    const response = { statusCode: 200, locationContext: 'opaque-signed-reference',
+      expiresAt: '2026-09-28T00:00:00.000Z' };
+    const fetch = vi.fn<typeof globalThis.fetch>()
+      .mockResolvedValueOnce(authResponse()).mockResolvedValueOnce(successfulResponse(response));
+    vi.stubGlobal('fetch', fetch);
+    const params = { loc: { coords: { lat: 40, long: -73 }, address: { one: 'not forwarded' } } };
+    await expect(createService().createLocationContext(params)).resolves.toEqual(response);
+    expect(fetch).toHaveBeenNthCalledWith(2, 'https://cloud.example/api/catalog/location-context',
+      expect.objectContaining({ method: 'POST', body: JSON.stringify({ loc: { coords: params.loc.coords } }) }));
+  });
+
+  it.each([NaN, Infinity, 91])('rejects invalid context latitude %s before transport', async (lat) => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    vi.stubGlobal('fetch', fetch);
+    await expect(createService().createLocationContext({ loc: { coords: { lat, long: 0 } } }))
+      .rejects.toThrow('valid coordinates');
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('does not log upstream errors containing sensitive context data', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const fetch = vi.fn<typeof globalThis.fetch>()
+      .mockResolvedValueOnce(authResponse()).mockResolvedValueOnce(
+        new Response(JSON.stringify({ message: 'sensitive context rejected' }), { status: 400 }));
+    vi.stubGlobal('fetch', fetch);
+    await expect(createService().homeFeed({ locationContext: 'opaque', rails: [{ railId: 'wine' }] }))
+      .rejects.toMatchObject({ status: 400 });
+    expect(error).not.toHaveBeenCalled();
+  });
+
 });

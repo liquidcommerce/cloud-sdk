@@ -18,6 +18,8 @@ import type {
   ICatalogAutocompleteParams,
   ICatalogHomeFeed,
   ICatalogHomeFeedParams,
+  ICatalogLocationContext,
+  ICatalogLocationContextParams,
   ICatalogParams,
   ICatalogProductItem,
   ICatalogProductsPage,
@@ -392,6 +394,9 @@ export interface ICatalogMethod {
   iterateProducts: (
     params?: Omit<ICatalogProductsParams, 'cursor'>
   ) => AsyncGenerator<ICatalogProductItem>;
+  createLocationContext: (
+    params: ICatalogLocationContextParams
+  ) => Promise<IApiResponseWithoutData<ICatalogLocationContext>>;
   homeFeed: (params: ICatalogHomeFeedParams) => Promise<IApiResponseWithoutData<ICatalogHomeFeed>>;
 }
 
