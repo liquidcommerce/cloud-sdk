@@ -2,7 +2,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AuthenticatedService } from '../src/core/authenticated.service';
 import { CatalogHelperService } from '../src/core/catalog-helper.service';
 import { LocationHelperService } from '../src/core/location-helper.service';
-import { LIQUID_COMMERCE_ENV, ENUM_ORDER_BY, ENUM_NAVIGATION_ORDER_DIRECTION_TYPE } from '../src/enums';
+import {
+  LIQUID_COMMERCE_ENV,
+  ENUM_ORDER_BY,
+  ENUM_NAVIGATION_ORDER_DIRECTION_TYPE,
+} from '../src/enums';
 import type { ICatalogParams, ICatalogHomeFeedParams } from '../src/interfaces';
 import { CatalogService } from '../src/services/catalog.service';
 
@@ -135,9 +139,7 @@ describe('CatalogService', () => {
         .mockResolvedValueOnce(
           successfulResponse({
             statusCode: 200,
-            data: [
-              { itemType: 'catalog', grouping: 'group-1', name: "Hendrick's Oasium Gin" },
-            ],
+            data: [{ itemType: 'catalog', grouping: 'group-1', name: "Hendrick's Oasium Gin" }],
           })
         );
 
@@ -239,7 +241,11 @@ describe('CatalogService', () => {
         .mockResolvedValueOnce(authResponse())
         .mockResolvedValueOnce(
           successfulResponse(
-            productPage([{ grouping: '665f1a2b3c4d5e6f7a8b9c0d', upc: '00087229178758' }], 'cur-2', counts)
+            productPage(
+              [{ grouping: '665f1a2b3c4d5e6f7a8b9c0d', upc: '00087229178758' }],
+              'cur-2',
+              counts
+            )
           )
         );
       vi.stubGlobal('fetch', fetch);
@@ -255,19 +261,18 @@ describe('CatalogService', () => {
       expect(response.data.counts).toEqual(counts);
     });
 
-    it.each([2.5, -0.5])(
-      'rejects a non-integer pageSize (%s) without a request',
-      async (pageSize) => {
-        const fetch = vi.fn<typeof globalThis.fetch>();
-        vi.stubGlobal('fetch', fetch);
-        vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    it.each([
+      2.5, -0.5,
+    ])('rejects a non-integer pageSize (%s) without a request', async (pageSize) => {
+      const fetch = vi.fn<typeof globalThis.fetch>();
+      vi.stubGlobal('fetch', fetch);
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
-        await expect(createService().listProducts({ pageSize })).rejects.toThrow(
-          'pageSize must be an integer'
-        );
-        expect(fetch).not.toHaveBeenCalled();
-      }
-    );
+      await expect(createService().listProducts({ pageSize })).rejects.toThrow(
+        'pageSize must be an integer'
+      );
+      expect(fetch).not.toHaveBeenCalled();
+    });
 
     // The platform adjusts every out-of-range integer instead of rejecting it,
     // so the SDK must not be stricter than the endpoint it wraps: an oversized
@@ -276,10 +281,7 @@ describe('CatalogService', () => {
       [999_999, 'pageSize=999999'],
       [0, 'pageSize=0'],
       [-1, 'pageSize=-1'],
-    ])('forwards an out-of-range integer pageSize (%s) for the server to adjust', async (
-      pageSize,
-      expectedQuery
-    ) => {
+    ])('forwards an out-of-range integer pageSize (%s) for the server to adjust', async (pageSize, expectedQuery) => {
       const fetch = vi
         .fn<typeof globalThis.fetch>()
         .mockResolvedValueOnce(authResponse())
@@ -400,61 +402,236 @@ describe('CatalogService', () => {
       expect.objectContaining({ method: 'POST', body: JSON.stringify(params) })
     );
   });
+
   it('posts an opaque context without location coordinates', async () => {
     const fetch = createFetch();
     vi.stubGlobal('fetch', fetch);
     const params = { locationContext: 'v1.test.opaque.signed', rails: [{ railId: 'wine' }] };
     await createService().homeFeed(params);
-    expect(fetch).toHaveBeenNthCalledWith(2, 'https://cloud.example/api/catalog/home-feed',
-      expect.objectContaining({ body: JSON.stringify(params) }));
+    expect(fetch).toHaveBeenNthCalledWith(
+      2,
+      'https://cloud.example/api/catalog/home-feed',
+      expect.objectContaining({ body: JSON.stringify(params) })
+    );
   });
 
   it('rejects context plus coordinates before a request', async () => {
     const fetch = vi.fn<typeof globalThis.fetch>();
     vi.stubGlobal('fetch', fetch);
-    await expect(createService().homeFeed({ locationContext: 'opaque',
-      loc: { coords: { lat: 40, long: -73 } }, rails: [{ railId: 'wine' }] }))
-      .rejects.toThrow('context or location');
+    await expect(
+      createService().homeFeed({
+        locationContext: 'opaque',
+        loc: { coords: { lat: 40, long: -73 } },
+        rails: [{ railId: 'wine' }],
+      })
+    ).rejects.toThrow('Home feed accepts either locationContext or loc, not both');
     expect(fetch).not.toHaveBeenCalled();
   });
 
   it('issues a context, stripping unrelated location fields', async () => {
-    const response = { statusCode: 200, locationContext: 'opaque-signed-reference',
-      expiresAt: '2026-09-28T00:00:00.000Z' };
-    const fetch = vi.fn<typeof globalThis.fetch>()
-      .mockResolvedValueOnce(authResponse()).mockResolvedValueOnce(successfulResponse(response));
+    const response = {
+      statusCode: 200,
+      locationContext: 'opaque-signed-reference',
+      expiresAt: '2026-09-28T00:00:00.000Z',
+    };
+    const fetch = vi
+      .fn<typeof globalThis.fetch>()
+      .mockResolvedValueOnce(authResponse())
+      .mockResolvedValueOnce(successfulResponse(response));
     vi.stubGlobal('fetch', fetch);
     const params = { loc: { coords: { lat: 40, long: -73 }, address: { one: 'not forwarded' } } };
     await expect(createService().createLocationContext(params)).resolves.toEqual(response);
-    expect(fetch).toHaveBeenNthCalledWith(2, 'https://cloud.example/api/catalog/location-context',
-      expect.objectContaining({ method: 'POST', body: JSON.stringify({ loc: { coords: params.loc.coords } }) }));
+    expect(fetch).toHaveBeenNthCalledWith(
+      2,
+      'https://cloud.example/api/catalog/location-context',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ loc: { coords: params.loc.coords } }),
+      })
+    );
   });
 
-  it.each([NaN, Infinity, 91])('rejects invalid context latitude %s before transport', async (lat) => {
+  it.each([
+    NaN,
+    Infinity,
+    91,
+  ])('rejects invalid context latitude %s before transport', async (lat) => {
     const fetch = vi.fn<typeof globalThis.fetch>();
     vi.stubGlobal('fetch', fetch);
-    await expect(createService().createLocationContext({ loc: { coords: { lat, long: 0 } } }))
-      .rejects.toThrow('valid coordinates');
+    await expect(
+      createService().createLocationContext({ loc: { coords: { lat, long: 0 } } })
+    ).rejects.toThrow('valid coordinates');
     expect(fetch).not.toHaveBeenCalled();
   });
 
   it('does not log upstream errors containing sensitive context data', async () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    const fetch = vi.fn<typeof globalThis.fetch>()
-      .mockResolvedValueOnce(authResponse()).mockResolvedValueOnce(
-        new Response(JSON.stringify({ message: 'sensitive context rejected' }), { status: 400 }));
+    const fetch = vi
+      .fn<typeof globalThis.fetch>()
+      .mockResolvedValueOnce(authResponse())
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ message: 'sensitive context rejected' }), { status: 400 })
+      );
     vi.stubGlobal('fetch', fetch);
-    await expect(createService().homeFeed({ locationContext: 'opaque', rails: [{ railId: 'wine' }] }))
-      .rejects.toMatchObject({ status: 400 });
+    await expect(
+      createService().homeFeed({ locationContext: 'opaque', rails: [{ railId: 'wine' }] })
+    ).rejects.toMatchObject({ status: 400 });
     expect(error).not.toHaveBeenCalled();
   });
 
   it('rejects context tokens beyond the Cloud contract bound', async () => {
     const fetch = vi.fn<typeof globalThis.fetch>();
     vi.stubGlobal('fetch', fetch);
-    await expect(createService().homeFeed({ locationContext: 'x'.repeat(257), rails: [{ railId: 'wine' }] }))
-      .rejects.toThrow('valid context');
+    await expect(
+      createService().homeFeed({ locationContext: 'x'.repeat(257), rails: [{ railId: 'wine' }] })
+    ).rejects.toThrow(
+      'Home feed locationContext must be a non-empty string of at most 256 characters'
+    );
     expect(fetch).not.toHaveBeenCalled();
   });
 
+  it.each([
+    { params: {}, message: 'Home feed requires between 1 and 16 rails' },
+    { params: { rails: [] }, message: 'Home feed requires between 1 and 16 rails' },
+    {
+      params: { rails: Array.from({ length: 17 }, (_, i) => ({ railId: String(i) })) },
+      message: 'Home feed requires between 1 and 16 rails',
+    },
+    {
+      params: { rails: [{ railId: 'a' }, { railId: 'a' }] },
+      message: 'Home feed rail IDs must be unique',
+    },
+    {
+      params: { rails: [{ railId: '' }] },
+      message: 'Home feed railId must be a non-empty string of at most 100 characters',
+    },
+    {
+      params: { rails: [{ railId: 'x'.repeat(101) }] },
+      message: 'Home feed railId must be a non-empty string of at most 100 characters',
+    },
+    {
+      params: { rails: [null] },
+      message: 'Home feed railId must be a non-empty string of at most 100 characters',
+    },
+    {
+      params: { rails: [{ railId: 1 }] },
+      message: 'Home feed railId must be a non-empty string of at most 100 characters',
+    },
+    {
+      params: {
+        rails: [
+          {
+            railId: 'a',
+            filters: Array.from({ length: 11 }, () => ({ key: 'categories', values: [] })),
+          },
+        ],
+      },
+      message: 'Home feed rail filters must be an array of at most 10 filters',
+    },
+    {
+      params: { rails: [{ railId: 'a', filters: {} }] },
+      message: 'Home feed rail filters must be an array of at most 10 filters',
+    },
+    {
+      params: {
+        rails: [{ railId: 'a' }],
+        retailers: ['111111111111111111111111', '222222222222222222222222'],
+      },
+      message: 'Home feed retailers must be an array containing at most one retailer ID',
+    },
+    {
+      params: { rails: [{ railId: 'a' }], retailers: '111111111111111111111111' },
+      message: 'Home feed retailers must be an array containing at most one retailer ID',
+    },
+  ])('rejects malformed home-feed inputs with $message before transport', async ({
+    params,
+    message,
+  }) => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    const error = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.stubGlobal('fetch', fetch);
+
+    await expect(
+      createService().homeFeed(params as unknown as ICatalogHomeFeedParams)
+    ).rejects.toThrow(message);
+
+    expect(fetch).not.toHaveBeenCalled();
+    expect(error).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    0,
+    25,
+    1.5,
+    NaN,
+    Infinity,
+    '12',
+    null,
+  ])('rejects invalid perPage %s before transport', async (perPage) => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    vi.stubGlobal('fetch', fetch);
+
+    await expect(
+      createService().homeFeed({ rails: [{ railId: 'a', perPage: perPage as number }] })
+    ).rejects.toThrow('Home feed rail perPage must be an integer between 1 and 24');
+
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    '',
+    'x'.repeat(257),
+    12,
+    null,
+  ])('reports malformed context separately from conflicting location inputs', async (locationContext) => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    vi.stubGlobal('fetch', fetch);
+
+    await expect(
+      createService().homeFeed({
+        locationContext: locationContext as string,
+        rails: [{ railId: 'a' }],
+      })
+    ).rejects.toThrow(
+      'Home feed locationContext must be a non-empty string of at most 256 characters'
+    );
+
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each([1, 24])('preserves valid rail and payload bounds with perPage %i', async (perPage) => {
+    const fetch = createFetch();
+    vi.stubGlobal('fetch', fetch);
+    const params: ICatalogHomeFeedParams = {
+      locationContext: 'x'.repeat(256),
+      retailers: ['111111111111111111111111'],
+      rails: Array.from({ length: 16 }, (_, i) => ({
+        railId: String(i).padEnd(100, 'x'),
+        perPage,
+        filters: Array.from({ length: 10 }, () => ({ key: 'categories', values: ['SPIRITS'] })),
+      })),
+    };
+
+    await createService().homeFeed(params);
+
+    expect(fetch).toHaveBeenNthCalledWith(
+      2,
+      'https://cloud.example/api/catalog/home-feed',
+      expect.objectContaining({ body: JSON.stringify(params) })
+    );
+  });
+
+  it('preserves empty retailer/filter arrays and omitted perPage', async () => {
+    const fetch = createFetch();
+    vi.stubGlobal('fetch', fetch);
+    const params = { rails: [{ railId: 'a', filters: [] }], retailers: [] };
+
+    await createService().homeFeed(params);
+
+    expect(fetch).toHaveBeenNthCalledWith(
+      2,
+      'https://cloud.example/api/catalog/home-feed',
+      expect.objectContaining({ body: JSON.stringify(params) })
+    );
+  });
 });

@@ -31,9 +31,9 @@ it('accepts an existing custom catalog implementation without home-feed methods'
 
 it('preserves full custom-client and factory assignability', () => {
   expectTypeOf<LegacyClient>().toExtend<ILiquidCommerceClient>();
-  expectTypeOf<
-    (...args: Parameters<typeof LiquidCommerce>) => Promise<LegacyClient>
-  >().toExtend<typeof LiquidCommerce>();
+  expectTypeOf<(...args: Parameters<typeof LiquidCommerce>) => Promise<LegacyClient>>().toExtend<
+    typeof LiquidCommerce
+  >();
 });
 
 it('still supplies both opt-in methods on the real SDK client', async () => {

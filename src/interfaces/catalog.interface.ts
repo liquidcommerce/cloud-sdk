@@ -159,6 +159,7 @@ export interface ICatalogHomeFeedParams {
   locationContext?: string;
   /** State and delivery area are resolved by Cloud from these coordinates. */
   loc?: { coords: { lat: number; long: number } };
+  /** Cloud accepts at most one retailer ID; omit or pass [] for no hard retailer scope. */
   retailers?: string[];
   fulfillmentType?: 'onDemand' | 'shipping';
   rails: ICatalogHomeFeedRailParams[];

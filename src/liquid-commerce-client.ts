@@ -221,7 +221,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *
    * @see {@link IApiResponseWithoutData} for the structure of the promise returned by both methods.
    */
-  public catalog: ICatalogMethod = {
+  public catalog = {
     availability: async (
       params: IAvailabilityParams
     ): Promise<IApiResponseWithoutData<IAvailabilityResponse>> => {
@@ -259,7 +259,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       await this.ensureAuthenticated();
       return this.catalogService.homeFeed(params);
     },
-  };
+  } satisfies ICatalogMethod;
 
   /**
    * Backs `catalog.iterateProducts`. Authentication is resolved on the first

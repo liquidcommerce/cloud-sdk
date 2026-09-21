@@ -6,6 +6,7 @@ import type {
   ICatalogAutocompleteParams,
   ICatalogHomeFeed,
   ICatalogHomeFeedParams,
+  ICatalogHomeFeedRailParams,
   ICatalogLocationContext,
   ICatalogLocationContextParams,
   ICatalogParams,
@@ -219,7 +220,12 @@ export class CatalogService {
       cursor = data?.nextCursor;
     } while (typeof cursor === 'string' && cursor.length > 0);
   }
-  /** Does not log location-bearing requests or upstream error objects. */
+
+  /**
+   * Issues an opaque location context for the authenticated partner.
+   * Rejects invalid coordinates before transport and forwards only coordinates.
+   * Does not log location-bearing requests or upstream error objects.
+   */
   public async createLocationContext(
     params: ICatalogLocationContextParams
   ): Promise<IApiResponseWithoutData<ICatalogLocationContext>> {
@@ -239,24 +245,62 @@ export class CatalogService {
     );
   }
 
+  /**
+   * Requests delivery-first rails composed by Cloud in one catalog call.
+   * Rejects invalid rail budgets and conflicting location inputs before transport.
+   * Does not log location-bearing requests or upstream error objects.
+   */
   public async homeFeed(
     params: ICatalogHomeFeedParams
   ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> {
     if (!Array.isArray(params?.rails) || params.rails.length < 1 || params.rails.length > 16) {
       throw new Error('Home feed requires between 1 and 16 rails');
     }
+    const railIds = new Set<string>();
+    for (const rail of params.rails) {
+      this.validateHomeFeedRail(rail);
+      if (railIds.has(rail.railId)) {
+        throw new Error('Home feed rail IDs must be unique');
+      }
+      railIds.add(rail.railId);
+    }
+    if (
+      params.retailers !== undefined &&
+      (!Array.isArray(params.retailers) || params.retailers.length > 1)
+    ) {
+      throw new Error('Home feed retailers must be an array containing at most one retailer ID');
+    }
     if (
       params.locationContext !== undefined &&
       (typeof params.locationContext !== 'string' ||
         !params.locationContext ||
-        params.locationContext.length > 256 ||
-        params.loc !== undefined)
+        params.locationContext.length > 256)
     ) {
-      throw new Error('Home feed requires a valid context or location, not both');
+      throw new Error(
+        'Home feed locationContext must be a non-empty string of at most 256 characters'
+      );
+    }
+    if (params.locationContext !== undefined && params.loc !== undefined) {
+      throw new Error('Home feed accepts either locationContext or loc, not both');
     }
     return this.client.post<IApiResponseWithoutData<ICatalogHomeFeed>>(
       `${this.servicePath}home-feed`,
       params
     );
+  }
+
+  private validateHomeFeedRail(rail: ICatalogHomeFeedRailParams): void {
+    if (typeof rail?.railId !== 'string' || !rail.railId || rail.railId.length > 100) {
+      throw new Error('Home feed railId must be a non-empty string of at most 100 characters');
+    }
+    if (
+      rail.perPage !== undefined &&
+      (!Number.isInteger(rail.perPage) || rail.perPage < 1 || rail.perPage > 24)
+    ) {
+      throw new Error('Home feed rail perPage must be an integer between 1 and 24');
+    }
+    if (rail.filters !== undefined && (!Array.isArray(rail.filters) || rail.filters.length > 10)) {
+      throw new Error('Home feed rail filters must be an array of at most 10 filters');
+    }
   }
 }
