@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.17.0...v1.18.0) (2026-09-22)
+
+
+### Features
+
+* **catalog:** add typed composition and location-context clients (MAR-233) ([#164](https://github.com/liquidcommerce/cloud-sdk/issues/164)) ([a44c100](https://github.com/liquidcommerce/cloud-sdk/commit/a44c100f93dffe5e3a5a21c065717ca4ac86db89))
+
 # [1.17.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.16.0...v1.17.0) (2026-09-10)
 
 
