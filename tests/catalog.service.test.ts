@@ -7,7 +7,7 @@ import {
   ENUM_ORDER_BY,
   ENUM_NAVIGATION_ORDER_DIRECTION_TYPE,
 } from '../src/enums';
-import type { ICatalogParams, ICatalogHomeFeedParams } from '../src/interfaces';
+import type { ICatalogParams, ICatalogComposeParams } from '../src/interfaces';
 import { CatalogService } from '../src/services/catalog.service';
 
 const createService = () =>
@@ -378,14 +378,14 @@ describe('CatalogService', () => {
     });
   });
 
-  it('posts a delivery-first home feed as one catalog request', async () => {
+  it('posts a delivery-first catalog composition as one catalog request', async () => {
     const fetch = createFetch();
     vi.stubGlobal('fetch', fetch);
-    const params: ICatalogHomeFeedParams = {
+    const params: ICatalogComposeParams = {
       loc: { coords: { lat: 40.7448, long: -73.9853 } },
-      rails: [
+      sections: [
         {
-          railId: 'bourbon',
+          sectionId: 'bourbon',
           search: 'bourbon',
           perPage: 12,
           orderBy: ENUM_ORDER_BY.PRICE,
@@ -394,11 +394,11 @@ describe('CatalogService', () => {
       ],
     };
 
-    await createService().homeFeed(params);
+    await createService().compose(params);
 
     expect(fetch).toHaveBeenNthCalledWith(
       2,
-      'https://cloud.example/api/catalog/home-feed',
+      'https://cloud.example/api/catalog/compose',
       expect.objectContaining({ method: 'POST', body: JSON.stringify(params) })
     );
   });
@@ -406,11 +406,11 @@ describe('CatalogService', () => {
   it('posts an opaque context without location coordinates', async () => {
     const fetch = createFetch();
     vi.stubGlobal('fetch', fetch);
-    const params = { locationContext: 'v1.test.opaque.signed', rails: [{ railId: 'wine' }] };
-    await createService().homeFeed(params);
+    const params = { locationContext: 'v1.test.opaque.signed', sections: [{ sectionId: 'wine' }] };
+    await createService().compose(params);
     expect(fetch).toHaveBeenNthCalledWith(
       2,
-      'https://cloud.example/api/catalog/home-feed',
+      'https://cloud.example/api/catalog/compose',
       expect.objectContaining({ body: JSON.stringify(params) })
     );
   });
@@ -419,12 +419,12 @@ describe('CatalogService', () => {
     const fetch = vi.fn<typeof globalThis.fetch>();
     vi.stubGlobal('fetch', fetch);
     await expect(
-      createService().homeFeed({
+      createService().compose({
         locationContext: 'opaque',
         loc: { coords: { lat: 40, long: -73 } },
-        rails: [{ railId: 'wine' }],
+        sections: [{ sectionId: 'wine' }],
       })
-    ).rejects.toThrow('Home feed accepts either locationContext or loc, not both');
+    ).rejects.toThrow('Catalog composition accepts either locationContext or loc, not both');
     expect(fetch).not.toHaveBeenCalled();
   });
 
@@ -474,7 +474,7 @@ describe('CatalogService', () => {
       );
     vi.stubGlobal('fetch', fetch);
     await expect(
-      createService().homeFeed({ locationContext: 'opaque', rails: [{ railId: 'wine' }] })
+      createService().compose({ locationContext: 'opaque', sections: [{ sectionId: 'wine' }] })
     ).rejects.toMatchObject({ status: 400 });
     expect(error).not.toHaveBeenCalled();
   });
@@ -483,67 +483,70 @@ describe('CatalogService', () => {
     const fetch = vi.fn<typeof globalThis.fetch>();
     vi.stubGlobal('fetch', fetch);
     await expect(
-      createService().homeFeed({ locationContext: 'x'.repeat(257), rails: [{ railId: 'wine' }] })
+      createService().compose({
+        locationContext: 'x'.repeat(257),
+        sections: [{ sectionId: 'wine' }],
+      })
     ).rejects.toThrow(
-      'Home feed locationContext must be a non-empty string of at most 256 characters'
+      'Catalog composition locationContext must be a non-empty string of at most 256 characters'
     );
     expect(fetch).not.toHaveBeenCalled();
   });
 
   it.each([
-    { params: {}, message: 'Home feed requires between 1 and 16 rails' },
-    { params: { rails: [] }, message: 'Home feed requires between 1 and 16 rails' },
+    { params: {}, message: 'Catalog composition requires between 1 and 16 sections' },
+    { params: { sections: [] }, message: 'Catalog composition requires between 1 and 16 sections' },
     {
-      params: { rails: Array.from({ length: 17 }, (_, i) => ({ railId: String(i) })) },
-      message: 'Home feed requires between 1 and 16 rails',
+      params: { sections: Array.from({ length: 17 }, (_, i) => ({ sectionId: String(i) })) },
+      message: 'Catalog composition requires between 1 and 16 sections',
     },
     {
-      params: { rails: [{ railId: 'a' }, { railId: 'a' }] },
-      message: 'Home feed rail IDs must be unique',
+      params: { sections: [{ sectionId: 'a' }, { sectionId: 'a' }] },
+      message: 'Catalog composition section IDs must be unique',
     },
     {
-      params: { rails: [{ railId: '' }] },
-      message: 'Home feed railId must be a non-empty string of at most 100 characters',
+      params: { sections: [{ sectionId: '' }] },
+      message: 'Catalog composition sectionId must be a non-empty string of at most 100 characters',
     },
     {
-      params: { rails: [{ railId: 'x'.repeat(101) }] },
-      message: 'Home feed railId must be a non-empty string of at most 100 characters',
+      params: { sections: [{ sectionId: 'x'.repeat(101) }] },
+      message: 'Catalog composition sectionId must be a non-empty string of at most 100 characters',
     },
     {
-      params: { rails: [null] },
-      message: 'Home feed railId must be a non-empty string of at most 100 characters',
+      params: { sections: [null] },
+      message: 'Catalog composition sectionId must be a non-empty string of at most 100 characters',
     },
     {
-      params: { rails: [{ railId: 1 }] },
-      message: 'Home feed railId must be a non-empty string of at most 100 characters',
+      params: { sections: [{ sectionId: 1 }] },
+      message: 'Catalog composition sectionId must be a non-empty string of at most 100 characters',
     },
     {
       params: {
-        rails: [
+        sections: [
           {
-            railId: 'a',
+            sectionId: 'a',
             filters: Array.from({ length: 11 }, () => ({ key: 'categories', values: [] })),
           },
         ],
       },
-      message: 'Home feed rail filters must be an array of at most 10 filters',
+      message: 'Catalog composition section filters must be an array of at most 10 filters',
     },
     {
-      params: { rails: [{ railId: 'a', filters: {} }] },
-      message: 'Home feed rail filters must be an array of at most 10 filters',
+      params: { sections: [{ sectionId: 'a', filters: {} }] },
+      message: 'Catalog composition section filters must be an array of at most 10 filters',
     },
     {
       params: {
-        rails: [{ railId: 'a' }],
+        sections: [{ sectionId: 'a' }],
         retailers: ['111111111111111111111111', '222222222222222222222222'],
       },
-      message: 'Home feed retailers must be an array containing at most one retailer ID',
+      message: 'Catalog composition retailers must be an array containing at most one retailer ID',
     },
     {
-      params: { rails: [{ railId: 'a' }], retailers: '111111111111111111111111' },
-      message: 'Home feed retailers must be an array containing at most one retailer ID',
+      params: { sections: [{ sectionId: 'a' }], retailers: '111111111111111111111111' },
+      message: 'Catalog composition retailers must be an array containing at most one retailer ID',
     },
-  ])('rejects malformed home-feed inputs with $message before transport', async ({
+  ])('rejects malformed catalog composition inputs with $message before transport', async ({
     params,
     message,
   }) => {
@@ -552,7 +555,7 @@ describe('CatalogService', () => {
     vi.stubGlobal('fetch', fetch);
 
     await expect(
-      createService().homeFeed(params as unknown as ICatalogHomeFeedParams)
+      createService().compose(params as unknown as ICatalogComposeParams)
     ).rejects.toThrow(message);
 
     expect(fetch).not.toHaveBeenCalled();
@@ -572,8 +575,8 @@ describe('CatalogService', () => {
     vi.stubGlobal('fetch', fetch);
 
     await expect(
-      createService().homeFeed({ rails: [{ railId: 'a', perPage: perPage as number }] })
-    ).rejects.toThrow('Home feed rail perPage must be an integer between 1 and 24');
+      createService().compose({ sections: [{ sectionId: 'a', perPage: perPage as number }] })
+    ).rejects.toThrow('Catalog composition section perPage must be an integer between 1 and 24');
 
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -588,35 +591,37 @@ describe('CatalogService', () => {
     vi.stubGlobal('fetch', fetch);
 
     await expect(
-      createService().homeFeed({
+      createService().compose({
         locationContext: locationContext as string,
-        rails: [{ railId: 'a' }],
+        sections: [{ sectionId: 'a' }],
       })
     ).rejects.toThrow(
-      'Home feed locationContext must be a non-empty string of at most 256 characters'
+      'Catalog composition locationContext must be a non-empty string of at most 256 characters'
     );
 
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it.each([1, 24])('preserves valid rail and payload bounds with perPage %i', async (perPage) => {
+  it.each([
+    1, 24,
+  ])('preserves valid section and payload bounds with perPage %i', async (perPage) => {
     const fetch = createFetch();
     vi.stubGlobal('fetch', fetch);
-    const params: ICatalogHomeFeedParams = {
+    const params: ICatalogComposeParams = {
       locationContext: 'x'.repeat(256),
       retailers: ['111111111111111111111111'],
-      rails: Array.from({ length: 16 }, (_, i) => ({
-        railId: String(i).padEnd(100, 'x'),
+      sections: Array.from({ length: 16 }, (_, i) => ({
+        sectionId: String(i).padEnd(100, 'x'),
         perPage,
         filters: Array.from({ length: 10 }, () => ({ key: 'categories', values: ['SPIRITS'] })),
       })),
     };
 
-    await createService().homeFeed(params);
+    await createService().compose(params);
 
     expect(fetch).toHaveBeenNthCalledWith(
       2,
-      'https://cloud.example/api/catalog/home-feed',
+      'https://cloud.example/api/catalog/compose',
       expect.objectContaining({ body: JSON.stringify(params) })
     );
   });
@@ -624,13 +629,13 @@ describe('CatalogService', () => {
   it('preserves empty retailer/filter arrays and omitted perPage', async () => {
     const fetch = createFetch();
     vi.stubGlobal('fetch', fetch);
-    const params = { rails: [{ railId: 'a', filters: [] }], retailers: [] };
+    const params = { sections: [{ sectionId: 'a', filters: [] }], retailers: [] };
 
-    await createService().homeFeed(params);
+    await createService().compose(params);
 
     expect(fetch).toHaveBeenNthCalledWith(
       2,
-      'https://cloud.example/api/catalog/home-feed',
+      'https://cloud.example/api/catalog/compose',
       expect.objectContaining({ body: JSON.stringify(params) })
     );
   });

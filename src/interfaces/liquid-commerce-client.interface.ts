@@ -16,8 +16,8 @@ import type {
   IAvailabilityResponse,
   ICatalog,
   ICatalogAutocompleteParams,
-  ICatalogHomeFeed,
-  ICatalogHomeFeedParams,
+  ICatalogComposeParams,
+  ICatalogComposeResult,
   ICatalogLocationContext,
   ICatalogLocationContextParams,
   ICatalogParams,
@@ -399,7 +399,9 @@ export interface ICatalogMethod {
     params: ICatalogLocationContextParams
   ) => Promise<IApiResponseWithoutData<ICatalogLocationContext>>;
   /** Optional for existing custom clients; check this capability before calling. */
-  homeFeed?: (params: ICatalogHomeFeedParams) => Promise<IApiResponseWithoutData<ICatalogHomeFeed>>;
+  compose?: (
+    params: ICatalogComposeParams
+  ) => Promise<IApiResponseWithoutData<ICatalogComposeResult>>;
 }
 
 /**

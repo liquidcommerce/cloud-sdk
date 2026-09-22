@@ -144,8 +144,8 @@ export interface ICatalogParams extends ILocBase {
   >;
 }
 
-export interface ICatalogHomeFeedRailParams {
-  railId: string;
+export interface ICatalogComposeSectionParams {
+  sectionId: string;
   source?: 'query' | 'regionalPopularity';
   search?: string;
   perPage?: number;
@@ -154,7 +154,7 @@ export interface ICatalogHomeFeedRailParams {
   filters?: ICatalogParams['filters'];
 }
 
-export interface ICatalogHomeFeedParams {
+export interface ICatalogComposeParams {
   /** Opaque Cloud-issued context; mutually exclusive with loc. */
   locationContext?: string;
   /** State and delivery area are resolved by Cloud from these coordinates. */
@@ -162,13 +162,13 @@ export interface ICatalogHomeFeedParams {
   /** Cloud accepts at most one retailer ID; omit or pass [] for no hard retailer scope. */
   retailers?: string[];
   fulfillmentType?: 'onDemand' | 'shipping';
-  rails: ICatalogHomeFeedRailParams[];
+  sections: ICatalogComposeSectionParams[];
 }
 
-export interface ICatalogHomeFeedRail {
-  railId: string;
+export interface ICatalogComposeSectionResult {
+  sectionId: string;
   status: 'ok' | 'partial' | 'exhausted' | 'error' | 'unavailable';
-  products: IHomeFeedCardProduct[];
+  products: ICatalogComposeCardProduct[];
   total: number;
   requestedCount: number;
   examinedCandidates: number;
@@ -198,7 +198,7 @@ export interface IRegionalPopularitySelection {
   fallbackReason?: 'no_state' | 'state_not_qualified';
 }
 
-export interface IHomeFeedCardProduct
+export interface ICatalogComposeCardProduct
   extends Pick<IProduct, 'id' | 'name' | 'brand' | 'images' | 'priceInfo'> {
   popularity?: IRegionalPopularityCandidate;
   fulfillmentKind: 'onDemand' | 'shipping';
@@ -214,7 +214,7 @@ export interface IHomeFeedCardProduct
   >;
 }
 
-export interface IHomeFeedRetailerSummary {
+export interface ICatalogComposeRetailerSummary {
   id: string;
   name: string;
   fulfillments: Array<{
@@ -225,9 +225,9 @@ export interface IHomeFeedRetailerSummary {
   }>;
 }
 
-export interface ICatalogHomeFeed {
-  rails: ICatalogHomeFeedRail[];
-  retailers: IHomeFeedRetailerSummary[];
+export interface ICatalogComposeResult {
+  sections: ICatalogComposeSectionResult[];
+  retailers: ICatalogComposeRetailerSummary[];
 }
 
 /**

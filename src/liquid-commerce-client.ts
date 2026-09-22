@@ -16,8 +16,8 @@ import type {
   ICartUpdateParams,
   ICatalog,
   ICatalogAutocompleteParams,
-  ICatalogHomeFeed,
-  ICatalogHomeFeedParams,
+  ICatalogComposeParams,
+  ICatalogComposeResult,
   ICatalogLocationContext,
   ICatalogLocationContextParams,
   ICatalogMethod,
@@ -253,11 +253,11 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       await this.ensureAuthenticated();
       return this.catalogService.createLocationContext(params);
     },
-    homeFeed: async (
-      params: ICatalogHomeFeedParams
-    ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> => {
+    compose: async (
+      params: ICatalogComposeParams
+    ): Promise<IApiResponseWithoutData<ICatalogComposeResult>> => {
       await this.ensureAuthenticated();
-      return this.catalogService.homeFeed(params);
+      return this.catalogService.compose(params);
     },
   } satisfies ICatalogMethod;
 

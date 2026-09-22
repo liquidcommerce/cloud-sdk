@@ -4,9 +4,9 @@ import type {
   IAvailabilityResponse,
   ICatalog,
   ICatalogAutocompleteParams,
-  ICatalogHomeFeed,
-  ICatalogHomeFeedParams,
-  ICatalogHomeFeedRailParams,
+  ICatalogComposeParams,
+  ICatalogComposeResult,
+  ICatalogComposeSectionParams,
   ICatalogLocationContext,
   ICatalogLocationContextParams,
   ICatalogParams,
@@ -246,29 +246,35 @@ export class CatalogService {
   }
 
   /**
-   * Requests delivery-first rails composed by Cloud in one catalog call.
-   * Rejects invalid rail budgets and conflicting location inputs before transport.
+   * Requests delivery-first sections composed by Cloud in one catalog call.
+   * Rejects invalid section budgets and conflicting location inputs before transport.
    * Does not log location-bearing requests or upstream error objects.
    */
-  public async homeFeed(
-    params: ICatalogHomeFeedParams
-  ): Promise<IApiResponseWithoutData<ICatalogHomeFeed>> {
-    if (!Array.isArray(params?.rails) || params.rails.length < 1 || params.rails.length > 16) {
-      throw new Error('Home feed requires between 1 and 16 rails');
+  public async compose(
+    params: ICatalogComposeParams
+  ): Promise<IApiResponseWithoutData<ICatalogComposeResult>> {
+    if (
+      !Array.isArray(params?.sections) ||
+      params.sections.length < 1 ||
+      params.sections.length > 16
+    ) {
+      throw new Error('Catalog composition requires between 1 and 16 sections');
     }
-    const railIds = new Set<string>();
-    for (const rail of params.rails) {
-      this.validateHomeFeedRail(rail);
-      if (railIds.has(rail.railId)) {
-        throw new Error('Home feed rail IDs must be unique');
+    const sectionIds = new Set<string>();
+    for (const section of params.sections) {
+      this.validateComposeSection(section);
+      if (sectionIds.has(section.sectionId)) {
+        throw new Error('Catalog composition section IDs must be unique');
       }
-      railIds.add(rail.railId);
+      sectionIds.add(section.sectionId);
     }
     if (
       params.retailers !== undefined &&
       (!Array.isArray(params.retailers) || params.retailers.length > 1)
     ) {
-      throw new Error('Home feed retailers must be an array containing at most one retailer ID');
+      throw new Error(
+        'Catalog composition retailers must be an array containing at most one retailer ID'
+      );
     }
     if (
       params.locationContext !== undefined &&
@@ -277,30 +283,39 @@ export class CatalogService {
         params.locationContext.length > 256)
     ) {
       throw new Error(
-        'Home feed locationContext must be a non-empty string of at most 256 characters'
+        'Catalog composition locationContext must be a non-empty string of at most 256 characters'
       );
     }
     if (params.locationContext !== undefined && params.loc !== undefined) {
-      throw new Error('Home feed accepts either locationContext or loc, not both');
+      throw new Error('Catalog composition accepts either locationContext or loc, not both');
     }
-    return this.client.post<IApiResponseWithoutData<ICatalogHomeFeed>>(
-      `${this.servicePath}home-feed`,
+    return this.client.post<IApiResponseWithoutData<ICatalogComposeResult>>(
+      `${this.servicePath}compose`,
       params
     );
   }
 
-  private validateHomeFeedRail(rail: ICatalogHomeFeedRailParams): void {
-    if (typeof rail?.railId !== 'string' || !rail.railId || rail.railId.length > 100) {
-      throw new Error('Home feed railId must be a non-empty string of at most 100 characters');
+  private validateComposeSection(section: ICatalogComposeSectionParams): void {
+    if (
+      typeof section?.sectionId !== 'string' ||
+      !section.sectionId ||
+      section.sectionId.length > 100
+    ) {
+      throw new Error(
+        'Catalog composition sectionId must be a non-empty string of at most 100 characters'
+      );
     }
     if (
-      rail.perPage !== undefined &&
-      (!Number.isInteger(rail.perPage) || rail.perPage < 1 || rail.perPage > 24)
+      section.perPage !== undefined &&
+      (!Number.isInteger(section.perPage) || section.perPage < 1 || section.perPage > 24)
     ) {
-      throw new Error('Home feed rail perPage must be an integer between 1 and 24');
+      throw new Error('Catalog composition section perPage must be an integer between 1 and 24');
     }
-    if (rail.filters !== undefined && (!Array.isArray(rail.filters) || rail.filters.length > 10)) {
-      throw new Error('Home feed rail filters must be an array of at most 10 filters');
+    if (
+      section.filters !== undefined &&
+      (!Array.isArray(section.filters) || section.filters.length > 10)
+    ) {
+      throw new Error('Catalog composition section filters must be an array of at most 10 filters');
     }
   }
 }
