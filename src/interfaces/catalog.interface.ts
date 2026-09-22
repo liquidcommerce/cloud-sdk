@@ -144,6 +144,92 @@ export interface ICatalogParams extends ILocBase {
   >;
 }
 
+export interface ICatalogComposeSectionParams {
+  sectionId: string;
+  source?: 'query' | 'regionalPopularity';
+  search?: string;
+  perPage?: number;
+  orderBy?: ENUM_ORDER_BY;
+  orderDirection?: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE;
+  filters?: ICatalogParams['filters'];
+}
+
+export interface ICatalogComposeParams {
+  /** Opaque Cloud-issued context; mutually exclusive with loc. */
+  locationContext?: string;
+  /** State and delivery area are resolved by Cloud from these coordinates. */
+  loc?: { coords: { lat: number; long: number } };
+  /** Cloud accepts at most one retailer ID; omit or pass [] for no hard retailer scope. */
+  retailers?: string[];
+  fulfillmentType?: 'onDemand' | 'shipping';
+  sections: ICatalogComposeSectionParams[];
+}
+
+export interface ICatalogComposeSectionResult {
+  sectionId: string;
+  status: 'ok' | 'partial' | 'exhausted' | 'error' | 'unavailable';
+  products: ICatalogComposeCardProduct[];
+  total: number;
+  requestedCount: number;
+  examinedCandidates: number;
+  selection?: IRegionalPopularitySelection;
+  reason?: string;
+}
+
+export interface IRegionalPopularityCandidate {
+  gtin14: string;
+  catalogVariantId: string;
+  catalogProductId: string;
+  rank: number;
+}
+
+export interface IRegionalPopularitySelection {
+  source: 'regionalPopularity';
+  status: 'fresh' | 'stale';
+  snapshotId: string;
+  policyVersion: 'v1';
+  generatedAtMs: number;
+  sourceWatermarkMs: number;
+  windowStart: string;
+  windowEndExclusive: string;
+  regionType: 'state' | 'national';
+  regionKey: string;
+  fallback: boolean;
+  fallbackReason?: 'no_state' | 'state_not_qualified';
+}
+
+export interface ICatalogComposeCardProduct
+  extends Pick<IProduct, 'id' | 'name' | 'brand' | 'images' | 'priceInfo'> {
+  popularity?: IRegionalPopularityCandidate;
+  fulfillmentKind: 'onDemand' | 'shipping';
+  sizes: Array<
+    Pick<IProductSize, 'id' | 'upc' | 'size' | 'image' | 'price' | 'pack' | 'packDesc'> & {
+      variants: Array<
+        Pick<
+          IProductVariant,
+          'partNumber' | 'retailerId' | 'price' | 'salePrice' | 'stock' | 'fulfillmentTypes'
+        >
+      >;
+    }
+  >;
+}
+
+export interface ICatalogComposeRetailerSummary {
+  id: string;
+  name: string;
+  fulfillments: Array<{
+    id: string;
+    type: string;
+    fees: unknown;
+    expectation: unknown;
+  }>;
+}
+
+export interface ICatalogComposeResult {
+  sections: ICatalogComposeSectionResult[];
+  retailers: ICatalogComposeRetailerSummary[];
+}
+
 /**
  * ICatalog interface represents a structured collection of retailers, products, and navigation schema.
  */
@@ -724,4 +810,14 @@ export interface ICatalogProductsPage {
   nextCursor?: string;
 
   counts: ICatalogProductPageCounts;
+}
+
+/** Issue an opaque context through the authenticated partner's Cloud location semantics. */
+export interface ICatalogLocationContextParams {
+  loc: { coords: { lat: number; long: number } };
+}
+
+export interface ICatalogLocationContext {
+  locationContext: string;
+  expiresAt: string;
 }

@@ -4,6 +4,11 @@ import type {
   IAvailabilityResponse,
   ICatalog,
   ICatalogAutocompleteParams,
+  ICatalogComposeParams,
+  ICatalogComposeResult,
+  ICatalogComposeSectionParams,
+  ICatalogLocationContext,
+  ICatalogLocationContextParams,
   ICatalogParams,
   ICatalogProductItem,
   ICatalogProductsPage,
@@ -214,5 +219,103 @@ export class CatalogService {
       // query, so continuing on it would re-request the first page forever.
       cursor = data?.nextCursor;
     } while (typeof cursor === 'string' && cursor.length > 0);
+  }
+
+  /**
+   * Issues an opaque location context for the authenticated partner.
+   * Rejects invalid coordinates before transport and forwards only coordinates.
+   * Does not log location-bearing requests or upstream error objects.
+   */
+  public async createLocationContext(
+    params: ICatalogLocationContextParams
+  ): Promise<IApiResponseWithoutData<ICatalogLocationContext>> {
+    const coords = params?.loc?.coords;
+    if (
+      !coords ||
+      !Number.isFinite(coords.lat) ||
+      !Number.isFinite(coords.long) ||
+      Math.abs(coords.lat) > 90 ||
+      Math.abs(coords.long) > 180
+    ) {
+      throw new Error('Location context requires valid coordinates');
+    }
+    return this.client.post<IApiResponseWithoutData<ICatalogLocationContext>>(
+      `${this.servicePath}location-context`,
+      { loc: { coords: { lat: coords.lat, long: coords.long } } }
+    );
+  }
+
+  /**
+   * Requests delivery-first sections composed by Cloud in one catalog call.
+   * Rejects invalid section budgets and conflicting location inputs before transport.
+   * Does not log location-bearing requests or upstream error objects.
+   */
+  public async compose(
+    params: ICatalogComposeParams
+  ): Promise<IApiResponseWithoutData<ICatalogComposeResult>> {
+    if (
+      !Array.isArray(params?.sections) ||
+      params.sections.length < 1 ||
+      params.sections.length > 16
+    ) {
+      throw new Error('Catalog composition requires between 1 and 16 sections');
+    }
+    const sectionIds = new Set<string>();
+    for (const section of params.sections) {
+      this.validateComposeSection(section);
+      if (sectionIds.has(section.sectionId)) {
+        throw new Error('Catalog composition section IDs must be unique');
+      }
+      sectionIds.add(section.sectionId);
+    }
+    if (
+      params.retailers !== undefined &&
+      (!Array.isArray(params.retailers) || params.retailers.length > 1)
+    ) {
+      throw new Error(
+        'Catalog composition retailers must be an array containing at most one retailer ID'
+      );
+    }
+    if (
+      params.locationContext !== undefined &&
+      (typeof params.locationContext !== 'string' ||
+        !params.locationContext ||
+        params.locationContext.length > 256)
+    ) {
+      throw new Error(
+        'Catalog composition locationContext must be a non-empty string of at most 256 characters'
+      );
+    }
+    if (params.locationContext !== undefined && params.loc !== undefined) {
+      throw new Error('Catalog composition accepts either locationContext or loc, not both');
+    }
+    return this.client.post<IApiResponseWithoutData<ICatalogComposeResult>>(
+      `${this.servicePath}compose`,
+      params
+    );
+  }
+
+  private validateComposeSection(section: ICatalogComposeSectionParams): void {
+    if (
+      typeof section?.sectionId !== 'string' ||
+      !section.sectionId ||
+      section.sectionId.length > 100
+    ) {
+      throw new Error(
+        'Catalog composition sectionId must be a non-empty string of at most 100 characters'
+      );
+    }
+    if (
+      section.perPage !== undefined &&
+      (!Number.isInteger(section.perPage) || section.perPage < 1 || section.perPage > 24)
+    ) {
+      throw new Error('Catalog composition section perPage must be an integer between 1 and 24');
+    }
+    if (
+      section.filters !== undefined &&
+      (!Array.isArray(section.filters) || section.filters.length > 10)
+    ) {
+      throw new Error('Catalog composition section filters must be an array of at most 10 filters');
+    }
   }
 }

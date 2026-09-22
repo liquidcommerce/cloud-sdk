@@ -16,6 +16,10 @@ import type {
   IAvailabilityResponse,
   ICatalog,
   ICatalogAutocompleteParams,
+  ICatalogComposeParams,
+  ICatalogComposeResult,
+  ICatalogLocationContext,
+  ICatalogLocationContextParams,
   ICatalogParams,
   ICatalogProductItem,
   ICatalogProductsPage,
@@ -390,6 +394,14 @@ export interface ICatalogMethod {
   iterateProducts: (
     params?: Omit<ICatalogProductsParams, 'cursor'>
   ) => AsyncGenerator<ICatalogProductItem>;
+  /** Optional for existing custom clients; check this capability before calling. */
+  createLocationContext?: (
+    params: ICatalogLocationContextParams
+  ) => Promise<IApiResponseWithoutData<ICatalogLocationContext>>;
+  /** Optional for existing custom clients; check this capability before calling. */
+  compose?: (
+    params: ICatalogComposeParams
+  ) => Promise<IApiResponseWithoutData<ICatalogComposeResult>>;
 }
 
 /**

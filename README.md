@@ -248,6 +248,30 @@ do {
 > resolve are dropped rather than published as dead URLs, so the total can fall
 > short of your assignment count — `counts` reports how many and why.
 
+#### Optional catalog composition capabilities
+
+The SDK client provides `catalog.compose()` and `catalog.createLocationContext()`.
+`compose()` assembles product sections for homepages, category pages, or other
+discovery experiences through `POST /catalog/compose`. Cloud shares location
+resolution, availability, and offer selection across all sections in the request.
+These members are optional in `ICatalogMethod` so existing custom catalog/client
+implementations and typed mocks remain assignable without adding methods. Callers
+using these capabilities must check for them first:
+
+```typescript
+if (typeof client.catalog.compose !== 'function') {
+  throw new Error('This client does not support catalog composition');
+}
+const composition = await client.catalog.compose({
+  sections: [{ sectionId: 'whiskey', search: 'whiskey', perPage: 12 }],
+});
+```
+
+Check `createLocationContext` the same way before calling it. Both methods require
+the corresponding Cloud endpoints to be deployed. Existing catalog calls and the
+`LiquidCommerce()` factory signature are unchanged; upgrading alone does not enable
+catalog composition.
+
 ### Cart
 
 Shopping cart management:
