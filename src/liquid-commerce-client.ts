@@ -104,7 +104,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       apiKey,
       baseURL,
       env: config.env,
-      demoSessionToken: config.demoSessionToken,
+      accelpayDemo: config.accelpayDemo,
     });
 
     this.addressService = this.singletonManager.getAddressService(this.authenticatedClient);
@@ -139,7 +139,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
   public async init(): Promise<void> {
     try {
       await this.authenticatedClient.authenticate();
-      if (this.config.demoSessionToken) {
+      if (this.config.accelpayDemo) {
         const result = await this.authenticatedClient.get<{
           data?: { engine?: string; sessionId?: string };
         }>('/cart/demo-session');
@@ -166,7 +166,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
   private async ensureAuthenticated(): Promise<void> {
     if (this.authenticatedClient.isTokenExpired()) {
       await this.authenticatedClient.authenticate();
-      if (this.config.demoSessionToken) {
+      if (this.config.accelpayDemo) {
         const result = await this.authenticatedClient.get<{
           data?: { engine?: string; sessionId?: string };
         }>('/cart/demo-session');

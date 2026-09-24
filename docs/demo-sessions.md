@@ -1,9 +1,18 @@
-# Authorized Cloud SDK demo sessions
+# Authorized AccelPay demo
 
-Pass an optional `demoSessionToken` to `LiquidCommerce(apiKey, config)`. Obtain it from the authenticated Platform Services demo-session endpoint; do not manufacture a boolean override. The SDK sends it on authentication and every Cloud request. Initialization verifies Cloud readiness at `GET /api/cart/demo-session`, including the partner AccelPay brand mapping. Failed validation rejects initialization.
+```ts
+const client = await LiquidCommerce(apiKey, {
+  env: LIQUID_COMMERCE_ENV.STAGE,
+  googlePlacesApiKey: "...",
+  accelpayDemo: {
+    partnerAppToken: existingPartnerAppToken,
+    cartScopeId: crypto.randomUUID(),
+  },
+});
+```
 
-Clients and downstream service caches are isolated by the complete token. Renew with Platform Services before expiry, retaining session identity, and construct a client with the renewed token. Never retry an expired demo request without its token. New demo sessions require new carts and payment sessions.
+Omit accelpayDemo for ordinary partner behavior. The demo option sends the existing app credential and cart scope on authentication, refresh and every SDK request. Cloud validates current app authorization with Platform Services. Client initialization checks Cloud readiness and the existing AccelPay mapping. Errors never retry without the override.
 
-Omitting the option preserves normal configuration behavior. Deploy Cloud support before using this option. This selects the real checkout engine and does not simulate orders or payments.
+Use a fresh cart scope when switching modes and clear prior cart/shopper/payment state. Recreate the client with the latest app credential after normal app authentication refresh, keeping cartScopeId for the same cart. Cache identity includes both credential and scope. The SDK does not issue or renew a separate demo credential.
 
-The prepare script builds distributable files when installing this SDK from a pinned Git commit, allowing coordinated consumers to validate an unreleased SDK. Prefer the corresponding published version once released.
+Deploy backend support first. The partner app can pin this exact Git commit before npm publication. Git installs run prepare to build bundles using the canonical public environment URLs, with explicit ENV_* build values retaining precedence.

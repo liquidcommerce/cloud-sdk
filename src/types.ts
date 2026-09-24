@@ -59,8 +59,8 @@ export type IApiResponseWithoutData<T> = IApiResponseBase & {
 };
 
 export interface ILiquidCommerceConfig {
-  /** Signed, partner-scoped override issued to an authorized Cloud SDK demo operator. */
-  demoSessionToken?: string;
+  /** Enable the demo using an existing partner app token and a fresh UUID v4 cart scope. */
+  accelpayDemo?: { partnerAppToken: string; cartScopeId: string };
 
   googlePlacesApiKey: string;
 
