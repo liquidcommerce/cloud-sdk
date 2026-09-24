@@ -144,6 +144,7 @@ export class SingletonManager {
    * @return The authenticated service object.
    */
   public getAuthenticatedClient(config: {
+    demoSessionToken?: string;
     apiKey: string;
     baseURL: string;
     env: LIQUID_COMMERCE_ENV;

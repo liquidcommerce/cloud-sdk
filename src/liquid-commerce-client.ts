@@ -104,6 +104,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       apiKey,
       baseURL,
       env: config.env,
+      demoSessionToken: config.demoSessionToken,
     });
 
     this.addressService = this.singletonManager.getAddressService(this.authenticatedClient);
@@ -138,9 +139,19 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
   public async init(): Promise<void> {
     try {
       await this.authenticatedClient.authenticate();
+      if (this.config.demoSessionToken) {
+        const result = await this.authenticatedClient.get<{
+          data?: { engine?: string; sessionId?: string };
+        }>('/cart/demo-session');
+        if (result.data?.engine !== 'accelpay' || !result.data.sessionId) {
+          throw new Error('Cloud did not confirm the AccelPay demo session.');
+        }
+      }
     } catch (error) {
       console.error('Failed to initialize LiquidCommerceClient:', error);
-      throw new Error('Authentication failed during initialization');
+      throw new Error(
+        error instanceof Error ? error.message : 'Authentication failed during initialization'
+      );
     }
   }
 
@@ -155,6 +166,14 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
   private async ensureAuthenticated(): Promise<void> {
     if (this.authenticatedClient.isTokenExpired()) {
       await this.authenticatedClient.authenticate();
+      if (this.config.demoSessionToken) {
+        const result = await this.authenticatedClient.get<{
+          data?: { engine?: string; sessionId?: string };
+        }>('/cart/demo-session');
+        if (result.data?.engine !== 'accelpay' || !result.data.sessionId) {
+          throw new Error('Cloud did not confirm the AccelPay demo session.');
+        }
+      }
     }
   }
 
@@ -169,7 +188,9 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       return await this.authenticatedClient.getAuth();
     } catch (error) {
       console.error('Failed to fetch auth:', error);
-      throw new Error('Authentication failed during initialization');
+      throw new Error(
+        error instanceof Error ? error.message : 'Authentication failed during initialization'
+      );
     }
   }
 

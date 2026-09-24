@@ -48,7 +48,8 @@
   "fl": "pnpm check && pnpm tsc --noEmit",
   "clean:all": "rm -rf node_modules dist umd && pnpm install && pnpm build",
   "docs": "typedoc --out docs src",
-  "prepublishOnly": "pnpm run validate && pnpm run build"
+  "prepublishOnly": "pnpm run validate && pnpm run build",
+  "prepare": "pnpm run build"
  },
  "keywords": [
   "liquidcommerce",

@@ -59,6 +59,9 @@ export type IApiResponseWithoutData<T> = IApiResponseBase & {
 };
 
 export interface ILiquidCommerceConfig {
+  /** Signed, partner-scoped override issued to an authorized Cloud SDK demo operator. */
+  demoSessionToken?: string;
+
   googlePlacesApiKey: string;
 
   env: LIQUID_COMMERCE_ENV;
