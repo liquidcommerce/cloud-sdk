@@ -347,6 +347,25 @@ export interface IAttributesPersonalization {
   availableFrom: Date;
 
   availableTo: Date;
+
+  isRequired?: boolean;
+
+  /** Ordered; pickers preselect the first font. Absent or empty means no font choice. */
+  fonts?: IPartnerEngravingFont[];
+}
+
+/**
+ * One font as a partner attached it to a size. `maxLines`/`maxCharsPerLine` may only tighten
+ * the size's own limits; `sampleImageUrl` is the partner's mock-up of this bottle in this font.
+ */
+export interface IPartnerEngravingFont {
+  key: string;
+
+  maxLines?: number;
+
+  maxCharsPerLine?: number;
+
+  sampleImageUrl?: string;
 }
 
 /**
@@ -417,7 +436,44 @@ export interface IProductVariant {
 }
 
 /**
+ * An engraving font a shopper may pick for a size.
+ *
+ * `woff2Url` is the file to load in the browser (CSS Font Loading API), `previewImageUrl`
+ * the selector tile. `maxLines`/`maxCharsPerLine` are the effective limits for text in this
+ * font on this size (never more than `IProductSizeEngraving` allows), so apply them to the
+ * input once a font is chosen; `allowedCharsPattern` and `supportsAllCaps` describe what the
+ * font can draw.
+ */
+export interface IEngravingFontOption {
+  key: string;
+
+  name: string;
+
+  woff2Url: string;
+
+  ttfUrl?: string;
+
+  previewImageUrl: string;
+
+  sampleImageUrl?: string;
+
+  maxLines: number;
+
+  maxCharsPerLine: number;
+
+  allowedCharsPattern?: string;
+
+  supportsAllCaps?: boolean;
+}
+
+/**
  * Represents the engraving details for a product size.
+ *
+ * `fonts` is ordered: preselect the first one in a picker and send the shopper's choice as
+ * `personalization.fontKey`. Filter it by the chosen fulfillment's `engravingFontKeys` first.
+ * Limits to apply are the chosen font's, never looser than the size's. Cloud applies a font only when a key
+ * is sent; lines alone are engraved without a font. An empty list means no font choice;
+ * engraving then behaves as it always has.
  */
 export interface IProductSizeEngraving {
   status: boolean;
@@ -433,6 +489,8 @@ export interface IProductSizeEngraving {
   location: string;
 
   isRequired: boolean;
+
+  fonts: IEngravingFontOption[];
 }
 
 /**

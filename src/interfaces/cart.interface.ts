@@ -1,6 +1,6 @@
 import type { CART_EVENT_ENUM } from '../enums';
 import type { ILoc, ILocBase } from './address.interface';
-import type { IProduct, IProductPresale } from './catalog.interface';
+import type { IEngravingFontOption, IProduct, IProductPresale } from './catalog.interface';
 import type { IRetailer } from './retailer.interface';
 
 /**
@@ -31,6 +31,42 @@ export interface ICartItemEngraving {
   lines: string[];
 
   isRequired: boolean;
+
+  /** The font applied to this engraving; absent or null when the retailer offers none. */
+  font?: ICartItemEngravingFont | null;
+
+  fonts?: IEngravingFontOption[];
+}
+
+/**
+ * The engraving font applied to a cart item.
+ */
+export interface ICartItemEngravingFont {
+  key: string;
+
+  name: string;
+}
+
+/**
+ * Personalization sent with a cart item; `type: 'engraving'` with `lines` is the engraving
+ * form, `fontKey` picks one of the size's `engraving.fonts`. Omit `fontKey` to get the default.
+ */
+export interface ICartItemPersonalization {
+  type: string;
+
+  lines?: string[];
+
+  instructions?: string;
+
+  width?: number;
+
+  height?: number;
+
+  imageUrl?: string;
+
+  fontKey?: string;
+
+  attributes?: Record<string, string | number | boolean | string[]>;
 }
 
 /**
@@ -58,6 +94,8 @@ export interface ICartItemGiftCart {
  */
 export interface ICartItemAttributes {
   engraving: ICartItemEngraving;
+
+  personalization?: ICartItemPersonalization | null;
 
   presale: IProductPresale;
 
@@ -306,6 +344,8 @@ export interface ICartUpdateItem {
   parentFulfillmentId?: string;
 
   engravingLines?: string[];
+
+  personalization?: ICartItemPersonalization;
 
   scheduledFor?: string | Date;
 
