@@ -189,6 +189,12 @@ export interface IRetailerFulfillments {
 
   canEngrave: boolean;
 
+  /**
+   * Engraving font keys this retailer can engrave; shoppers get the overlap with the size's
+   * fonts. Absent, null or empty: the retailer engraves, but offers no font choice.
+   */
+  engravingFontKeys?: string[] | null;
+
   deliveryFee?: number;
 
   shippingFee?: number;
