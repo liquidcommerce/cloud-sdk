@@ -45,11 +45,17 @@ export interface ICartItemEngravingFont {
   key: string;
 
   name: string;
+
+  /** The chosen font's effective limits: the size's, tightened for this font. */
+  maxLines: number;
+
+  maxCharsPerLine: number;
 }
 
 /**
- * Personalization sent with a cart item; `type: 'engraving'` with `lines` is the engraving
- * form, `fontKey` picks one of the size's `engraving.fonts`. Omit `fontKey` to get the default.
+ * Personalization sent with a cart item. Engraving text goes in the item's `engravingLines`;
+ * set `fontKey` (with `type: 'engraving'`) to pick one of the offered `engraving.fonts`.
+ * Without a `fontKey` the lines are engraved without a font; cloud never picks one.
  */
 export interface ICartItemPersonalization {
   type: string;
@@ -343,9 +349,11 @@ export interface ICartUpdateItem {
 
   parentFulfillmentId?: string;
 
+  /** The engraving text. `personalization` only adds the font choice. */
   engravingLines?: string[];
 
-  personalization?: ICartItemPersonalization;
+  /** `null` clears the current selection. */
+  personalization?: ICartItemPersonalization | null;
 
   scheduledFor?: string | Date;
 

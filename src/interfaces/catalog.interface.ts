@@ -490,7 +490,7 @@ export interface IProductSizeEngraving {
 
   isRequired: boolean;
 
-  fonts: IEngravingFontOption[];
+  fonts?: IEngravingFontOption[];
 }
 
 /**
