@@ -3,9 +3,22 @@ import type {
   IAvailabilityParams,
   IAvailabilityResponse,
   ICatalog,
+  ICatalogAutocompleteParams,
+  ICatalogComposeParams,
+  ICatalogComposeResult,
+  ICatalogComposeSectionParams,
+  ICatalogLocationContext,
+  ICatalogLocationContextParams,
   ICatalogParams,
+  ICatalogProductItem,
+  ICatalogProductsPage,
+  ICatalogProductsParams,
+  ICatalogSuggestion,
 } from '../interfaces';
-import type { IApiResponseWithoutData } from '../types';
+import type { IApiResponseWithData, IApiResponseWithoutData } from '../types';
+
+const AUTOCOMPLETE_LIMIT_MIN = 1;
+const AUTOCOMPLETE_LIMIT_MAX = 25;
 
 /**
  * The CatalogService class provides methods for interacting with the catalog API.
@@ -62,6 +75,247 @@ export class CatalogService {
     } catch (error) {
       console.error('Catalog search request failed:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Returns search-as-you-type product suggestions for a partial term.
+   *
+   * Unlike `search`, this hits the dedicated prefix endpoint: no facets, scoring
+   * chain, spell correction, or hydration run, so it is cheap enough to call on
+   * every keystroke. Suggestions identify and link a product only; they carry no
+   * availability or price.
+   *
+   * @param {ICatalogAutocompleteParams} params - The typed term and optional limit.
+   * @return {Promise<IApiResponseWithData<ICatalogSuggestion[]>>} - A promise that resolves to the ordered suggestions.
+   * @throws {Error} - If the term is empty or the limit is out of range, or if the request fails.
+   */
+  public async autocomplete(
+    params: ICatalogAutocompleteParams
+  ): Promise<IApiResponseWithData<ICatalogSuggestion[]>> {
+    try {
+      // Only leading whitespace is dropped: a trailing space is meaningful to
+      // the backend (it marks the last token complete rather than a prefix).
+      const term = typeof params?.term === 'string' ? params.term.replace(/^\s+/, '') : '';
+      if (term.trim().length === 0) {
+        throw new Error('term must be a non-empty string');
+      }
+
+      if (
+        params.limit !== undefined &&
+        (!Number.isInteger(params.limit) ||
+          params.limit < AUTOCOMPLETE_LIMIT_MIN ||
+          params.limit > AUTOCOMPLETE_LIMIT_MAX)
+      ) {
+        throw new Error(
+          `limit must be an integer between ${AUTOCOMPLETE_LIMIT_MIN} and ${AUTOCOMPLETE_LIMIT_MAX}`
+        );
+      }
+      const body: ICatalogAutocompleteParams =
+        params.limit === undefined ? { term } : { term, limit: params.limit };
+
+      return await this.client.post<IApiResponseWithData<ICatalogSuggestion[]>>(
+        `${this.servicePath}autocomplete`,
+        body
+      );
+    } catch (error) {
+      console.error('Catalog autocomplete request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Lists one page of every product in the authenticated partner's catalog, for
+   * building the product-page half of a storefront sitemap.
+   *
+   * There is no partner argument: cloud derives the partner from the API key, so
+   * a caller can only ever enumerate its own catalog.
+   *
+   * The enumeration is availability-blind by design. It lists products whose page
+   * exists, not products purchasable at the moment of the call, so a page count
+   * below the partner's assignment count is expected: products whose barcode does
+   * not resolve are dropped rather than published as dead URLs, and `counts` says
+   * how many and why.
+   *
+   * Terminate on `nextCursor`, never on an empty `items` array — see
+   * {@link iterateProducts}, which handles the paging correctly.
+   *
+   * @param {ICatalogProductsParams} params - Optional page size and cursor.
+   * @return {Promise<IApiResponseWithData<ICatalogProductsPage>>} - A promise that resolves to one page of products.
+   * @throws {Error} - If `pageSize` is not an integer, or if the request fails.
+   */
+  public async listProducts(
+    params: ICatalogProductsParams = {}
+  ): Promise<IApiResponseWithData<ICatalogProductsPage>> {
+    try {
+      // Cloud's DTO carries `@IsInt()`, so a fractional pageSize is rejected with
+      // a 400: fail here rather than spend a round trip on it. Every integer is
+      // forwarded as given, because the platform owns the range and adjusts
+      // rather than rejects — above the maximum is capped, below 1 falls back to
+      // the default.
+      if (params.pageSize !== undefined && !Number.isInteger(params.pageSize)) {
+        throw new Error('pageSize must be an integer');
+      }
+
+      const queryParams = new URLSearchParams();
+
+      if (params.pageSize !== undefined) {
+        queryParams.append('pageSize', params.pageSize.toString());
+      }
+
+      if (typeof params.cursor === 'string' && params.cursor.length > 0) {
+        queryParams.append('cursor', params.cursor);
+      }
+
+      const query = queryParams.toString();
+
+      return await this.client.get<IApiResponseWithData<ICatalogProductsPage>>(
+        `${this.servicePath}products${query ? `?${query}` : ''}`
+      );
+    } catch (error) {
+      console.error('Catalog products request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Walks the partner's entire catalog, yielding one product at a time and
+   * fetching each page as it is needed.
+   *
+   * Prefer this over hand-rolling the loop around {@link listProducts}: it
+   * terminates on `nextCursor` rather than on an empty page. Products are
+   * filtered out after a page is read from the index, so a full page can
+   * legitimately yield nothing and still have successors — a loop that stops
+   * there truncates the enumeration silently, and a short sitemap looks exactly
+   * like a working one.
+   *
+   * A walk is not resumable: the cursor is held internally and never exposed,
+   * so a page request that fails mid-walk (including a `500` from the platform)
+   * ends the iteration and a retry restarts from the beginning. Drive
+   * {@link listProducts} directly to checkpoint progress over a large catalog.
+   *
+   * @param {Omit<ICatalogProductsParams, 'cursor'>} params - Optional page size; the cursor is managed internally.
+   * @return {AsyncGenerator<ICatalogProductItem>} - Each product in the partner's catalog.
+   * @throws {Error} - If any page request fails; the walk cannot be resumed from where it stopped.
+   *
+   * @example
+   * for await (const product of client.catalog.iterateProducts()) {
+   *   console.log(product.grouping, product.upc);
+   * }
+   */
+  public async *iterateProducts(
+    params: Omit<ICatalogProductsParams, 'cursor'> = {}
+  ): AsyncGenerator<ICatalogProductItem> {
+    let cursor: string | undefined;
+
+    do {
+      const page = await this.listProducts({ ...params, cursor });
+      const data = page?.data;
+
+      yield* data?.items ?? [];
+
+      // Terminate only when the cursor is gone. An empty `items` is not the end.
+      // An empty-string cursor counts as gone: `listProducts` drops it from the
+      // query, so continuing on it would re-request the first page forever.
+      cursor = data?.nextCursor;
+    } while (typeof cursor === 'string' && cursor.length > 0);
+  }
+
+  /**
+   * Issues an opaque location context for the authenticated partner.
+   * Rejects invalid coordinates before transport and forwards only coordinates.
+   * Does not log location-bearing requests or upstream error objects.
+   */
+  public async createLocationContext(
+    params: ICatalogLocationContextParams
+  ): Promise<IApiResponseWithoutData<ICatalogLocationContext>> {
+    const coords = params?.loc?.coords;
+    if (
+      !coords ||
+      !Number.isFinite(coords.lat) ||
+      !Number.isFinite(coords.long) ||
+      Math.abs(coords.lat) > 90 ||
+      Math.abs(coords.long) > 180
+    ) {
+      throw new Error('Location context requires valid coordinates');
+    }
+    return this.client.post<IApiResponseWithoutData<ICatalogLocationContext>>(
+      `${this.servicePath}location-context`,
+      { loc: { coords: { lat: coords.lat, long: coords.long } } }
+    );
+  }
+
+  /**
+   * Requests delivery-first sections composed by Cloud in one catalog call.
+   * Rejects invalid section budgets and conflicting location inputs before transport.
+   * Does not log location-bearing requests or upstream error objects.
+   */
+  public async compose(
+    params: ICatalogComposeParams
+  ): Promise<IApiResponseWithoutData<ICatalogComposeResult>> {
+    if (
+      !Array.isArray(params?.sections) ||
+      params.sections.length < 1 ||
+      params.sections.length > 16
+    ) {
+      throw new Error('Catalog composition requires between 1 and 16 sections');
+    }
+    const sectionIds = new Set<string>();
+    for (const section of params.sections) {
+      this.validateComposeSection(section);
+      if (sectionIds.has(section.sectionId)) {
+        throw new Error('Catalog composition section IDs must be unique');
+      }
+      sectionIds.add(section.sectionId);
+    }
+    if (
+      params.retailers !== undefined &&
+      (!Array.isArray(params.retailers) || params.retailers.length > 1)
+    ) {
+      throw new Error(
+        'Catalog composition retailers must be an array containing at most one retailer ID'
+      );
+    }
+    if (
+      params.locationContext !== undefined &&
+      (typeof params.locationContext !== 'string' ||
+        !params.locationContext ||
+        params.locationContext.length > 256)
+    ) {
+      throw new Error(
+        'Catalog composition locationContext must be a non-empty string of at most 256 characters'
+      );
+    }
+    if (params.locationContext !== undefined && params.loc !== undefined) {
+      throw new Error('Catalog composition accepts either locationContext or loc, not both');
+    }
+    return this.client.post<IApiResponseWithoutData<ICatalogComposeResult>>(
+      `${this.servicePath}compose`,
+      params
+    );
+  }
+
+  private validateComposeSection(section: ICatalogComposeSectionParams): void {
+    if (
+      typeof section?.sectionId !== 'string' ||
+      !section.sectionId ||
+      section.sectionId.length > 100
+    ) {
+      throw new Error(
+        'Catalog composition sectionId must be a non-empty string of at most 100 characters'
+      );
+    }
+    if (
+      section.perPage !== undefined &&
+      (!Number.isInteger(section.perPage) || section.perPage < 1 || section.perPage > 24)
+    ) {
+      throw new Error('Catalog composition section perPage must be an integer between 1 and 24');
+    }
+    if (
+      section.filters !== undefined &&
+      (!Array.isArray(section.filters) || section.filters.length > 10)
+    ) {
+      throw new Error('Catalog composition section filters must be an array of at most 10 filters');
     }
   }
 }

@@ -15,7 +15,16 @@ import type {
   IAvailabilityParams,
   IAvailabilityResponse,
   ICatalog,
+  ICatalogAutocompleteParams,
+  ICatalogComposeParams,
+  ICatalogComposeResult,
+  ICatalogLocationContext,
+  ICatalogLocationContextParams,
   ICatalogParams,
+  ICatalogProductItem,
+  ICatalogProductsPage,
+  ICatalogProductsParams,
+  ICatalogSuggestion,
 } from './catalog.interface';
 import type {
   ICheckoutCompleteParams,
@@ -285,6 +294,114 @@ export interface ICatalogMethod {
    * @see {@link ICatalog} for the structure of the catalog data returned.
    */
   search: (params: ICatalogParams) => Promise<IApiResponseWithoutData<ICatalog>>;
+
+  /**
+   * Returns search-as-you-type product suggestions for a partial term.
+   *
+   * Served by the dedicated prefix endpoint rather than `search`: no facets,
+   * scoring chain, spell correction, or hydration run, so it is cheap enough to
+   * call on every keystroke. Only the final token is prefix-matched; earlier
+   * tokens must match in full. Suggestions identify and link a product only —
+   * they carry no availability or price.
+   *
+   * @param {ICatalogAutocompleteParams} params - The typed term and an optional limit (1–25, default 10).
+   * @return {Promise<IApiResponseWithData<ICatalogSuggestion[]>>} - A promise that resolves to the ordered suggestions.
+   *
+   * @example
+   * try {
+   *   const suggestions = await liquidCommerce.catalog.autocomplete({
+   *     term: 'hendricks oasi',
+   *     limit: 8,
+   *   });
+   *   console.log('Suggestions:', suggestions.data.map((s) => s.name));
+   * } catch (error) {
+   *   console.error('Catalog autocomplete failed:', error);
+   * }
+   *
+   * @see {@link ICatalogAutocompleteParams} for the request parameters.
+   * @see {@link ICatalogSuggestion} for the structure of one suggestion.
+   */
+  autocomplete: (
+    params: ICatalogAutocompleteParams
+  ) => Promise<IApiResponseWithData<ICatalogSuggestion[]>>;
+
+  /**
+   * Lists one page of every product in the authenticated partner's catalog, for
+   * building the product-page half of a storefront sitemap.
+   *
+   * There is no partner argument: cloud derives the partner from the API key, so
+   * a caller can only ever enumerate its own catalog. The enumeration is
+   * availability-blind by design — it lists products whose page exists, not
+   * products purchasable right now — and `counts` reports how many products were
+   * dropped as unlinkable, and why.
+   *
+   * Terminate on `nextCursor`, never on an empty `items` array. Prefer
+   * {@link ICatalogMethod.iterateProducts}, which does this for you.
+   *
+   * @param {ICatalogProductsParams} params - Optional page size (default 1000, clamped to 5000) and cursor.
+   * @return {Promise<IApiResponseWithData<ICatalogProductsPage>>} - A promise that resolves to one page of products.
+   *
+   * @example
+   * let cursor: string | undefined;
+   * do {
+   *   const page = await liquidCommerce.catalog.listProducts({ cursor });
+   *   for (const { grouping, upc } of page.data.items) {
+   *     console.log(grouping, upc);
+   *   }
+   *   cursor = page.data.nextCursor;
+   * } while (cursor);
+   *
+   * @see {@link ICatalogProductsParams} for the request parameters.
+   * @see {@link ICatalogProductsPage} for the structure of one page.
+   */
+  listProducts: (
+    params?: ICatalogProductsParams
+  ) => Promise<IApiResponseWithData<ICatalogProductsPage>>;
+
+  /**
+   * Walks the partner's entire catalog, yielding one product at a time and
+   * fetching each page as it is needed.
+   *
+   * Prefer this over hand-rolling the loop around
+   * {@link ICatalogMethod.listProducts}: it terminates on `nextCursor` rather
+   * than on an empty page. Products are filtered out after a page is read, so a
+   * page can legitimately yield nothing and still have successors — stopping
+   * there truncates the enumeration silently.
+   *
+   * Two behaviours differ from every other method on this client:
+   *
+   * 1. This call returns a generator synchronously, so it never rejects.
+   *    Authentication runs on the first pull — an auth or network failure
+   *    surfaces at the `for await`, not at the call, so wrap the loop rather
+   *    than the call. The same applies to an invalid `pageSize`.
+   * 2. A walk is not resumable. The cursor is held internally and never
+   *    exposed, so a page request that fails mid-walk (including a `500` from
+   *    the platform) ends the iteration and a retry restarts from the
+   *    beginning. To checkpoint progress over a large catalog, drive
+   *    {@link ICatalogMethod.listProducts} yourself and keep each `nextCursor`.
+   *
+   * @param {Omit<ICatalogProductsParams, 'cursor'>} params - Optional page size; the cursor is managed internally.
+   * @return {AsyncGenerator<ICatalogProductItem>} - Each product in the partner's catalog.
+   * @throws {Error} - On the first pull if authentication fails, or on any page request that fails.
+   *
+   * @example
+   * for await (const product of liquidCommerce.catalog.iterateProducts()) {
+   *   console.log(product.grouping, product.upc);
+   * }
+   *
+   * @see {@link ICatalogProductItem} for the structure of one product.
+   */
+  iterateProducts: (
+    params?: Omit<ICatalogProductsParams, 'cursor'>
+  ) => AsyncGenerator<ICatalogProductItem>;
+  /** Optional for existing custom clients; check this capability before calling. */
+  createLocationContext?: (
+    params: ICatalogLocationContextParams
+  ) => Promise<IApiResponseWithoutData<ICatalogLocationContext>>;
+  /** Optional for existing custom clients; check this capability before calling. */
+  compose?: (
+    params: ICatalogComposeParams
+  ) => Promise<IApiResponseWithoutData<ICatalogComposeResult>>;
 }
 
 /**

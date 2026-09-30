@@ -15,8 +15,17 @@ import type {
   ICartMethod,
   ICartUpdateParams,
   ICatalog,
+  ICatalogAutocompleteParams,
+  ICatalogComposeParams,
+  ICatalogComposeResult,
+  ICatalogLocationContext,
+  ICatalogLocationContextParams,
   ICatalogMethod,
   ICatalogParams,
+  ICatalogProductItem,
+  ICatalogProductsPage,
+  ICatalogProductsParams,
+  ICatalogSuggestion,
   ICheckoutCompleteParams,
   ICheckoutCompleteResponse,
   ICheckoutMethod,
@@ -212,7 +221,7 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
    *
    * @see {@link IApiResponseWithoutData} for the structure of the promise returned by both methods.
    */
-  public catalog: ICatalogMethod = {
+  public catalog = {
     availability: async (
       params: IAvailabilityParams
     ): Promise<IApiResponseWithoutData<IAvailabilityResponse>> => {
@@ -223,7 +232,46 @@ class LiquidCommerceClient implements ILiquidCommerceClient {
       await this.ensureAuthenticated();
       return this.catalogService.search(params);
     },
-  };
+    autocomplete: async (
+      params: ICatalogAutocompleteParams
+    ): Promise<IApiResponseWithData<ICatalogSuggestion[]>> => {
+      await this.ensureAuthenticated();
+      return this.catalogService.autocomplete(params);
+    },
+    listProducts: async (
+      params: ICatalogProductsParams = {}
+    ): Promise<IApiResponseWithData<ICatalogProductsPage>> => {
+      await this.ensureAuthenticated();
+      return this.catalogService.listProducts(params);
+    },
+    iterateProducts: (
+      params: Omit<ICatalogProductsParams, 'cursor'> = {}
+    ): AsyncGenerator<ICatalogProductItem> => this.iterateCatalogProducts(params),
+    createLocationContext: async (
+      params: ICatalogLocationContextParams
+    ): Promise<IApiResponseWithoutData<ICatalogLocationContext>> => {
+      await this.ensureAuthenticated();
+      return this.catalogService.createLocationContext(params);
+    },
+    compose: async (
+      params: ICatalogComposeParams
+    ): Promise<IApiResponseWithoutData<ICatalogComposeResult>> => {
+      await this.ensureAuthenticated();
+      return this.catalogService.compose(params);
+    },
+  } satisfies ICatalogMethod;
+
+  /**
+   * Backs `catalog.iterateProducts`. Authentication is resolved on the first
+   * pull rather than at call time, since a generator body does not run until
+   * then.
+   */
+  private async *iterateCatalogProducts(
+    params: Omit<ICatalogProductsParams, 'cursor'>
+  ): AsyncGenerator<ICatalogProductItem> {
+    await this.ensureAuthenticated();
+    yield* this.catalogService.iterateProducts(params);
+  }
 
   /**
    * Represents a cart object with methods for updating and retrieving cart data.

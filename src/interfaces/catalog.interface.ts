@@ -144,6 +144,92 @@ export interface ICatalogParams extends ILocBase {
   >;
 }
 
+export interface ICatalogComposeSectionParams {
+  sectionId: string;
+  source?: 'query' | 'regionalPopularity';
+  search?: string;
+  perPage?: number;
+  orderBy?: ENUM_ORDER_BY;
+  orderDirection?: ENUM_NAVIGATION_ORDER_DIRECTION_TYPE;
+  filters?: ICatalogParams['filters'];
+}
+
+export interface ICatalogComposeParams {
+  /** Opaque Cloud-issued context; mutually exclusive with loc. */
+  locationContext?: string;
+  /** State and delivery area are resolved by Cloud from these coordinates. */
+  loc?: { coords: { lat: number; long: number } };
+  /** Cloud accepts at most one retailer ID; omit or pass [] for no hard retailer scope. */
+  retailers?: string[];
+  fulfillmentType?: 'onDemand' | 'shipping';
+  sections: ICatalogComposeSectionParams[];
+}
+
+export interface ICatalogComposeSectionResult {
+  sectionId: string;
+  status: 'ok' | 'partial' | 'exhausted' | 'error' | 'unavailable';
+  products: ICatalogComposeCardProduct[];
+  total: number;
+  requestedCount: number;
+  examinedCandidates: number;
+  selection?: IRegionalPopularitySelection;
+  reason?: string;
+}
+
+export interface IRegionalPopularityCandidate {
+  gtin14: string;
+  catalogVariantId: string;
+  catalogProductId: string;
+  rank: number;
+}
+
+export interface IRegionalPopularitySelection {
+  source: 'regionalPopularity';
+  status: 'fresh' | 'stale';
+  snapshotId: string;
+  policyVersion: 'v1';
+  generatedAtMs: number;
+  sourceWatermarkMs: number;
+  windowStart: string;
+  windowEndExclusive: string;
+  regionType: 'state' | 'national';
+  regionKey: string;
+  fallback: boolean;
+  fallbackReason?: 'no_state' | 'state_not_qualified';
+}
+
+export interface ICatalogComposeCardProduct
+  extends Pick<IProduct, 'id' | 'name' | 'brand' | 'images' | 'priceInfo'> {
+  popularity?: IRegionalPopularityCandidate;
+  fulfillmentKind: 'onDemand' | 'shipping';
+  sizes: Array<
+    Pick<IProductSize, 'id' | 'upc' | 'size' | 'image' | 'price' | 'pack' | 'packDesc'> & {
+      variants: Array<
+        Pick<
+          IProductVariant,
+          'partNumber' | 'retailerId' | 'price' | 'salePrice' | 'stock' | 'fulfillmentTypes'
+        >
+      >;
+    }
+  >;
+}
+
+export interface ICatalogComposeRetailerSummary {
+  id: string;
+  name: string;
+  fulfillments: Array<{
+    id: string;
+    type: string;
+    fees: unknown;
+    expectation: unknown;
+  }>;
+}
+
+export interface ICatalogComposeResult {
+  sections: ICatalogComposeSectionResult[];
+  retailers: ICatalogComposeRetailerSummary[];
+}
+
 /**
  * ICatalog interface represents a structured collection of retailers, products, and navigation schema.
  */
@@ -153,6 +239,39 @@ export interface ICatalog {
   products?: IProduct[] | Array<Record<string, any>>;
 
   navigation?: INavigationSchema;
+}
+
+/**
+ * Parameters for search-as-you-type product suggestions (`POST catalog/autocomplete`).
+ */
+export interface ICatalogAutocompleteParams {
+  /**
+   * The partial search term as typed. Only the final token is prefix-matched;
+   * earlier tokens must match in full, so `hendricks oasi` means `hendricks`
+   * complete plus `oasi` as a prefix. A trailing space marks the last token
+   * complete. A final token shorter than 2 characters is ignored.
+   */
+  term: string;
+
+  /**
+   * Maximum suggestions to return (1–25). Omit to use the platform default of 10.
+   */
+  limit?: number;
+}
+
+/**
+ * One product suggestion. Identify-and-link only: it carries no availability or
+ * price, and the product may not be purchasable at the shopper's location.
+ */
+export interface ICatalogSuggestion {
+  itemType: 'catalog' | 'custom';
+
+  /** Product grouping — the key to link or hydrate on (one document per product). */
+  grouping: string;
+
+  name: string;
+
+  image?: string;
 }
 
 /**
@@ -667,4 +786,96 @@ export interface IProduct {
   priceInfo: IProductPriceInfo | null;
 
   additionalInformation?: string;
+}
+
+/**
+ * Parameters for one page of the authenticated partner's product enumeration
+ * (`GET catalog/products`).
+ *
+ * There is no partner argument: cloud derives the partner from the API key, so a
+ * caller can only ever enumerate its own catalog.
+ */
+export interface ICatalogProductsParams {
+  /**
+   * Products read per page, defaulting to 1000. The platform owns the range and
+   * adjusts an out-of-range value rather than rejecting it: above 5000 is capped
+   * at 5000, and below 1 falls back to the default. Must be an integer, though —
+   * cloud rejects a fractional value with a 400.
+   *
+   * A page may return fewer items than this and still not be the last page.
+   */
+  pageSize?: number;
+
+  /**
+   * Opaque cursor from the previous response's `nextCursor`. Omit to start at the
+   * beginning of the partner's scope.
+   */
+  cursor?: string;
+}
+
+/**
+ * One product in the partner's scope, keyed for a product detail page link.
+ */
+export interface ICatalogProductItem {
+  /** Product grouping — the product key, one entry per product. */
+  grouping: string;
+
+  /**
+   * The barcode the product detail page is addressed by, in the catalog's stored
+   * zero-padded form (`00087229178758`). Pass it through verbatim: re-padding,
+   * trimming, or stripping zeros breaks the lookup, which normalizes on its own
+   * side.
+   */
+  upc: string;
+}
+
+/**
+ * Per-page tally of what the enumeration read and what it dropped.
+ *
+ * `inScope` minus `emitted` is accounted for entirely by the drop counters. They
+ * tell a caller how many of its products are currently unlinkable, and why.
+ */
+export interface ICatalogProductPageCounts {
+  /** Products this page read from the partner's scope. */
+  inScope: number;
+
+  /** Products actually returned in `items`. */
+  emitted: number;
+
+  /** Dropped because the product carries no usable barcode. */
+  droppedNoUpc: number;
+
+  /**
+   * Dropped because the barcode does not resolve to a product detail page, so
+   * linking it would publish a dead URL.
+   */
+  droppedUnresolvable: number;
+}
+
+/**
+ * One page of the partner's product enumeration.
+ */
+export interface ICatalogProductsPage {
+  items: ICatalogProductItem[];
+
+  /**
+   * Cursor for the next page, absent only on the last page.
+   *
+   * Terminate on this field, never on an empty `items`: products are dropped
+   * after a page is read from the index, so a page can legitimately return zero
+   * items and still have successors.
+   */
+  nextCursor?: string;
+
+  counts: ICatalogProductPageCounts;
+}
+
+/** Issue an opaque context through the authenticated partner's Cloud location semantics. */
+export interface ICatalogLocationContextParams {
+  loc: { coords: { lat: number; long: number } };
+}
+
+export interface ICatalogLocationContext {
+  locationContext: string;
+  expiresAt: string;
 }
