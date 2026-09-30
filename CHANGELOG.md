@@ -1,3 +1,15 @@
+# [1.10.0-beta.14](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.13...v1.10.0-beta.14) (2026-09-29)
+
+
+### Bug Fixes
+
+* **types:** address engraving font review (DELIV-2110) ([4f393a6](https://github.com/liquidcommerce/cloud-sdk/commit/4f393a658daec858964527aaf8477012ecf6ceb9))
+
+
+### Features
+
+* **types:** engraving font types (DELIV-2110) ([44f7e5d](https://github.com/liquidcommerce/cloud-sdk/commit/44f7e5d73b255841690cc5df4c8afb74455c6a11))
+
 # [1.18.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.17.0...v1.18.0) (2026-09-22)
 
 

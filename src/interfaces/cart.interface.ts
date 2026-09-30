@@ -1,6 +1,6 @@
 import type { CART_EVENT_ENUM } from '../enums';
 import type { ILoc, ILocBase } from './address.interface';
-import type { IProduct, IProductPresale } from './catalog.interface';
+import type { IEngravingFontOption, IProduct, IProductPresale } from './catalog.interface';
 import type { IRetailer } from './retailer.interface';
 
 /**
@@ -31,6 +31,48 @@ export interface ICartItemEngraving {
   lines: string[];
 
   isRequired: boolean;
+
+  /** The font applied to this engraving; absent or null when the retailer offers none. */
+  font?: ICartItemEngravingFont | null;
+
+  fonts?: IEngravingFontOption[];
+}
+
+/**
+ * The engraving font applied to a cart item.
+ */
+export interface ICartItemEngravingFont {
+  key: string;
+
+  name: string;
+
+  /** The chosen font's effective limits: the size's, tightened for this font. */
+  maxLines: number;
+
+  maxCharsPerLine: number;
+}
+
+/**
+ * Personalization sent with a cart item. Engraving text goes in the item's `engravingLines`;
+ * set `fontKey` (with `type: 'engraving'`) to pick one of the offered `engraving.fonts`.
+ * Without a `fontKey` the lines are engraved without a font; cloud never picks one.
+ */
+export interface ICartItemPersonalization {
+  type: string;
+
+  lines?: string[];
+
+  instructions?: string;
+
+  width?: number;
+
+  height?: number;
+
+  imageUrl?: string;
+
+  fontKey?: string;
+
+  attributes?: Record<string, string | number | boolean | string[]>;
 }
 
 /**
@@ -58,6 +100,8 @@ export interface ICartItemGiftCart {
  */
 export interface ICartItemAttributes {
   engraving: ICartItemEngraving;
+
+  personalization?: ICartItemPersonalization | null;
 
   presale: IProductPresale;
 
@@ -305,7 +349,11 @@ export interface ICartUpdateItem {
 
   parentFulfillmentId?: string;
 
+  /** The engraving text. `personalization` only adds the font choice. */
   engravingLines?: string[];
+
+  /** `null` clears the current selection. */
+  personalization?: ICartItemPersonalization | null;
 
   scheduledFor?: string | Date;
 

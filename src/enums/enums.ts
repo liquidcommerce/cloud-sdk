@@ -204,6 +204,7 @@ export enum CART_EVENT_ENUM {
   ITEMS_NOT_ADDED = 'ItemsNotAdded',
   ITEMS_REQUESTED_NOT_ADDED = 'ItemsRequestedNotAdded',
   ITEM_NOT_ENGRAVED = 'ItemEngravingError',
+  ITEM_ENGRAVING_FONT_REPLACED = 'ItemEngravingFontReplaced',
   ADDRESS_CHANGE = 'AddressChange',
   LOCATION_AVAILABILITY = 'LocationAvailability',
   PARTNER_PRODUCT_CONFIGS = 'PartnerProductConfigs',
