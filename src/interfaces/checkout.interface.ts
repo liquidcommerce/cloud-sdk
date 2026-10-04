@@ -2,6 +2,7 @@ import type { CHECKOUT_EVENT_ENUM } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
 import type { ICartAttributesPromoCode, ICartItemAttributes } from './cart.interface';
+import type { ICheckoutDeliveryScheduling, ICheckoutDeliverySelection } from './delivery.interface';
 import type { IRetailerExpectation } from './retailer.interface';
 
 /**
@@ -158,6 +159,7 @@ export interface ICheckoutPrepareParams extends ICoreParams {
   marketingPreferences?: ICheckoutMarketingPreferences;
 
   deliveryTips?: ICheckoutDeliveryTip[];
+  deliverySelections?: ICheckoutDeliverySelection[];
 
   deliveryInstructions?: ICheckoutDeliveryInstructions[];
 
@@ -275,6 +277,7 @@ export interface ICheckoutFulfillmentBopisContact {
 }
 
 export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
+  deliveryScheduling?: ICheckoutDeliveryScheduling;
   id: string;
 
   deliveryInstructions: string;
