@@ -1,7 +1,7 @@
 import type { LIQUID_COMMERCE_ENV } from '../enums';
 import type { AuthServiceResponse, IAuth } from '../types';
 import type { HttpClient, IHttpClientOptions, IRequestOptions } from './utils';
-import { getFetchImplementation } from './utils';
+import { getFetchImplementation, toRequestError } from './utils';
 
 interface IAuthConfig {
   apiKey: string;
@@ -172,14 +172,7 @@ export class AuthenticatedService {
       }
 
       if (!response.ok) {
-        // For error responses, create a structured error object
-        const errorObj = {
-          ...responseData,
-          status: response.status,
-          message: responseData?.message || `HTTP error! status: ${response.status}`,
-        };
-
-        throw errorObj;
+        throw toRequestError(responseData, response.status);
       }
 
       return responseData;
