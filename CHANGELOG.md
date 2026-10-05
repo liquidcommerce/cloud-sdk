@@ -1,3 +1,16 @@
+# [1.10.0-beta.15](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.14...v1.10.0-beta.15) (2026-10-05)
+
+
+### Bug Fixes
+
+* **client:** read error text from error or errors when message is missing ([567ac21](https://github.com/liquidcommerce/cloud-sdk/commit/567ac21ea4acdbf3113a6aca2b50bf11078a1ab0))
+
+
+### Features
+
+* **enums:** add 8111 PAYMENT_INVALID_EXPIRY, returned on the Minibar lane ([23ef1a1](https://github.com/liquidcommerce/cloud-sdk/commit/23ef1a138693ac56dd0b05721a9cff76299cf367))
+* **enums:** sync checkout codes with Cloud and add payment codes ([662e827](https://github.com/liquidcommerce/cloud-sdk/commit/662e8275ed6df984365bf52328c5b8a6b2cb92ab))
+
 # [1.19.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.18.0...v1.19.0) (2026-09-30)
 
 

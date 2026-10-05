@@ -305,6 +305,8 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 5509,
   REQUEST_CHECKOUT_PROCESSING_LOCK_NOT_ACQUIRED_ERROR = 5510,
   REQUEST_BOPIS_PRODUCT_NOT_OPTED_IN_ERROR = 5511,
+  REQUEST_PAYMENT_PLATFORM_MISMATCH_ERROR = 5512,
+  REQUEST_PAYMENT_VERIFICATION_ERROR = 5513,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -318,11 +320,11 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_VALIDATION_ERROR = "There's been an error with your request parameters, check and try again.",
   REQUEST_TAX_ERROR = 'There was an error calculating tax for your order.',
   REQUEST_COMPLETE_TOKEN = 'The checkout token provided is invalid, check and try again.',
-  REQUEST_DEFAULT_COMPLETE_ERROR = 'There was an error completing your checkout, confirm through the (prepare) method and try again.',
+  REQUEST_DEFAULT_COMPLETE_ERROR = 'There was an error completing your checkout, please try again later.',
   REQUEST_CHECKOUT_COMPLETE_UPDATE_ERROR = 'Unable to update your checkout status.',
   REQUEST_CHECKOUT_COMPLETE_SAVE_ERROR = 'Unable to save your completed checkout.',
   REQUEST_CHECKOUT_HAS_COMPLETE_ERROR = 'This checkout has already been processed, create a new cart to process a new checkout.',
-  REQUEST_NO_CART_ITEM_ERROR = 'Item(s) in your cart are no longer available',
+  REQUEST_NO_CART_ITEM_ERROR = 'Item(s) in your cart are no longer available.',
   REQUEST_NO_CUSTOMER_FOUND_ERROR = 'The customer account was not found.',
   REQUEST_PAYMENT_ATTACHED_ERROR = 'The payment attached to the checkout is not a valid payment method for this customer.',
   REQUEST_SHIPPING_ADDRESS_ERROR = 'The address in your cart has changed, check and try again.',
@@ -339,6 +341,69 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_CART_MIN_RETAILER_NOT_MET_ERROR = 'Some items in your cart do not meet the minimum retailer requirements per order quantity. Please adjust your cart and try again.',
   REQUEST_CHECKOUT_PROCESSING_LOCK_NOT_ACQUIRED_ERROR = 'This checkout is currently being processed, please try again later.',
   REQUEST_BOPIS_PRODUCT_NOT_OPTED_IN_ERROR = 'One or more items in your cart are no longer eligible for in-store pickup (BOPIS) and were removed. Please review your cart and try again.',
+  REQUEST_PAYMENT_PLATFORM_MISMATCH_ERROR = 'This payment method is not available for this checkout. Please re-enter your card details.',
+  REQUEST_PAYMENT_VERIFICATION_ERROR = "We couldn't verify your payment information. Please check your card details and billing address, then try again.",
+}
+
+/**
+ * Payment errors a checkout completion can return. The payment service owns these codes and
+ * messages; they arrive in `statusCode` and `message` alongside the checkout codes above.
+ */
+export enum ENUM_PAYMENT_STATUS_CODE_ERROR {
+  PAYMENT_METHOD_INVALID = 8100,
+  PAYMENT_METHOD_NOT_ON_FILE = 8101,
+  PAYMENT_METHOD_EXPIRED = 8102,
+  PAYMENT_DECLINED = 8103,
+  PAYMENT_AUTHENTICATION_REQUIRED = 8104,
+  PAYMENT_CARD_ERROR = 8105,
+  PAYMENT_INSUFFICIENT_FUNDS = 8106,
+  PAYMENT_CURRENCY_MISMATCH = 8107,
+  PAYMENT_AMOUNT_TOO_LARGE = 8108,
+  PAYMENT_AMOUNT_TOO_SMALL = 8109,
+  PAYMENT_INVALID_CVC = 8110,
+  PAYMENT_INVALID_EXPIRY = 8111,
+  PAYMENT_CARD_DECLINED = 8112,
+  PAYMENT_CARD_RESTRICTED = 8113,
+  PAYMENT_PROCESSING_ERROR = 8114,
+  PAYMENT_CUSTOMER_MAX_PAYMENT_ATTEMPTS = 8115,
+  PAYMENT_INVALID_ACCOUNT = 8116,
+  PAYMENT_RISK_LEVEL_HIGH = 8117,
+  PAYMENT_STRIPE_ACCOUNT_ERROR = 8118,
+  PAYMENT_STRIPE_API_ERROR = 8119,
+  PAYMENT_STRIPE_RATE_LIMIT = 8120,
+  PAYMENT_METHOD_UNSUPPORTED = 8121,
+  PAYMENT_METHOD_NOT_FOUND = 40003,
+}
+
+export enum ENUM_PAYMENT_STATUS_CODE_MESSAGE {
+  PAYMENT_METHOD_INVALID = 'Invalid payment method provided',
+  PAYMENT_METHOD_NOT_ON_FILE = 'Payment method not found',
+  PAYMENT_METHOD_EXPIRED = 'Payment method has expired',
+  PAYMENT_DECLINED = 'Payment was declined',
+  PAYMENT_AUTHENTICATION_REQUIRED = 'Payment requires authentication',
+  PAYMENT_CARD_ERROR = 'There was an error processing the card',
+  PAYMENT_INSUFFICIENT_FUNDS = 'Insufficient funds in the account',
+  PAYMENT_CURRENCY_MISMATCH = 'Currency mismatch in the payment',
+  PAYMENT_AMOUNT_TOO_LARGE = 'Payment amount exceeds the maximum allowed',
+  PAYMENT_AMOUNT_TOO_SMALL = 'Payment amount is below the minimum allowed',
+  PAYMENT_INVALID_CVC = 'Invalid card CVC provided',
+  PAYMENT_INVALID_EXPIRY = 'Invalid card expiry date',
+  PAYMENT_CARD_DECLINED = 'The card was declined',
+  PAYMENT_CARD_RESTRICTED = 'The card has restrictions preventing this payment',
+  PAYMENT_PROCESSING_ERROR = 'An error occurred while processing the payment',
+  PAYMENT_CUSTOMER_MAX_PAYMENT_ATTEMPTS = 'Maximum payment attempts reached for this customer',
+  PAYMENT_INVALID_ACCOUNT = 'The account provided is invalid',
+  PAYMENT_RISK_LEVEL_HIGH = 'The payment was flagged as high risk',
+  PAYMENT_STRIPE_ACCOUNT_ERROR = 'There was an error with the Stripe account',
+  PAYMENT_STRIPE_API_ERROR = 'An error occurred with the Stripe API',
+  PAYMENT_STRIPE_RATE_LIMIT = 'Stripe rate limit exceeded',
+  PAYMENT_METHOD_UNSUPPORTED = 'The payment method is not supported for this transaction',
+  PAYMENT_METHOD_NOT_FOUND = 'Payment method not found',
+}
+
+/** A coupon that stopped qualifying fails completion with HTTP 422; `message` gives the reason. */
+export enum ENUM_DISCOUNT_STATUS_CODE_ERROR {
+  REQUEST_COUPON_REJECTED_AT_COMPLETE_ERROR = 5600,
 }
 
 export enum CHECKOUT_EVENT_ENUM {
