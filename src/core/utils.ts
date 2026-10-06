@@ -136,3 +136,33 @@ export function getFetchImplementation(): HttpClient {
 
   return xhrFetch;
 }
+
+function firstText(...values: unknown[]): string {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim() !== '') {
+      return value;
+    }
+  }
+
+  return '';
+}
+
+/**
+ * Builds the object thrown for a non-2xx response. Partners show `message` to shoppers, but not
+ * every upstream error puts its text there (Vault uses `error`, a rate limit sends a bare string),
+ * so fall back to those before the status. A `message` that is present is kept as sent, arrays
+ * included, so partners already reading it see no change.
+ */
+export function toRequestError(body: unknown, status: number): Record<string, any> {
+  const data: Record<string, any> =
+    body !== null && typeof body === 'object' ? (body as Record<string, any>) : {};
+
+  return {
+    ...data,
+    status,
+    message:
+      data.message ||
+      firstText(typeof body === 'string' ? body : '', data.error, data.errors?.[0]?.message) ||
+      `HTTP error! status: ${status}`,
+  };
+}
