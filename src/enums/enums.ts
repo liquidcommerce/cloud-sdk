@@ -307,6 +307,8 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_BOPIS_PRODUCT_NOT_OPTED_IN_ERROR = 5511,
   REQUEST_PAYMENT_PLATFORM_MISMATCH_ERROR = 5512,
   REQUEST_PAYMENT_VERIFICATION_ERROR = 5513,
+  REQUEST_EXPRESS_AUTHORIZATION_MISMATCH_ERROR = 5514,
+  REQUEST_DELIVERY_SELECTION_ERROR = 5515,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -343,6 +345,8 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_BOPIS_PRODUCT_NOT_OPTED_IN_ERROR = 'One or more items in your cart are no longer eligible for in-store pickup (BOPIS) and were removed. Please review your cart and try again.',
   REQUEST_PAYMENT_PLATFORM_MISMATCH_ERROR = 'This payment method is not available for this checkout. Please re-enter your card details.',
   REQUEST_PAYMENT_VERIFICATION_ERROR = "We couldn't verify your payment information. Please check your card details and billing address, then try again.",
+  REQUEST_EXPRESS_AUTHORIZATION_MISMATCH_ERROR = 'Your order changed since you approved it with your wallet. Please approve the payment again.',
+  REQUEST_DELIVERY_SELECTION_ERROR = 'The selected delivery time is not available. Please choose another delivery time.',
 }
 
 /**
@@ -408,7 +412,8 @@ export enum ENUM_DISCOUNT_STATUS_CODE_ERROR {
 
 /**
  * Delivery window errors from checkout prepare and complete. They fail with HTTP 400 and arrive
- * in `errors[].code` with `field: 'deliverySelections'`; `message` gives the text.
+ * in `errors[].code`, with `field: 'deliverySelections'` (or `'deliverySlotsFor'` for an invalid
+ * `deliverySlotsFor`); `message` gives the text.
  */
 export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   /** The order-by time of the selected window has passed. Pick a new window. */
