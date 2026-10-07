@@ -2,6 +2,7 @@ import type { CHECKOUT_EVENT_ENUM } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
 import type { ICartAttributesPromoCode, ICartItemAttributes } from './cart.interface';
+import type { ICheckoutDeliveryScheduling, ICheckoutDeliverySelection } from './delivery.interface';
 import type { IRetailerExpectation } from './retailer.interface';
 
 /**
@@ -159,10 +160,27 @@ export interface ICheckoutPrepareParams extends ICoreParams {
 
   deliveryTips?: ICheckoutDeliveryTip[];
 
+  /**
+   * Delivery windows to apply. Absent: keep the windows accepted before. Present: replace them
+   * with exactly these; a scheduling fulfillment that is not listed, or `slotId: null`, gets no
+   * window (ASAP).
+   */
+  deliverySelections?: ICheckoutDeliverySelection[];
+
+  /**
+   * A fulfillment id. When set, that fulfillment's `deliveryScheduling.slots` holds the full
+   * window list. Send it when the window picker opens.
+   */
+  deliverySlotsFor?: string;
+
   deliveryInstructions?: ICheckoutDeliveryInstructions[];
 
   acceptedAccountCreation?: boolean;
 
+  /**
+   * @deprecated Use `deliverySelections` (one window per fulfillment). This checkout-wide value
+   * has no effect on delivery windows.
+   */
   scheduledDelivery?: string;
 
   payment?: string;
@@ -279,7 +297,11 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
 
   deliveryInstructions: string;
 
+  /** The BOPIS pickup time from the cart item. Delivery windows are in `deliveryScheduling`. */
   scheduledFor?: string | Date;
+
+  /** Delivery scheduling data. Present only when the fulfillment supports scheduled delivery. */
+  deliveryScheduling?: ICheckoutDeliveryScheduling;
 
   type: 'shipping' | 'onDemand' | 'bopis';
 

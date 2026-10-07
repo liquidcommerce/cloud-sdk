@@ -232,7 +232,6 @@ const updatedCart = await client.cart.update({
       quantity: 2,
       fulfillmentId: 'fulfillment_id',
       engravingLines: ['Line 1', 'Line 2'], // Optional
-      scheduledFor: '2024-12-25', // Optional
     },
   ],
   loc: {
@@ -633,7 +632,6 @@ const preparedCheckout = await client.checkout.prepare({
     },
   ],
   acceptedAccountCreation: true,
-  scheduledDelivery: '2024-12-25T14:00:00Z',
   promoCode: 'DISCOUNT10', // Optional
   giftCards: ['GC123456'], // Optional
 });
@@ -644,6 +642,38 @@ const completedCheckout = await client.checkout.complete({
   payment: 'payment_id',
 });
 ```
+
+#### Scheduled Delivery
+
+An on-demand fulfillment that supports scheduled delivery has `deliveryScheduling` in the
+prepare response. Other fulfillments do not have the key.
+
+```typescript
+// 1. The window picker opens: ask for the full window list of one fulfillment
+const withSlots = await client.checkout.prepare({
+  cartId: 'cart_id',
+  deliverySlotsFor: 'fulfillment_id',
+});
+// fulfillment.deliveryScheduling = {
+//   availability: { status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt, reason },
+//   slots: [{ id: '4136780-2:1791478800', start, end, cutoff }], // cutoff = "Order by"
+//   selectedSlotId: null,
+// }
+
+// 2. The shopper picks a window. The response echoes it in deliveryScheduling.selectedSlotId.
+await client.checkout.prepare({
+  cartId: 'cart_id',
+  deliverySelections: [{ fulfillmentId: 'fulfillment_id', slotId: '4136780-2:1791478800' }],
+});
+```
+
+`deliverySelections` replaces the earlier selections; leave it out to keep them. `slotId: null`
+means no window (ASAP). Window errors fail with HTTP 400 and a code from
+`ENUM_CHECKOUT_DELIVERY_ERROR_CODE` in `errors[].code`. When `checkout.complete` fails with
+`delivery_window_expired`, the order-by time has passed: pick a new window and complete again.
+Orders show the window in `fulfillments[].scheduledFor` and `fulfillments[].scheduledUntil`.
+
+`scheduledDelivery` (checkout) and `scheduledFor` (cart item) are deprecated.
 
 #### Checkout Payment
 

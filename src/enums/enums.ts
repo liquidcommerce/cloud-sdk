@@ -406,6 +406,29 @@ export enum ENUM_DISCOUNT_STATUS_CODE_ERROR {
   REQUEST_COUPON_REJECTED_AT_COMPLETE_ERROR = 5600,
 }
 
+/**
+ * Delivery window errors from checkout prepare and complete. They fail with HTTP 400 and arrive
+ * in `errors[].code` with `field: 'deliverySelections'`; `message` gives the text.
+ */
+export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
+  /** The order-by time of the selected window has passed. Pick a new window. */
+  DELIVERY_WINDOW_EXPIRED = 'delivery_window_expired',
+  /** The selected window is not offered now. */
+  DELIVERY_WINDOW_UNAVAILABLE = 'delivery_window_unavailable',
+  /** Scheduled delivery is turned off. */
+  DELIVERY_WINDOWS_UNSUPPORTED = 'delivery_windows_unsupported',
+  /** The retailer or the fulfillment does not offer scheduled delivery. */
+  DELIVERY_SCHEDULING_NOT_ENABLED = 'delivery_scheduling_not_enabled',
+  /** A delivery window needs a cart with one fulfillment group. */
+  MULTIPLE_FULFILLMENT_GROUPS = 'multiple_fulfillment_groups',
+  /** The window belongs to a fulfillment option that is not in this checkout. */
+  UNKNOWN_FULFILLMENT_OPTION = 'unknown_fulfillment_option',
+  /** The slot id is malformed or does not match the fulfillment. */
+  DELIVERY_SELECTION_INVALID = 'delivery_selection_invalid',
+  /** The fulfillment has no delivery scheduling. */
+  DELIVERY_SCHEDULING_UNSUPPORTED = 'delivery_scheduling_unsupported',
+}
+
 export enum CHECKOUT_EVENT_ENUM {
   ERROR_PROCESSING_GIFT_CARDS = 'ErrorProcessingGiftCards',
   INVALID_GIFT_CARD_CODE = 'InvalidGiftCardCodes',

@@ -186,6 +186,10 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
 
   price: number;
 
+  /**
+   * @deprecated Delivery windows are per fulfillment: send `deliverySelections` to checkout
+   * prepare and read `ICheckoutFulfillment.deliveryScheduling`.
+   */
   scheduledFor: string | Date;
 
   availableAt: string | Date;
@@ -355,6 +359,10 @@ export interface ICartUpdateItem {
   /** `null` clears the current selection. */
   personalization?: ICartItemPersonalization | null;
 
+  /**
+   * @deprecated Delivery windows are per fulfillment: send `deliverySelections` to checkout
+   * prepare. BOPIS pickup time stays in `bopis.scheduledFor`.
+   */
   scheduledFor?: string | Date;
 
   bopis?: ICartItemBopis;
