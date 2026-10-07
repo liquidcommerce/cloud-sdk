@@ -120,6 +120,17 @@ export class CheckoutHelperService {
       this.validateDeliveryTips(normalizedParams.deliveryTips);
     }
 
+    if (normalizedParams?.deliverySelections !== undefined) {
+      this.validateDeliverySelections(normalizedParams.deliverySelections);
+    }
+
+    if (
+      normalizedParams?.deliverySlotsFor !== undefined &&
+      (typeof normalizedParams.deliverySlotsFor !== 'string' || !normalizedParams.deliverySlotsFor)
+    ) {
+      throw new Error('Invalid deliverySlotsFor');
+    }
+
     if (normalizedParams?.refresh) {
       normalizedParams.refresh = Boolean(normalizedParams.refresh);
     }
@@ -416,5 +427,34 @@ export class CheckoutHelperService {
         throw new Error('Invalid tip amount in deliveryTip');
       }
     });
+  }
+
+  /**
+   * Validates the shape of the delivery selections. Cloud checks the slot ids.
+   *
+   * @param {ICheckoutPrepareParams['deliverySelections']} selections - The delivery selections.
+   * @throws {Error} If the parameter is not an array, or a selection has an invalid
+   * fulfillmentId or slotId.
+   * @return {void}
+   */
+  private validateDeliverySelections(
+    selections: ICheckoutPrepareParams['deliverySelections']
+  ): void {
+    if (!Array.isArray(selections)) {
+      throw new Error('Invalid deliverySelections');
+    }
+
+    for (const selection of selections) {
+      if (!selection?.fulfillmentId || typeof selection.fulfillmentId !== 'string') {
+        throw new Error('Invalid fulfillmentId in deliverySelection');
+      }
+
+      if (
+        selection.slotId !== null &&
+        (typeof selection.slotId !== 'string' || !selection.slotId)
+      ) {
+        throw new Error('Invalid slotId in deliverySelection');
+      }
+    }
   }
 }
