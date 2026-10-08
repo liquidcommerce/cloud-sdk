@@ -299,9 +299,10 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
 
   /**
    * For a scheduled on-demand fulfillment: the delivery window start (ISO-8601 UTC). For BOPIS:
-   * the pickup time from the cart item. Window choices are in `deliveryScheduling`.
+   * the pickup time from the cart item. Window choices are in `deliveryScheduling`. Cloud sends
+   * a string (JSON), never a `Date`.
    */
-  scheduledFor?: string | Date;
+  scheduledFor?: string;
 
   /** The delivery window end (ISO-8601 UTC); absent when unscheduled. */
   scheduledUntil?: string;
