@@ -124,11 +124,8 @@ export class CheckoutHelperService {
       this.validateDeliverySelections(normalizedParams.deliverySelections);
     }
 
-    if (
-      normalizedParams?.deliverySlotsFor !== undefined &&
-      (typeof normalizedParams.deliverySlotsFor !== 'string' || !normalizedParams.deliverySlotsFor)
-    ) {
-      throw new Error('Invalid deliverySlotsFor');
+    if (normalizedParams?.deliverySlotsFor !== undefined) {
+      this.validateDeliverySlotsFor(normalizedParams.deliverySlotsFor);
     }
 
     if (normalizedParams?.refresh) {
@@ -449,12 +446,28 @@ export class CheckoutHelperService {
         throw new Error('Invalid fulfillmentId in deliverySelection');
       }
 
-      if (
-        selection.slotId !== null &&
-        (typeof selection.slotId !== 'string' || !selection.slotId)
-      ) {
+      if (selection.slotId !== null && !this.isNonEmptyString(selection.slotId)) {
         throw new Error('Invalid slotId in deliverySelection');
       }
     }
+  }
+
+  /**
+   * Validates the fulfillment id that asks Cloud for the delivery slots.
+   *
+   * @param {ICheckoutPrepareParams['deliverySlotsFor']} fulfillmentId - The fulfillment id.
+   * @throws {Error} If the parameter is not a non-empty string.
+   * @return {void}
+   */
+  private validateDeliverySlotsFor(
+    fulfillmentId: ICheckoutPrepareParams['deliverySlotsFor']
+  ): void {
+    if (!this.isNonEmptyString(fulfillmentId)) {
+      throw new Error('Invalid deliverySlotsFor');
+    }
+  }
+
+  private isNonEmptyString(value: unknown): value is string {
+    return typeof value === 'string' && value.length > 0;
   }
 }
