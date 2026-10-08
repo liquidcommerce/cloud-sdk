@@ -59,7 +59,7 @@ export interface CheckoutDeliveryScheduling {
 
   /**
    * The full window list. Filled only for the fulfillment named in
-   * `ICheckoutPrepareParams.deliverySlotsFor`; empty otherwise.
+   * `ICheckoutPrepareParams.deliverySlotsFulfillmentId`; empty otherwise.
    */
   slots: DeliverySlot[];
 

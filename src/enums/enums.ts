@@ -412,8 +412,8 @@ export enum ENUM_DISCOUNT_STATUS_CODE_ERROR {
 
 /**
  * Delivery window errors from checkout prepare and complete. They fail with HTTP 400 and arrive
- * in `errors[].code`, with `field: 'deliverySelections'` (or `'deliverySlotsFor'` for an invalid
- * `deliverySlotsFor`); `message` gives the text.
+ * in `errors[].code`, with `field: 'deliverySelections'` (or `'deliverySlotsFulfillmentId'` for an invalid
+ * `deliverySlotsFulfillmentId`); `message` gives the text.
  */
 export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   /** The order-by time of the selected window has passed. Pick a new window. */

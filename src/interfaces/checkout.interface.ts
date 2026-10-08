@@ -171,7 +171,7 @@ export interface ICheckoutPrepareParams extends ICoreParams {
    * A fulfillment id. When set, that fulfillment's `deliveryScheduling.slots` holds the full
    * window list. Send it when the window picker opens.
    */
-  deliverySlotsFor?: string;
+  deliverySlotsFulfillmentId?: string;
 
   deliveryInstructions?: ICheckoutDeliveryInstructions[];
 

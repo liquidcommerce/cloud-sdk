@@ -42,12 +42,12 @@ describe('CheckoutService delivery scheduling', () => {
     vi.unstubAllGlobals();
   });
 
-  it('sends deliverySelections and deliverySlotsFor to prepare unchanged', async () => {
+  it('sends deliverySelections and deliverySlotsFulfillmentId to prepare unchanged', async () => {
     const fetch = stubFetch(jsonResponse({ data: {} }));
 
     await createService().prepare({
       cartId: 'cart-1',
-      deliverySlotsFor: 'fulfillment-1',
+      deliverySlotsFulfillmentId: 'fulfillment-1',
       deliverySelections: [
         { fulfillmentId: 'fulfillment-1', slotId: '4136780-2:1791478800' },
         { fulfillmentId: 'fulfillment-2', slotId: null },
@@ -57,7 +57,7 @@ describe('CheckoutService delivery scheduling', () => {
     expect(fetch.mock.calls[1]?.[0]).toBe('https://cloud.example/api/checkout/prepare');
     expect(sentBody(fetch)).toMatchObject({
       cartId: 'cart-1',
-      deliverySlotsFor: 'fulfillment-1',
+      deliverySlotsFulfillmentId: 'fulfillment-1',
       deliverySelections: [
         { fulfillmentId: 'fulfillment-1', slotId: '4136780-2:1791478800' },
         { fulfillmentId: 'fulfillment-2', slotId: null },
@@ -77,7 +77,7 @@ describe('CheckoutService delivery scheduling', () => {
       { deliverySelections: [{ fulfillmentId: 'f', slotId: '' }] },
       'Invalid slotId in deliverySelection',
     ],
-    ['an empty deliverySlotsFor', { deliverySlotsFor: '' }, 'Invalid deliverySlotsFor'],
+    ['an empty deliverySlotsFulfillmentId', { deliverySlotsFulfillmentId: '' }, 'Invalid deliverySlotsFulfillmentId'],
   ])('rejects %s before the request', async (_name, extra, message) => {
     const fetch = stubFetch(jsonResponse({ data: {} }));
     vi.spyOn(console, 'error').mockImplementation(() => undefined);

@@ -652,7 +652,7 @@ prepare response. Other fulfillments do not have the key.
 // 1. The window picker opens: ask for the full window list of one fulfillment
 const withSlots = await client.checkout.prepare({
   cartId: 'cart_id',
-  deliverySlotsFor: 'fulfillment_id',
+  deliverySlotsFulfillmentId: 'fulfillment_id',
 });
 // fulfillment.deliveryScheduling = {
 //   availability: { status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt, reason },
