@@ -442,7 +442,7 @@ export class CheckoutHelperService {
     }
 
     for (const selection of selections) {
-      if (!selection?.fulfillmentId || typeof selection.fulfillmentId !== 'string') {
+      if (!this.isNonEmptyString(selection?.fulfillmentId)) {
         throw new Error('Invalid fulfillmentId in deliverySelection');
       }
 
@@ -467,6 +467,12 @@ export class CheckoutHelperService {
     }
   }
 
+  /**
+   * Checks that a value is a string with at least one character.
+   *
+   * @param {unknown} value - The value to check.
+   * @return {boolean} True if the value is a non-empty string.
+   */
   private isNonEmptyString(value: unknown): value is string {
     return typeof value === 'string' && value.length > 0;
   }
