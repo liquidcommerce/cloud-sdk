@@ -78,6 +78,41 @@ describe('CheckoutService delivery scheduling', () => {
       'Invalid slotId in deliverySelection',
     ],
     ['an empty deliverySlotsFulfillmentId', { deliverySlotsFulfillmentId: '' }, 'Invalid deliverySlotsFulfillmentId'],
+    [
+      'more than 50 deliverySelections',
+      {
+        deliverySelections: Array.from({ length: 51 }, (_, index) => ({
+          fulfillmentId: `f-${index}`,
+          slotId: null,
+        })),
+      },
+      'Invalid deliverySelections',
+    ],
+    [
+      'a duplicate fulfillmentId',
+      {
+        deliverySelections: [
+          { fulfillmentId: 'f', slotId: null },
+          { fulfillmentId: 'f', slotId: 'f:1' },
+        ],
+      },
+      'Duplicate fulfillmentId in deliverySelections',
+    ],
+    [
+      'a fulfillmentId longer than 255 characters',
+      { deliverySelections: [{ fulfillmentId: 'f'.repeat(256), slotId: null }] },
+      'Invalid fulfillmentId in deliverySelection',
+    ],
+    [
+      'a slotId longer than 255 characters',
+      { deliverySelections: [{ fulfillmentId: 'f', slotId: 's'.repeat(256) }] },
+      'Invalid slotId in deliverySelection',
+    ],
+    [
+      'a deliverySlotsFulfillmentId longer than 255 characters',
+      { deliverySlotsFulfillmentId: 'f'.repeat(256) },
+      'Invalid deliverySlotsFulfillmentId',
+    ],
   ])('rejects %s before the request', async (_name, extra, message) => {
     const fetch = stubFetch(jsonResponse({ data: {} }));
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
@@ -86,6 +121,18 @@ describe('CheckoutService delivery scheduling', () => {
       createService().prepare({ cartId: 'cart-1', ...extra } as unknown as ICheckoutPrepareParams)
     ).rejects.toThrow(message);
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('accepts 50 deliverySelections with ids of 255 characters', async () => {
+    const fetch = stubFetch(jsonResponse({ data: {} }));
+    const deliverySelections = Array.from({ length: 50 }, (_, index) => ({
+      fulfillmentId: String(index).padEnd(255, 'f'),
+      slotId: 's'.repeat(255),
+    }));
+
+    await createService().prepare({ cartId: 'cart-1', deliverySelections });
+
+    expect(sentBody(fetch).deliverySelections).toHaveLength(50);
   });
 
   it('keeps the delivery error code of a failed complete', async () => {

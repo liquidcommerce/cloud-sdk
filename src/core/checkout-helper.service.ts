@@ -7,6 +7,10 @@ import type {
 } from '../interfaces';
 import type { LocationHelperService } from './location-helper.service';
 
+/** Cloud's limits on `deliverySelections` (CheckoutPrepareDto). */
+const MAX_DELIVERY_SELECTIONS = 50;
+const MAX_DELIVERY_ID_LENGTH = 255;
+
 /**
  * CheckoutHelperService is a helper class that provides methods
  * for validating and normalizing checkout parameters.
@@ -427,26 +431,34 @@ export class CheckoutHelperService {
   }
 
   /**
-   * Validates the shape of the delivery selections. Cloud checks the slot ids.
+   * Validates the shape of the delivery selections with Cloud's limits: at most 50 entries, one
+   * per fulfillmentId, ids of at most 255 characters. Cloud checks that the slot ids exist.
    *
    * @param {ICheckoutPrepareParams['deliverySelections']} selections - The delivery selections.
-   * @throws {Error} If the parameter is not an array, or a selection has an invalid
-   * fulfillmentId or slotId.
+   * @throws {Error} If the parameter is not an array, has too many entries or a duplicate
+   * fulfillmentId, or a selection has an invalid fulfillmentId or slotId.
    * @return {void}
    */
   private validateDeliverySelections(
     selections: ICheckoutPrepareParams['deliverySelections']
   ): void {
-    if (!Array.isArray(selections)) {
+    if (!Array.isArray(selections) || selections.length > MAX_DELIVERY_SELECTIONS) {
       throw new Error('Invalid deliverySelections');
     }
 
+    const fulfillmentIds = new Set<string>();
+
     for (const selection of selections) {
-      if (!this.isNonEmptyString(selection?.fulfillmentId)) {
+      if (!this.isDeliveryId(selection?.fulfillmentId)) {
         throw new Error('Invalid fulfillmentId in deliverySelection');
       }
 
-      if (selection.slotId !== null && !this.isNonEmptyString(selection.slotId)) {
+      if (fulfillmentIds.has(selection.fulfillmentId)) {
+        throw new Error('Duplicate fulfillmentId in deliverySelections');
+      }
+      fulfillmentIds.add(selection.fulfillmentId);
+
+      if (selection.slotId !== null && !this.isDeliveryId(selection.slotId)) {
         throw new Error('Invalid slotId in deliverySelection');
       }
     }
@@ -456,15 +468,26 @@ export class CheckoutHelperService {
    * Validates the fulfillment id that asks Cloud for the delivery slots.
    *
    * @param {ICheckoutPrepareParams['deliverySlotsFulfillmentId']} fulfillmentId - The fulfillment id.
-   * @throws {Error} If the parameter is not a non-empty string.
+   * @throws {Error} If the parameter is not a non-empty string of at most 255 characters.
    * @return {void}
    */
   private validateDeliverySlotsFulfillmentId(
     fulfillmentId: ICheckoutPrepareParams['deliverySlotsFulfillmentId']
   ): void {
-    if (!this.isNonEmptyString(fulfillmentId)) {
+    if (!this.isDeliveryId(fulfillmentId)) {
       throw new Error('Invalid deliverySlotsFulfillmentId');
     }
+  }
+
+  /**
+   * Checks that a value is a delivery id Cloud accepts: a non-empty string of at most 255
+   * characters.
+   *
+   * @param {unknown} value - The value to check.
+   * @return {boolean} True if the value is a valid delivery id.
+   */
+  private isDeliveryId(value: unknown): value is string {
+    return this.isNonEmptyString(value) && value.length <= MAX_DELIVERY_ID_LENGTH;
   }
 
   /**
