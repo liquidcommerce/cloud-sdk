@@ -427,9 +427,10 @@ export enum ENUM_DISCOUNT_STATUS_CODE_ERROR {
 }
 
 /**
- * Delivery window errors from checkout prepare and complete. They fail with HTTP 400 and arrive
- * in `errors[].code`, with `field: 'deliverySelections'` (or `'deliverySlotsFulfillmentId'` for an invalid
- * `deliverySlotsFulfillmentId`); `message` gives the text.
+ * Delivery window errors from checkout prepare and complete. They fail with HTTP 400 (statusCode
+ * 5515) and arrive in `errors[].code`, with `field: 'deliverySelections'` (or
+ * `'deliverySlotsFulfillmentId'` for an invalid `deliverySlotsFulfillmentId`); `message` gives the
+ * text. Elements services adds `DELIVERY_SELECTION_NOT_ACCEPTED` with HTTP 409.
  */
 export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   /** The order-by time of the selected window has passed. Pick a new window. */
@@ -461,6 +462,12 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
    * Elements services also returns it with HTTP 409 when such a fulfillment gets a window.
    */
   DELIVERY_SCHEDULING_UNSUPPORTED = 'delivery_scheduling_unsupported',
+  /**
+   * Returned by Elements services, not by Cloud, with HTTP 409: Cloud did not echo the requested
+   * window in `deliveryScheduling.selectedSlotId`. Clear that selection and let the shopper pick
+   * a window again.
+   */
+  DELIVERY_SELECTION_NOT_ACCEPTED = 'delivery_selection_not_accepted',
 }
 
 export enum CHECKOUT_EVENT_ENUM {
