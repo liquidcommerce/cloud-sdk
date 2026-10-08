@@ -436,9 +436,17 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   DELIVERY_WINDOW_EXPIRED = 'delivery_window_expired',
   /** The selected window is not offered now. */
   DELIVERY_WINDOW_UNAVAILABLE = 'delivery_window_unavailable',
-  /** Scheduled delivery is turned off. */
+  /**
+   * Cart-wide: this checkout cannot take a delivery window at all (scheduled delivery is turned
+   * off, or the cart has a preorder item). Hide the window picker for the whole checkout and
+   * send `slotId: null` (ASAP) for every fulfillment.
+   */
   DELIVERY_WINDOWS_UNSUPPORTED = 'delivery_windows_unsupported',
-  /** The retailer or the fulfillment does not offer scheduled delivery. */
+  /**
+   * Per fulfillment, from the retailer: the retailer has not turned on scheduled delivery for
+   * this fulfillment option. Hide the window picker for that fulfillment only and send
+   * `slotId: null` for it.
+   */
   DELIVERY_SCHEDULING_NOT_ENABLED = 'delivery_scheduling_not_enabled',
   /** A delivery window needs a cart with one fulfillment group. */
   MULTIPLE_FULFILLMENT_GROUPS = 'multiple_fulfillment_groups',
@@ -446,7 +454,12 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   UNKNOWN_FULFILLMENT_OPTION = 'unknown_fulfillment_option',
   /** The slot id is malformed or does not match the fulfillment. */
   DELIVERY_SELECTION_INVALID = 'delivery_selection_invalid',
-  /** The fulfillment has no delivery scheduling. */
+  /**
+   * Per fulfillment, from the fulfillment type: the fulfillment can never take a window (it is
+   * not on-demand, or the checkout does not support delivery windows). A window was sent for a
+   * fulfillment without `deliveryScheduling`; send `slotId: null` for it or leave it out.
+   * Elements services also returns it with HTTP 409 when such a fulfillment gets a window.
+   */
   DELIVERY_SCHEDULING_UNSUPPORTED = 'delivery_scheduling_unsupported',
 }
 
