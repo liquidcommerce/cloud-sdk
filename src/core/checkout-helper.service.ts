@@ -431,12 +431,10 @@ export class CheckoutHelperService {
   }
 
   /**
-   * Validates the shape of the delivery selections with Cloud's limits: at most 50 entries, one
-   * per fulfillmentId, ids of at most 255 characters. Cloud checks that the slot ids exist.
+   * Validates the delivery selections against Cloud's limits. Cloud checks that the slot ids exist.
    *
    * @param {ICheckoutPrepareParams['deliverySelections']} selections - The delivery selections.
-   * @throws {Error} If the parameter is not an array, has too many entries or a duplicate
-   * fulfillmentId, or a selection has an invalid fulfillmentId or slotId.
+   * @throws {Error} If the array is invalid, too long, repeats a fulfillmentId, or has an invalid id.
    * @return {void}
    */
   private validateDeliverySelections(
@@ -465,10 +463,10 @@ export class CheckoutHelperService {
   }
 
   /**
-   * Validates the fulfillment id that asks Cloud for the delivery slots.
+   * Validates the deliverySlotsFulfillmentId parameter.
    *
    * @param {ICheckoutPrepareParams['deliverySlotsFulfillmentId']} fulfillmentId - The fulfillment id.
-   * @throws {Error} If the parameter is not a non-empty string of at most 255 characters.
+   * @throws {Error} If the id is invalid.
    * @return {void}
    */
   private validateDeliverySlotsFulfillmentId(
@@ -480,8 +478,7 @@ export class CheckoutHelperService {
   }
 
   /**
-   * Checks that a value is a delivery id Cloud accepts: a non-empty string of at most 255
-   * characters.
+   * Checks that a value is a non-empty string within Cloud's id length limit.
    *
    * @param {unknown} value - The value to check.
    * @return {boolean} True if the value is a valid delivery id.
@@ -491,7 +488,7 @@ export class CheckoutHelperService {
   }
 
   /**
-   * Checks that a value is a string with at least one character.
+   * Checks that a value is a non-empty string.
    *
    * @param {unknown} value - The value to check.
    * @return {boolean} True if the value is a non-empty string.

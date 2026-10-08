@@ -11,10 +11,9 @@ export interface DeliverySlot {
   /** `<fulfillmentOptionId>:<window start in Unix seconds>`, for example `4136780-2:1791478800`. */
   id: string;
 
-  /** Window start. */
   start: string;
 
-  /** Window end (start + 1 hour). */
+  /** One hour after `start`. */
   end: string;
 
   /**
@@ -30,10 +29,7 @@ export interface DeliverySlot {
  * @interface
  */
 export interface DeliveryAvailability {
-  /**
-   * Cloud sends only `'available'` today; the other values arrive in a later release. Compare
-   * with `ENUM_DELIVERY_AVAILABILITY_STATUS` or with the string value.
-   */
+  /** Compare with `ENUM_DELIVERY_AVAILABILITY_STATUS` or its string value. */
   status: ENUM_DELIVERY_AVAILABILITY_STATUS | `${ENUM_DELIVERY_AVAILABILITY_STATUS}`;
 
   /** The fulfillment can deliver as soon as possible right now. */
@@ -45,18 +41,17 @@ export interface DeliveryAvailability {
   /** IANA time zone of the retailer, for example `America/New_York`. */
   timezone: string;
 
-  /** The first window, or `null` when there is none. */
+  /** The first available window. */
   nextSlot: DeliverySlot | null;
 
-  /** ISO-8601 UTC time at which Cloud built this availability. */
+  /** When Cloud built this availability (ISO-8601 UTC). */
   checkedAt: string;
 
   reason: string | null;
 }
 
 /**
- * Delivery scheduling data of a checkout fulfillment. Present only on fulfillments that
- * support scheduled delivery.
+ * Delivery scheduling data of a checkout fulfillment.
  *
  * @interface
  */
@@ -69,7 +64,7 @@ export interface CheckoutDeliveryScheduling {
    */
   slots: DeliverySlot[];
 
-  /** The accepted window (`DeliverySlot.id`), or `null` for no window (ASAP). */
+  /** The accepted `DeliverySlot.id`, or `null` for no window (ASAP). */
   selectedSlotId: string | null;
 }
 

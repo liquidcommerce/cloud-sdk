@@ -428,9 +428,8 @@ export enum ENUM_DISCOUNT_STATUS_CODE_ERROR {
 
 /**
  * Delivery window errors from checkout prepare and complete. They fail with HTTP 400 (statusCode
- * 5515) and arrive in `errors[].code`, with `field: 'deliverySelections'` (or
- * `'deliverySlotsFulfillmentId'` for an invalid `deliverySlotsFulfillmentId`); `message` gives the
- * text. Elements services adds `DELIVERY_SELECTION_NOT_ACCEPTED` with HTTP 409.
+ * 5515) and arrive in `errors[].code`, with `field: 'deliverySelections'` or
+ * `'deliverySlotsFulfillmentId'`.
  */
 export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   /** The order-by time of the selected window has passed. Pick a new window. */
@@ -444,9 +443,8 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
    */
   DELIVERY_WINDOWS_UNSUPPORTED = 'delivery_windows_unsupported',
   /**
-   * Per fulfillment, from the retailer: the retailer has not turned on scheduled delivery for
-   * this fulfillment option. Hide the window picker for that fulfillment only and send
-   * `slotId: null` for it.
+   * Per fulfillment: the retailer has not turned on scheduled delivery for this fulfillment
+   * option. Hide the window picker for that fulfillment only and send `slotId: null` for it.
    */
   DELIVERY_SCHEDULING_NOT_ENABLED = 'delivery_scheduling_not_enabled',
   /** A delivery window needs a cart with one fulfillment group. */
@@ -456,10 +454,9 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   /** The slot id is malformed or does not match the fulfillment. */
   DELIVERY_SELECTION_INVALID = 'delivery_selection_invalid',
   /**
-   * Per fulfillment, from the fulfillment type: the fulfillment can never take a window (it is
-   * not on-demand, or the checkout does not support delivery windows). A window was sent for a
-   * fulfillment without `deliveryScheduling`; send `slotId: null` for it or leave it out.
-   * Elements services also returns it with HTTP 409 when such a fulfillment gets a window.
+   * Per fulfillment: a window was sent for a fulfillment without `deliveryScheduling`, which can
+   * never take one. Send `slotId: null` for it or leave it out. Elements services returns it with
+   * HTTP 409.
    */
   DELIVERY_SCHEDULING_UNSUPPORTED = 'delivery_scheduling_unsupported',
   /**

@@ -186,7 +186,7 @@ export interface IRetailerFulfillmentBopis {
 export interface IRetailerFulfillments {
   id: string;
 
-  /** Delivery scheduling availability. Present only when the fulfillment supports it. */
+  /** Present only when the fulfillment supports scheduled delivery. */
   deliveryAvailability?: DeliveryAvailability;
 
   type: ENUM_MODALITIES;

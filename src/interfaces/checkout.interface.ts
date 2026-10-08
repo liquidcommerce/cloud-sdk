@@ -165,18 +165,15 @@ export interface ICheckoutPrepareParams extends ICoreParams {
    * with exactly these; a scheduling fulfillment that is not listed, or `slotId: null`, gets no
    * window (ASAP). At most 50 entries, one per `fulfillmentId`, ids of at most 255 characters.
    *
-   * Recovery from an expired window: when this field is absent, Cloud sends the stored window
-   * again on every prepare. After that window's order-by time (`DeliverySlot.cutoff`) passes,
-   * each such prepare fails with HTTP 400 and code `delivery_window_expired`
-   * (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE.DELIVERY_WINDOW_EXPIRED`). To recover, send this field
-   * with `slotId: null` (ASAP) or a new slot for that fulfillment, or send `[]` to clear all
-   * windows.
+   * When this field is absent, Cloud applies the stored window again, so after its
+   * `DeliverySlot.cutoff` passes every prepare fails with `delivery_window_expired`. To recover,
+   * send `slotId: null` or a new slot for that fulfillment, or `[]` to clear all windows.
    */
   deliverySelections?: CheckoutDeliverySelection[];
 
   /**
-   * A fulfillment id. When set, that fulfillment's `deliveryScheduling.slots` holds the full
-   * window list. Send it when the window picker opens.
+   * The fulfillment whose `deliveryScheduling.slots` gets the full window list. Send it when the
+   * window picker opens.
    */
   deliverySlotsFulfillmentId?: string;
 
@@ -306,15 +303,14 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
 
   /**
    * For a scheduled on-demand fulfillment: the delivery window start (ISO-8601 UTC). For BOPIS:
-   * the pickup time from the cart item. Window choices are in `deliveryScheduling`. Cloud sends
-   * a string (JSON), never a `Date`.
+   * the pickup time from the cart item. Cloud sends a string, never a `Date`.
    */
   scheduledFor?: string;
 
   /** The delivery window end (ISO-8601 UTC); absent when unscheduled. */
   scheduledUntil?: string;
 
-  /** Delivery scheduling data. Present only when the fulfillment supports scheduled delivery. */
+  /** Present only when the fulfillment supports scheduled delivery. */
   deliveryScheduling?: CheckoutDeliveryScheduling;
 
   type: 'shipping' | 'onDemand' | 'bopis';
