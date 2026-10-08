@@ -163,7 +163,14 @@ export interface ICheckoutPrepareParams extends ICoreParams {
   /**
    * Delivery windows to apply. Absent: keep the windows accepted before. Present: replace them
    * with exactly these; a scheduling fulfillment that is not listed, or `slotId: null`, gets no
-   * window (ASAP).
+   * window (ASAP). At most 50 entries, one per `fulfillmentId`, ids of at most 255 characters.
+   *
+   * Recovery from an expired window: when this field is absent, Cloud sends the stored window
+   * again on every prepare. After that window's order-by time (`DeliverySlot.cutoff`) passes,
+   * each such prepare fails with HTTP 400 and code `delivery_window_expired`
+   * (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE.DELIVERY_WINDOW_EXPIRED`). To recover, send this field
+   * with `slotId: null` (ASAP) or a new slot for that fulfillment, or send `[]` to clear all
+   * windows.
    */
   deliverySelections?: CheckoutDeliverySelection[];
 
