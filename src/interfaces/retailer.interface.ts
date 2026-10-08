@@ -186,7 +186,11 @@ export interface IRetailerFulfillmentBopis {
 export interface IRetailerFulfillments {
   id: string;
 
-  /** Present only when the fulfillment supports scheduled delivery. */
+  /**
+   * Present only when the fulfillment supports scheduled delivery. A store that is closed now stays
+   * in the response only with this field, `canSchedule: true` and a future `nextSlot`; checkout then
+   * needs a window for it.
+   */
   deliveryAvailability?: DeliveryAvailability;
 
   type: ENUM_MODALITIES;

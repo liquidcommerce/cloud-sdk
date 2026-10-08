@@ -437,6 +437,11 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   /** The selected window is not offered now. */
   DELIVERY_WINDOW_UNAVAILABLE = 'delivery_window_unavailable',
   /**
+   * The store cannot deliver now, so this fulfillment needs a window before Place Order. Open the
+   * picker for it.
+   */
+  DELIVERY_WINDOW_REQUIRED = 'delivery_window_required',
+  /**
    * Cart-wide: this checkout cannot take a delivery window at all (scheduled delivery is turned
    * off, or the cart has a preorder item). Hide the window picker for the whole checkout and
    * send `slotId: null` (ASAP) for every fulfillment.
