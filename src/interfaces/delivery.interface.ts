@@ -5,7 +5,7 @@
  *
  * @interface
  */
-export interface IDeliverySlot {
+export interface DeliverySlot {
   /** `<fulfillmentOptionId>:<window start in Unix seconds>`, for example `4136780-2:1791478800`. */
   id: string;
 
@@ -27,7 +27,7 @@ export interface IDeliverySlot {
  *
  * @interface
  */
-export interface IDeliveryAvailability {
+export interface DeliveryAvailability {
   status: 'available' | 'unavailable' | 'unknown' | 'address_required';
 
   /** The fulfillment can deliver as soon as possible right now. */
@@ -40,7 +40,7 @@ export interface IDeliveryAvailability {
   timezone: string;
 
   /** The first window, or `null` when there is none. */
-  nextSlot: IDeliverySlot | null;
+  nextSlot: DeliverySlot | null;
 
   /** ISO-8601 UTC time at which Cloud built this availability. */
   checkedAt: string;
@@ -54,16 +54,16 @@ export interface IDeliveryAvailability {
  *
  * @interface
  */
-export interface ICheckoutDeliveryScheduling {
-  availability: IDeliveryAvailability;
+export interface CheckoutDeliveryScheduling {
+  availability: DeliveryAvailability;
 
   /**
    * The full window list. Filled only for the fulfillment named in
    * `ICheckoutPrepareParams.deliverySlotsFor`; empty otherwise.
    */
-  slots: IDeliverySlot[];
+  slots: DeliverySlot[];
 
-  /** The accepted window (`IDeliverySlot.id`), or `null` for no window (ASAP). */
+  /** The accepted window (`DeliverySlot.id`), or `null` for no window (ASAP). */
   selectedSlotId: string | null;
 }
 
@@ -72,9 +72,9 @@ export interface ICheckoutDeliveryScheduling {
  *
  * @interface
  */
-export interface ICheckoutDeliverySelection {
+export interface CheckoutDeliverySelection {
   fulfillmentId: string;
 
-  /** An `IDeliverySlot.id`, or `null` for no window (ASAP). */
+  /** A `DeliverySlot.id`, or `null` for no window (ASAP). */
   slotId: string | null;
 }
