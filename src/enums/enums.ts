@@ -192,6 +192,22 @@ export enum ENUM_AVAILABILITY_VALUE {
   BACKORDER = 'BACKORDER',
 }
 
+/**
+ * Status of `DeliveryAvailability` for one fulfillment. Cloud sends only `AVAILABLE` today; the
+ * other values are reserved for a later release, so treat any value other than `AVAILABLE` as
+ * "no delivery windows to show".
+ */
+export enum ENUM_DELIVERY_AVAILABILITY_STATUS {
+  /** Windows were computed; check `canDeliverNow` and `canSchedule`. */
+  AVAILABLE = 'available',
+  /** The fulfillment cannot deliver now and has no window. */
+  UNAVAILABLE = 'unavailable',
+  /** Cloud could not compute the windows. Try again later. */
+  UNKNOWN = 'unknown',
+  /** A delivery address is necessary before the windows can be computed. */
+  ADDRESS_REQUIRED = 'address_required',
+}
+
 export enum CART_PARAM_ERROR_ENUM {
   INVALID_ITEMS_TYPE = 'Items must be a non-empty array',
   INVALID_ITEMS_MAX = 'You can only send up to 25 items at a time!',

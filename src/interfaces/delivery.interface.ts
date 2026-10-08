@@ -1,3 +1,5 @@
+import type { ENUM_DELIVERY_AVAILABILITY_STATUS } from '../enums';
+
 /**
  * A one-hour delivery window a shopper can pick for an on-demand fulfillment.
  *
@@ -28,7 +30,11 @@ export interface DeliverySlot {
  * @interface
  */
 export interface DeliveryAvailability {
-  status: 'available' | 'unavailable' | 'unknown' | 'address_required';
+  /**
+   * Cloud sends only `'available'` today; the other values arrive in a later release. Compare
+   * with `ENUM_DELIVERY_AVAILABILITY_STATUS` or with the string value.
+   */
+  status: ENUM_DELIVERY_AVAILABILITY_STATUS | `${ENUM_DELIVERY_AVAILABILITY_STATUS}`;
 
   /** The fulfillment can deliver as soon as possible right now. */
   canDeliverNow: boolean;
