@@ -452,7 +452,10 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
    * option. Hide the window picker for that fulfillment only and send `slotId: null` for it.
    */
   DELIVERY_SCHEDULING_NOT_ENABLED = 'delivery_scheduling_not_enabled',
-  /** A delivery window needs a cart with one fulfillment group. */
+  /**
+   * @deprecated ManaShop no longer sends it: each on-demand group of a cart can take its own window.
+   * Kept so older clients still compile.
+   */
   MULTIPLE_FULFILLMENT_GROUPS = 'multiple_fulfillment_groups',
   /** The window belongs to a fulfillment option that is not in this checkout. */
   UNKNOWN_FULFILLMENT_OPTION = 'unknown_fulfillment_option',
