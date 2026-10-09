@@ -2,6 +2,7 @@ import type { CHECKOUT_EVENT_ENUM } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
 import type { ICartAttributesPromoCode, ICartItemAttributes } from './cart.interface';
+import type { CheckoutDeliveryScheduling, CheckoutDeliverySelection } from './delivery.interface';
 import type { IRetailerExpectation } from './retailer.interface';
 
 /**
@@ -159,10 +160,33 @@ export interface ICheckoutPrepareParams extends ICoreParams {
 
   deliveryTips?: ICheckoutDeliveryTip[];
 
+  /**
+   * Delivery windows to apply. Absent: keep the windows accepted before. Present: replace them
+   * with exactly these; a scheduling fulfillment that is not listed, or `slotId: null`, gets no
+   * window (ASAP). At most 50 entries, one per `fulfillmentId`, ids of at most 255 characters.
+   *
+   * When this field is absent, Cloud keeps the accepted window and does not check it again;
+   * ManaShop checks it at completion. When `complete` fails with error `statusCode` 5515 (for
+   * example `delivery_window_expired`), send prepare with `deliverySelections` (a new slot,
+   * `slotId: null` for ASAP, or `[]` to clear all windows), then complete again. A prepare that
+   * sends this field can also fail with 5515. AccelPay checkouts only.
+   */
+  deliverySelections?: CheckoutDeliverySelection[];
+
+  /**
+   * The fulfillment whose `deliveryScheduling.slots` gets the full window list. Send it when the
+   * window picker opens.
+   */
+  deliverySlotsFulfillmentId?: string;
+
   deliveryInstructions?: ICheckoutDeliveryInstructions[];
 
   acceptedAccountCreation?: boolean;
 
+  /**
+   * @deprecated Use `deliverySelections` (one window per fulfillment). This checkout-wide value
+   * has no effect on delivery windows.
+   */
   scheduledDelivery?: string;
 
   payment?: string;
@@ -279,7 +303,21 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
 
   deliveryInstructions: string;
 
+  /**
+   * For a scheduled on-demand fulfillment: the delivery window start (ISO-8601 UTC). For BOPIS:
+   * the pickup time from the cart item. Cloud always sends an ISO string, and `''` when there is
+   * no scheduled time.
+   */
   scheduledFor?: string | Date;
+
+  /**
+   * The delivery window end from ManaShop (ISO-8601 UTC). Absent when there is no window or the
+   * server does not support it. For display, prefer `deliveryScheduling.selectedSlot.end`.
+   */
+  scheduledUntil?: string;
+
+  /** Present only when the fulfillment supports scheduled delivery. */
+  deliveryScheduling?: CheckoutDeliveryScheduling;
 
   type: 'shipping' | 'onDemand' | 'bopis';
 

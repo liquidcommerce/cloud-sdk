@@ -232,7 +232,6 @@ const updatedCart = await client.cart.update({
       quantity: 2,
       fulfillmentId: 'fulfillment_id',
       engravingLines: ['Line 1', 'Line 2'], // Optional
-      scheduledFor: '2024-12-25', // Optional
     },
   ],
   loc: {
@@ -633,7 +632,6 @@ const preparedCheckout = await client.checkout.prepare({
     },
   ],
   acceptedAccountCreation: true,
-  scheduledDelivery: '2024-12-25T14:00:00Z',
   promoCode: 'DISCOUNT10', // Optional
   giftCards: ['GC123456'], // Optional
 });
@@ -644,6 +642,70 @@ const completedCheckout = await client.checkout.complete({
   payment: 'payment_id',
 });
 ```
+
+#### Scheduled Delivery
+
+Scheduled delivery works on AccelPay checkouts only. An on-demand fulfillment that supports it
+has `deliveryScheduling` in the prepare response. Other fulfillments do not have the key.
+
+```typescript
+// 1. The window picker opens: ask for the full window list of one fulfillment
+const withSlots = await client.checkout.prepare({
+  cartId: 'cart_id',
+  deliverySlotsFulfillmentId: 'fulfillment_id',
+});
+// fulfillment.deliveryScheduling = {
+//   availability: { status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt },
+//   slots: [{ id, start, end, cutoff }], // cutoff = "Order by" (ManaShop's release time)
+//   selectedSlotId: null,
+//   selectedSlot: null,
+// }
+
+// 2. The shopper picks a window. Send its id back unchanged. The response echoes it in
+//    deliveryScheduling.selectedSlotId and deliveryScheduling.selectedSlot.
+await client.checkout.prepare({
+  cartId: 'cart_id',
+  deliverySelections: [{ fulfillmentId: 'fulfillment_id', slotId: slot.id }],
+});
+```
+
+A slot `id` is opaque: pass it back unchanged and do not parse it. `slots` is a snapshot at the
+time of the response. Do not cache it; request it again each time the window picker opens.
+
+`deliverySelections` replaces the earlier selections. Leave it out to keep the accepted window:
+Cloud does not check it again, and ManaShop checks it at completion. `slotId: null` means no
+window (ASAP).
+
+Window errors fail with HTTP 400, body `statusCode` 5515
+(`ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR`) and one shared `message`.
+The reason is in `errors[].code` (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE`), with a per-item `message`:
+
+- `delivery_window_expired`: the order-by time has passed.
+- `delivery_window_unavailable`: the window is not offered now.
+- `delivery_windows_unsupported`: this checkout cannot take a window at all.
+- `delivery_scheduling_not_enabled`: the retailer has not turned on scheduled delivery for this fulfillment.
+- `multiple_fulfillment_groups`: a window needs a cart with one fulfillment group.
+- `delivery_selection_invalid`: the selection is malformed.
+
+When `checkout.complete` fails with one of these, send `prepare` with `deliverySelections` (a new
+`slotId`, `slotId: null` for ASAP, or `[]` to clear all windows), then `complete` again. A
+prepare that sends `deliverySelections` can also fail with 5515.
+
+```typescript
+try {
+  await client.checkout.complete({ token, payment });
+} catch (error: any) {
+  if (error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR) {
+    const codes = (error.errors ?? []).map((item: { code: string }) => item.code);
+    // error.status is 400; error.message is Cloud's shared message.
+    // Show the window picker again, then prepare with new deliverySelections and complete.
+  }
+}
+```
+
+Orders show the window in `fulfillments[].scheduledFor` and `fulfillments[].scheduledUntil`.
+
+`scheduledDelivery` (checkout) is deprecated. The cart item `scheduledFor` is not used for delivery windows.
 
 #### Checkout Payment
 
