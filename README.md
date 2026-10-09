@@ -692,10 +692,16 @@ The reason is in `errors[].code` (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE`), with a p
 - `delivery_window_required`: the store cannot deliver now, so this fulfillment needs a window. Open the picker for it.
 - `delivery_windows_unsupported`: this checkout cannot take a window at all.
 - `delivery_scheduling_not_enabled`: the retailer has not turned on scheduled delivery for this fulfillment.
-- `multiple_fulfillment_groups`: a window needs a cart with one fulfillment group.
 - `delivery_selection_invalid`: the selection is malformed.
 
-When `checkout.complete` fails with one of these, send `prepare` with `deliverySelections` (a new
+`multiple_fulfillment_groups` is deprecated and no longer sent: each on-demand fulfillment group
+of a cart can take its own window. One store cannot combine a window with another fulfillment in
+the same order: that fails with HTTP 400, `statusCode` 5516
+(`ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR`) and `errors[].code`
+`multiple_fulfillment_options_per_store` (`ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE`). Choose ASAP for
+that store, or move its items to one fulfillment.
+
+When `checkout.complete` fails with 5515 or 5516, send `prepare` with `deliverySelections` (a new
 `slotId`, `slotId: null` for ASAP, or `[]` to clear all windows), then `complete` again. A
 prepare that sends `deliverySelections` can also fail with 5515.
 
