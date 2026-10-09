@@ -187,8 +187,8 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
   price: number;
 
   /**
-   * @deprecated Delivery windows are per fulfillment: send `deliverySelections` to checkout
-   * prepare and read `ICheckoutFulfillment.deliveryScheduling`.
+   * Not used for delivery windows: those are per fulfillment, sent as `deliverySelections` to
+   * checkout prepare and read from `ICheckoutFulfillment.deliveryScheduling`.
    */
   scheduledFor: string | Date;
 
@@ -360,8 +360,8 @@ export interface ICartUpdateItem {
   personalization?: ICartItemPersonalization | null;
 
   /**
-   * @deprecated Delivery windows are per fulfillment: send `deliverySelections` to checkout
-   * prepare. BOPIS pickup time stays in `bopis.scheduledFor`.
+   * Not used for delivery windows: those are per fulfillment, sent as `deliverySelections` to
+   * checkout prepare. BOPIS pickup time stays in `bopis.scheduledFor`.
    */
   scheduledFor?: string | Date;
 

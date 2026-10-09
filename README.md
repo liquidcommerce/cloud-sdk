@@ -675,7 +675,7 @@ means no window (ASAP). Window errors fail with HTTP 400 and a code from
 `delivery_window_expired`, the order-by time has passed: pick a new window and complete again.
 Orders show the window in `fulfillments[].scheduledFor` and `fulfillments[].scheduledUntil`.
 
-`scheduledDelivery` (checkout) and `scheduledFor` (cart item) are deprecated.
+`scheduledDelivery` (checkout) is deprecated. The cart item `scheduledFor` is not used for delivery windows.
 
 #### Checkout Payment
 
