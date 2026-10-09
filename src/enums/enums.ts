@@ -364,7 +364,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_PAYMENT_VERIFICATION_ERROR = "We couldn't verify your payment information. Please check your card details and billing address, then try again.",
   REQUEST_EXPRESS_AUTHORIZATION_MISMATCH_ERROR = 'Your order changed since you approved it with your wallet. Please approve the payment again.',
   REQUEST_DELIVERY_SELECTION_ERROR = 'The selected delivery time is not available. Please choose another delivery time.',
-  REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR = 'Items from the same store must use one delivery method. Change the delivery method for some items to continue.',
+  REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR = 'Scheduled delivery cannot be combined with another delivery method from the same store. Choose ASAP delivery, or use one delivery method for all items from this store.',
 }
 
 /**
@@ -483,8 +483,8 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
  */
 export enum ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE {
   /**
-   * One retailer has items on more than one fulfillment (for example same-day and shipping). Each
-   * retailer takes one fulfillment per order: move the retailer's items to one fulfillment.
+   * One retailer has a scheduled fulfillment (a delivery window) and items on another fulfillment
+   * in the same order. Choose ASAP for it, or move the retailer's items to one fulfillment.
    */
   MULTIPLE_FULFILLMENT_OPTIONS_PER_STORE = 'multiple_fulfillment_options_per_store',
 }
