@@ -658,9 +658,11 @@ const withSlots = await client.checkout.prepare({
 //   availability: { status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt, reason },
 //   slots: [{ id: '4136780-2:1791478800', start, end, cutoff }], // cutoff = "Order by"
 //   selectedSlotId: null,
+//   selectedSlot: null,
 // }
 
-// 2. The shopper picks a window. The response echoes it in deliveryScheduling.selectedSlotId.
+// 2. The shopper picks a window. The response echoes it in deliveryScheduling.selectedSlotId
+//    and deliveryScheduling.selectedSlot (with the window's end and cutoff).
 await client.checkout.prepare({
   cartId: 'cart_id',
   deliverySelections: [{ fulfillmentId: 'fulfillment_id', slotId: '4136780-2:1791478800' }],
