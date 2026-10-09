@@ -8,7 +8,7 @@ import type { ENUM_DELIVERY_AVAILABILITY_STATUS } from '../enums';
  * @interface
  */
 export interface DeliverySlot {
-  /** `<fulfillmentOptionId>:<window start in Unix seconds>`, for example `4136780-2:1791478800`. */
+  /** Opaque. Pass it back unchanged; do not parse it. */
   id: string;
 
   start: string;
@@ -17,8 +17,8 @@ export interface DeliverySlot {
   end: string;
 
   /**
-   * Last moment to place the order for this window: the release time ManaShop sets for the
-   * window. Show it as "Order by".
+   * Last moment to place the order for this window: ManaShop's release time, which is the window
+   * start minus the delivery expectation and any release buffer. Show it as "Order by".
    */
   cutoff: string;
 }
@@ -29,7 +29,10 @@ export interface DeliverySlot {
  * @interface
  */
 export interface DeliveryAvailability {
-  /** Compare with `ENUM_DELIVERY_AVAILABILITY_STATUS` or its string value. */
+  /**
+   * `'available'` when `canDeliverNow` or `canSchedule` is true, otherwise `'unavailable'`.
+   * Compare with `ENUM_DELIVERY_AVAILABILITY_STATUS` or its string value.
+   */
   status: ENUM_DELIVERY_AVAILABILITY_STATUS | `${ENUM_DELIVERY_AVAILABILITY_STATUS}`;
 
   /** The fulfillment can deliver as soon as possible right now. */
@@ -38,16 +41,14 @@ export interface DeliveryAvailability {
   /** At least one delivery window exists. */
   canSchedule: boolean;
 
-  /** IANA time zone of the retailer, for example `America/New_York`. */
-  timezone: string;
+  /** IANA time zone of the retailer, for example `America/New_York`, or `null` when unknown. */
+  timezone: string | null;
 
   /** The first available window. */
   nextSlot: DeliverySlot | null;
 
   /** When Cloud built this availability (ISO-8601 UTC). */
   checkedAt: string;
-
-  reason: string | null;
 }
 
 /**
@@ -60,7 +61,8 @@ export interface CheckoutDeliveryScheduling {
 
   /**
    * The full window list. Filled only for the fulfillment named in
-   * `ICheckoutPrepareParams.deliverySlotsFulfillmentId`; empty otherwise.
+   * `ICheckoutPrepareParams.deliverySlotsFulfillmentId`; empty otherwise. It is a snapshot at the
+   * time of the response: do not cache it, and request it again each time the window picker opens.
    */
   slots: DeliverySlot[];
 

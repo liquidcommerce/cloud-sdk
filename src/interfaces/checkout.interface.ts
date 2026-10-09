@@ -165,9 +165,11 @@ export interface ICheckoutPrepareParams extends ICoreParams {
    * with exactly these; a scheduling fulfillment that is not listed, or `slotId: null`, gets no
    * window (ASAP). At most 50 entries, one per `fulfillmentId`, ids of at most 255 characters.
    *
-   * When this field is absent, Cloud applies the stored window again, so after its
-   * `DeliverySlot.cutoff` passes every prepare fails with `delivery_window_expired`. To recover,
-   * send `slotId: null` or a new slot for that fulfillment, or `[]` to clear all windows.
+   * When this field is absent, Cloud keeps the accepted window and does not check it again;
+   * ManaShop checks it at completion. When `complete` fails with error `statusCode` 5515 (for
+   * example `delivery_window_expired`), send prepare with `deliverySelections` (a new slot,
+   * `slotId: null` for ASAP, or `[]` to clear all windows), then complete again. A prepare that
+   * sends this field can also fail with 5515. AccelPay checkouts only.
    */
   deliverySelections?: CheckoutDeliverySelection[];
 
@@ -303,11 +305,15 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
 
   /**
    * For a scheduled on-demand fulfillment: the delivery window start (ISO-8601 UTC). For BOPIS:
-   * the pickup time from the cart item. Cloud sends a string, never a `Date`.
+   * the pickup time from the cart item. Cloud always sends an ISO string, and `''` when there is
+   * no scheduled time.
    */
-  scheduledFor?: string;
+  scheduledFor?: string | Date;
 
-  /** The delivery window end (ISO-8601 UTC); absent when unscheduled. */
+  /**
+   * The delivery window end from ManaShop (ISO-8601 UTC). Absent when there is no window or the
+   * server does not support it. For display, prefer `deliveryScheduling.selectedSlot.end`.
+   */
   scheduledUntil?: string;
 
   /** Present only when the fulfillment supports scheduled delivery. */

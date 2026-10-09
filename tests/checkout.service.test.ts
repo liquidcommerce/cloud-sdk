@@ -2,7 +2,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AuthenticatedService } from '../src/core/authenticated.service';
 import { CheckoutHelperService } from '../src/core/checkout-helper.service';
 import { LocationHelperService } from '../src/core/location-helper.service';
-import { ENUM_CHECKOUT_DELIVERY_ERROR_CODE, LIQUID_COMMERCE_ENV } from '../src/enums';
+import {
+  ENUM_CHECKOUT_DELIVERY_ERROR_CODE,
+  ENUM_CHECKOUT_STATUS_CODE_ERROR,
+  ENUM_CHECKOUT_STATUS_CODE_MESSAGE,
+  LIQUID_COMMERCE_ENV,
+} from '../src/enums';
 import type { ICheckoutPrepareParams } from '../src/interfaces';
 import { CheckoutService } from '../src/services/checkout.service';
 
@@ -139,8 +144,8 @@ describe('CheckoutService delivery scheduling', () => {
     stubFetch(
       jsonResponse(
         {
-          statusCode: 400,
-          message: 'The delivery window has expired.',
+          statusCode: ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR,
+          message: ENUM_CHECKOUT_STATUS_CODE_MESSAGE.REQUEST_DELIVERY_SELECTION_ERROR,
           errors: [
             {
               field: 'deliverySelections',
@@ -156,10 +161,18 @@ describe('CheckoutService delivery scheduling', () => {
 
     await expect(
       createService().complete({ token: 'checkout-token', payment: 'payment-1' })
-    ).rejects.toMatchObject({
+    ).rejects.toEqual({
       status: 400,
-      message: 'The delivery window has expired.',
-      errors: [{ field: 'deliverySelections', code: 'delivery_window_expired' }],
+      statusCode: 5515,
+      message:
+        'The selected delivery time is not available. Please choose another delivery time.',
+      errors: [
+        {
+          field: 'deliverySelections',
+          code: 'delivery_window_expired',
+          message: 'The delivery window has expired.',
+        },
+      ],
     });
   });
 });

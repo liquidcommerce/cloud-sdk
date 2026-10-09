@@ -193,19 +193,14 @@ export enum ENUM_AVAILABILITY_VALUE {
 }
 
 /**
- * Status of `DeliveryAvailability` for one fulfillment. Cloud sends only `AVAILABLE` today; the
- * other values are reserved for a later release, so treat any value other than `AVAILABLE` as
- * "no delivery windows to show".
+ * Status of `DeliveryAvailability` for one fulfillment: `AVAILABLE` when `canDeliverNow` or
+ * `canSchedule` is true, otherwise `UNAVAILABLE`.
  */
 export enum ENUM_DELIVERY_AVAILABILITY_STATUS {
-  /** Windows were computed; check `canDeliverNow` and `canSchedule`. */
+  /** `canDeliverNow` or `canSchedule` is true. */
   AVAILABLE = 'available',
   /** The fulfillment cannot deliver now and has no window. */
   UNAVAILABLE = 'unavailable',
-  /** Cloud could not compute the windows. Try again later. */
-  UNKNOWN = 'unknown',
-  /** A delivery address is necessary before the windows can be computed. */
-  ADDRESS_REQUIRED = 'address_required',
 }
 
 export enum CART_PARAM_ERROR_ENUM {
@@ -429,12 +424,13 @@ export enum ENUM_DISCOUNT_STATUS_CODE_ERROR {
 }
 
 /**
- * Delivery window errors from checkout prepare and complete. They fail with HTTP 400 (statusCode
- * 5515) and arrive in `errors[].code`, with `field: 'deliverySelections'` or
- * `'deliverySlotsFulfillmentId'`.
+ * Delivery window errors from checkout prepare and complete. They fail with HTTP 400 (body
+ * `statusCode` 5515, one shared `message`) and arrive in `errors[].code`, with a per-item
+ * `message` and `field: 'deliverySelections'` or `'deliverySlotsFulfillmentId'`. To recover from
+ * a failed complete, send prepare with new `deliverySelections`, then complete.
  */
 export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
-  /** The order-by time of the selected window has passed. Pick a new window. */
+  /** The order-by time of the selected window has passed. Send prepare with a new selection. */
   DELIVERY_WINDOW_EXPIRED = 'delivery_window_expired',
   /** The selected window is not offered now. */
   DELIVERY_WINDOW_UNAVAILABLE = 'delivery_window_unavailable',
