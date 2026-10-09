@@ -17,8 +17,8 @@ export interface DeliverySlot {
   end: string;
 
   /**
-   * Last moment to place the order for this window (window start minus the delivery
-   * expectation). Show it as "Order by".
+   * Last moment to place the order for this window: the release time ManaShop sets for the
+   * window. Show it as "Order by".
    */
   cutoff: string;
 }

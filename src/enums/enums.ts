@@ -455,8 +455,8 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   DELIVERY_SELECTION_INVALID = 'delivery_selection_invalid',
   /**
    * Per fulfillment: a window was sent for a fulfillment without `deliveryScheduling`, which can
-   * never take one. Send `slotId: null` for it or leave it out. Elements services returns it with
-   * HTTP 409.
+   * never take one. Send `slotId: null` for it or leave it out. Cloud and Elements services both
+   * return it with HTTP 400.
    */
   DELIVERY_SCHEDULING_UNSUPPORTED = 'delivery_scheduling_unsupported',
   /**

@@ -656,7 +656,7 @@ const withSlots = await client.checkout.prepare({
 });
 // fulfillment.deliveryScheduling = {
 //   availability: { status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt, reason },
-//   slots: [{ id: '4136780-2:1791478800', start, end, cutoff }], // cutoff = "Order by"
+//   slots: [{ id: '4136780-2:1791478800', start, end, cutoff }], // cutoff = "Order by" (release time ManaShop sets)
 //   selectedSlotId: null,
 //   selectedSlot: null,
 // }
