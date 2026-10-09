@@ -63,8 +63,8 @@ export interface IOrderFulfillment {
   /** Delivery window start (ISO-8601 UTC), or `null` when unscheduled. */
   scheduledFor: string | null; // new Date().toISOString()
   /**
-   * Delivery window end (ISO-8601 UTC), or `null` when unscheduled. Absent when Cloud has no
-   * window end for this fulfillment.
+   * Delivery window end (ISO-8601 UTC). The Orders API sends `null` when there is no end. Absent
+   * on Cloud versions without scheduled delivery.
    */
   scheduledUntil?: string | null;
   updatedAt: string; // new Date().toISOString()
