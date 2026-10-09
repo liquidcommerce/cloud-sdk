@@ -648,6 +648,13 @@ const completedCheckout = await client.checkout.complete({
 Scheduled delivery works on AccelPay checkouts only. An on-demand fulfillment that supports it
 has `deliveryScheduling` in the prepare response. Other fulfillments do not have the key.
 
+Catalog and cart responses send `deliveryAvailability` on the retailer fulfillments of on-demand
+stores (`{ status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt }`). `status` is
+`'available'` when `canDeliverNow` or `canSchedule` is true, otherwise `'unavailable'`. A store
+that is closed now stays in the response only when `canSchedule` is true and `nextSlot` is a
+future window. Checkout then needs a window for it; without one, checkout fails with
+`delivery_window_required` until the shopper picks one.
+
 ```typescript
 // 1. The window picker opens: ask for the full window list of one fulfillment
 const withSlots = await client.checkout.prepare({
@@ -682,6 +689,7 @@ The reason is in `errors[].code` (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE`), with a p
 
 - `delivery_window_expired`: the order-by time has passed.
 - `delivery_window_unavailable`: the window is not offered now.
+- `delivery_window_required`: the store cannot deliver now, so this fulfillment needs a window. Open the picker for it.
 - `delivery_windows_unsupported`: this checkout cannot take a window at all.
 - `delivery_scheduling_not_enabled`: the retailer has not turned on scheduled delivery for this fulfillment.
 - `multiple_fulfillment_groups`: a window needs a cart with one fulfillment group.

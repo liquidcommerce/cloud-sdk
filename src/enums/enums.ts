@@ -193,9 +193,8 @@ export enum ENUM_AVAILABILITY_VALUE {
 }
 
 /**
- * Status of `DeliveryAvailability` for one fulfillment. Cloud sends only `AVAILABLE` today; the
- * other values are reserved for a later release, so treat any value other than `AVAILABLE` as
- * "no delivery windows to show".
+ * Status of `DeliveryAvailability` for one fulfillment: `AVAILABLE` when `canDeliverNow` or
+ * `canSchedule` is true, otherwise `UNAVAILABLE`.
  */
 export enum ENUM_DELIVERY_AVAILABILITY_STATUS {
   /** `canDeliverNow` or `canSchedule` is true. */
