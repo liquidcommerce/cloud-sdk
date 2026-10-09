@@ -1,7 +1,7 @@
 import type { ENUM_DELIVERY_AVAILABILITY_STATUS } from '../enums';
 
 /**
- * A one-hour delivery window a shopper can pick for an on-demand fulfillment.
+ * A delivery window a shopper can pick for an on-demand fulfillment.
  *
  * All times are ISO-8601 UTC strings.
  *
@@ -13,12 +13,12 @@ export interface DeliverySlot {
 
   start: string;
 
-  /** One hour after `start`. */
+  /** End of the window. */
   end: string;
 
   /**
-   * Last moment to place the order for this window (window start minus the delivery
-   * expectation). Show it as "Order by".
+   * Last moment to place the order for this window: the release time ManaShop sets for the
+   * window. Show it as "Order by".
    */
   cutoff: string;
 }
@@ -66,6 +66,12 @@ export interface CheckoutDeliveryScheduling {
 
   /** The accepted `DeliverySlot.id`, or `null` for no window (ASAP). */
   selectedSlotId: string | null;
+
+  /**
+   * The window the shopper picked for this fulfillment, with its real `end` and `cutoff`
+   * (release time), or `null` when none is picked.
+   */
+  selectedSlot: DeliverySlot | null;
 }
 
 /**
