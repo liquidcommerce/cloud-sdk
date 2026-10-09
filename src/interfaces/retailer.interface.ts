@@ -186,7 +186,7 @@ export interface IRetailerFulfillmentBopis {
 export interface IRetailerFulfillments {
   id: string;
 
-  /** Present only when the fulfillment supports scheduled delivery. */
+  /** Not sent yet; Cloud starts sending it in a later scheduled-delivery release. */
   deliveryAvailability?: DeliveryAvailability;
 
   type: ENUM_MODALITIES;
