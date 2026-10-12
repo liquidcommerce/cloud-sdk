@@ -194,7 +194,8 @@ export enum ENUM_AVAILABILITY_VALUE {
 
 /**
  * Status of `DeliveryAvailability` for one fulfillment: `AVAILABLE` when `canDeliverNow` or
- * `canSchedule` is true, otherwise `UNAVAILABLE`.
+ * `canSchedule` is true, otherwise `UNAVAILABLE`. Treat any value other than `AVAILABLE` as
+ * "no delivery windows to show".
  */
 export enum ENUM_DELIVERY_AVAILABILITY_STATUS {
   /** `canDeliverNow` or `canSchedule` is true. */
@@ -455,14 +456,23 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
    * Kept so older clients still compile.
    */
   MULTIPLE_FULFILLMENT_GROUPS = 'multiple_fulfillment_groups',
-  /** The window belongs to a fulfillment option that is not in this checkout. */
+  /**
+   * ManaShop's answer for a window of a fulfillment option that is not in its checkout. Cloud
+   * checks this first and answers `delivery_selection_invalid` for a fulfillment that is not
+   * selected in the checkout, so clients see this code only in a rare ManaShop pass-through.
+   * Handle it as `delivery_selection_invalid`.
+   */
   UNKNOWN_FULFILLMENT_OPTION = 'unknown_fulfillment_option',
   /** The slot id is malformed or does not match the fulfillment. */
   DELIVERY_SELECTION_INVALID = 'delivery_selection_invalid',
   /**
-   * Per fulfillment: a window was sent for a fulfillment without `deliveryScheduling`, which can
-   * never take one. Send `slotId: null` for it or leave it out. Cloud and Elements services both
-   * return it with HTTP 400.
+   * Per fulfillment: this fulfillment can never take a window. Cloud returns it, with HTTP 400,
+   * for a window sent for a fulfillment that is not on-demand, or on a checkout that is not an
+   * AccelPay checkout. Elements services returns it, also with HTTP 400, when Cloud's response
+   * has no `deliveryScheduling` for a fulfillment it sent a window for. An on-demand fulfillment
+   * of an AccelPay checkout is not checked by Cloud: if its retailer has not turned on scheduled
+   * delivery, the answer is `delivery_scheduling_not_enabled`. Send `slotId: null` for it or
+   * leave it out.
    */
   DELIVERY_SCHEDULING_UNSUPPORTED = 'delivery_scheduling_unsupported',
   /**

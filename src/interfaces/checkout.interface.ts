@@ -169,7 +169,9 @@ export interface ICheckoutPrepareParams extends ICoreParams {
    * ManaShop checks it at completion. When `complete` fails with error `statusCode` 5515 (for
    * example `delivery_window_expired`), send prepare with `deliverySelections` (a new slot,
    * `slotId: null` for ASAP, or `[]` to clear all windows), then complete again. A prepare that
-   * sends this field can also fail with 5515. AccelPay checkouts only.
+   * sends this field can also fail with 5515, and in one rare case a prepare without it too
+   * (Cloud creates a new upstream checkout with the accepted window, which has expired).
+   * Recover in the same way. AccelPay checkouts only.
    */
   deliverySelections?: CheckoutDeliverySelection[];
 

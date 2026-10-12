@@ -683,6 +683,10 @@ time of the response. Do not cache it; request it again each time the window pic
 Cloud does not check it again, and ManaShop checks it at completion. `slotId: null` means no
 window (ASAP).
 
+`deliveryScheduling.selectedSlotId` tells whether a window is held. `selectedSlot` is display
+detail and can be `null` while `selectedSlotId` is set; then find the window by its id in `slots`
+or `availability.nextSlot`, and do not show ASAP.
+
 Window errors fail with HTTP 400, body `statusCode` 5515
 (`ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR`) and one shared `message`.
 The reason is in `errors[].code` (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE`), with a per-item `message`:
@@ -692,7 +696,12 @@ The reason is in `errors[].code` (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE`), with a p
 - `delivery_window_required`: the store cannot deliver now, so this fulfillment needs a window. Open the picker for it.
 - `delivery_windows_unsupported`: this checkout cannot take a window at all.
 - `delivery_scheduling_not_enabled`: the retailer has not turned on scheduled delivery for this fulfillment.
-- `delivery_selection_invalid`: the selection is malformed.
+- `delivery_scheduling_unsupported`: this fulfillment can never take a window (it is not on-demand,
+  or the checkout is not an AccelPay checkout). Send `slotId: null` for it.
+- `delivery_selection_invalid`: the selection is malformed, or names a fulfillment that is not
+  selected in the checkout.
+- `unknown_fulfillment_option`: rare. ManaShop's answer for a fulfillment that is not in its
+  checkout; Cloud usually answers `delivery_selection_invalid` first. Handle it the same way.
 
 `multiple_fulfillment_groups` is deprecated and no longer sent: each on-demand fulfillment group
 of a cart can take its own window. One store cannot combine a window with another fulfillment in
@@ -703,7 +712,9 @@ that store, or move its items to one fulfillment.
 
 When `checkout.complete` fails with 5515 or 5516, send `prepare` with `deliverySelections` (a new
 `slotId`, `slotId: null` for ASAP, or `[]` to clear all windows), then `complete` again. A
-prepare that sends `deliverySelections` can also fail with 5515.
+prepare that sends `deliverySelections` can also fail with 5515. In one rare case a prepare
+without it fails too: Cloud creates a new upstream checkout with the accepted window, which has
+expired. Recover in the same way.
 
 ```typescript
 try {
