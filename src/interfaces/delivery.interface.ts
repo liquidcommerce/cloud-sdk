@@ -66,12 +66,17 @@ export interface CheckoutDeliveryScheduling {
    */
   slots: DeliverySlot[];
 
-  /** The accepted `DeliverySlot.id`, or `null` for no window (ASAP). */
+  /**
+   * The accepted `DeliverySlot.id`, or `null` for no window (ASAP). This is the source of truth
+   * for whether a window is held.
+   */
   selectedSlotId: string | null;
 
   /**
-   * The window the shopper picked for this fulfillment, with its real `end` and `cutoff`
-   * (release time), or `null` when none is picked.
+   * Display detail of the accepted window, with its real `end` and `cutoff` (release time).
+   * It can be `null` while `selectedSlotId` is set, when Cloud could not read the window; then
+   * find the window by `selectedSlotId` in `slots` or `availability.nextSlot`, and do not show
+   * ASAP.
    */
   selectedSlot: DeliverySlot | null;
 }
