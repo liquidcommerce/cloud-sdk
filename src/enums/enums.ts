@@ -193,7 +193,7 @@ export enum ENUM_AVAILABILITY_VALUE {
 }
 
 /**
- * Status of `DeliveryAvailability` for one fulfillment: `AVAILABLE` when `canDeliverNow` or
+ * Status of `IDeliveryAvailability` for one fulfillment: `AVAILABLE` when `canDeliverNow` or
  * `canSchedule` is true, otherwise `UNAVAILABLE`. Treat any value other than `AVAILABLE` as
  * "no delivery windows to show".
  */

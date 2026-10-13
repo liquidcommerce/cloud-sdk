@@ -2,7 +2,7 @@ import type { CHECKOUT_EVENT_ENUM } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
 import type { ICartAttributesPromoCode, ICartItemAttributes } from './cart.interface';
-import type { CheckoutDeliveryScheduling, CheckoutDeliverySelection } from './delivery.interface';
+import type { ICheckoutDeliveryScheduling, ICheckoutDeliverySelection } from './delivery.interface';
 import type { IRetailerExpectation } from './retailer.interface';
 
 /**
@@ -173,7 +173,7 @@ export interface ICheckoutPrepareParams extends ICoreParams {
    * (Cloud creates a new upstream checkout with the accepted window, which has expired).
    * Recover in the same way. AccelPay checkouts only.
    */
-  deliverySelections?: CheckoutDeliverySelection[];
+  deliverySelections?: ICheckoutDeliverySelection[];
 
   /**
    * The fulfillment whose `deliveryScheduling.slots` gets the full window list. Send it when the
@@ -319,7 +319,7 @@ export interface ICheckoutFulfillment extends ICheckoutTotalAmounts {
   scheduledUntil?: string;
 
   /** Present only when the fulfillment supports scheduled delivery. */
-  deliveryScheduling?: CheckoutDeliveryScheduling;
+  deliveryScheduling?: ICheckoutDeliveryScheduling;
 
   type: 'shipping' | 'onDemand' | 'bopis';
 

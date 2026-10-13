@@ -1,6 +1,6 @@
 import type { DAYS_OF_WEEK, ENUM_MODALITIES, SHIPPING_CATEGORY_TYPE } from '../enums';
 import type { IAddress, ICoords } from './address.interface';
-import type { DeliveryAvailability } from './delivery.interface';
+import type { IDeliveryAvailability } from './delivery.interface';
 
 /**
  * The IRetailerTimes interface represents the working hours of a retailer.
@@ -191,7 +191,7 @@ export interface IRetailerFulfillments {
    * that is closed now stays in the response only with this field, `canSchedule: true` and a future
    * `nextSlot`; checkout then needs a window for it.
    */
-  deliveryAvailability?: DeliveryAvailability;
+  deliveryAvailability?: IDeliveryAvailability;
 
   type: ENUM_MODALITIES;
 
