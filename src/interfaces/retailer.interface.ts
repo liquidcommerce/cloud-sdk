@@ -1,6 +1,6 @@
 import type { DAYS_OF_WEEK, ENUM_MODALITIES, SHIPPING_CATEGORY_TYPE } from '../enums';
 import type { IAddress, ICoords } from './address.interface';
-import type { DeliveryAvailability } from './delivery.interface';
+import type { IDeliveryAvailability } from './delivery.interface';
 
 /**
  * The IRetailerTimes interface represents the working hours of a retailer.
@@ -187,7 +187,7 @@ export interface IRetailerFulfillments {
   id: string;
 
   /** Not sent yet; Cloud starts sending it in a later scheduled-delivery release. */
-  deliveryAvailability?: DeliveryAvailability;
+  deliveryAvailability?: IDeliveryAvailability;
 
   type: ENUM_MODALITIES;
 

@@ -7,7 +7,7 @@ import type { ENUM_DELIVERY_AVAILABILITY_STATUS } from '../enums';
  *
  * @interface
  */
-export interface DeliverySlot {
+export interface IDeliverySlot {
   /** Opaque. Pass it back unchanged; do not parse it. */
   id: string;
 
@@ -28,7 +28,7 @@ export interface DeliverySlot {
  *
  * @interface
  */
-export interface DeliveryAvailability {
+export interface IDeliveryAvailability {
   /**
    * `'available'` when `canDeliverNow` or `canSchedule` is true, otherwise `'unavailable'`.
    * Compare with `ENUM_DELIVERY_AVAILABILITY_STATUS` or its string value.
@@ -45,7 +45,7 @@ export interface DeliveryAvailability {
   timezone: string | null;
 
   /** The first available window. */
-  nextSlot: DeliverySlot | null;
+  nextSlot: IDeliverySlot | null;
 
   /** When Cloud built this availability (ISO-8601 UTC). */
   checkedAt: string;
@@ -56,18 +56,18 @@ export interface DeliveryAvailability {
  *
  * @interface
  */
-export interface CheckoutDeliveryScheduling {
-  availability: DeliveryAvailability;
+export interface ICheckoutDeliveryScheduling {
+  availability: IDeliveryAvailability;
 
   /**
    * The full window list. Filled only for the fulfillment named in
    * `ICheckoutPrepareParams.deliverySlotsFulfillmentId`; empty otherwise. It is a snapshot at the
    * time of the response: do not cache it, and request it again each time the window picker opens.
    */
-  slots: DeliverySlot[];
+  slots: IDeliverySlot[];
 
   /**
-   * The accepted `DeliverySlot.id`, or `null` for no window (ASAP). This is the source of truth
+   * The accepted `IDeliverySlot.id`, or `null` for no window (ASAP). This is the source of truth
    * for whether a window is held.
    */
   selectedSlotId: string | null;
@@ -79,7 +79,7 @@ export interface CheckoutDeliveryScheduling {
    * ASAP. If it is not there, prepare with `deliverySlotsFulfillmentId` set to this fulfillment to
    * load the list.
    */
-  selectedSlot: DeliverySlot | null;
+  selectedSlot: IDeliverySlot | null;
 }
 
 /**
@@ -87,9 +87,9 @@ export interface CheckoutDeliveryScheduling {
  *
  * @interface
  */
-export interface CheckoutDeliverySelection {
+export interface ICheckoutDeliverySelection {
   fulfillmentId: string;
 
-  /** A `DeliverySlot.id`, or `null` for no window (ASAP). */
+  /** A `IDeliverySlot.id`, or `null` for no window (ASAP). */
   slotId: string | null;
 }
