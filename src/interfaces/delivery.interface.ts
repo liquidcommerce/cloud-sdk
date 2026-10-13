@@ -38,13 +38,21 @@ export interface IDeliveryAvailability {
   /** The fulfillment can deliver as soon as possible right now. */
   canDeliverNow: boolean;
 
-  /** At least one delivery window exists. */
+  /**
+   * The fulfillment can take a delivery window. In checkout, at least one window exists. On
+   * catalog and cart fulfillments of a store that is closed now, it comes from the store's
+   * scheduled delivery setting, and checkout gives the windows.
+   */
   canSchedule: boolean;
 
   /** IANA time zone of the retailer, for example `America/New_York`, or `null` when unknown. */
   timezone: string | null;
 
-  /** The first available window. */
+  /**
+   * The first available window, or `null`. On catalog and cart fulfillments of a store that is
+   * closed now and can schedule, it is `null`: show "Schedule delivery" without a time, and get
+   * the windows in checkout (`deliverySlotsFulfillmentId`).
+   */
   nextSlot: IDeliverySlot | null;
 
   /** When Cloud built this availability (ISO-8601 UTC). */

@@ -651,9 +651,22 @@ has `deliveryScheduling` in the prepare response. Other fulfillments do not have
 Catalog and cart responses send `deliveryAvailability` on the retailer fulfillments of on-demand
 stores (`{ status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt }`). `status` is
 `'available'` when `canDeliverNow` or `canSchedule` is true, otherwise `'unavailable'`. A store
-that is closed now stays in the response only when `canSchedule` is true and `nextSlot` is a
-future window. Checkout then needs a window for it; without one, checkout fails with
-`delivery_window_required` until the shopper picks one.
+that is closed now stays in the response only when `canSchedule` is true. Its `nextSlot` is
+`null`, so show "Schedule delivery" without a time; the windows come from checkout. Checkout then
+needs a window for it; without one, checkout fails with `delivery_window_required` until the
+shopper picks one.
+
+```typescript
+// A store that is closed now and can schedule, on a catalog or cart fulfillment
+// fulfillment.deliveryAvailability = {
+//   status: 'available',
+//   canDeliverNow: false,
+//   canSchedule: true,
+//   timezone: 'America/New_York',
+//   nextSlot: null, // no time on the product page; checkout gives the windows
+//   checkedAt: '2026-10-08T03:00:00.000Z',
+// }
+```
 
 ```typescript
 // 1. The window picker opens: ask for the full window list of one fulfillment

@@ -188,8 +188,9 @@ export interface IRetailerFulfillments {
 
   /**
    * Sent on catalog and cart retailer fulfillments for on-demand stores; see the README. A store
-   * that is closed now stays in the response only with this field, `canSchedule: true` and a future
-   * `nextSlot`; checkout then needs a window for it.
+   * that is closed now stays in the response only with this field and `canSchedule: true`. Its
+   * `nextSlot` is `null`: show "Schedule delivery" without a time. Checkout gives the windows and
+   * needs one for this fulfillment.
    */
   deliveryAvailability?: IDeliveryAvailability;
 
