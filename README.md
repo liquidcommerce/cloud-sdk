@@ -678,7 +678,8 @@ window (ASAP).
 
 `deliveryScheduling.selectedSlotId` tells whether a window is held. `selectedSlot` is display
 detail and can be `null` while `selectedSlotId` is set; then find the window by its id in `slots`
-or `availability.nextSlot`, and do not show ASAP.
+or `availability.nextSlot`, and do not show ASAP. If it is not there, prepare with
+`deliverySlotsFulfillmentId` set to this fulfillment to load the list.
 
 Window errors fail with HTTP 400, body `statusCode` 5515
 (`ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR`) and one shared `message`.

@@ -76,7 +76,8 @@ export interface CheckoutDeliveryScheduling {
    * Display detail of the accepted window, with its real `end` and `cutoff` (release time).
    * It can be `null` while `selectedSlotId` is set, when Cloud could not read the window; then
    * find the window by `selectedSlotId` in `slots` or `availability.nextSlot`, and do not show
-   * ASAP.
+   * ASAP. If it is not there, prepare with `deliverySlotsFulfillmentId` set to this fulfillment to
+   * load the list.
    */
   selectedSlot: DeliverySlot | null;
 }
