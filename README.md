@@ -723,9 +723,10 @@ that store, or move its items to one fulfillment.
 
 When `checkout.complete` fails with 5515 or 5516, send `prepare` with `deliverySelections` (a new
 `slotId`, `slotId: null` for ASAP, or `[]` to clear all windows), then `complete` again. A
-prepare that sends `deliverySelections` can also fail with 5515. In one rare case a prepare
-without it fails too: Cloud creates a new upstream checkout with the accepted window, which has
-expired. Recover in the same way.
+prepare that sends `deliverySelections` can also fail with 5515 or 5516. A prepare without it can
+fail too: with 5516 when a window is already stored for a store that has items in another
+fulfillment, and, in one rare case, with 5515 when Cloud creates a new upstream checkout with the
+accepted window, which has expired. Recover in the same way.
 
 ```typescript
 try {
