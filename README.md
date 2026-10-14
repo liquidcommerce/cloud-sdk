@@ -732,10 +732,14 @@ accepted window, which has expired. Recover in the same way.
 try {
   await client.checkout.complete({ token, payment });
 } catch (error: any) {
-  if (error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR) {
+  if (
+    error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR ||
+    error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR
+  ) {
+    // 5515: ENUM_CHECKOUT_DELIVERY_ERROR_CODE; 5516: ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE.
     const codes = (error.errors ?? []).map((item: { code: string }) => item.code);
     // error.status is 400; error.message is Cloud's shared message.
-    // Show the window picker again, then prepare with new deliverySelections and complete.
+    // Show the window picker again (or ASAP for 5516), then prepare with new deliverySelections and complete.
   }
 }
 ```
