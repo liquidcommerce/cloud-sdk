@@ -188,7 +188,8 @@ export interface IRetailerFulfillments {
 
   /**
    * Present on catalog and cart responses only on an AccelPay on-demand fulfillment whose store is
-   * closed now and whose retailer takes scheduled orders. Today it is always
+   * closed now and whose retailer takes scheduled orders, while scheduled delivery is switched on
+   * for the partner. Today it is always
    * `{ status: 'available', canDeliverNow: false, canSchedule: true, nextSlot: null }`: show
    * "Schedule delivery" without a time. Checkout gives the windows and needs one for this
    * fulfillment. Any `status` other than `'available'` means the fulfillment cannot be bought.

@@ -711,7 +711,8 @@ The reason is in `errors[].code` (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE`), with a p
 - `delivery_windows_unsupported`: this checkout cannot take a window at all.
 - `delivery_scheduling_not_enabled`: the retailer has not turned on scheduled delivery for this fulfillment.
 - `delivery_scheduling_unsupported`: this fulfillment can never take a window (it is not on-demand,
-  or the checkout is not an AccelPay checkout). Send `slotId: null` for it.
+  or the checkout is not an AccelPay checkout), or scheduled delivery is switched off for the
+  partner. Send `slotId: null` for it.
 - `delivery_selection_invalid`: the selection is malformed, or names a fulfillment that is not
   selected in the checkout.
 - `unknown_fulfillment_option`: rare. ManaShop's answer for a fulfillment that is not in its
