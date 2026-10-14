@@ -727,12 +727,14 @@ that store, or move its items to one fulfillment. A store that is closed now
 5516 too, before a window is picked. ASAP is not possible for that store, so move its items to one
 fulfillment.
 
-When `checkout.complete` fails with 5515 or 5516, send `prepare` with `deliverySelections` (a new
-`slotId`, `slotId: null` for ASAP, or `[]` to clear all windows), then `complete` again. A
-prepare that sends `deliverySelections` can also fail with 5515 or 5516. A prepare without it can
-fail too: with 5516 when a store has items in another fulfillment and either has a window stored
-or is closed now, and, in one rare case, with 5515 when Cloud creates a new upstream checkout with
-the accepted window, which has expired. Recover in the same way.
+When `checkout.complete` fails with 5515, or with 5516 for a store that has a window stored, send
+`prepare` with `deliverySelections` (a new `slotId`, `slotId: null` for ASAP, or `[]` to clear all
+windows), then `complete` again. A prepare that sends `deliverySelections` can also fail with 5515
+or 5516. A prepare without it can fail too: with 5516 when a store has items in another
+fulfillment and either has a window stored or is closed now, and, in one rare case, with 5515 when
+Cloud creates a new upstream checkout with the accepted window, which has expired. Recover in the
+same way, except for a store that is closed now: `deliverySelections` cannot clear that 5516, so
+update the cart to move the store's items to one fulfillment, then `prepare` again.
 
 ```typescript
 try {
@@ -745,8 +747,9 @@ try {
     // 5515: ENUM_CHECKOUT_DELIVERY_ERROR_CODE; 5516: ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE.
     const codes = (error.errors ?? []).map((item: { code: string }) => item.code);
     // error.status is 400; error.message is Cloud's shared message.
-    // Show the window picker again; for 5516 choose ASAP or move the store's items to one
-    // fulfillment. Then prepare with new deliverySelections and complete.
+    // Show the window picker again, or choose ASAP for a 5516 store with a window stored, then
+    // prepare with new deliverySelections and complete. If the 5516 store is closed now, update
+    // the cart to move its items to one fulfillment, then prepare again.
   }
 }
 ```
