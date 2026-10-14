@@ -63,6 +63,11 @@ export interface IDeliveryAvailability {
  * @interface
  */
 export interface ICheckoutDeliveryScheduling {
+  /**
+   * When `availability.canDeliverNow` is false, this fulfillment needs a window: send a `slotId`
+   * in `deliverySelections` before `complete`, or it fails with 400 (5515)
+   * `delivery_window_required`.
+   */
   availability: IDeliveryAvailability;
 
   /**

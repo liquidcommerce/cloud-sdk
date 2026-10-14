@@ -647,6 +647,9 @@ const completedCheckout = await client.checkout.complete({
 
 Scheduled delivery works on AccelPay checkouts only. An on-demand fulfillment that supports it
 has `deliveryScheduling` in the prepare response. Other fulfillments do not have the key.
+When `deliveryScheduling.availability.canDeliverNow` is false, this fulfillment needs a window:
+send a `slotId` in `deliverySelections` before `complete`, or it fails with 400 (5515)
+`delivery_window_required`.
 
 Catalog and cart responses send `deliveryAvailability` only on an on-demand fulfillment whose
 store is closed now and can take scheduled orders. See `IRetailerFulfillments.deliveryAvailability`
