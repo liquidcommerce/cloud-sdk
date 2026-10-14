@@ -491,6 +491,9 @@ export enum ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE {
   /**
    * One retailer has a scheduled fulfillment (a delivery window) and items on another fulfillment
    * in the same order. Choose ASAP for it, or move the retailer's items to one fulfillment.
+   * A retailer that is closed now (`canDeliverNow` false) with items on another fulfillment gets
+   * this code too, before a window is picked. ASAP is not possible for it, so the only recovery
+   * is to move its items to one fulfillment.
    */
   MULTIPLE_FULFILLMENT_OPTIONS_PER_STORE = 'multiple_fulfillment_options_per_store',
 }
