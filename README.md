@@ -648,13 +648,10 @@ const completedCheckout = await client.checkout.complete({
 Scheduled delivery works on AccelPay checkouts only. An on-demand fulfillment that supports it
 has `deliveryScheduling` in the prepare response. Other fulfillments do not have the key.
 
-Catalog and cart responses send `deliveryAvailability` on the retailer fulfillments of on-demand
-stores (`{ status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt }`). `status` is
-`'available'` when `canDeliverNow` or `canSchedule` is true, otherwise `'unavailable'`. A store
-that is closed now stays in the response only when `canSchedule` is true. Its `nextSlot` is
-`null`, so show "Schedule delivery" without a time; the windows come from checkout. Checkout then
-needs a window for it; without one, checkout fails with `delivery_window_required` until the
-shopper picks one.
+Catalog and cart responses send `deliveryAvailability` only on an on-demand fulfillment whose
+store is closed now and can take scheduled orders. See `IRetailerFulfillments.deliveryAvailability`
+for the full rule. Checkout then needs a window for that fulfillment; without one, checkout fails
+with `delivery_window_required` until the shopper picks one.
 
 ```typescript
 // A store that is closed now and can schedule, on a catalog or cart fulfillment

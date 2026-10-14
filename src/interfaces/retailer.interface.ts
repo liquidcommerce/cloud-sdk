@@ -187,10 +187,13 @@ export interface IRetailerFulfillments {
   id: string;
 
   /**
-   * Sent on catalog and cart retailer fulfillments for on-demand stores; see the README. A store
-   * that is closed now stays in the response only with this field and `canSchedule: true`. Its
-   * `nextSlot` is `null`: show "Schedule delivery" without a time. Checkout gives the windows and
-   * needs one for this fulfillment.
+   * Present on catalog and cart responses only on an AccelPay on-demand fulfillment whose store is
+   * closed now and whose retailer takes scheduled orders. Today it is always
+   * `{ status: 'available', canDeliverNow: false, canSchedule: true, nextSlot: null }`: show
+   * "Schedule delivery" without a time. Checkout gives the windows and needs one for this
+   * fulfillment. Any `status` other than `'available'` means the fulfillment cannot be bought.
+   *
+   * Absent (open stores included): decide from the store hours (`hours`, `breaks`) as before.
    */
   deliveryAvailability?: IDeliveryAvailability;
 

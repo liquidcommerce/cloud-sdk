@@ -39,9 +39,8 @@ export interface IDeliveryAvailability {
   canDeliverNow: boolean;
 
   /**
-   * The fulfillment can take a delivery window. In checkout, at least one window exists. On
-   * catalog and cart fulfillments of a store that is closed now, it comes from the store's
-   * scheduled delivery setting, and checkout gives the windows.
+   * The fulfillment can take a delivery window. In checkout, at least one window exists. For
+   * catalog and cart, see `IRetailerFulfillments.deliveryAvailability`.
    */
   canSchedule: boolean;
 
@@ -49,9 +48,8 @@ export interface IDeliveryAvailability {
   timezone: string | null;
 
   /**
-   * The first available window, or `null`. On catalog and cart fulfillments of a store that is
-   * closed now and can schedule, it is `null`: show "Schedule delivery" without a time, and get
-   * the windows in checkout (`deliverySlotsFulfillmentId`).
+   * The first available window, or `null`. Always `null` on catalog and cart; see
+   * `IRetailerFulfillments.deliveryAvailability`.
    */
   nextSlot: IDeliverySlot | null;
 
