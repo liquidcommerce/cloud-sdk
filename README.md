@@ -647,6 +647,26 @@ const completedCheckout = await client.checkout.complete({
 
 Scheduled delivery works on AccelPay checkouts only. An on-demand fulfillment that supports it
 has `deliveryScheduling` in the prepare response. Other fulfillments do not have the key.
+When `deliveryScheduling.availability.canDeliverNow` is false, this fulfillment needs a window:
+send a `slotId` in `deliverySelections` before `complete`, or it fails with 400 (5515)
+`delivery_window_required`.
+
+Catalog and cart responses send `deliveryAvailability` only on an on-demand fulfillment whose
+store is closed now and can take scheduled orders. See `IRetailerFulfillments.deliveryAvailability`
+for the full rule. Checkout then needs a window for that fulfillment; without one, checkout fails
+with `delivery_window_required` until the shopper picks one.
+
+```typescript
+// A store that is closed now and can schedule, on a catalog or cart fulfillment
+// fulfillment.deliveryAvailability = {
+//   status: 'available',
+//   canDeliverNow: false,
+//   canSchedule: true,
+//   timezone: 'America/New_York',
+//   nextSlot: null, // no time on the product page; checkout gives the windows
+//   checkedAt: '2026-10-08T03:00:00.000Z',
+// }
+```
 
 ```typescript
 // 1. The window picker opens: ask for the full window list of one fulfillment
@@ -687,30 +707,50 @@ The reason is in `errors[].code` (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE`), with a p
 
 - `delivery_window_expired`: the order-by time has passed.
 - `delivery_window_unavailable`: the window is not offered now.
+- `delivery_window_required`: the store cannot deliver now, so this fulfillment needs a window. Open the picker for it.
 - `delivery_windows_unsupported`: this checkout cannot take a window at all.
 - `delivery_scheduling_not_enabled`: the retailer has not turned on scheduled delivery for this fulfillment.
 - `delivery_scheduling_unsupported`: this fulfillment can never take a window (it is not on-demand,
-  or the checkout is not an AccelPay checkout). Send `slotId: null` for it.
-- `multiple_fulfillment_groups`: a window needs a cart with one fulfillment group.
+  or the checkout is not an AccelPay checkout), or scheduled delivery is switched off for the
+  partner. Send `slotId: null` for it.
 - `delivery_selection_invalid`: the selection is malformed, or names a fulfillment that is not
   selected in the checkout.
 - `unknown_fulfillment_option`: rare. ManaShop's answer for a fulfillment that is not in its
   checkout; Cloud usually answers `delivery_selection_invalid` first. Handle it the same way.
 
-When `checkout.complete` fails with one of these, send `prepare` with `deliverySelections` (a new
-`slotId`, `slotId: null` for ASAP, or `[]` to clear all windows), then `complete` again. A
-prepare that sends `deliverySelections` can also fail with 5515. In one rare case a prepare
-without it fails too: Cloud creates a new upstream checkout with the accepted window, which has
-expired. Recover in the same way.
+`multiple_fulfillment_groups` is deprecated and no longer sent: each on-demand fulfillment group
+of a cart can take its own window. One store cannot combine a window with another fulfillment in
+the same order: that fails with HTTP 400, `statusCode` 5516
+(`ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR`) and `errors[].code`
+`multiple_fulfillment_options_per_store` (`ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE`). Choose ASAP for
+that store, or move its items to one fulfillment. A store that is closed now
+(`deliveryScheduling.availability.canDeliverNow` false) and has items on another fulfillment gets
+5516 too, before a window is picked. ASAP is not possible for that store, so move its items to one
+fulfillment.
+
+When `checkout.complete` fails with 5515, or with 5516 for a store that has a window stored, send
+`prepare` with `deliverySelections` (a new `slotId`, `slotId: null` for ASAP, or `[]` to clear all
+windows), then `complete` again. A prepare that sends `deliverySelections` can also fail with 5515
+or 5516. A prepare without it can fail too: with 5516 when a store has items in another
+fulfillment and either has a window stored or is closed now, and, in one rare case, with 5515 when
+Cloud creates a new upstream checkout with the accepted window, which has expired. Recover in the
+same way, except for a store that is closed now: `deliverySelections` cannot clear that 5516, so
+update the cart to move the store's items to one fulfillment, then `prepare` again.
 
 ```typescript
 try {
   await client.checkout.complete({ token, payment });
 } catch (error: any) {
-  if (error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR) {
+  if (
+    error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR ||
+    error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR
+  ) {
+    // 5515: ENUM_CHECKOUT_DELIVERY_ERROR_CODE; 5516: ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE.
     const codes = (error.errors ?? []).map((item: { code: string }) => item.code);
     // error.status is 400; error.message is Cloud's shared message.
-    // Show the window picker again, then prepare with new deliverySelections and complete.
+    // Show the window picker again, or choose ASAP for a 5516 store with a window stored, then
+    // prepare with new deliverySelections and complete. If the 5516 store is closed now, update
+    // the cart to move its items to one fulfillment, then prepare again.
   }
 }
 ```

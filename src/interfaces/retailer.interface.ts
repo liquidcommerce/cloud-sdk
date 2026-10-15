@@ -186,7 +186,16 @@ export interface IRetailerFulfillmentBopis {
 export interface IRetailerFulfillments {
   id: string;
 
-  /** Not sent yet; Cloud starts sending it in a later scheduled-delivery release. */
+  /**
+   * Present on catalog and cart responses only on an AccelPay on-demand fulfillment whose store is
+   * closed now and whose retailer takes scheduled orders, while scheduled delivery is switched on
+   * for the partner. Cloud sends it as
+   * `{ status: 'available', canDeliverNow: false, canSchedule: true, nextSlot: null }`: show
+   * "Schedule delivery" without a time. Checkout gives the windows and needs one for this
+   * fulfillment. Any `status` other than `'available'` means the fulfillment cannot be bought.
+   *
+   * Absent (open stores included): decide from the store hours (`hours`, `breaks`) as before.
+   */
   deliveryAvailability?: IDeliveryAvailability;
 
   type: ENUM_MODALITIES;

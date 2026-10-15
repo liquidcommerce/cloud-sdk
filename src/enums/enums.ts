@@ -193,8 +193,9 @@ export enum ENUM_AVAILABILITY_VALUE {
 }
 
 /**
- * Status of `IDeliveryAvailability` for one fulfillment. Treat any value other than `AVAILABLE`
- * as "no delivery windows to show".
+ * Status of `IDeliveryAvailability` for one fulfillment: `AVAILABLE` when `canDeliverNow` or
+ * `canSchedule` is true, otherwise `UNAVAILABLE`. Treat any value other than `AVAILABLE` as
+ * "no delivery windows to show".
  */
 export enum ENUM_DELIVERY_AVAILABILITY_STATUS {
   /** `canDeliverNow` or `canSchedule` is true. */
@@ -320,6 +321,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_PAYMENT_VERIFICATION_ERROR = 5513,
   REQUEST_EXPRESS_AUTHORIZATION_MISMATCH_ERROR = 5514,
   REQUEST_DELIVERY_SELECTION_ERROR = 5515,
+  REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR = 5516,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -358,6 +360,7 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_PAYMENT_VERIFICATION_ERROR = "We couldn't verify your payment information. Please check your card details and billing address, then try again.",
   REQUEST_EXPRESS_AUTHORIZATION_MISMATCH_ERROR = 'Your order changed since you approved it with your wallet. Please approve the payment again.',
   REQUEST_DELIVERY_SELECTION_ERROR = 'The selected delivery time is not available. Please choose another delivery time.',
+  REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR = 'Scheduled delivery cannot be combined with another delivery method from the same store. Use one delivery method for all items from this store.',
 }
 
 /**
@@ -433,6 +436,11 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
   /** The selected window is not offered now. */
   DELIVERY_WINDOW_UNAVAILABLE = 'delivery_window_unavailable',
   /**
+   * The store cannot deliver now, so this fulfillment needs a window before Place Order. Open the
+   * picker for it.
+   */
+  DELIVERY_WINDOW_REQUIRED = 'delivery_window_required',
+  /**
    * Cart-wide: this checkout cannot take a delivery window at all (scheduled delivery is turned
    * off, or the cart has a preorder item). Hide the window picker for the whole checkout and
    * send `slotId: null` (ASAP) for every fulfillment.
@@ -443,7 +451,10 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
    * option. Hide the window picker for that fulfillment only and send `slotId: null` for it.
    */
   DELIVERY_SCHEDULING_NOT_ENABLED = 'delivery_scheduling_not_enabled',
-  /** A delivery window needs a cart with one fulfillment group. */
+  /**
+   * @deprecated ManaShop no longer sends it: each on-demand group of a cart can take its own window.
+   * Kept so older clients still compile.
+   */
   MULTIPLE_FULFILLMENT_GROUPS = 'multiple_fulfillment_groups',
   /**
    * ManaShop's answer for a window of a fulfillment option that is not in its checkout. Cloud
@@ -461,15 +472,32 @@ export enum ENUM_CHECKOUT_DELIVERY_ERROR_CODE {
    * has no `deliveryScheduling` for a fulfillment it sent a window for. An on-demand fulfillment
    * of an AccelPay checkout is not checked by Cloud: if its retailer has not turned on scheduled
    * delivery, the answer is `delivery_scheduling_not_enabled`. Send `slotId: null` for it or
-   * leave it out.
+   * leave it out. Cloud also returns it, with HTTP 400, for any window while scheduled delivery is
+   * switched off for the partner; send `[]` or `slotId: null` then.
    */
   DELIVERY_SCHEDULING_UNSUPPORTED = 'delivery_scheduling_unsupported',
   /**
    * Returned by Elements services, not by Cloud, with HTTP 409: Cloud did not echo the requested
-   * window in `deliveryScheduling.selectedSlotId`. Clear that selection and let the shopper pick
-   * a window again.
+   * window in `deliveryScheduling.selectedSlotId`. There is one `errors[]` entry for each refused
+   * fulfillment, with its `fulfillmentId`; the response is 409 when any entry has this code.
+   * Clear those selections and let the shopper pick a window again.
    */
   DELIVERY_SELECTION_NOT_ACCEPTED = 'delivery_selection_not_accepted',
+}
+
+/**
+ * Fulfillment errors from checkout prepare and complete. They fail with HTTP 400 (statusCode
+ * 5516) and arrive in `errors[].code`, with `field: 'items'`.
+ */
+export enum ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE {
+  /**
+   * One retailer has a scheduled fulfillment (a delivery window) and items on another fulfillment
+   * in the same order. Choose ASAP for it, or move the retailer's items to one fulfillment.
+   * A retailer that is closed now (`canDeliverNow` false) with items on another fulfillment gets
+   * this code too, before a window is picked. ASAP is not possible for it, so the only recovery
+   * is to move its items to one fulfillment.
+   */
+  MULTIPLE_FULFILLMENT_OPTIONS_PER_STORE = 'multiple_fulfillment_options_per_store',
 }
 
 export enum CHECKOUT_EVENT_ENUM {
