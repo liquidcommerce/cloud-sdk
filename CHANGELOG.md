@@ -1,3 +1,16 @@
+# [1.10.0-beta.17](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.16...v1.10.0-beta.17) (2026-10-15)
+
+
+### Bug Fixes
+
+* **types:** leave ASAP out of the 5516 message and document two refusals (DELIV-2843) ([cf94b37](https://github.com/liquidcommerce/cloud-sdk/commit/cf94b37ee59d795db419706fb4b4bde01ef6690e))
+
+
+### Features
+
+* **checkout:** add the delivery_window_required code for a store that is closed now (DELIV-2842) ([a4d4249](https://github.com/liquidcommerce/cloud-sdk/commit/a4d4249b251c52c5a99328a2d5fdfd7e14739e88))
+* **checkout:** add the multiple_fulfillment_options_per_store error and status 5516 (DELIV-2843) ([078797b](https://github.com/liquidcommerce/cloud-sdk/commit/078797b25b80b683c170b62d00b65b30e39bb0f1))
+
 # [1.10.0-beta.16](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.15...v1.10.0-beta.16) (2026-10-13)
 
 
