@@ -559,6 +559,11 @@
             </button>
           </li>
           <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tracking-tab" data-bs-toggle="tab" data-bs-target="#tracking" type="button"
+              role="tab" aria-controls="tracking" aria-selected="false">Tracking
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
             <button class="nav-link" id="webhook-tab" data-bs-toggle="tab" data-bs-target="#webhook" type="button"
               role="tab" aria-controls="webhook" aria-selected="false">Webhook
             </button>
@@ -625,6 +630,11 @@
           <li class="nav-item">
             <button class="nav-link" id="order-tab-mobile" data-bs-toggle="tab" data-bs-target="#order" type="button"
               role="tab" aria-controls="order" aria-selected="false">Order
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="tracking-tab-mobile" data-bs-toggle="tab" data-bs-target="#tracking"
+              type="button" role="tab" aria-controls="tracking" aria-selected="false">Tracking
             </button>
           </li>
           <li class="nav-item">
@@ -1115,6 +1125,27 @@
                     <button type="button" class="btn btn-primary" id="listOrdersBtn">List Orders</button>
                   </div>
                   <div id="listOrdersResults"></div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- TRACKING EXAMPLE -->
+            <div class="tab-pane fade" id="tracking" role="tabpanel" aria-labelledby="tracking-tab">
+              <div class="section-container">
+                <h2 class="section-title">Tracking API</h2>
+
+                <div class="p-3 mb-4 border rounded shadow-sm">
+                  <h5>Track Order</h5>
+                  <div class="mb-4">
+                    <div class="mb-3">
+                      <label for="trackingIdentifier" class="form-label">Order ID or Legacy Order Number</label>
+                      <input type="text" class="form-control" id="trackingIdentifier"
+                        placeholder="Enter order ID (e.g. RESR_111111111111) or legacy order number (e.g. 121212121212)">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="getTracking">Get Tracking</button>
+                  </div>
+                  <div id="trackingResults"></div>
                 </div>
 
               </div>
@@ -2932,7 +2963,7 @@
                               ${fulfillment.expectationFormatted?.engraving ? `<p class="mb-1"><strong>Engraving Expectation:</strong> ${fulfillment.expectationFormatted.engraving}</p>` : ''}
 
                               ${fulfillment.cancellation?.category ? `
-                                <div class="alert alert-warning mt-2 mb-2">
+                                <div class="mt-2 mb-2 alert alert-warning">
                                   <h6>Cancellation Details</h6>
                                   <p class="mb-1"><strong>Category:</strong> ${fulfillment.cancellation.category}</p>
                                   ${fulfillment.cancellation.subcategory ? `<p class="mb-1"><strong>Subcategory:</strong> ${fulfillment.cancellation.subcategory}</p>` : ''}
@@ -3233,6 +3264,157 @@
           // Scroll to order results
           document.getElementById('orderResults').scrollIntoView({ behavior: 'smooth' });
         });
+      });
+    }
+
+    async function fetchTracking(identifier) {
+      if (!client) {
+        document.getElementById('trackingResults').innerHTML = '<p class="alert alert-danger">SDK not initialized. Please try again.</p>';
+        return;
+      }
+
+      try {
+        document.getElementById('trackingResults').innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+        const response = await client.tracking.get(identifier);
+
+        if (response.data) {
+          displayTrackingDetails(response.data);
+        } else {
+          document.getElementById('trackingResults').innerHTML = `
+            <div class="alert alert-danger">
+              <h5>Tracking Not Found</h5>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error fetching tracking:', error);
+        document.getElementById('trackingResults').innerHTML = `
+          <div class="alert alert-danger">
+            <h5>Error Fetching Tracking</h5>
+            <p>${error.message || 'Unknown error occurred'}</p>
+          </div>
+        `;
+      }
+    }
+
+    function displayTrackingDetails(tracking) {
+      const trackingResults = document.getElementById('trackingResults');
+
+      let html = `
+        <div class="mb-4 card">
+          <div class="text-white card-header bg-primary">
+            <h4 class="mb-0">Tracking Information</h4>
+          </div>
+          <div class="card-body">
+            <div class="mb-4 row">
+              <div class="col-md-6">
+                <p><strong>Reference ID:</strong> ${tracking.referenceId || 'N/A'}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Legacy Order Number:</strong> ${tracking.legacyOrderNumber || 'N/A'}</p>
+              </div>
+            </div>
+
+            <h5 class="mb-3">Packages (${tracking.packages.length})</h5>
+            ${tracking.packages.map((pkg, index) => `
+              <div class="mb-4 p-3 border rounded ${pkg.isLegacy ? 'bg-light' : ''}">
+                <div class="mb-3 d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0">Package ${index + 1}</h6>
+                  <div>
+                    <span class="badge ${getTrackingStatusBadgeColor(pkg.status)}">${pkg.status}</span>
+                    ${pkg.isLegacy ? '<span class="badge bg-secondary ms-2">Legacy</span>' : ''}
+                  </div>
+                </div>
+
+                <div class="mb-3 row">
+                  <div class="col-md-6">
+                    <p><strong>ID:</strong> ${pkg.id || 'N/A'}</p>
+                    <p><strong>Retailer Order ID:</strong> ${pkg.retailerOrderId || 'N/A'}</p>
+                    <p><strong>Carrier:</strong> ${pkg.carrier || 'N/A'}</p>
+                    <p><strong>Tracking Number:</strong> ${pkg.trackingNumber || 'N/A'}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p><strong>Est. Delivery:</strong> ${pkg.trackingDetails.estimatedDeliveryDatetime ? new Date(pkg.trackingDetails.estimatedDeliveryDatetime).toLocaleString() : 'N/A'}</p>
+                    ${pkg.trackingDetails.carrierTrackingUrl ? `<p><a href="${pkg.trackingDetails.carrierTrackingUrl}" target="_blank" class="btn btn-sm btn-outline-primary">Track on Carrier Site</a></p>` : ''}
+                    ${pkg.trackingDetails.aftershipTrackingUrl ? `<p><a href="${pkg.trackingDetails.aftershipTrackingUrl}" target="_blank" class="btn btn-sm btn-outline-secondary">Track on Aftership</a></p>` : ''}
+                  </div>
+                </div>
+
+                ${pkg.trackingUpdates && pkg.trackingUpdates.length > 0 ? `
+                  <h6 class="mt-3">Tracking Updates</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Date</th>
+                          <th>Message</th>
+                          <th>Location</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${pkg.trackingUpdates.map(update => `
+                          <tr>
+                            <td>${update.updateDatetime ? new Date(update.updateDatetime).toLocaleString() : 'N/A'}</td>
+                            <td>${update.message || 'N/A'}</td>
+                            <td>${[update.city, update.state, update.zip].filter(Boolean).join(', ') || 'N/A'}</td>
+                          </tr>
+                        `).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                ` : '<p class="text-muted">No tracking updates available</p>'}
+
+                ${pkg.items && pkg.items.length > 0 ? `
+                  <h6 class="mt-3">Items</h6>
+                  <ul class="list-group">
+                    ${pkg.items.map(item => `
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>${item.name} (Qty: ${item.quantity})</span>
+                        ${item.value ? `<span>$${(item.value / 100).toFixed(2)}</span>` : ''}
+                      </li>
+                    `).join('')}
+                  </ul>
+                ` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      trackingResults.innerHTML = html;
+    }
+
+    function getTrackingStatusBadgeColor(status) {
+      switch (status?.toLowerCase()) {
+        case 'delivered':
+          return 'bg-success';
+        case 'in_transit':
+        case 'out_for_delivery':
+          return 'bg-info';
+        case 'pending':
+        case 'label_created':
+          return 'bg-warning';
+        case 'exception':
+        case 'failed':
+          return 'bg-danger';
+        default:
+          return 'bg-secondary';
+      }
+    }
+
+    const getTrackingButton = document.getElementById('getTracking');
+    if (getTrackingButton) {
+      getTrackingButton.addEventListener('click', () => {
+        const identifier = document.getElementById('trackingIdentifier').value.trim();
+        if (identifier) {
+          fetchTracking(identifier);
+        } else {
+          document.getElementById('trackingResults').innerHTML = `
+            <div class="alert alert-warning">
+              <p>Please enter an Order ID or Legacy Order Number.</p>
+            </div>
+          `;
+        }
       });
     }
 
