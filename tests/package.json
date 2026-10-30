@@ -1,0 +1,20 @@
+{
+  "name": "automated-tests",
+  "version": "1.0.0",
+  "description": "Automated tests for LiquidCommerce Cloud SDK",
+  "scripts": {
+    "test": "npx playwright test --config=config/playwright.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.0.2"
+  },
+  "dependencies": {
+    "@dlenroc/testrail": "^1.9.1",
+    "@faker-js/faker": "^8.4.1",
+    "ajv": "^8.17.1",
+    "dotenv": "^16.4.5",
+    "slack-notify": "^2.0.7"
+  },
+  "author": "Uladzimir Makarau"
+}
