@@ -261,6 +261,9 @@ export enum CART_EVENT_ENUM {
   PRESALE_NOT_STARTED = 'PresaleNotStarted',
   PRESALE_EXPIRED = 'PresaleExpired',
   PRESALE_MIXED_CART = 'PresaleMixedCart',
+  PRESALE_ALREADY_IN_CART = 'PresaleAlreadyInCart',
+  PRESALE_NOT_FOUND = 'PresaleNotFound',
+  PRESALE_EXCLUDED_FROM_DISCOUNT = 'PresaleExcludedFromDiscount',
 
   // Retailer restriction events
   RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',
@@ -322,6 +325,10 @@ export enum ENUM_CHECKOUT_STATUS_CODE_ERROR {
   REQUEST_EXPRESS_AUTHORIZATION_MISMATCH_ERROR = 5514,
   REQUEST_DELIVERY_SELECTION_ERROR = 5515,
   REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR = 5516,
+  REQUEST_PRESALE_EXPIRED_ERROR = 5519,
+  REQUEST_PRESALE_LIMIT_EXCEEDED_ERROR = 5520,
+  REQUEST_PRESALE_MIXED_CART_ERROR = 5521,
+  REQUEST_PRESALE_NOT_FOUND_ERROR = 5522,
 }
 
 export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
@@ -361,6 +368,10 @@ export enum ENUM_CHECKOUT_STATUS_CODE_MESSAGE {
   REQUEST_EXPRESS_AUTHORIZATION_MISMATCH_ERROR = 'Your order changed since you approved it with your wallet. Please approve the payment again.',
   REQUEST_DELIVERY_SELECTION_ERROR = 'The selected delivery time is not available. Please choose another delivery time.',
   REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR = 'Scheduled delivery cannot be combined with another delivery method from the same store. Use one delivery method for all items from this store.',
+  REQUEST_PRESALE_EXPIRED_ERROR = 'The presale item is no longer available and was removed from your cart. Review your cart and try again.',
+  REQUEST_PRESALE_LIMIT_EXCEEDED_ERROR = 'The requested presale quantity is no longer available. Please review your cart and try again.',
+  REQUEST_PRESALE_MIXED_CART_ERROR = "Presale items can't be combined with other items. The other items were removed from your cart; review it and try again.",
+  REQUEST_PRESALE_NOT_FOUND_ERROR = 'The presale item is no longer offered and was removed from your cart. Review your cart and try again.',
 }
 
 /**
@@ -533,6 +544,15 @@ export enum CHECKOUT_EVENT_ENUM {
   PRODUCT_NOT_ELIGIBLE = 'ProductNotEligible',
   NOT_ENOUGH_PREVIOUS_ORDERS = 'NotEnoughPreviousOrders',
 
+  // Presale events carried over from the cart
+  PRESALE_NOT_STARTED = 'PresaleNotStarted',
+  PRESALE_EXPIRED = 'PresaleExpired',
+  PRESALE_LIMIT_EXCEEDED = 'PresaleLimitExceeded',
+  PRESALE_NOT_FOUND = 'PresaleNotFound',
+  PRESALE_MIXED_CART = 'PresaleMixedCart',
+  PRESALE_ALREADY_IN_CART = 'PresaleAlreadyInCart',
+  PRESALE_EXCLUDED_FROM_DISCOUNT = 'PresaleExcludedFromDiscount',
+
   // Retailer restriction events
   RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',
   RETAILERS_DO_NOT_ALLOW_PROMOS = 'RetailersDoNotAllowPromos',
@@ -574,6 +594,12 @@ export enum ENUM_CUSTOMER_PLACEMENT {
   STANDARD = 'standard',
   PRE_SALE = 'pre_sale',
   BACK_ORDER = 'back_order',
+}
+
+/** How a storefront sells a presale. A display hint; the cart takes either. */
+export enum ENUM_PRESALE_CHECKOUT_FLOW {
+  CHECKOUT = 'checkout',
+  CART = 'cart',
 }
 
 export enum SHIPPING_CATEGORY_TYPE {

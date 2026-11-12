@@ -1,4 +1,4 @@
-import type { CHECKOUT_EVENT_ENUM } from '../enums';
+import type { CHECKOUT_EVENT_ENUM, ENUM_CUSTOMER_PLACEMENT } from '../enums';
 import type { ICoreParams } from '../types';
 import type { IAddress } from './address.interface';
 import type { ICartAttributesPromoCode, ICartItemAttributes } from './cart.interface';
@@ -418,6 +418,8 @@ export interface ICheckoutItem {
 
   bottleDeposits: number;
 
+  customerPlacement?: ENUM_CUSTOMER_PLACEMENT;
+
   attributes: ICartItemAttributes;
 
   bopis?: import('./cart.interface').ICartItemBopis | null;
@@ -513,6 +515,11 @@ export interface ICheckoutPrepareResponse {
   promoCode: ICartAttributesPromoCode;
 
   isInternationalAllowed: boolean;
+
+  /** Copied from the cart: the presale lock and when it lapses. */
+  isPresaleLocked?: boolean;
+
+  presaleExpiresAt?: string | null;
 }
 
 /**

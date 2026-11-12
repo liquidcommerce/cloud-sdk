@@ -247,6 +247,33 @@ const updatedCart = await client.cart.update({
 });
 ```
 
+#### Presale Items
+
+A presale line has `customerPlacement: 'pre_sale'` (`ENUM_CUSTOMER_PLACEMENT.PRE_SALE`) and its
+terms in `attributes.presale`; show `attributes.presale.estimatedShipBy` as its ship date. Adding it
+reserves the presale for a fixed time: `isPresaleLocked` and `presaleExpiresAt` on the cart and on
+the prepared checkout. Editing the cart does not extend it. When it lapses, the next cart update
+drops the presale line with a `PresaleExpired` event and keeps the other lines; adding the presale
+again starts a new reservation.
+
+`attributes.presale.checkoutFlow` (`ENUM_PRESALE_CHECKOUT_FLOW`) says how to sell the presale:
+`checkout` sends the shopper straight to checkout with it, `cart` adds it to the cart like any other
+product. It is set per presale and absent means `checkout`. It is a display choice: the cart
+accepts the presale either way.
+
+On the AccelPay lane a cart holds one presale's lines beside regular items, and lines of a second
+presale are dropped with `PresaleAlreadyInCart`. Otherwise a presale cannot share a cart: the
+regular lines are dropped with `PresaleMixedCart`.
+
+`checkout.prepare` lists these situations in `events` and still succeeds, except a presale that has
+not started (5508). `checkout.complete` fails with HTTP 400 and one of these body `statusCode`s;
+show the cart again and prepare before retrying:
+
+- 5519 `REQUEST_PRESALE_EXPIRED_ERROR`: the reservation lapsed and the presale line was removed.
+- 5520 `REQUEST_PRESALE_LIMIT_EXCEEDED_ERROR`: the requested presale quantity is no longer available.
+- 5521 `REQUEST_PRESALE_MIXED_CART_ERROR`: the regular lines were removed beside the presale.
+- 5522 `REQUEST_PRESALE_NOT_FOUND_ERROR`: the presale is no longer offered and its line was removed.
+
 ### User
 
 User profile and preferences management:
