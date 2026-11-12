@@ -540,11 +540,10 @@ export enum CHECKOUT_EVENT_ENUM {
   INVALID_DOMAIN = 'InvalidDomain',
   INVALID_REQUIREMENTS = 'InvalidRequirements',
   INVALID_ORGANIZATION = 'InvalidOrganization',
-  PRESALE_ITEMS_NOT_ALLOWED = 'PresaleItemsNotAllowed',
   PRODUCT_NOT_ELIGIBLE = 'ProductNotEligible',
   NOT_ENOUGH_PREVIOUS_ORDERS = 'NotEnoughPreviousOrders',
 
-  // Presale events carried over from the cart
+  // Presale events
   PRESALE_NOT_STARTED = 'PresaleNotStarted',
   PRESALE_EXPIRED = 'PresaleExpired',
   PRESALE_LIMIT_EXCEEDED = 'PresaleLimitExceeded',
@@ -552,6 +551,7 @@ export enum CHECKOUT_EVENT_ENUM {
   PRESALE_MIXED_CART = 'PresaleMixedCart',
   PRESALE_ALREADY_IN_CART = 'PresaleAlreadyInCart',
   PRESALE_EXCLUDED_FROM_DISCOUNT = 'PresaleExcludedFromDiscount',
+  PRESALE_ITEMS_NOT_ALLOWED = 'PresaleItemsNotAllowed',
 
   // Retailer restriction events
   RETAILER_DOES_NOT_ALLOW_PROMOS = 'RetailerDoesNotAllowPromos',

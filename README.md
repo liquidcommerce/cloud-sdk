@@ -254,7 +254,8 @@ terms in `attributes.presale`; show `attributes.presale.estimatedShipBy` as its 
 reserves the presale for a fixed time: `isPresaleLocked` and `presaleExpiresAt` on the cart and on
 the prepared checkout. Editing the cart does not extend it. When it lapses, the next cart update
 drops the presale line with a `PresaleExpired` event and keeps the other lines; adding the presale
-again starts a new reservation.
+again starts a new reservation. `PresaleExpired` also drops the line when the presale's purchase
+window closes, so do not read every one as a lapsed reservation.
 
 `attributes.presale.checkoutFlow` (`ENUM_PRESALE_CHECKOUT_FLOW`) says how to sell the presale:
 `checkout` sends the shopper straight to checkout with it, `cart` adds it to the cart like any other
@@ -265,14 +266,7 @@ On the AccelPay lane a cart holds one presale's lines beside regular items, and 
 presale are dropped with `PresaleAlreadyInCart`. Otherwise a presale cannot share a cart: the
 regular lines are dropped with `PresaleMixedCart`.
 
-`checkout.prepare` lists these situations in `events` and still succeeds, except a presale that has
-not started (5508). `checkout.complete` fails with HTTP 400 and one of these body `statusCode`s;
-show the cart again and prepare before retrying:
-
-- 5519 `REQUEST_PRESALE_EXPIRED_ERROR`: the reservation lapsed and the presale line was removed.
-- 5520 `REQUEST_PRESALE_LIMIT_EXCEEDED_ERROR`: the requested presale quantity is no longer available.
-- 5521 `REQUEST_PRESALE_MIXED_CART_ERROR`: the regular lines were removed beside the presale.
-- 5522 `REQUEST_PRESALE_NOT_FOUND_ERROR`: the presale is no longer offered and its line was removed.
+How checkout reports these is under [Presale Checkout](#presale-checkout).
 
 ### User
 
@@ -785,6 +779,19 @@ try {
 Orders show the window in `fulfillments[].scheduledFor` and `fulfillments[].scheduledUntil`.
 
 `scheduledDelivery` (checkout) is deprecated. The cart item `scheduledFor` is not used for delivery windows.
+
+#### Presale Checkout
+
+`checkout.prepare` lists the [presale cart events](#presale-items) in `events` and still succeeds,
+except for a presale that has not started: prepare fails with HTTP 400 (5508), so
+`PresaleNotStarted` never shows up in its `events`. `checkout.complete` fails with HTTP 400 and one
+of these body `statusCode`s; show the cart again and prepare before retrying:
+
+- 5508 `REQUEST_PRESALE_NOT_STARTED_ERROR`: the presale has not started yet.
+- 5519 `REQUEST_PRESALE_EXPIRED_ERROR`: the reservation lapsed or the purchase window closed, and the presale line was removed.
+- 5520 `REQUEST_PRESALE_LIMIT_EXCEEDED_ERROR`: the requested presale quantity is no longer available.
+- 5521 `REQUEST_PRESALE_MIXED_CART_ERROR`: the regular lines were removed beside the presale.
+- 5522 `REQUEST_PRESALE_NOT_FOUND_ERROR`: the presale is no longer offered and its line was removed.
 
 #### Checkout Payment
 
