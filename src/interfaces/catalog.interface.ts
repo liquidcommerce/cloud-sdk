@@ -522,6 +522,11 @@ export interface IProductPresale {
 
   language: string;
 
+  /**
+   * How to sell the presale: `checkout` goes straight to checkout with it, `cart` adds it to the
+   * cart. Absent means `checkout`, and cloud always sends `checkout` for partners not on AccelPay
+   * checkout. A display choice: on AccelPay checkout the cart accepts the presale either way.
+   */
   checkoutFlow?: ENUM_PRESALE_CHECKOUT_FLOW;
 }
 

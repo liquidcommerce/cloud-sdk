@@ -259,8 +259,9 @@ window closes, so do not read every one as a lapsed reservation.
 
 `attributes.presale.checkoutFlow` (`ENUM_PRESALE_CHECKOUT_FLOW`) says how to sell the presale:
 `checkout` sends the shopper straight to checkout with it, `cart` adds it to the cart like any other
-product. It is set per presale and absent means `checkout`. It is a display choice: the cart
-accepts the presale either way.
+product. It is set per presale and absent means `checkout`. Cloud always sends `checkout` for
+partners not on AccelPay checkout, whose carts refuse a presale beside other items. It is a display
+choice: on AccelPay checkout the cart accepts the presale either way.
 
 On the AccelPay lane a cart holds one presale's lines beside regular items, and lines of a second
 presale are dropped with `PresaleAlreadyInCart`. Otherwise a presale cannot share a cart: the
