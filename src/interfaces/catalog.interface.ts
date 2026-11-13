@@ -6,6 +6,7 @@ import type {
   ENUM_MODALITIES,
   ENUM_NAVIGATION_ORDER_DIRECTION_TYPE,
   ENUM_ORDER_BY,
+  ENUM_PRESALE_CHECKOUT_FLOW,
 } from '../enums';
 import type { ILocBase } from './address.interface';
 import type { IRetailer } from './retailer.interface';
@@ -507,6 +508,10 @@ export interface IProductSizeEngraving {
  * @property {boolean} isActive - Indicates whether the presale is currently active.
  *
  * @property {string} language - The language associated with the product presale.
+ *
+ * @property {ENUM_PRESALE_CHECKOUT_FLOW} [checkoutFlow] - Whether the storefront sends the presale
+ *                                      straight to checkout or adds it to the cart. Absent means
+ *                                      `checkout`. A display hint: the cart accepts either.
  */
 export interface IProductPresale {
   canPurchaseOn: null | string;
@@ -516,6 +521,13 @@ export interface IProductPresale {
   isActive: boolean;
 
   language: string;
+
+  /**
+   * How to sell the presale: `checkout` goes straight to checkout with it, `cart` adds it to the
+   * cart. Absent means `checkout`, and cloud always sends `checkout` for partners not on AccelPay
+   * checkout. A display choice: on AccelPay checkout the cart accepts the presale either way.
+   */
+  checkoutFlow?: ENUM_PRESALE_CHECKOUT_FLOW;
 }
 
 /**

@@ -1,4 +1,4 @@
-import type { CART_EVENT_ENUM } from '../enums';
+import type { CART_EVENT_ENUM, ENUM_CUSTOMER_PLACEMENT } from '../enums';
 import type { ILoc, ILocBase } from './address.interface';
 import type { IEngravingFontOption, IProduct, IProductPresale } from './catalog.interface';
 import type { IRetailer } from './retailer.interface';
@@ -197,6 +197,9 @@ export interface ICartItem extends Partial<Omit<IProduct, 'attributes'>> {
   images: string[];
 
   mainImage: string;
+
+  /** `pre_sale` for a presale line. On the AccelPay lane a cart can hold one presale's lines beside standard ones. */
+  customerPlacement: ENUM_CUSTOMER_PLACEMENT;
 
   attributes: ICartItemAttributes;
 
