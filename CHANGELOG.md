@@ -1,3 +1,10 @@
+# [1.10.0-beta.18](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.17...v1.10.0-beta.18) (2026-11-13)
+
+
+### Features
+
+* **types:** presale checkoutFlow, mixed-cart presale events and refusal codes (DELIV-2046) ([92763c3](https://github.com/liquidcommerce/cloud-sdk/commit/92763c364624ffcfc7939c3b430f4ede3bffba15))
+
 # [1.10.0-beta.17](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.16...v1.10.0-beta.17) (2026-10-15)
 
 
