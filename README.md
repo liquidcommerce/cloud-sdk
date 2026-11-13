@@ -292,7 +292,6 @@ const updatedCart = await client.cart.update({
       quantity: 2,
       fulfillmentId: 'fulfillment_id',
       engravingLines: ['Line 1', 'Line 2'], // Optional
-      scheduledFor: '2024-12-25', // Optional
     },
   ],
   loc: {
@@ -307,6 +306,28 @@ const updatedCart = await client.cart.update({
   giftCards: ['GC123456'], // Optional
 });
 ```
+
+#### Presale Items
+
+A presale line has `customerPlacement: 'pre_sale'` (`ENUM_CUSTOMER_PLACEMENT.PRE_SALE`) and its
+terms in `attributes.presale`; show `attributes.presale.estimatedShipBy` as its ship date. Adding it
+reserves the presale for a fixed time: `isPresaleLocked` and `presaleExpiresAt` on the cart and on
+the prepared checkout. Editing the cart does not extend it. When it lapses, the next cart update
+drops the presale line with a `PresaleExpired` event and keeps the other lines; adding the presale
+again starts a new reservation. `PresaleExpired` also drops the line when the presale's purchase
+window closes, so do not read every one as a lapsed reservation.
+
+`attributes.presale.checkoutFlow` (`ENUM_PRESALE_CHECKOUT_FLOW`) says how to sell the presale:
+`checkout` sends the shopper straight to checkout with it, `cart` adds it to the cart like any other
+product. It is set per presale and absent means `checkout`. Cloud always sends `checkout` for
+partners not on AccelPay checkout, whose carts refuse a presale beside other items. It is a display
+choice: on AccelPay checkout the cart accepts the presale either way.
+
+On the AccelPay lane a cart holds one presale's lines beside regular items, and lines of a second
+presale are dropped with `PresaleAlreadyInCart`. Otherwise a presale cannot share a cart: the
+regular lines are dropped with `PresaleMixedCart`.
+
+How checkout reports these is under [Presale Checkout](#presale-checkout).
 
 ### User
 
@@ -693,7 +714,6 @@ const preparedCheckout = await client.checkout.prepare({
     },
   ],
   acceptedAccountCreation: true,
-  scheduledDelivery: '2024-12-25T14:00:00Z',
   promoCode: 'DISCOUNT10', // Optional
   giftCards: ['GC123456'], // Optional
 });
@@ -704,6 +724,135 @@ const completedCheckout = await client.checkout.complete({
   payment: 'payment_id',
 });
 ```
+
+#### Scheduled Delivery
+
+Scheduled delivery works on AccelPay checkouts only. An on-demand fulfillment that supports it
+has `deliveryScheduling` in the prepare response. Other fulfillments do not have the key.
+When `deliveryScheduling.availability.canDeliverNow` is false, this fulfillment needs a window:
+send a `slotId` in `deliverySelections` before `complete`, or it fails with 400 (5515)
+`delivery_window_required`.
+
+Catalog and cart responses send `deliveryAvailability` only on an on-demand fulfillment whose
+store is closed now and can take scheduled orders. See `IRetailerFulfillments.deliveryAvailability`
+for the full rule. Checkout then needs a window for that fulfillment; without one, checkout fails
+with `delivery_window_required` until the shopper picks one.
+
+```typescript
+// A store that is closed now and can schedule, on a catalog or cart fulfillment
+// fulfillment.deliveryAvailability = {
+//   status: 'available',
+//   canDeliverNow: false,
+//   canSchedule: true,
+//   timezone: 'America/New_York',
+//   nextSlot: null, // no time on the product page; checkout gives the windows
+//   checkedAt: '2026-10-08T03:00:00.000Z',
+// }
+```
+
+```typescript
+// 1. The window picker opens: ask for the full window list of one fulfillment
+const withSlots = await client.checkout.prepare({
+  cartId: 'cart_id',
+  deliverySlotsFulfillmentId: 'fulfillment_id',
+});
+// fulfillment.deliveryScheduling = {
+//   availability: { status, canDeliverNow, canSchedule, timezone, nextSlot, checkedAt },
+//   slots: [{ id, start, end, cutoff }], // cutoff = "Order by" (ManaShop's release time)
+//   selectedSlotId: null,
+//   selectedSlot: null,
+// }
+
+// 2. The shopper picks a window. Send its id back unchanged. The response echoes it in
+//    deliveryScheduling.selectedSlotId and deliveryScheduling.selectedSlot.
+await client.checkout.prepare({
+  cartId: 'cart_id',
+  deliverySelections: [{ fulfillmentId: 'fulfillment_id', slotId: slot.id }],
+});
+```
+
+A slot `id` is opaque: pass it back unchanged and do not parse it. `slots` is a snapshot at the
+time of the response. Do not cache it; request it again each time the window picker opens.
+
+`deliverySelections` replaces the earlier selections. Leave it out to keep the accepted window:
+Cloud does not check it again, and ManaShop checks it at completion. `slotId: null` means no
+window (ASAP).
+
+`deliveryScheduling.selectedSlotId` tells whether a window is held. `selectedSlot` is display
+detail and can be `null` while `selectedSlotId` is set; then find the window by its id in `slots`
+or `availability.nextSlot`, and do not show ASAP. If it is not there, prepare with
+`deliverySlotsFulfillmentId` set to this fulfillment to load the list.
+
+Window errors fail with HTTP 400, body `statusCode` 5515
+(`ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR`) and one shared `message`.
+The reason is in `errors[].code` (`ENUM_CHECKOUT_DELIVERY_ERROR_CODE`), with a per-item `message`:
+
+- `delivery_window_expired`: the order-by time has passed.
+- `delivery_window_unavailable`: the window is not offered now.
+- `delivery_window_required`: the store cannot deliver now, so this fulfillment needs a window. Open the picker for it.
+- `delivery_windows_unsupported`: this checkout cannot take a window at all.
+- `delivery_scheduling_not_enabled`: the retailer has not turned on scheduled delivery for this fulfillment.
+- `delivery_scheduling_unsupported`: this fulfillment can never take a window (it is not on-demand,
+  or the checkout is not an AccelPay checkout), or scheduled delivery is switched off for the
+  partner. Send `slotId: null` for it.
+- `delivery_selection_invalid`: the selection is malformed, or names a fulfillment that is not
+  selected in the checkout.
+- `unknown_fulfillment_option`: rare. ManaShop's answer for a fulfillment that is not in its
+  checkout; Cloud usually answers `delivery_selection_invalid` first. Handle it the same way.
+
+`multiple_fulfillment_groups` is deprecated and no longer sent: each on-demand fulfillment group
+of a cart can take its own window. One store cannot combine a window with another fulfillment in
+the same order: that fails with HTTP 400, `statusCode` 5516
+(`ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR`) and `errors[].code`
+`multiple_fulfillment_options_per_store` (`ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE`). Choose ASAP for
+that store, or move its items to one fulfillment. A store that is closed now
+(`deliveryScheduling.availability.canDeliverNow` false) and has items on another fulfillment gets
+5516 too, before a window is picked. ASAP is not possible for that store, so move its items to one
+fulfillment.
+
+When `checkout.complete` fails with 5515, or with 5516 for a store that has a window stored, send
+`prepare` with `deliverySelections` (a new `slotId`, `slotId: null` for ASAP, or `[]` to clear all
+windows), then `complete` again. A prepare that sends `deliverySelections` can also fail with 5515
+or 5516. A prepare without it can fail too: with 5516 when a store has items in another
+fulfillment and either has a window stored or is closed now, and, in one rare case, with 5515 when
+Cloud creates a new upstream checkout with the accepted window, which has expired. Recover in the
+same way, except for a store that is closed now: `deliverySelections` cannot clear that 5516, so
+update the cart to move the store's items to one fulfillment, then `prepare` again.
+
+```typescript
+try {
+  await client.checkout.complete({ token, payment });
+} catch (error: any) {
+  if (
+    error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_DELIVERY_SELECTION_ERROR ||
+    error.statusCode === ENUM_CHECKOUT_STATUS_CODE_ERROR.REQUEST_ONE_FULFILLMENT_PER_RETAILER_ERROR
+  ) {
+    // 5515: ENUM_CHECKOUT_DELIVERY_ERROR_CODE; 5516: ENUM_CHECKOUT_FULFILLMENT_ERROR_CODE.
+    const codes = (error.errors ?? []).map((item: { code: string }) => item.code);
+    // error.status is 400; error.message is Cloud's shared message.
+    // Show the window picker again, or choose ASAP for a 5516 store with a window stored, then
+    // prepare with new deliverySelections and complete. If the 5516 store is closed now, update
+    // the cart to move its items to one fulfillment, then prepare again.
+  }
+}
+```
+
+Orders show the window in `fulfillments[].scheduledFor` and `fulfillments[].scheduledUntil`.
+
+`scheduledDelivery` (checkout) is deprecated. The cart item `scheduledFor` is not used for delivery windows.
+
+#### Presale Checkout
+
+`checkout.prepare` lists the [presale cart events](#presale-items) in `events` and still succeeds,
+except for a presale that has not started: prepare fails with HTTP 400 (5508), so
+`PresaleNotStarted` never shows up in its `events`. `checkout.complete` fails with HTTP 400 and one
+of these body `statusCode`s; show the cart again and prepare before retrying:
+
+- 5508 `REQUEST_PRESALE_NOT_STARTED_ERROR`: the presale has not started yet.
+- 5519 `REQUEST_PRESALE_EXPIRED_ERROR`: the reservation lapsed or the purchase window closed, and the presale line was removed.
+- 5520 `REQUEST_PRESALE_LIMIT_EXCEEDED_ERROR`: the requested presale quantity is no longer available.
+- 5521 `REQUEST_PRESALE_MIXED_CART_ERROR`: the regular lines were removed beside the presale.
+- 5522 `REQUEST_PRESALE_NOT_FOUND_ERROR`: the presale is no longer offered and its line was removed.
 
 #### Checkout Payment
 

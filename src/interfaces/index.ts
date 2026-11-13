@@ -2,6 +2,7 @@ export * from './address.interface';
 export * from './cart.interface';
 export * from './catalog.interface';
 export * from './checkout.interface';
+export * from './delivery.interface';
 export * from './liquid-commerce-client.interface';
 export * from './liquid-commerce-order-client.interface';
 export * from './order.interface';
