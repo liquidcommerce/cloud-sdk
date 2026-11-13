@@ -60,7 +60,13 @@ export interface IOrderFulfillment {
   id: string;
   type: ENUM_ORDER_FULFILLMENT_TYPE;
   status: ENUM_ORDER_STATUS;
+  /** Delivery window start (ISO-8601 UTC), or `null` when unscheduled. */
   scheduledFor: string | null; // new Date().toISOString()
+  /**
+   * Delivery window end (ISO-8601 UTC). The Orders API sends `null` when there is no end. Absent
+   * on Cloud versions without scheduled delivery.
+   */
+  scheduledUntil?: string | null;
   updatedAt: string; // new Date().toISOString()
   itemIds: string[];
   cancellation: IOrderFulfillmentCancellation;
