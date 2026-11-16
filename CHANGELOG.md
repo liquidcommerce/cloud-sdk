@@ -1,3 +1,44 @@
+# [1.10.0-beta.18](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.17...v1.10.0-beta.18) (2026-11-13)
+
+
+### Features
+
+* **types:** presale checkoutFlow, mixed-cart presale events and refusal codes (DELIV-2046) ([92763c3](https://github.com/liquidcommerce/cloud-sdk/commit/92763c364624ffcfc7939c3b430f4ede3bffba15))
+
+# [1.10.0-beta.17](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.16...v1.10.0-beta.17) (2026-10-15)
+
+
+### Bug Fixes
+
+* **types:** leave ASAP out of the 5516 message and document two refusals (DELIV-2843) ([cf94b37](https://github.com/liquidcommerce/cloud-sdk/commit/cf94b37ee59d795db419706fb4b4bde01ef6690e))
+
+
+### Features
+
+* **checkout:** add the delivery_window_required code for a store that is closed now (DELIV-2842) ([a4d4249](https://github.com/liquidcommerce/cloud-sdk/commit/a4d4249b251c52c5a99328a2d5fdfd7e14739e88))
+* **checkout:** add the multiple_fulfillment_options_per_store error and status 5516 (DELIV-2843) ([078797b](https://github.com/liquidcommerce/cloud-sdk/commit/078797b25b80b683c170b62d00b65b30e39bb0f1))
+
+# [1.10.0-beta.16](https://github.com/liquidcommerce/cloud-sdk/compare/v1.10.0-beta.15...v1.10.0-beta.16) (2026-10-13)
+
+
+### Bug Fixes
+
+* **types:** document the delivery window on checkout fulfillments (DELIV-2840) ([e858c16](https://github.com/liquidcommerce/cloud-sdk/commit/e858c16eb95130e9702ed780f70bbfb56e385a59))
+* **types:** make order fulfillment scheduledUntil optional (DELIV-2840) ([24edd2e](https://github.com/liquidcommerce/cloud-sdk/commit/24edd2ed6ca318535255c7e04e720e49f2c68b9b))
+* **types:** match delivery availability and window docs to Cloud (DELIV-2840) ([dcd978d](https://github.com/liquidcommerce/cloud-sdk/commit/dcd978d2bbff4adf5235f45645cdfc27e44f320b))
+* **types:** restore scheduledFor as string | Date on checkout fulfillments (DELIV-2840) ([241bf70](https://github.com/liquidcommerce/cloud-sdk/commit/241bf7078da1228467e82da8e507261aff50d7cd))
+* **types:** type checkout fulfillment scheduledFor as a string like scheduledUntil (DELIV-2840) ([1ee6648](https://github.com/liquidcommerce/cloud-sdk/commit/1ee6648a3401a4c95ca9ccad6fe42a3b39688bda))
+
+
+### Features
+
+* **checkout:** match Cloud's deliverySelections limits before prepare (DELIV-2840) ([f18ef08](https://github.com/liquidcommerce/cloud-sdk/commit/f18ef08a3acaf4799c22a068c33497825ce0326c))
+* **checkout:** validate delivery selections in prepare (DELIV-2840) ([e0ed746](https://github.com/liquidcommerce/cloud-sdk/commit/e0ed74625e94c4ed4942cfe22964951a843a7b58))
+* **enums:** add DELIVERY_SELECTION_NOT_ACCEPTED from Elements services (DELIV-2840) ([959290c](https://github.com/liquidcommerce/cloud-sdk/commit/959290cc3afd4753870eb589da9dbd4eb101dd44))
+* **enums:** sync checkout codes 5514 and 5515 with Cloud (DELIV-2840) ([6087680](https://github.com/liquidcommerce/cloud-sdk/commit/6087680371b55f4d9236ad992dc8116671997986))
+* **types:** add delivery scheduling types (DELIV-2840) ([1944269](https://github.com/liquidcommerce/cloud-sdk/commit/19442692e1dd4392d75d2dd4e2ee274de1aef890))
+* **types:** add deliveryScheduling.selectedSlot with the window's real end and cutoff (DELIV-2840) ([aaeb2b8](https://github.com/liquidcommerce/cloud-sdk/commit/aaeb2b84799fcafe975449e922c02ff7d0014277))
+
 # [1.20.0](https://github.com/liquidcommerce/cloud-sdk/compare/v1.19.0...v1.20.0) (2026-10-06)
 
 
